@@ -1,0 +1,31 @@
+{
+    "specific": {
+        "passwordRequirements": {
+            "title": "Passwordmust have at least:",
+            "rules": {
+                "numbers": "one number",
+                "letters": "one lowercase letter",
+                "capitalLetters": "one uppercase letter",
+                "specialCharacters": "one special character",
+                "length": "and be at least 8 and maximum 32 characters long"
+            }
+        }
+    },
+    "chat": {
+        "chatMessageList": {
+            "emptyListLabel": "No messages yet"
+        }
+    },
+    "image": {
+        "avatar-upload": {
+            "chooseFile": "Choose file",
+            "fileChosen": "File chosen",
+            "removeFile": "Remove"
+        }
+    },
+    "user": {
+        "user-select": {
+            "search": "Search for user..."
+        }
+    }
+}

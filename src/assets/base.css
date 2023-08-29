@@ -1,0 +1,54 @@
+/* color palette from <https://github.com/vuejs/theme> */
+:root {
+  --accent: #208155;
+  --accent-light: #40cd8d;
+  --accent-dark: #1c3b2d;
+  --main: #161f27;
+  --main-light: #4a627a;
+  --main-dark: #101419;
+
+  --danger: #e74c3c;
+  --warning: #f39c12;
+  --info: #3498db;
+  --success: #41b883;
+
+  --background: var(--main);
+
+  --white: #fff;
+
+  --text: #2c3e50;
+  --text-2: #4a627a;
+  --text-3: #7f8a93;
+
+  --text-contrast: #fff;
+  --text-contrast-2: #dcdcdc;
+  --text-contrast-3: #c0c0c0;
+
+  --random-background-url: url('https://picsum.photos/1920/1080');
+  --overlay-dark-background: rgba(0, 0, 0, 0.5);
+
+  --border-radius: 0.5rem;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  color: var(--text-contrast-2);
+  background: var(--background);
+  text-rendering: optimizeLegibility;
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
