@@ -10,10 +10,6 @@ The structure is as follows:
 │   ├── your-local-component-1.vue
 │   ├── your-local-component-2.vue
 │   └── ...
-├── locales
-│   ├── en.json
-│   ├── ua.json
-│   └── ...
 ├── stores
 │   ├── store1.ts
 │   └── ...
@@ -31,18 +27,10 @@ Every module consists of `index.ts` file. Its the main module's file and exports
 
 ```ts
 import router from './router'
-// @ts-ignore
-import ua from './locales/ua.json'
-// @ts-ignore
-import en from './locales/en.json'
 
 export default {
   name: '[your-module-name]',
-  router,
-  locales: {
-    ua,
-    en
-  }
+  router
 }
 ```
 
@@ -76,14 +64,6 @@ And the module.vue file. Its a wrapper for your `router-view` to display the nes
 </template>
 ```
 
-The locale files under `locales` directory must have the following structure:
-
-```json
-{
-    ...
-}
-```
-
 The directory `components` is only for local components that you are sure don't need to be reused across the app.
 
-![NOTE] If you dont have locales, routes or smth else, just dont export them. As well as routes. All the parts are optional except for the `index.ts` file. Everything else is of your choice.
+![NOTE] If you dont have routes, just dont export them. All the parts are optional except for the `index.ts` file. Everything else is of your choice.

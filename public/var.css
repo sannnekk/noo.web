@@ -1,0 +1,15 @@
+body {
+  /* Main colors */
+  --primary: #defba1;
+  --secondary: #cdc9ff;
+  --light: #f0effc;
+  --lightest: #fff;
+  --dark: #181818;
+
+  /* Background */
+  --light-background-color: var(--light);
+
+  /* Text */
+  --dark-text-color: var(--dark);
+  --text-light: #939393;
+}

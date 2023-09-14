@@ -6,9 +6,5 @@ import en from './locales/en.json'
 
 export default {
   name: 'profile',
-  router,
-  locales: {
-    ua,
-    en
-  }
+  router
 }

@@ -1,4 +1,3 @@
-import '@/assets/base.css'
 import App from '@/App.vue'
 import router from '@/router'
 import locales from '@/locales'
@@ -18,7 +17,9 @@ const modules = import.meta.glob('@/modules/!(__template__)/index.ts', {
   import: 'default',
   eager: true
 })
-Object.values(modules).forEach((module) => registerModule(module as ApplicationModule))
+Object.values(modules).forEach((module) =>
+  registerModule(module as ApplicationModule)
+)
 
 // creating the app
 const app = createApp(App)
@@ -36,7 +37,10 @@ library.add(far)
 app.component('fa-icon', FontAwesomeIcon)
 
 // adding global components
-const components = import.meta.glob('@/components/*/**.vue', { import: 'default', eager: true })
+const components = import.meta.glob('@/components/*/**.vue', {
+  import: 'default',
+  eager: true
+})
 Object.entries(components).forEach(([path, component]) => {
   const name = path.split('/').pop()?.split('.')[0]
 
