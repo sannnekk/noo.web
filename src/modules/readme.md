@@ -14,9 +14,9 @@ The structure is as follows:
 │   ├── store1.ts
 │   └── ...
 ├── views
-│   ├── index.ts
-│   ├── another-view-1.ts
-│   ├── another-view.ts
+│   ├── index.vue
+│   ├── another-view-1.vue
+│   ├── another-view.vue
 │   └── ...
 ├── index.ts
 ├── module.vue
