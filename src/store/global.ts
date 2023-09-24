@@ -1,5 +1,79 @@
+import type { User } from '@/types/entities/User'
 import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 
 export const useGlobalStore = defineStore('global', () => {
-  return {}
+  // state
+  const _isLoading = ref(false)
+  const _isPaneOpen = ref(false)
+
+  const _userRole = ref<User['role'] | null>('student')
+  const _navEntries = ref([
+    {
+      title: 'Главная',
+      icon: 'home',
+      route: '/',
+      for: ['admin', 'student', 'teacher', 'mentor']
+    },
+    {
+      title: 'Материалы',
+      icon: 'graduation-cap',
+      route: '/materials',
+      for: ['admin', 'teacher', 'mentor', 'student']
+    },
+    {
+      title: 'Работы',
+      icon: 'list-check',
+      route: '/works',
+      for: ['student', 'mentor']
+    },
+    {
+      title: 'Мои ученики',
+      icon: 'users',
+      route: '/students',
+      for: ['mentor']
+    },
+    {
+      title: 'Пользователи',
+      icon: 'users',
+      route: '/users',
+      for: ['admin']
+    },
+    {
+      title: 'Календарь',
+      icon: 'calendar-check',
+      route: '/calendar',
+      for: ['admin', 'student', 'teacher', 'mentor']
+    },
+    {
+      title: 'Профиль',
+      icon: 'address-card',
+      route: '/profile',
+      for: ['admin', 'student', 'teacher', 'mentor']
+    }
+  ])
+
+  // functions
+  function setLoading(value: boolean): void {
+    _isLoading.value = value
+  }
+
+  function setPaneOpen(value: boolean): void {
+    _isPaneOpen.value = value
+  }
+
+  // getters
+  const navEntries = computed(() => {
+    return _navEntries.value.filter((entry) =>
+      entry.for.includes(_userRole.value || '?')
+    )
+  })
+
+  return {
+    _isLoading,
+    _isPaneOpen,
+    setLoading,
+    setPaneOpen,
+    navEntries
+  }
 })

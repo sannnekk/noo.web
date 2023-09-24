@@ -44,6 +44,9 @@ export default {
   path: '/[your-module-name]',
   name: '[your-module-name]',
   component: module,
+  meta: {
+    layout: 'div' // <-- your layout, paneLayout if it is not set
+  },
   children: [
     {
       path: '',

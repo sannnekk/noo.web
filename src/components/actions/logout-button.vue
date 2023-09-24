@@ -1,0 +1,30 @@
+<template>
+  <button class="logout-button">
+    <inline-icon
+      name="arrow-right-from-bracket"
+      class="logout-button__icon"
+    />
+    <span class="logout-button__text">Выйти</span>
+  </button>
+</template>
+
+<script setup lang="ts">
+import { useAuthStore } from '@/store'
+
+const authStore = useAuthStore()
+</script>
+
+<style scoped lang="sass">
+.logout-button
+  border: none
+  background: none
+  color: var(--danger)
+  cursor: pointer
+  font-size: 1em
+
+  &__icon
+    margin-right: 0.4em
+
+  &:hover
+    opacity: 0.7
+</style>

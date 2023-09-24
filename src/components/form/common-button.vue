@@ -17,12 +17,9 @@
       <slot />
     </button>
   </div>
-  <loader-overlay v-if="overlay" />
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-
 interface Props {
   alignment?: 'left' | 'center' | 'right' | 'stretch'
   type?: 'button' | 'submit' | 'reset'
@@ -37,22 +34,13 @@ interface Emits {
   (e: 'click'): void
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   design: 'primary',
   type: 'button',
   alignment: 'left'
 })
-const emits = defineEmits<Emits>()
 
-const overlay = ref(false)
-
-watch(
-  () => props.loading,
-  () => {
-    setTimeout(() => (overlay.value = true), 500)
-    setTimeout(() => (overlay.value = false), 2000)
-  }
-)
+defineEmits<Emits>()
 </script>
 
 <style scoped lang="sass">
