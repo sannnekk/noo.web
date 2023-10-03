@@ -20,4 +20,10 @@ body {
 
   /* other */
   --border-radius: 8px;
+  --border-radius-button: 18px; 
+  --border-radius-color: #cdcdcd;
+  --text-deadline-color-one: #279c27;
+  --text-deadline-color-two: var(--danger);
+  --text-deadline-color-three: var(--warning);
+  
 }
