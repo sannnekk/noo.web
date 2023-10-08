@@ -32,9 +32,14 @@ const route = useRoute()
     padding: 0.5em 1em
 
   &__pane-toggler
-    font-size: 30px
-    margin-right: 1em
+    font-size: 60px
+    margin-right: 0em
+    height: 1em
 
   &__logo
     flex: 1
+
+    h1
+      margin: 0
+      padding: 0
 </style>

@@ -17,19 +17,19 @@ export const useGlobalStore = defineStore('global', () => {
     },
     {
       title: 'Материалы',
-      icon: 'graduation-cap',
+      icon: 'uni-cap',
       route: '/materials',
       for: ['admin', 'teacher', 'mentor', 'student']
     },
     {
       title: 'Работы',
-      icon: 'list-check',
+      icon: 'list',
       route: '/works',
       for: ['student', 'mentor']
     },
     {
       title: 'Мои ученики',
-      icon: 'users',
+      icon: 'student',
       route: '/students',
       for: ['mentor']
     },
@@ -41,13 +41,13 @@ export const useGlobalStore = defineStore('global', () => {
     },
     {
       title: 'Календарь',
-      icon: 'calendar-check',
-      route: '/calendar',
+      icon: 'calender',
+      route: '/calender',
       for: ['admin', 'student', 'teacher', 'mentor']
     },
     {
       title: 'Профиль',
-      icon: 'address-card',
+      icon: 'user',
       route: '/profile',
       for: ['admin', 'student', 'teacher', 'mentor']
     }
@@ -64,9 +64,9 @@ export const useGlobalStore = defineStore('global', () => {
 
   // getters
   const navEntries = computed(() => {
-    return _navEntries.value.filter((entry) =>
+    return _navEntries.value /* .filter((entry) =>
       entry.for.includes(_userRole.value || '?')
-    )
+    ) */
   })
 
   return {

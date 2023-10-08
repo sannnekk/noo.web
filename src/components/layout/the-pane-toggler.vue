@@ -2,26 +2,35 @@
   <button
     class="pane-toggler"
     @click="globalStore.setPaneOpen(true)"
+    @mouseenter="isOnHover = true"
+    @mouseleave="isOnHover = false"
   >
-    <inline-icon name="bars" />
+    <inline-icon
+      name="bars"
+      :animation="isOnHover"
+    />
   </button>
 </template>
 
 <script setup lang="ts">
 import { useGlobalStore } from '@/store'
+import { ref } from 'vue'
 
 const globalStore = useGlobalStore()
+
+const isOnHover = ref(false)
 </script>
 
 <style scoped lang="sass">
 .pane-toggler
   border: none
   background: none
-  padding: 0.2em
   color: var(--dark)
   font-size: 1em
+  display: flex
+  align-items: center
+  justify-content: center
   cursor: pointer
-
-  &:hover
-    color: var(--text-light)
+  height: 1em
+  width: 1em
 </style>

@@ -1,10 +1,38 @@
-import { useI18n } from 'vue-i18n'
-
-interface Options {
+interface UseDateOptions {
   precision: 'year' | 'month' | 'day'
 }
 
-export function useDate(date: Date, options?: Options) {
+const months = [
+  'Января',
+  'Февраля',
+  'Марта',
+  'Апреля',
+  'Мая',
+  'Июня',
+  'Июля',
+  'Августа',
+  'Сентября',
+  'Октября',
+  'Ноября',
+  'Декабря'
+]
+
+const monthNames = [
+  'Январь',
+  'Февраль',
+  'Март',
+  'Апрель',
+  'Май',
+  'Июнь',
+  'Июль',
+  'Август',
+  'Сентярь',
+  'Октябрь',
+  'Ноябрь',
+  'Декабрь'
+]
+
+export function useDate(date: Date, options?: UseDateOptions) {
   function isOnSameDay(d2: Date) {
     return (
       date.getDate() === d2.getDate() &&
@@ -39,6 +67,15 @@ export function useDate(date: Date, options?: Options) {
     return useDate(date).isOnSameDay(yesterday)
   }
 
+  function isTomorrow() {
+    const now = new Date()
+    const tomorrow = new Date()
+
+    tomorrow.setDate(now.getDate() + 1)
+
+    return useDate(date).isOnSameDay(tomorrow)
+  }
+
   function isInThisYear() {
     return date.getFullYear() === new Date().getFullYear()
   }
@@ -60,26 +97,33 @@ export function useDate(date: Date, options?: Options) {
   }
 
   function toBeautiful() {
-    const i18n = useI18n()
     const _date = useDate(date)
 
-    if (_date.isToday()) return i18n.t('composables.date.today')
+    if (_date.isToday()) return 'cегодня'
 
-    if (_date.isYesterday()) return i18n.t('composables.date.yesterday')
+    if (_date.isYesterday()) return 'вчера'
+
+    if (_date.isTomorrow()) return 'завтра'
 
     if (options?.precision === 'day' && _date.isInThisYear())
-      return `${date.getDate()} ${i18n.t('composables.date.months.' + date.getMonth())}`
+      return `${date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`}.${
+        date.getMonth() + 1 >= 10
+          ? date.getMonth() + 1
+          : `0${date.getMonth() + 1}`
+      }`
 
     if (options?.precision === 'day' && !_date.isInThisYear())
-      return `${date.getDate()} ${i18n.t(
-        'composables.date.months.' + date.getMonth()
-      )} ${date.getFullYear()}`
+      return `${date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`}.${
+        date.getMonth() + 1 >= 10
+          ? date.getMonth() + 1
+          : `0${date.getMonth() + 1}`
+      }.${date.getFullYear()}`
 
-    if (_date.isOnLastWeek()) return i18n.t('composables.date.thisWeek')
+    if (_date.isOnLastWeek()) return 'на этой неделе'
 
-    if (_date.isInThisMonth()) return i18n.t('composables.date.thisMonth')
+    if (_date.isInThisMonth()) return 'в этом месяце'
 
-    if (_date.isInThisYear()) return i18n.t('composables.date.months.' + date.getMonth())
+    if (_date.isInThisYear()) return monthNames[date.getMonth()]
 
     return date.getFullYear().toString()
   }
@@ -90,6 +134,7 @@ export function useDate(date: Date, options?: Options) {
     isInThisMonth,
     isToday,
     isYesterday,
+    isTomorrow,
     isInThisYear,
     toBeautiful,
     daysDifference,

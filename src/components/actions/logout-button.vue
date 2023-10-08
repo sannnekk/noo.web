@@ -1,7 +1,7 @@
 <template>
   <button class="logout-button">
     <inline-icon
-      name="arrow-right-from-bracket"
+      name="logout"
       class="logout-button__icon"
     />
     <span class="logout-button__text">Выйти</span>

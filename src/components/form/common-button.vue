@@ -3,7 +3,9 @@
     class="v-button"
     :class="{ inline, [alignment]: true }"
   >
-    <button
+    <component
+      :is="to ? 'router-link' : 'button'"
+      :to="to"
       class="v-button__button"
       :class="{ [design]: true, contrast }"
       :disabled="disabled"
@@ -15,7 +17,7 @@
         class="v-button__button__loader"
       />
       <slot />
-    </button>
+    </component>
   </div>
 </template>
 
@@ -28,6 +30,7 @@ interface Props {
   contrast?: boolean
   inline?: boolean
   loading?: boolean
+  to?: string
 }
 
 interface Emits {
@@ -66,14 +69,15 @@ defineEmits<Emits>()
       width: 100%
 
   &__button
+    text-decoration: none
     display: inline-flex
     align-items: center
     border-radius: 3em
     font-family: Montserrat, sans-serif
     font-weight: 400
-    text-transform: uppercase
+    //text-transform: uppercase
     cursor: pointer
-    padding: 0.5em 2.5em
+    padding: 0.5em 1.5em
 
     &__loader
       display: block
@@ -81,7 +85,7 @@ defineEmits<Emits>()
 
     &.primary
       color: var(--dark)
-      border: 1px solid var(--dark)
+      border: 1px solid transparent
       background-color: var(--primary)
 
       &.contrast
@@ -93,7 +97,7 @@ defineEmits<Emits>()
           color: var(--dark)
 
       &:hover
-        background-color: var(--light-background-color)
+        border-color: var(--dark)
 
     &.secondary
       color: var(--dark)

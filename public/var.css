@@ -5,10 +5,11 @@ body {
   --light: #f0effc;
   --lightest: #fff;
   --dark: #181818;
+  --lila: #d795f1;
 
   --danger: #ff4d4d;
   --warning: #ffad33;
-  --success: #00b300;
+  --success: #279c27;
   --info: var(--secondary);
 
   /* Background */
@@ -20,10 +21,6 @@ body {
 
   /* other */
   --border-radius: 8px;
-  --border-radius-button: 18px; 
-  --border-radius-color: #cdcdcd;
-  --text-deadline-color-one: #279c27;
-  --text-deadline-color-two: var(--danger);
-  --text-deadline-color-three: var(--warning);
-  
+  --border-radius-button: 18px;
+  --border-color: #cdcdcd;
 }

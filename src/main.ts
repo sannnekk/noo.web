@@ -6,11 +6,6 @@ import { registerModule } from '@/modules-container'
 import type { ApplicationModule } from '@/types/dev/ApplicationModule'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { fab } from '@fortawesome/free-brands-svg-icons'
-import { fas } from '@fortawesome/free-solid-svg-icons'
-import { far } from '@fortawesome/free-regular-svg-icons'
 
 // adding modules
 const modules = import.meta.glob('@/modules/!(__template__)/index.ts', {
@@ -30,14 +25,8 @@ app.use(createPinia())
 app.use(locales)
 app.use(autoAnimatePlugin)
 
-// font-awesome
-library.add(fab)
-library.add(fas)
-library.add(far)
-app.component('fa-icon', FontAwesomeIcon)
-
 // adding global components
-const components = import.meta.glob('@/components/*/**.vue', {
+const components = import.meta.glob('@/components/**/**.vue', {
   import: 'default',
   eager: true
 })

@@ -13,16 +13,19 @@
           <ul>
             <li
               class="pane__nav__entry"
-              v-for="navEntry in globalStore.navEntries"
+              v-for="(navEntry, index) in globalStore.navEntries"
               :key="navEntry.route"
             >
               <router-link
                 :to="navEntry.route"
                 @click="globalStore.setPaneOpen(false)"
+                @mouseenter="isOnHover[index] = true"
+                @mouseleave="isOnHover[index] = false"
               >
                 <inline-icon
                   class="pane__nav__entry__icon"
                   :name="navEntry.icon"
+                  :animation="isOnHover[index]"
                 />
                 <span class="pane__nav__entry__title">
                   {{ navEntry.title }}</span
@@ -54,8 +57,31 @@
 <script setup lang="ts">
 import { useGlobalStore } from '@/store'
 import logo from '../common/logo.vue'
+import { ref, watch } from 'vue'
 
 const globalStore = useGlobalStore()
+
+const isOnHover = ref(globalStore.navEntries.map(() => false))
+
+const animationDelay = 300
+const animationStep = 100
+const animationDuration = 200
+
+watch(
+  () => globalStore._isPaneOpen,
+  () => {
+    if (globalStore._isPaneOpen) {
+      globalStore.navEntries.forEach((_, index) => {
+        setTimeout(() => {
+          isOnHover.value[index] = true
+        }, animationDelay + index * animationStep)
+        setTimeout(() => {
+          isOnHover.value[index] = false
+        }, animationDelay + index * animationStep + animationDuration)
+      })
+    }
+  }
+)
 </script>
 
 <style scoped lang="sass">
@@ -107,7 +133,8 @@ const globalStore = useGlobalStore()
       a
         text-decoration: none
         color: inherit
-        display: block
+        display: flex
+        align-items: center
         padding: 0.7em 0
 
         &.router-link-active
@@ -115,10 +142,8 @@ const globalStore = useGlobalStore()
           font-weight: bold
 
       &__icon
-        padding: 0 15px 0 30px
-        font-size: 22px
-        width: 50px
-        color: var(--secondary)
+        font-size: 42px
+        margin: 0 30px
 
       &:hover
         background-color: var(--lightest)
