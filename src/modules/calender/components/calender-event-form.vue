@@ -86,11 +86,15 @@ const currentDate = computed(() =>
         .form-group
           &--input
             flex: 1
+            font-size: 14px
+
+            &:deep() input
+              padding: 0.7em 1.3em
 
           &--button
             :deep()
               button
-                font-size: 1.1em
+                font-size: 14px
                 width: 100%
                 padding: 0.6em 2em
 
@@ -99,4 +103,5 @@ const currentDate = computed(() =>
           display: block
           margin-bottom: 0.5rem
           font-weight: 500
+          font-size: 14px
 </style>

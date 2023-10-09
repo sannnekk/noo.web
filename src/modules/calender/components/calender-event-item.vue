@@ -84,4 +84,7 @@ defineEmits<Emits>()
       padding: 0
       color: var(--text-light)
       flex: 1
+
+    &__button
+      font-size: 0.8em
 </style>

@@ -71,13 +71,14 @@ defineEmits<Emits>()
   &__button
     text-decoration: none
     display: inline-flex
+    text-decoration: none
     align-items: center
     border-radius: 3em
     font-family: Montserrat, sans-serif
     font-weight: 400
-    //text-transform: uppercase
     cursor: pointer
     padding: 0.5em 1.5em
+    font-size: inherit
 
     &__loader
       display: block
