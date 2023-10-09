@@ -1,16 +1,23 @@
 import module from './module.vue'
 import index from './views/index.vue'
+import material from './views/material.vue'
 
 export default {
   path: '/materials',
-  name: 'materials',
-  component: module, // <-- necessary
+  name: 'Материалы',
+  component: module,
   children: [
-    // <-- your routes
     {
       path: '',
-      name: 'materials.index',
-      component: index
+      name: 'Материалы',
+      component: index,
+      children: [
+        {
+          path: ':slug?',
+          name: 'Материал',
+          component: material
+        }
+      ]
     }
   ]
 }

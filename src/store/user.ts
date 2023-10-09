@@ -10,7 +10,7 @@ export const useUserStore = defineStore('user', () => {
     name: 'Мария Гришковец',
     username: 'mne_papa_ne_velel',
     email: 'maria@gmail.com',
-    avatar: 'https://picsum.photos/200/200',
+    avatar: '/img/avatar/mascha.jpg',
     telegramId: '',
     isBlocked: false,
     forbidden: 0,

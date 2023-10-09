@@ -1,4 +1,5 @@
-import type { Subject } from './Subject'
+import type { Chapter } from './Chapter'
+import type { Work } from './Work'
 
 export interface Material {
   id: string
@@ -6,8 +7,10 @@ export interface Material {
   name: string
   description: string
   content: string
-  subjectId: string
-  subject?: Subject
+  chapterId: string
+  chapter?: Chapter
+  workId?: string
+  work?: Work
   createdAt: Date
   updatedAt: Date
 }
