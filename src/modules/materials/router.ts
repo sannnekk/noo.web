@@ -14,7 +14,7 @@ export default {
       children: [
         {
           path: ':slug?',
-          name: 'Материал',
+          name: 'Материалы',
           component: material
         }
       ]
