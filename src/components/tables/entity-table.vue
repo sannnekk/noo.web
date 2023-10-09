@@ -157,9 +157,11 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
         &.col-type-icon
           vertical-align: middle
           font-size: 1.7em
+          width: 2em
+          text-align: center
 
           span
             width: 1em
             height: 1em
-            display: block
+            display: inline-block
 </style>

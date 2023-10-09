@@ -57,6 +57,11 @@ console.log(material)
     &__title
       flex: 1
 
+    &__work-link
+      .v-button:deep()
+        button
+          font-size: 1.05em
+
   &__description
     padding: 1rem
     margin-right: 1rem
