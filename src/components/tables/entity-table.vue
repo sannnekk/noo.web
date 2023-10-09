@@ -130,7 +130,6 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
         color: var(--text-light)
         padding: 0.5rem
         vertical-align: top
-        min-width: 20%
 
   tbody
     tr

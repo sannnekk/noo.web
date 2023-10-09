@@ -1,10 +1,10 @@
 <template>
-  <span
+  <b
     class="status-tag"
     :class="[type, mode]"
   >
     <slot />
-  </span>
+  </b>
 </template>
 
 <script setup lang="ts">
