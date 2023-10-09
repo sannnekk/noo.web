@@ -1,16 +1,6 @@
 <template>
   <div class="logo">
-    <img
-      v-if="image"
-      src="/assets/logo.png"
-      alt="logo"
-    />
-    <h1
-      v-else
-      :class="{ dark }"
-    >
-      НОО.<span class="thin">Платформа</span>
-    </h1>
+    <h1 :class="{ dark }">НОО.<span class="thin">Платформа</span></h1>
   </div>
 </template>
 
