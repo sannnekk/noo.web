@@ -30,7 +30,6 @@ const cols = [
     title: 'Статус работы',
     keys: ['solveStatus', 'checkStatus'],
     type: 'tag',
-    join: '<br>',
     tagFunction
   },
   {
