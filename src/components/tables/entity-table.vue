@@ -45,7 +45,10 @@
             <status-tag :type="col.tagFunction!(key, object[key]).type">
               {{ col.tagFunction!(key, object[key]).text }}
             </status-tag>
-            <span v-html="col.join"></span>
+            <span
+              v-if="col.join"
+              v-html="col.join"
+            ></span>
           </span>
           <span
             v-else-if="col.type === 'date'"

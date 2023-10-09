@@ -21,7 +21,7 @@ withDefaults(defineProps<Props>(), {
 
 <style scoped lang="sass">
 .status-tag
-  display: inline-block
+  display: block
   line-height: 1
   white-space: nowrap
   vertical-align: baseline
