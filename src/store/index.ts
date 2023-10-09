@@ -1,2 +1,2 @@
 export { useGlobalStore } from './global'
-export { useAuthStore } from './auth'
+export { useUserStore } from './user'

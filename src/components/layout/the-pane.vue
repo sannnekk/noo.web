@@ -24,6 +24,9 @@
               >
                 <inline-icon
                   class="pane__nav__entry__icon"
+                  :class="{
+                    'pane__nav__entry__icon--opened': isOpening[index]
+                  }"
                   :name="navEntry.icon"
                   :animation="isOnHover[index]"
                 />
@@ -62,6 +65,7 @@ import { ref, watch } from 'vue'
 const globalStore = useGlobalStore()
 
 const isOnHover = ref(globalStore.navEntries.map(() => false))
+const isOpening = ref(globalStore.navEntries.map(() => false))
 
 const animationDelay = 300
 const animationStep = 100
@@ -74,11 +78,14 @@ watch(
       globalStore.navEntries.forEach((_, index) => {
         setTimeout(() => {
           isOnHover.value[index] = true
+          isOpening.value[index] = true
         }, animationDelay + index * animationStep)
         setTimeout(() => {
           isOnHover.value[index] = false
         }, animationDelay + index * animationStep + animationDuration)
       })
+    } else {
+      isOpening.value = globalStore.navEntries.map(() => false)
     }
   }
 )
@@ -102,7 +109,7 @@ watch(
   z-index: 999999
   width: min(90%, 350px)
   height: 100%
-  background-color: var(--light-background-color)
+  background-color: var(--lightest)
   transition: left 0.3s ease-in-out
 
   &.open
@@ -144,6 +151,13 @@ watch(
       &__icon
         font-size: 42px
         margin: 0 30px
+        transition: transform 0.2s ease-in-out
+        transform: scale(0)
+        opacity: 0
+
+        &--opened
+          opacity: 1
+          transform: scale(1)
 
       &:hover
         background-color: var(--lightest)

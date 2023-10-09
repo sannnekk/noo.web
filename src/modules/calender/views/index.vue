@@ -76,8 +76,32 @@ const events = ref<CalenderEvent[]>([
     id: '6',
     title: 'Grading Deadline',
     description: 'Submit grades for the semester',
-    date: new Date('2022-05-15T23:59:59'),
+    date: new Date('2023-10-15T23:59:59'),
     type: 'teacher-deadline',
+    to: '/works/1'
+  },
+  {
+    id: '65',
+    title: 'Grading Deadline',
+    description: 'Submit grades for the semester',
+    date: new Date('2023-10-15T23:59:59'),
+    type: 'work-checked',
+    to: '/works/1'
+  },
+  {
+    id: '66',
+    title: 'Grading Deadline',
+    description: 'Submit grades for the semester',
+    date: new Date('2023-10-15T23:59:59'),
+    type: 'event',
+    to: '/works/1'
+  },
+  {
+    id: '67',
+    title: 'Grading Deadline',
+    description: 'Submit grades for the semester',
+    date: new Date('2023-10-15T23:59:59'),
+    type: 'work-made',
     to: '/works/1'
   },
   {

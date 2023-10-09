@@ -4,14 +4,18 @@
       name="logout"
       class="logout-button__icon"
     />
-    <span class="logout-button__text">Выйти</span>
+    <span
+      class="logout-button__text"
+      @click="userStore.logout()"
+      >Выйти</span
+    >
   </button>
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '@/store'
+import { useUserStore } from '@/store'
 
-const authStore = useAuthStore()
+const userStore = useUserStore()
 </script>
 
 <style scoped lang="sass">

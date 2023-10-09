@@ -5,15 +5,17 @@
   >
     <div class="profile-widget__avatar">
       <user-avatar
-        src="img/avatar/mascha.jpg"
-        name="Мария Гришковец"
+        :src="userStore.user.avatar"
+        :name="userStore.user.name"
       />
     </div>
     <div class="profile-widget__credentials">
-      <h3 class="profile-widget__credentials__name">Мария Гришковец</h3>
+      <h3 class="profile-widget__credentials__name">
+        {{ userStore.user.name }}
+      </h3>
       <div class="profile-widget__credentials__actions">
         <span class="profile-widget__credentials__actions__username">
-          @mne_papa_ne_velel
+          {{ userStore.user.username }}
         </span>
         <div class="profile-widget__credentials__actions__separator">
           &bullet;
@@ -24,7 +26,11 @@
   </router-link>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useUserStore } from '@/store'
+
+const userStore = useUserStore()
+</script>
 
 <style scoped lang="sass">
 .profile-widget
