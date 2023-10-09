@@ -42,7 +42,10 @@
             v-for="(key, index) in col.keys"
             :key="index"
           >
-            <status-tag :type="col.tagFunction!(key, object[key]).type">
+            <status-tag
+              class="status-tag"
+              :type="col.tagFunction!(key, object[key]).type"
+            >
               {{ col.tagFunction!(key, object[key]).text }}
             </status-tag>
             <span
@@ -140,6 +143,9 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
 
       td
         padding: 0.5rem
+
+        .status-tag
+          margin: 0.5em 0
 
         &.col-style-bold
           font-weight: 500
