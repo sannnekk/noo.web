@@ -28,7 +28,7 @@ const cols = [
     type: 'text'
   },
   {
-    title: 'Email',
+    title: 'E-mail',
     keys: ['email'],
     type: 'text'
   },

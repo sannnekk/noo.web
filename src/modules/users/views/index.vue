@@ -34,11 +34,11 @@ const cols = [
     tagFunction: (key: string, value: string) => {
       switch (value) {
         case 'admin':
-          return { text: 'Администратор', type: 'success' }
+          return { text: 'Администратор', type: 'danger' }
         case 'teacher':
-          return { text: 'Преподаватель', type: 'warning' }
+          return { text: 'Преподаватель', type: 'success' }
         case 'mentor':
-          return { text: 'Куратор', type: 'danger' }
+          return { text: 'Куратор', type: 'black' }
         case 'student':
         default:
           return { text: 'Студент', type: 'info' }
@@ -51,7 +51,7 @@ const cols = [
     type: 'text'
   },
   {
-    title: 'Email',
+    title: 'E-mail',
     keys: ['email'],
     type: 'text'
   },

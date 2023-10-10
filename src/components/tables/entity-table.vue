@@ -186,6 +186,5 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
 
         &.col-type-avatar
           font-size: 3em
-          padding-left: 1em
           width: 1em
 </style>

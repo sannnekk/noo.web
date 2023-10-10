@@ -55,6 +55,8 @@ const isOnHover = ref(false)
   &__input:deep()
 
     input
+      font-size: 16px
+      padding: 0.75em 1em 0.75em 3em !important
       padding-left: 4em !important
 
   &__button
