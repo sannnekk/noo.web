@@ -3,6 +3,7 @@
     <thead>
       <tr>
         <th
+          :class="`col-style-${col.style} col-type-${col.type}`"
           v-for="(col, index) in cols"
           :key="index"
         >
@@ -63,6 +64,12 @@
           >
             <inline-icon :name="object[key]" />
           </span>
+          <span v-else-if="col.type === 'avatar'">
+            <user-avatar
+              :src="object[col.keys[0]]"
+              :name="object[col.keys[1]]"
+            />
+          </span>
           <span v-else>-</span>
         </td>
         <td v-if="editable || removeable">
@@ -83,7 +90,7 @@ interface Props {
     join?: string
     width?: string
     style?: ('bold' | 'italic' | 'centered')[]
-    type: 'text' | 'tag' | 'link' | 'icon' | 'date'
+    type: 'text' | 'tag' | 'link' | 'icon' | 'date' | 'avatar'
     linkTo?: string
     tagFunction?: (
       key: string,
@@ -126,6 +133,7 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
 
 <style scoped lang="sass">
 .entity-table
+  width: 100%
   border-collapse: collapse
 
   thead
@@ -136,6 +144,9 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
         color: var(--text-light)
         padding: 0.5rem
         vertical-align: top
+
+        &.col-type-link
+          text-align: center
 
   tbody
     tr
@@ -172,4 +183,9 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
             width: 1em
             height: 1em
             display: inline-block
+
+        &.col-type-avatar
+          font-size: 3em
+          padding-left: 1em
+          width: 1em
 </style>

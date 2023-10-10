@@ -2,7 +2,7 @@
   <svg
     id="Layer_2"
     xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 245.08 245"
+    viewBox="-30 -30 275.08 275"
   >
     <g class="moveable-forwards">
       <circle

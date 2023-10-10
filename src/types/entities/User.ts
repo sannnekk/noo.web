@@ -5,7 +5,7 @@ export interface User {
   name: string
   username: string
   email: string
-  avatar: string
+  avatar?: string
   telegramId?: string
   password?: string
   isBlocked: boolean
