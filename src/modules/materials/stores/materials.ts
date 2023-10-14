@@ -7,7 +7,7 @@ export const useMaterialsStore = defineStore('materials', () => {
     {
       id: '1',
       slug: 'chemistry',
-      name: 'Химия',
+      name: 'Часть 1',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
       chapters: [
@@ -74,7 +74,7 @@ export const useMaterialsStore = defineStore('materials', () => {
     {
       id: '2',
       slug: 'biology',
-      name: 'Биология',
+      name: 'Часть 2',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
       chapters: [

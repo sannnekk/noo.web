@@ -10,6 +10,7 @@
       :animation="isOnHover"
     />
     <text-input
+      placeholder="Поиск"
       class="search-field__input"
       type="text"
       v-model="model"

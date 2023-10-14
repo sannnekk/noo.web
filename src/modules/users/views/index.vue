@@ -28,7 +28,7 @@ const cols = [
     type: 'text'
   },
   {
-    title: '',
+    title: 'Роль',
     keys: ['role'],
     type: 'tag',
     tagFunction: (key: string, value: string) => {

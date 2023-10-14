@@ -16,7 +16,7 @@ export const useGlobalStore = defineStore('global', () => {
       for: ['admin', 'student', 'teacher', 'mentor']
     },
     {
-      title: 'Материалы',
+      title: 'Мои курсы',
       icon: 'uni-cap',
       route: '/materials',
       for: ['admin', 'teacher', 'mentor', 'student']

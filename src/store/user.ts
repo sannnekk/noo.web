@@ -1,6 +1,7 @@
 import type { User } from '@/types/entities/User'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User>({
@@ -45,7 +46,10 @@ export const useUserStore = defineStore('user', () => {
     }
   })
 
-  function logout() {}
+  function logout() {
+    const router = useRouter()
+    router.push('/auth')
+  }
 
   return {
     user,
