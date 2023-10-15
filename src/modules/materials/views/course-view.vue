@@ -7,8 +7,20 @@
       >
         &#8249; Ко всем курсам
       </router-link>
-      <h2 class="index-materials-view__tree__title">Содержание</h2>
-      <materials-tree :data="materialsStore.getMaterialsTree()" />
+      <h2 class="index-materials-view__tree__title">
+        {{ course?.name }}
+      </h2>
+      <div class="index-materials-view__tree__author">
+        <div class="index-materials-view__tree__author__avatar">
+          <user-avatar :name="course?.author.name" />
+        </div>
+        <div class="index-materials-view__tree__author__name">
+          <router-link :to="`/users/${course?.author.id}`">{{
+            course?.author.name
+          }}</router-link>
+        </div>
+      </div>
+      <materials-tree :data="materialsTree" />
     </div>
     <div class="index-materials-view__content">
       <router-view />
@@ -22,8 +34,12 @@ import MaterialsTree from '../components/materials-tree.vue'
 import { useRoute } from 'vue-router'
 
 const materialsStore = useMaterialsStore()
-
 const route = useRoute()
+
+const courseId = route.params.courseId as string
+
+const course = materialsStore.getCourseById(courseId)
+const materialsTree = materialsStore.getMaterialsTree(courseId)
 </script>
 
 <style lang="sass" scoped>
@@ -49,9 +65,28 @@ const route = useRoute()
         color: var(--secondary)
 
     &__title
-      margin: 0 0 1rem 0
+      margin-bottom: 0
       font-size: 1.3rem
       font-weight: bold
+
+    &__author
+      display: flex
+      align-items: center
+      margin-bottom: 1em
+
+      &__avatar
+        margin-right: 0.5rem
+
+      &__name
+        font-size: 0.9em
+        font-weight: 500
+
+        a
+          text-decoration: none
+          color: var(--text-light)
+
+          &:hover
+            color: var(--secondary)
 
   &__content
     flex: 1

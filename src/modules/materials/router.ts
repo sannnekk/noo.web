@@ -14,13 +14,13 @@ export default {
       component: indexView
     },
     {
-      path: ':course',
+      path: ':courseId',
       name: 'Курс',
       component: courseView,
       children: [
         {
           path: ':slug?',
-          name: 'Химия',
+          name: 'Просмотр курса',
           component: materialView
         }
       ]

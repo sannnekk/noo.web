@@ -40,7 +40,10 @@ const materialsStore = useMaterialsStore()
 const route = useRoute()
 
 const material = computed(() =>
-  materialsStore.getMaterialBySlug(route.params.slug as string)
+  materialsStore.getMaterialBySlug(
+    route.params.courseId as string,
+    route.params.slug as string
+  )
 )
 
 console.log(material)

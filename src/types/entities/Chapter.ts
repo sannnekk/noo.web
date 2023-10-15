@@ -1,12 +1,12 @@
 import type { Material } from './Material'
-import type { Subject } from './Subject'
+import type { Course } from './Course'
 
 export interface Chapter {
   id: string
   name: string
   slug: string
-  subjectId: string
-  subject?: Subject
+  courseId: string
+  course?: Course
   materials?: Material[]
   createdAt: Date
   updatedAt: Date

@@ -1,88 +1,27 @@
-import type { Subject } from '@/types/entities/Subject'
+import { type Course } from '@/types/entities/Course'
+import type { Material } from '@/types/entities/Material'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useMaterialsStore = defineStore('materials', () => {
-  const tree = ref<Subject[]>([
+  const courses = ref<Course[]>([
     {
       id: '1',
-      slug: 'chemistry',
-      name: 'Часть 1',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
+      slug: '1',
+      name: 'Химия',
+      image: 'https://picsum.photos/680/680?2',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      author: {
+        id: '1',
+        name: 'John Doe',
+        avatar: 'https://i.pravatar.cc/300?img=1'
+      },
       chapters: [
         {
           id: '11',
           name: 'Глава 1',
           slug: 'chapter123',
-          subjectId: '1',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          materials: [
-            {
-              id: '111',
-              name: 'Материал 1',
-              description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
-              content:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
-              slug: '111',
-              chapterId: '123',
-              createdAt: new Date(),
-              updatedAt: new Date()
-            },
-            {
-              id: '112',
-              name: 'Материал 2',
-              description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
-              content:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
-              slug: '112',
-              chapterId: '123',
-              createdAt: new Date(),
-              updatedAt: new Date()
-            }
-          ]
-        },
-        {
-          id: '12',
-          name: 'Глава 2',
-          slug: 'chapter456',
-          subjectId: '1',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          materials: [
-            {
-              id: '121',
-              name: 'Материал 3',
-              description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
-              content:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
-              slug: '121',
-              chapterId: '456',
-              createdAt: new Date(),
-              updatedAt: new Date()
-            }
-          ]
-        }
-      ],
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      id: '2',
-      slug: 'biology',
-      name: 'Часть 2',
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
-      chapters: [
-        {
-          id: '21',
-          name: 'Глава 1',
-          slug: 'chapter123',
-          subjectId: '2',
+          courseId: '1',
           createdAt: new Date(),
           updatedAt: new Date(),
           materials: [
@@ -124,10 +63,10 @@ export const useMaterialsStore = defineStore('materials', () => {
           ]
         },
         {
-          id: '22',
+          id: '12',
           name: 'Глава 2',
           slug: 'chapter456',
-          subjectId: '2',
+          courseId: '1',
           createdAt: new Date(),
           updatedAt: new Date(),
           materials: [
@@ -149,33 +88,115 @@ export const useMaterialsStore = defineStore('materials', () => {
       ],
       createdAt: new Date(),
       updatedAt: new Date()
+    },
+    {
+      id: '2',
+      slug: '2',
+      name: 'Биология',
+      image: 'https://picsum.photos/680/680?1',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      author: {
+        id: '2',
+        name: 'Олександр Іванович',
+        avatar: 'https://i.pravatar.cc/300?img=1'
+      },
+      chapters: [
+        {
+          id: '21',
+          name: 'Глава 1',
+          slug: 'chapter123',
+          courseId: '2',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          materials: [
+            {
+              id: '211',
+              name: 'Материал 1',
+              description:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
+              content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
+              slug: '111',
+              chapterId: '123',
+              createdAt: new Date(),
+              updatedAt: new Date()
+            },
+            {
+              id: '222',
+              name: 'Материал 2',
+              description:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
+              content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
+              slug: '112',
+              chapterId: '123',
+              createdAt: new Date(),
+              updatedAt: new Date()
+            }
+          ]
+        },
+        {
+          id: '12',
+          name: 'Глава 2',
+          slug: 'chapter456',
+          courseId: '2',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          materials: [
+            {
+              id: '121',
+              name: 'Материал 3',
+              description:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
+              content:
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae n',
+              slug: '121',
+              chapterId: '456',
+              createdAt: new Date(),
+              updatedAt: new Date()
+            }
+          ]
+        }
+      ],
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
   ])
 
-  function getMaterialsTree() {
-    return tree.value.map((subject) => {
+  function getCourseById(courseId: string): Course | undefined {
+    return courses.value.find(({ id }) => id === courseId)
+  }
+
+  function getMaterialsTree(courseId: string) {
+    const course = getCourseById(courseId)
+
+    if (!course || !course.chapters) return []
+
+    return course.chapters.map((chapter) => {
       return {
-        ...subject,
-        children: (subject.chapters || []).map((chapter) => {
-          return {
-            ...chapter,
-            children: chapter.materials
-          }
-        })
+        ...chapter,
+        children: chapter.materials
       }
     })
   }
 
-  function getMaterialBySlug(slug: string) {
-    const chapters = tree.value.flatMap((subject) => subject.chapters)
-    const materials = chapters.flatMap((chapter) => chapter!.materials)
+  function getMaterialBySlug(
+    courseId: string,
+    slug: string
+  ): Material | undefined {
+    const course = getCourseById(courseId)
 
-    return materials.find((material) => material!.slug === slug)
+    if (!course || !course.chapters) return undefined
+
+    const materials = course.chapters.flatMap((chapter) => chapter!.materials)
+
+    return materials.find((material) => material?.slug === slug)
   }
 
   return {
-    tree,
+    courses,
     getMaterialsTree,
-    getMaterialBySlug
+    getMaterialBySlug,
+    getCourseById
   }
 })

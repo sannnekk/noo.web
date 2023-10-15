@@ -23,7 +23,7 @@
         "
         @click="subject.opened = !subject.opened"
         class="materials-tree__item__name"
-        :to="`/materials/${$route.params.course}/${subject.slug}`"
+        :to="`/materials/${$route.params.courseId}/${subject.slug}`"
       >
         <inline-icon
           class="materials-tree__item__name__icon"
@@ -42,12 +42,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Subject } from '@/types/entities/Subject'
+import type { Course } from '@/types/entities/Course'
 import { ref } from 'vue'
 
 interface Props {
-  data: (Pick<Subject, 'id' | 'name' | 'slug'> & {
-    children?: Pick<Subject, 'id' | 'name' | 'slug'>[]
+  data: (Pick<Course, 'id' | 'name' | 'slug'> & {
+    children?: Pick<Course, 'id' | 'name' | 'slug'>[]
     workId?: string
   })[]
   nestingLevel?: number
@@ -125,3 +125,4 @@ const dataModel = ref(
       > .materials-tree__item__name
         color: var(--secondary)
 </style>
+@/types/entities/Course
