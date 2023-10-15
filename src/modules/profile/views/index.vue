@@ -15,26 +15,26 @@
         <h3 class="index-profile-view__charts__title">Средний балл</h3>
         <div class="index-profile-view__charts__chart">
           <line-chart
-            :data="userStore.charts.workScoreGraph.data"
-            :labels="userStore.charts.workScoreGraph.labels"
+            :data="profileStore.charts.workScoreGraph.data"
+            :labels="profileStore.charts.workScoreGraph.labels"
           />
         </div>
       </div>
       <div class="index-profile-view__charts__card">
         <div class="index-profile-view__charts__huge-number">
-          <h1>{{ userStore.charts.worksMadeCount }}</h1>
+          <h1>{{ profileStore.charts.worksMadeCount }}</h1>
           <p>работ сдано</p>
         </div>
       </div>
       <div class="index-profile-view__charts__card">
         <div class="index-profile-view__charts__huge-number">
-          <h1>{{ userStore.charts.madeBeforeDeadlineRate }}%</h1>
+          <h1>{{ profileStore.charts.madeBeforeDeadlineRate }}%</h1>
           <p>работ сдано в дедлайн</p>
         </div>
       </div>
       <div class="index-profile-view__charts__card">
         <div class="index-profile-view__charts__huge-number">
-          <h1>{{ userStore.charts.firstWorkScore }}</h1>
+          <h1>{{ profileStore.charts.firstWorkScore }}</h1>
           <p>балл первой работы</p>
         </div>
       </div>
@@ -46,8 +46,10 @@
 import { useUserStore } from '@/store'
 import ProfileCredentials from '../components/profile-credentials.vue'
 import ProfilePasswordForm from '../components/profile-password-form.vue'
+import { useProfileStore } from '../stores/profile'
 
 const userStore = useUserStore()
+const profileStore = useProfileStore()
 </script>
 
 <style lang="sass" scoped>

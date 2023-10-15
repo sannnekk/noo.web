@@ -91,4 +91,5 @@ const materialsTree = materialsStore.getMaterialsTree(courseId)
   &__content
     flex: 1
     padding: 1rem
+    overflow: hidden
 </style>

@@ -7,7 +7,7 @@
       :is="to ? 'router-link' : 'button'"
       :to="to"
       class="v-button__button"
-      :class="{ [design]: true, contrast }"
+      :class="{ [design]: true, loading, contrast }"
       :disabled="disabled"
       :type="type"
       @click="$emit('click')"
@@ -79,10 +79,11 @@ defineEmits<Emits>()
     cursor: pointer
     padding: 0.5em 1.5em
     font-size: inherit
+    transition: 0.2s ease all
 
     &__loader
       display: block
-      font-size: 40px
+      font-size: 20px
 
     &.primary
       color: var(--dark)
@@ -93,11 +94,11 @@ defineEmits<Emits>()
         background-color: var(--dark)
         color: var(--light)
 
-        &:hover
+        &:not(.loading):hover
           background-color: var(--light)
           color: var(--dark)
 
-      &:hover
+      &:not(.loading):hover
         border-color: var(--dark)
 
     &.secondary
@@ -105,7 +106,7 @@ defineEmits<Emits>()
       border: 1px solid var(--dark)
       background-color: var(--light-background-color)
 
-      &:hover
+      &:not(.loading):hover
         background-color: var(--dark)
         color: var(--light-background-color)
 </style>

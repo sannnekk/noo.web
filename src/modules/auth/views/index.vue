@@ -14,8 +14,9 @@
             </div>
             <div class="index-auth-view__auth-form">
               <auth-form
-                v-model="credentials"
-                @submit="submit()"
+                v-model="authStore.credentials"
+                :is-loading="authStore.isLoggingIn"
+                @submit="authStore.login()"
               />
             </div>
             <div class="index-auth-view__auth-rights">
@@ -33,16 +34,9 @@ import authIconSpace from '../components/auth-icon-space.vue'
 import authTitles from '../components/auth-titles.vue'
 import authForm from '../components/auth-form.vue'
 import authRights from '../components/auth-rights.vue'
-import { reactive } from 'vue'
+import { useAuthStore } from '../stores/auth'
 
-/* ============= TODO: move it to store ============= */
-const credentials = reactive({
-  username: '',
-  password: ''
-})
-
-function submit() {}
-/* ============= ENDTODO ============= */
+const authStore = useAuthStore()
 </script>
 
 <style lang="sass" scoped>

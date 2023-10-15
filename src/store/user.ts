@@ -4,6 +4,8 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export const useUserStore = defineStore('user', () => {
+  const _router = useRouter()
+
   const user = ref<User>({
     id: '123',
     slug: 'user123',
@@ -25,36 +27,13 @@ export const useUserStore = defineStore('user', () => {
     newPasswordRepeat: ''
   })
 
-  const charts = ref({
-    firstWorkScore: 27,
-    worksMadeCount: 12,
-    madeBeforeDeadlineRate: 89,
-    workScoreGraph: {
-      labels: ['Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь', 'Январь', 'Февраль'],
-      data: [
-        {
-          label: 'Химия',
-          color: '#defba1',
-          values: [15, 12, 17, 19, 18, 23]
-        },
-        {
-          label: 'Биология',
-          color: '#cdc9ff',
-          values: [10, 12, 11, 13, 15, 17]
-        }
-      ]
-    }
-  })
-
   function logout() {
-    const router = useRouter()
-    router.push('/auth')
+    _router.push('/auth')
   }
 
   return {
     user,
     passwordChange,
-    charts,
     logout
   }
 })

@@ -19,7 +19,7 @@
       <common-button
         contrast
         alignment="center"
-        :loading="loading"
+        :loading="isLoading"
         @click="onSubmit()"
       >
         Войти
@@ -36,6 +36,7 @@ interface Props {
     username: string
     password: string
   }
+  isLoading?: boolean
 }
 
 interface Emits {
@@ -51,13 +52,8 @@ const model = computed({
   set: (val) => emits('update:modelValue', val)
 })
 
-const loading = ref(false)
-
 function onSubmit() {
   emits('submit')
-  loading.value = true
-
-  setTimeout(() => (loading.value = false), 2000)
 }
 </script>
 

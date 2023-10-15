@@ -6,9 +6,10 @@
     />
     <span
       class="logout-button__text"
-      @click="userStore.logout()"
-      >Выйти</span
+      @click.prevent="userStore.logout()"
     >
+      Выйти
+    </span>
   </button>
 </template>
 
