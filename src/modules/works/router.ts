@@ -1,5 +1,5 @@
 import module from './module.vue'
-import index from './views/index.vue'
+import indexView from './views/index-view.vue'
 import paneLayout from '@/layouts/pane-layout.vue'
 
 export default {
@@ -14,7 +14,7 @@ export default {
     {
       path: '',
       name: 'Работы',
-      component: index
+      component: indexView
     }
   ]
 }

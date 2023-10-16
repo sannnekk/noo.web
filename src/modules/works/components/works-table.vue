@@ -2,16 +2,20 @@
   <div class="works-table">
     <entity-table
       :cols="cols"
-      :data="worksStore.works"
+      :data="works"
       :tag-function="tagFunction"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useWorksStore } from '../stores/works'
+import type { Work } from '@/types/entities/Work'
 
-const worksStore = useWorksStore()
+interface Props {
+  works: Partial<Work>[]
+}
+
+defineProps<Props>()
 
 const cols = [
   {

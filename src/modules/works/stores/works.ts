@@ -1,7 +1,9 @@
+import type { Work } from '@/types/entities/Work'
 import { defineStore } from 'pinia'
+import { ref, reactive } from 'vue'
 
 export const useWorksStore = defineStore('works', () => {
-  const works = [
+  const works = reactive<(Work & any)[]>([
     {
       icon: 'check-green',
       name: '01.03 ДЗ 2 часть, Биохимия клетки',
@@ -47,7 +49,7 @@ export const useWorksStore = defineStore('works', () => {
       action: 'Перейти'
     },
     {
-      icon: 'check',
+      icon: 'check-green',
       name: '07.03 Тест по циклам растений, 200 вопросов',
       solveDeadline: new Date('2023-03-09'),
       checkDeadline: new Date('2023-03-11'),
@@ -57,7 +59,9 @@ export const useWorksStore = defineStore('works', () => {
       maxScore: '-',
       action: 'Перейти'
     }
-  ]
+  ])
 
-  return { works }
+  const search = ref('')
+
+  return { works, search }
 })

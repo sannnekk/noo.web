@@ -1,6 +1,7 @@
 import type { Answer } from './Answer'
 import type { AssignedWork } from './AssignedWork'
 import type { Comment } from './Comment'
+import type { TaskOption } from './TaskOption'
 import type { Work } from './Work'
 
 export interface Task {
@@ -9,18 +10,17 @@ export interface Task {
   name: string
   content: string
   highestScore: number
-  type: 'one_choice' | 'multiple_choice' | 'work' | 'text'
+  type: 'one_choice' | 'multiple_choice' | 'word' | 'text'
   workId: string
   work?: Work
-  taskImplementationId?: string
-  taskImplementation?: {
-    answerId: string
-    answer?: Answer
-    commentId: string
-    comment?: Comment
-    assignedWorkId: string
-    assignedWork?: AssignedWork
-  }
+  answerId?: string
+  answer?: Answer
+  commentId?: string
+  comment?: Comment
+  assignedWorkId?: string
+  assignedWork?: AssignedWork
+  options?: TaskOption[]
+  optionsIds?: TaskOption['id'][]
   createdAt: Date
   updatedAt: Date
 }

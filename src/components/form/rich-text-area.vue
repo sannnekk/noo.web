@@ -1,19 +1,25 @@
 <template>
-  <QuillEditor
-    :toolbar="toolbar"
-    theme="snow"
-    content-type="delta"
-    v-model:content="model"
-  />
+  <div class="rich-text-area">
+    <label>{{ label }}</label>
+    <div class="rich-text-area__inner">
+      <QuillEditor
+        :toolbar="toolbar"
+        theme="snow"
+        content-type="delta"
+        v-model:content="model"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 interface Props {
   modelValue: string
+  label?: string
 }
 
 interface Emits {
@@ -34,18 +40,34 @@ const model = computed({
 
 const toolbar = [
   ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-  ['blockquote'],
+  ['blockquote', 'link'],
 
   [{ list: 'ordered' }, { list: 'bullet' }],
   [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
-  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+  [{ header: [1, 2, false] }],
 
   [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-  [{ font: [] }],
   [{ align: [] }],
 
   ['clean']
 ]
 </script>
 
-<style scoped></style>
+<style scoped lang="sass">
+.rich-text-area
+  label
+    font-size: 0.8em
+    color: var(--text-light)
+
+  &__inner
+    border-radius: var(--border-radius)
+    border: 1px solid var(--border-color)
+
+  &:deep()
+    .ql-toolbar.ql-snow
+      border: none
+      border-bottom: 1px solid var(--border-color)
+
+    .ql-container.ql-snow
+      border: none
+</style>

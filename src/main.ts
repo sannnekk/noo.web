@@ -1,6 +1,5 @@
 import App from '@/App.vue'
 import router from '@/router'
-import locales from '@/locales'
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import { registerModule } from '@/modules-container'
 import type { ApplicationModule } from '@/types/dev/ApplicationModule'
@@ -22,7 +21,6 @@ const app = createApp(App)
 // adding plugins
 app.use(router)
 app.use(createPinia())
-app.use(locales)
 app.use(autoAnimatePlugin)
 
 // adding global components
