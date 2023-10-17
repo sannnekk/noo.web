@@ -16,7 +16,7 @@
       class="task-list__add"
       v-if="currentTaskId !== 'new'"
     >
-      <router-link to="/create-work/new"> ➕ Добавить </router-link>
+      <router-link to="/create-work/new"> ➕ Добавить вопрос </router-link>
     </div>
   </div>
 </template>

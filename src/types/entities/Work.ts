@@ -1,3 +1,4 @@
+import type { Task } from './Task'
 import type { Material } from './Material'
 
 export interface Work {
@@ -5,8 +6,10 @@ export interface Work {
   slug: string
   name: string
   description: string
-  materialId: string
+  materialId?: string
   material?: Material
-  createdAt: Date
-  updatedAt: Date
+  tasks: Task[]
+  taskIds: string[]
+  createdAt?: Date
+  updatedAt?: Date
 }

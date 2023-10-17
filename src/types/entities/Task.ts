@@ -19,6 +19,7 @@ export interface Task {
   comment?: Comment
   assignedWorkId?: string
   assignedWork?: AssignedWork
+  rightAnswer?: string
   options?: TaskOption[]
   optionsIds?: TaskOption['id'][]
   createdAt: Date

@@ -42,6 +42,18 @@
         />
       </div>
     </div>
+    <div
+      class="task-form__row"
+      v-if="['word'].includes(model.type)"
+    >
+      <div class="task-form__col-12 form-group">
+        <form-input
+          label="Правильный ответ"
+          type="text"
+          v-model="model.rightAnswer"
+        />
+      </div>
+    </div>
     <div class="task-form__row">
       <div class="task-form__col-12 form-group">
         <common-button
