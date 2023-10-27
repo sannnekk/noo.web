@@ -1,30 +1,36 @@
 <template>
   <div class="index-materials-view">
-    <div class="index-materials-view__tree">
-      <router-link
-        class="index-materials-view__tree__back-button"
-        to="/materials"
-      >
-        &#8249; Ко всем курсам
-      </router-link>
-      <h2 class="index-materials-view__tree__title">
-        {{ course?.name }}
-      </h2>
-      <div class="index-materials-view__tree__author">
-        <div class="index-materials-view__tree__author__avatar">
-          <user-avatar :name="course?.author.name" />
+    <the-sidebar-layout>
+      <template #sidebar>
+        <div class="index-materials-view__tree">
+          <router-link
+            class="index-materials-view__tree__back-button"
+            to="/materials"
+          >
+            &#8249; Ко всем курсам
+          </router-link>
+          <h2 class="index-materials-view__tree__title">
+            {{ course?.name }}
+          </h2>
+          <div class="index-materials-view__tree__author">
+            <div class="index-materials-view__tree__author__avatar">
+              <user-avatar :name="course?.author.name" />
+            </div>
+            <div class="index-materials-view__tree__author__name">
+              <router-link :to="`/users/${course?.author.id}`">{{
+                course?.author.name
+              }}</router-link>
+            </div>
+          </div>
+          <materials-tree :data="materialsTree" />
         </div>
-        <div class="index-materials-view__tree__author__name">
-          <router-link :to="`/users/${course?.author.id}`">{{
-            course?.author.name
-          }}</router-link>
+      </template>
+      <template #content>
+        <div class="index-materials-view__content">
+          <router-view />
         </div>
-      </div>
-      <materials-tree :data="materialsTree" />
-    </div>
-    <div class="index-materials-view__content">
-      <router-view />
-    </div>
+      </template>
+    </the-sidebar-layout>
   </div>
 </template>
 
@@ -44,16 +50,7 @@ const materialsTree = materialsStore.getMaterialsTree(courseId)
 
 <style lang="sass" scoped>
 .index-materials-view
-  display: flex
-  flex-direction: row
-
   &__tree
-    width: 300px
-    padding: 1rem
-    margin: 1rem
-    border-radius: var(--border-radius)
-    border: 1px solid var(--border-color)
-
     &__back-button
       display: block
       margin-bottom: 1rem
@@ -87,9 +84,4 @@ const materialsTree = materialsStore.getMaterialsTree(courseId)
 
           &:hover
             color: var(--secondary)
-
-  &__content
-    flex: 1
-    padding: 1rem
-    overflow: hidden
 </style>

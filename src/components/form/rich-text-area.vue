@@ -13,17 +13,18 @@
 </template>
 
 <script setup lang="ts">
-import { QuillEditor } from '@vueup/vue-quill'
+import type { DeltaContentType } from '@/types/composed/DeltaContentType'
+import { Delta, QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 
 interface Props {
-  modelValue: string
+  modelValue: DeltaContentType
   label?: string
 }
 
 interface Emits {
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:modelValue', value: DeltaContentType): void
 }
 
 const props = defineProps<Props>()
@@ -31,7 +32,7 @@ const emit = defineEmits<Emits>()
 
 const model = computed({
   get() {
-    return props.modelValue
+    return new Delta(props.modelValue)
   },
   set(value) {
     emit('update:modelValue', value)
@@ -70,4 +71,7 @@ const toolbar = [
 
     .ql-container.ql-snow
       border: none
+
+      .ql-editor
+        font-family: var(--font-family)
 </style>

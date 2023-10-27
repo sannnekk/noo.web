@@ -25,15 +25,22 @@
             v-if="col.type === 'text'"
             v-html="getTextCol(object, col)"
           ></span>
-          <span
-            v-else-if="col.type === 'link'"
-            v-for="(key, index) in col.keys"
-            :key="key"
-          >
+          <span v-else-if="col.type === 'link'">
             <common-button
-              :design="index === 0 ? 'primary' : 'secondary'"
+              v-if="col.value"
+              :to="unfunction(col, object, 'linkTo')"
               alignment="center"
-              :to="col.linkTo!"
+              design="primary"
+            >
+              {{ unfunction(col, object) }}
+            </common-button>
+            <common-button
+              v-else
+              alignment="center"
+              :design="index === 0 ? 'primary' : 'secondary'"
+              :to="unfunction(col, object, 'linkTo')"
+              v-for="(key, index) in col.keys"
+              :key="key"
             >
               {{ object[key] }}
             </common-button>
@@ -58,11 +65,16 @@
             v-else-if="col.type === 'date'"
             v-html="getDateCol(object, col)"
           ></span>
-          <span
-            v-else-if="col.type === 'icon'"
-            v-for="key in col.keys"
-          >
-            <inline-icon :name="object[key]" />
+          <span v-else-if="col.type === 'icon'">
+            <inline-icon
+              v-if="col.value"
+              :name="unfunction(col, object)"
+            />
+            <inline-icon
+              v-else
+              :name="object[key]"
+              v-for="key in col.keys"
+            />
           </span>
           <span v-else-if="col.type === 'avatar'">
             <user-avatar
@@ -86,12 +98,13 @@ import { useDate } from '@/composables/useDate'
 interface Props {
   cols: {
     title: string
+    value?: string | ((row: any) => string)
     keys: string[]
     join?: string
     width?: string
     style?: ('bold' | 'italic' | 'centered')[]
     type: 'text' | 'tag' | 'link' | 'icon' | 'date' | 'avatar'
-    linkTo?: string
+    linkTo?: string | Function
     tagFunction?: (
       key: string,
       value: string | number | Date
@@ -114,19 +127,48 @@ interface Emits {
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
+function unfunction(
+  col: Props['cols'][0],
+  row: any,
+  key: keyof Props['cols'][0] = 'value'
+): Props['cols'][0][keyof Props['cols'][0]] {
+  if (getValueByKey(col, key) instanceof Function) {
+    return (getValueByKey(col, key) as Function).call(undefined, row)
+  }
+
+  return getValueByKey(col, key) || '-'
+}
+
+function getValueByKey(object: Record<string, any>, key: string): any {
+  const keys = key.split('.')
+  let value = object
+
+  for (const key of keys) {
+    value = value[key]
+  }
+
+  return value
+}
+
 function getTextCol(object: Record<string, any>, col: Props['cols'][0]) {
+  if (col.value instanceof Function) return unfunction(col, object)
+
   const keys = col.keys
   const join = col.join || '<br>'
 
-  return keys.map((key) => object[key] || '-').join(join)
+  return keys.map((key) => getValueByKey(object, key) || '-').join(join)
 }
 
 function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
+  if (col.value instanceof Function) return unfunction(col, object)
+
   const keys = col.keys
   const join = col.join || '<br>'
 
   return keys
-    .map((key) => useDate(object[key], { precision: 'day' }).toBeautiful())
+    .map((key) =>
+      useDate(getValueByKey(object, key), { precision: 'day' }).toBeautiful()
+    )
     .join(join)
 }
 </script>

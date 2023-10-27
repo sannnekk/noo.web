@@ -114,7 +114,7 @@ const userType = computed(() => {
 
     input
       font-weight: 500
-      font-size: 1.4em
+      font-size: 1.2em
       text-align: center
 
   &__username

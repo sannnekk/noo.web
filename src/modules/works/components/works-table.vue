@@ -9,29 +9,31 @@
 </template>
 
 <script setup lang="ts">
-import type { Work } from '@/types/entities/Work'
+import type { AssignedWork } from '@/types/entities/AssignedWork'
+import type { UserAction } from '../stores/works'
 
 interface Props {
-  works: Partial<Work>[]
+  works: Partial<AssignedWork>[]
+  getUserActionFunction: (a: AssignedWork) => UserAction
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const cols = [
   {
     title: '',
-    keys: ['icon'],
+    value: (a: AssignedWork) => props.getUserActionFunction(a).icon,
     type: 'icon'
   },
   {
     title: 'Название работы',
-    keys: ['name'],
+    keys: ['work.name'],
     type: 'text',
     style: 'bold'
   },
   {
     title: 'Дедлайн сдачи/проверки',
-    keys: ['solveDeadline', 'checkDeadline'],
+    keys: ['solveDeadlineAt', 'checkDeadlineAt'],
     type: 'date'
   },
   {
@@ -49,9 +51,9 @@ const cols = [
   },
   {
     title: '',
-    keys: ['action'],
+    value: (a: AssignedWork) => props.getUserActionFunction(a).action,
     type: 'link',
-    linkTo: '/works/1'
+    linkTo: (a: AssignedWork) => props.getUserActionFunction(a).link(a.id)
   }
 ]
 

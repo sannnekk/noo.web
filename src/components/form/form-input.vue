@@ -6,6 +6,7 @@
       :type="type"
       v-model="model"
       :placholder="placeholder"
+      :disabled="readonly"
     />
   </label>
 </template>
@@ -18,6 +19,7 @@ interface Props {
   type: string
   placeholder?: string
   modelValue: string | number
+  readonly?: boolean
 }
 
 interface Emits {

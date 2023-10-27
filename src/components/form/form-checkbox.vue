@@ -4,6 +4,7 @@
       <input
         class="form-checkbox__input"
         type="checkbox"
+        :disabled="readonly"
         v-model="model"
       />
       <div
@@ -45,6 +46,7 @@ import { computed } from 'vue'
 interface Props {
   modelValue: boolean
   label: string
+  readonly?: boolean
 }
 
 interface Emits {

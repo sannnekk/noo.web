@@ -1,12 +1,14 @@
 import type { Chapter } from './Chapter'
+import type { Media } from './Media'
 import type { User } from './User'
 
 export interface Course {
   id: string
   slug: string
   name: string
-  image: string
-  author: Partial<User>
+  image: Media
+  author: User
+  authorId: User['id']
   description: string
   chapters?: Chapter[]
   createdAt: Date

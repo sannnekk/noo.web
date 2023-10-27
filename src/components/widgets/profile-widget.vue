@@ -5,7 +5,7 @@
   >
     <div class="profile-widget__avatar">
       <user-avatar
-        :src="userStore.user.avatar"
+        :src="userStore.user.avatar?.url"
         :name="userStore.user.name"
       />
     </div>

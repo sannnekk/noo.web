@@ -1,6 +1,6 @@
 import type { User } from '@/types/entities/User'
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, readonly, ref } from 'vue'
 
 export const useGlobalStore = defineStore('global', () => {
   // state
@@ -62,18 +62,24 @@ export const useGlobalStore = defineStore('global', () => {
     _isPaneOpen.value = value
   }
 
+  function getUserRole(): User['role'] | null {
+    return _userRole.value
+  }
+
   // getters
   const navEntries = computed(() => {
-    return _navEntries.value /* .filter((entry) =>
+    return _navEntries.value.filter((entry) =>
       entry.for.includes(_userRole.value || '?')
-    ) */
+    )
   })
 
   return {
     _isLoading,
     _isPaneOpen,
+    _userRole,
     setLoading,
     setPaneOpen,
+    getUserRole,
     navEntries
   }
 })

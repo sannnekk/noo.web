@@ -1,3 +1,4 @@
+import type { DeltaContentType } from '../composed/DeltaContentType'
 import type { Answer } from './Answer'
 import type { AssignedWork } from './AssignedWork'
 import type { Comment } from './Comment'
@@ -8,16 +9,12 @@ export interface Task {
   id: string
   slug: string
   name: string
-  content: string
+  content: DeltaContentType
   highestScore: number
   type: 'one_choice' | 'multiple_choice' | 'word' | 'text'
-  workId: string
+  workId: Work['id']
   work?: Work
-  answerId?: string
-  answer?: Answer
-  commentId?: string
-  comment?: Comment
-  assignedWorkId?: string
+  assignedWorkId?: AssignedWork['id']
   assignedWork?: AssignedWork
   rightAnswer?: string
   options?: TaskOption[]

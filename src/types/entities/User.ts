@@ -1,3 +1,5 @@
+import type { Media } from './Media'
+
 export interface User {
   id: string
   slug: string
@@ -5,7 +7,7 @@ export interface User {
   name: string
   username: string
   email: string
-  avatar?: string
+  avatar?: Media
   telegramId?: string
   password?: string
   isBlocked: boolean

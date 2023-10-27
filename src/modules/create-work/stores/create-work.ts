@@ -15,13 +15,13 @@ export const useCreateWorkStore = defineStore('create-work', () => {
       {
         id: '1',
         name: 'Первый вопрос',
-        content: `{
-          "ops": [
+        content: {
+          ops: [
             {
-              "insert": "\n"
+              insert: '\n'
             }
           ]
-        }`,
+        },
         slug: 'task-1',
         highestScore: 3,
         type: 'one_choice',
@@ -32,13 +32,13 @@ export const useCreateWorkStore = defineStore('create-work', () => {
       {
         id: '2',
         name: 'Второй вопрос',
-        content: `{
-          "ops": [
+        content: {
+          ops: [
             {
-              "insert": "\n"
+              insert: '\n'
             }
           ]
-        }`,
+        },
         slug: 'task-2',
         highestScore: 3,
         type: 'multiple_choice',
@@ -49,13 +49,13 @@ export const useCreateWorkStore = defineStore('create-work', () => {
       {
         id: '3',
         name: 'Третий вопрос',
-        content: `{
-          "ops": [
+        content: {
+          ops: [
             {
-              "insert": "\n"
+              insert: '\n'
             }
           ]
-        }`,
+        },
         slug: 'task-3',
         highestScore: 3,
         type: 'word',
@@ -66,13 +66,13 @@ export const useCreateWorkStore = defineStore('create-work', () => {
       {
         id: '4',
         name: 'Четвертый вопрос',
-        content: `{
-          "ops": [
+        content: {
+          ops: [
             {
-              "insert": "\n"
+              insert: '\n'
             }
           ]
-        }`,
+        },
         slug: 'task-4',
         highestScore: 3,
         type: 'text',
@@ -88,13 +88,13 @@ export const useCreateWorkStore = defineStore('create-work', () => {
     return {
       id: uuid(),
       name: '',
-      content: `{
-        "ops": [
+      content: {
+        ops: [
           {
-            "insert": "\n"
+            insert: '\n'
           }
         ]
-      }`,
+      },
       slug: '',
       highestScore: 1,
       type: 'one_choice',

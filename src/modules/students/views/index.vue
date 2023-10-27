@@ -13,7 +13,7 @@ import { useStudentsStore } from '../stores/students'
 const cols = [
   {
     title: '',
-    keys: ['avatar', 'name'],
+    keys: ['avatar.url', 'name'],
     type: 'avatar'
   },
   {

@@ -14,7 +14,10 @@
       </div>
     </div>
     <div class="index-works-view__table">
-      <works-table :works="worksStore.works" />
+      <works-table
+        :works="worksStore.works"
+        :get-user-action-function="worksStore.getUserAction"
+      />
     </div>
   </div>
 </template>

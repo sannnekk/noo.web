@@ -67,6 +67,7 @@ defineEmits<Emits>()
   &.stretch
     .v-button__button
       width: 100%
+      justify-content: center
 
   &__button
     text-decoration: none
