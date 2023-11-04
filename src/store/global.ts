@@ -1,6 +1,6 @@
 import type { User } from '@/types/entities/User'
 import { defineStore } from 'pinia'
-import { computed, readonly, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 export const useGlobalStore = defineStore('global', () => {
   // state

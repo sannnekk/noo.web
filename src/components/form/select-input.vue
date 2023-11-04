@@ -3,6 +3,7 @@
     <label class="select-input__label">
       <span class="select-input__label-text">{{ label }}</span>
       <select
+        :disabled="readonly"
         class="select-input__select"
         v-model="model"
       >
@@ -28,6 +29,7 @@ interface Props {
     value: string
   }[]
   modelValue: string
+  readonly?: boolean
 }
 
 interface Emits {

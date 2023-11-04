@@ -19,6 +19,7 @@ export type Visibility = 'visible' | 'readonly' | 'hidden'
 export type FieldVisibility = {
   solveBox: Visibility
   checkBox: Visibility
+  scoreBox: Visibility
 }
 
 export const useWorksStore = defineStore('works', () => {
@@ -188,26 +189,31 @@ export const useWorksStore = defineStore('works', () => {
 
     let solveBox: Visibility = 'hidden'
     let checkBox: Visibility = 'hidden'
+    let scoreBox: Visibility = 'hidden'
 
     switch (role) {
       case 'student':
         solveBox = mode.value === 'solve' ? 'visible' : 'readonly'
         checkBox = mode.value === 'solve' ? 'hidden' : 'readonly'
+        scoreBox = mode.value === 'solve' ? 'hidden' : 'readonly'
         break
       case 'mentor':
         solveBox = 'readonly'
         checkBox = mode.value === 'check' ? 'visible' : 'readonly'
+        scoreBox = mode.value === 'check' ? 'visible' : 'readonly'
         break
       case 'admin':
       case 'teacher':
         solveBox = 'readonly'
         checkBox = 'readonly'
+        scoreBox = 'readonly'
         break
     }
 
     return {
       solveBox,
-      checkBox
+      checkBox,
+      scoreBox
     }
   })
 

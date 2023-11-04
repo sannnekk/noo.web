@@ -38,6 +38,18 @@
       />
     </div>
     <div
+      class="taks-view__score"
+      v-if="
+        ['visible', 'readonly'].includes(worksStore.fieldVisibility.scoreBox)
+      "
+    >
+      <task-score-container
+        v-model="worksStore.assignedWork"
+        :task="worksStore.task"
+        :readonly="worksStore.fieldVisibility.scoreBox === 'readonly'"
+      />
+    </div>
+    <div
       class="task-view__comment"
       v-if="
         ['visible', 'readonly'].includes(worksStore.fieldVisibility.checkBox)
@@ -64,6 +76,7 @@ import taskAnswerTextContainer from '../components/task-answer-text-container.vu
 import taskAnswerWordContainer from '../components/task-answer-word-container.vue'
 import taskAnswerOptionsContainer from '../components/task-answer-options-container.vue'
 import taskCommentContainer from '../components/task-comment-container.vue'
+import taskScoreContainer from '../components/task-score-container.vue'
 
 const worksStore = useWorksStore()
 </script>
