@@ -197,6 +197,7 @@ export const useWorksStore = defineStore('works', () => {
       case 'mentor':
         solveBox = 'readonly'
         checkBox = mode.value === 'check' ? 'visible' : 'readonly'
+        break
       case 'admin':
       case 'teacher':
         solveBox = 'readonly'

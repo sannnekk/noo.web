@@ -40,8 +40,7 @@
     <div
       class="task-view__comment"
       v-if="
-        ['visible', 'readonly'].includes(worksStore.fieldVisibility.checkBox) &&
-        worksStore.task.type === 'text'
+        ['visible', 'readonly'].includes(worksStore.fieldVisibility.checkBox)
       "
     >
       <task-comment-container

@@ -3,7 +3,7 @@
     <h4 class="task-answer-container__title">Ответ:</h4>
     <rich-text-container
       v-if="readonly"
-      :value="model"
+      :content="model"
     />
     <rich-text-area
       v-else

@@ -3,7 +3,7 @@
     <h4 class="task-comment-container__title">Комментарий:</h4>
     <rich-text-container
       v-if="readonly"
-      :value="model"
+      :content="model"
     />
     <rich-text-area
       v-else

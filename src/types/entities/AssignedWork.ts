@@ -8,7 +8,7 @@ export interface AssignedWork {
   slug: string
   mentorIds: User['id'][]
   mentors?: User[]
-  studentId: User['id'][]
+  studentId: User['id']
   student?: User
   workId: Work['id']
   work?: Work

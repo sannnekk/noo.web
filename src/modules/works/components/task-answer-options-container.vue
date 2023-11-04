@@ -88,5 +88,11 @@ const model = computed<TaskOption['id'][]>({
 
   &__hint
     font-size: 0.8rem
+    margin-top: 0
     color: var(--text-light)
+
+  &__list
+    &:deep()
+      *
+        color: var(--dark) !important
 </style>

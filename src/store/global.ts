@@ -7,7 +7,7 @@ export const useGlobalStore = defineStore('global', () => {
   const _isLoading = ref(false)
   const _isPaneOpen = ref(false)
 
-  const _userRole = ref<User['role'] | null>('student')
+  const _userRole = ref<User['role'] | null>('mentor')
   const _navEntries = ref([
     {
       title: 'Главная',

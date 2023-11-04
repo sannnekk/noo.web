@@ -15,7 +15,7 @@
     </div>
     <div class="form-group">
       <entity-select-widget
-        label="Присвоить к теоритическому материалу (опционально)"
+        label="Присвоить к теоретическому материалу (опционально)"
         v-model="createWorkStore.work.materialId"
         expect="id"
         nullable

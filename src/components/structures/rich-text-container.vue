@@ -34,6 +34,7 @@ const model = computed(() => new Delta(props.content))
       border: none
 
       .ql-editor
+        font-size: 1rem
         padding: 0
         font-family: var(--font-family)
 </style>

@@ -73,5 +73,6 @@ const toolbar = [
       border: none
 
       .ql-editor
+        font-size: 1rem
         font-family: var(--font-family)
 </style>
