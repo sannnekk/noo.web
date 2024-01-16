@@ -1,10 +1,14 @@
 import { defineStore } from 'pinia'
 import type { User } from '@/types/entities/User'
 import { reactive } from 'vue'
+import { http } from '@/utils/http'
+import { useGlobalStore } from '@/store'
 
 export const useStudentsStore = defineStore('students', () => {
+  const _globalStore = useGlobalStore()
+
   const students = reactive<User[]>([
-    {
+    /* {
       id: '1',
       slug: '1',
       name: 'Иванов Иван Иванович',
@@ -42,8 +46,27 @@ export const useStudentsStore = defineStore('students', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       telegramId: '1234567890'
-    }
+    } */
   ])
 
-  return { students }
+  _globalStore.setLoading(true)
+
+  http
+    .get('/user')
+    .then((data) => {
+      students.splice(0, students.length)
+      students.push(...data)
+    })
+    .catch(() => {
+      _globalStore.openModal('error', 'Ошибка при загрузке пользователей')
+    })
+    .finally(() => {
+      _globalStore.setLoading(false)
+    })
+
+  function getStudent(id: string) {
+    return students.find((student) => student.id === id)
+  }
+
+  return { students, getStudent }
 })

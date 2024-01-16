@@ -70,10 +70,7 @@ const emits = defineEmits<Emits>()
 
 const model = computed({
   get: () => props.modelValue || [],
-  set: (value) => {
-    console.log(value)
-    emits('update:modelValue', value)
-  }
+  set: (value) => emits('update:modelValue', value)
 })
 
 function emptyTaskOption(): TaskOption {

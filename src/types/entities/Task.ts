@@ -8,14 +8,11 @@ import type { Work } from './Work'
 export interface Task {
   id: string
   slug: string
-  name: string
   content: DeltaContentType
   highestScore: number
   type: 'one_choice' | 'multiple_choice' | 'word' | 'text'
   workId: Work['id']
   work?: Work
-  assignedWorkId?: AssignedWork['id']
-  assignedWork?: AssignedWork
   rightAnswer?: string
   options?: TaskOption[]
   optionsIds?: TaskOption['id'][]

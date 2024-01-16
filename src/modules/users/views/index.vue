@@ -13,6 +13,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { User } from '@/types/entities/User'
 import { useUsersStore } from '../stores/user'
 
 const cols = [
@@ -56,8 +57,17 @@ const cols = [
   },
   {
     title: 'Telegram',
-    keys: ['telegramId'],
-    type: 'link'
+    keys: ['telegramUsername'],
+    type: 'link',
+    deisng: 'secondary',
+    linkTo: (user: User) => `https://t.me/${user.telegramUsername}`
+  },
+  {
+    title: '',
+    value: () => 'Редактировать',
+    type: 'link',
+    design: 'secondary',
+    linkTo: (user: User) => `/users/edit/${user.username}`
   }
 ]
 

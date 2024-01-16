@@ -6,7 +6,7 @@
       :key="(item[itemKey] as string)"
     >
       <form-checkbox
-        :label="item[itemLabelKey]"
+        :label="getLabel(item)"
         :model-value="model[index]"
         :readonly="readonly"
         @update:modelValue="onSelect(item[itemKey] as string)"
@@ -58,6 +58,13 @@ function onSelect(key: string) {
   value = [key]
   console.log(value)
   emits('update:modelValue', value)
+}
+
+function getLabel(item: Record<string, any>) {
+  return props.itemLabelKey
+    .split(',')
+    .map((key) => item[key] || '—')
+    .join(', ')
 }
 </script>
 

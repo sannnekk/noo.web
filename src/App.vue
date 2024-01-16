@@ -1,9 +1,17 @@
 <template>
-  <div class="app">
+  <div
+    class="app"
+    v-auto-animate
+  >
     <component :is="layout">
       <router-view />
     </component>
     <the-loader-overlay v-if="globalStore._isLoading" />
+    <base-modal
+      :message="globalStore._globalModal.message"
+      :type="globalStore._globalModal.type"
+      v-model:visible="globalStore._globalModal.visible"
+    />
   </div>
 </template>
 

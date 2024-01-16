@@ -4,8 +4,10 @@
     :class="{ inline, [alignment]: true }"
   >
     <component
-      :is="to ? 'router-link' : 'button'"
+      :is="to ? (to.startsWith('http') ? 'router-link' : 'a') : 'button'"
       :to="to"
+      :href="to"
+      :target="to?.startsWith('http') ? '_blank' : ''"
       class="v-button__button"
       :class="{ [design]: true, loading, contrast }"
       :disabled="disabled"
@@ -26,7 +28,7 @@ interface Props {
   alignment?: 'left' | 'center' | 'right' | 'stretch'
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
-  design?: 'primary' | 'secondary'
+  design?: 'primary' | 'secondary' | 'danger'
   contrast?: boolean
   inline?: boolean
   loading?: boolean
@@ -51,6 +53,8 @@ defineEmits<Emits>()
   width: 100%
   display: flex
   flex-direction: row
+  pointer-events: none
+  text-align: center
 
   &.inline
     display: inline-flex
@@ -70,6 +74,7 @@ defineEmits<Emits>()
       justify-content: center
 
   &__button
+    pointer-events: all
     text-decoration: none
     display: inline-flex
     text-decoration: none
@@ -110,4 +115,12 @@ defineEmits<Emits>()
       &:not(.loading):hover
         background-color: var(--dark)
         color: var(--light-background-color)
+
+    &.danger
+      color: var(--light)
+      border: 1px solid transparent
+      background-color: var(--danger)
+
+      &:not(.loading):hover
+        opacity: 0.8
 </style>

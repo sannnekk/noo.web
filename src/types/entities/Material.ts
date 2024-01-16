@@ -1,3 +1,4 @@
+import type { DeltaContentType } from '../composed/DeltaContentType'
 import type { Chapter } from './Chapter'
 import type { Work } from './Work'
 
@@ -6,7 +7,7 @@ export interface Material {
   slug: string
   name: string
   description: string
-  content: string
+  content: DeltaContentType
   chapterId: string
   chapter?: Chapter
   workId?: string

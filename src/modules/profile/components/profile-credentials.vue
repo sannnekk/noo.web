@@ -25,11 +25,7 @@
       />
     </div>
     <div class="profile-credentials__role">
-      <status-tag
-        :type="userType"
-        mode="background"
-        >{{ userRole }}</status-tag
-      >
+      <role-tag :role="credentialsModel.role" />
     </div>
     <div
       class="profile-credentials__save-button"
@@ -38,7 +34,7 @@
       <common-button
         v-if="isChanged"
         alignment="center"
-        @click="() => {}"
+        @click="$emit('save')"
       >
         Сохранить
       </common-button>
@@ -48,7 +44,7 @@
 
 <script setup lang="ts">
 import type { User } from '@/types/entities/User'
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 
 interface Props {
   modelValue: User
@@ -56,6 +52,7 @@ interface Props {
 
 interface Emits {
   (e: 'update:modelValue', value: User): void
+  (e: 'save'): void
 }
 
 const props = defineProps<Props>()
@@ -71,34 +68,6 @@ const isChanged = ref(false)
 function onSomeInputChange() {
   isChanged.value = true
 }
-
-const userRole = computed(() => {
-  switch (credentialsModel.value.role) {
-    case 'admin':
-      return 'Администратор'
-    case 'teacher':
-      return 'Учитель'
-    case 'mentor':
-      return 'Куратор'
-    case 'student':
-    default:
-      return 'Ученик'
-  }
-})
-
-const userType = computed(() => {
-  switch (credentialsModel.value.role) {
-    case 'admin':
-      return 'danger'
-    case 'teacher':
-      return 'warning'
-    case 'mentor':
-      return 'success'
-    case 'student':
-    default:
-      return 'info'
-  }
-})
 </script>
 
 <style scoped lang="sass">

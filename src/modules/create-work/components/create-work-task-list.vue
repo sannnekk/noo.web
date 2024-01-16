@@ -1,22 +1,29 @@
 <template>
-  <div class="task-list">
-    <draggable-list
-      v-model="model"
-      item-key="id"
+  <div
+    class="task-list"
+    v-auto-animate
+  >
+    <div
+      class="task-list__items"
+      v-auto-animate
     >
-      <template v-slot="{ item }">
-        <div class="task-list__item">
-          <router-link :to="`/create-work/${item.id}`">
-            {{ item.name }}
-          </router-link>
-        </div>
-      </template>
-    </draggable-list>
+      <div
+        class="task-list__item"
+        v-for="(item, index) in model"
+        :key="item.id"
+      >
+        <router-link :to="`/create-work${$route.params.workSlug}/${item.slug}`">
+          {{ index + 1 }}
+        </router-link>
+      </div>
+    </div>
     <div
       class="task-list__add"
       v-if="currentTaskId !== 'new'"
     >
-      <router-link to="/create-work/new"> ➕ Добавить вопрос </router-link>
+      <router-link :to="`/create-work${$route.params.workSlug}/new`">
+        + Добавить вопрос
+      </router-link>
     </div>
   </div>
 </template>
@@ -46,9 +53,7 @@ const model = computed({
 <style scoped lang="sass">
 .task-list
   padding: 0
-  padding-left: 0.5em
   margin: 0
-  counter-reset: list
 
   &__add
     margin-top: 1rem
@@ -56,7 +61,6 @@ const model = computed({
     border: 1px solid var(--border-color)
     cursor: pointer
     border-radius: var(--border-radius)
-    margin-left: -0.5em
 
     a
       color: var(--secondary)
@@ -70,27 +74,32 @@ const model = computed({
         background-color: var(--text-light)
         color: var(--lightest) !important
 
+  &__items
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    gap: 0.2em
+
   &__item
-    display: block
-    margin-bottom: 10px
-    font-weight: 500
-    line-height: 1
-
-    &::before
-      counter-increment: list
-      content: counter(list)
-      margin-right: 0.9em
-      color: var(--secondary)
-
     a
-      color: var(--text-light)
+      font-weight: 500
+      display: grid
+      place-items: center
+      width: 35px
+      height: 35px
+      border-radius: var(--border-radius)
+      border: 1px solid var(--border-color)
+      color: var(--dark)
       text-decoration: none
       font-weight: normal
+
+      &:hover
+        background-color: var(--text-light)
+        color: var(--lightest) !important
 
       &.router-link-active
         font-weight: bold
         color: var(--dark)
-
-      &:not(.router-link-active):hover
-        color: var(--secondary)
+        background-color: var(--primary)
+        border-color: var(--primary)
 </style>

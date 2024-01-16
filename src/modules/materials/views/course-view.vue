@@ -1,5 +1,8 @@
 <template>
-  <div class="index-materials-view">
+  <div
+    class="index-materials-view"
+    v-if="materialsStore.course"
+  >
     <the-sidebar-layout>
       <template #sidebar>
         <div class="index-materials-view__tree">
@@ -9,17 +12,22 @@
           >
             &#8249; Ко всем курсам
           </router-link>
+          <span
+            class="index-materials-view__tree__students"
+            v-if="globalStore._userRole === 'teacher'"
+            @click="assignStudentsStore.modalVisible = true"
+          >
+            Ученики курса ({{ assignStudentsStore.studentsCount }})
+          </span>
           <h2 class="index-materials-view__tree__title">
-            {{ course?.name }}
+            {{ materialsStore.course.name }}
           </h2>
           <div class="index-materials-view__tree__author">
             <div class="index-materials-view__tree__author__avatar">
-              <user-avatar :name="course?.author.name" />
+              <user-avatar :name="materialsStore.course.author.name" />
             </div>
             <div class="index-materials-view__tree__author__name">
-              <router-link :to="`/users/${course?.author.id}`">{{
-                course?.author.name
-              }}</router-link>
+              <span>{{ materialsStore.course.author.name }}</span>
             </div>
           </div>
           <materials-tree :data="materialsTree" />
@@ -32,26 +40,62 @@
       </template>
     </the-sidebar-layout>
   </div>
+  <sure-modal
+    v-model:visible="assignStudentsStore.modalVisible"
+    @confirm="assignStudentsStore.save()"
+  >
+    <template #title>
+      <h3>Ученики курса</h3>
+    </template>
+    <template #text>
+      <div class="students-modal">
+        <div class="students-modal__search">
+          <search-field v-model="assignStudentsStore.search" />
+        </div>
+        <br />
+        <div class="students-modal__list">
+          <check-list
+            :items="assignStudentsStore.students"
+            v-model="assignStudentsStore.selectedStudentIds"
+            multiple
+            item-label-key="name,username"
+            item-key="id"
+          />
+        </div>
+      </div>
+    </template>
+  </sure-modal>
 </template>
 
 <script lang="ts" setup>
 import { useMaterialsStore } from '../stores/materials'
 import MaterialsTree from '../components/materials-tree.vue'
-import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+import { useGlobalStore } from '@/store'
+import { useAssignStudentsStore } from '../stores/assign-student'
 
 const materialsStore = useMaterialsStore()
-const route = useRoute()
+const assignStudentsStore = useAssignStudentsStore()
+const globalStore = useGlobalStore()
 
-const courseId = route.params.courseId as string
-
-const course = materialsStore.getCourseById(courseId)
-const materialsTree = materialsStore.getMaterialsTree(courseId)
+const materialsTree = computed(() => materialsStore.getMaterialsTree())
 </script>
 
 <style lang="sass" scoped>
 .index-materials-view
   &__tree
     &__back-button
+      display: block
+      margin-bottom: 1rem
+      font-size: 0.8em
+      color: var(--text-light)
+      text-decoration: none
+
+      &:hover
+        color: var(--secondary)
+
+    &__students
+      cursor: pointer
       display: block
       margin-bottom: 1rem
       font-size: 0.8em
@@ -78,10 +122,16 @@ const materialsTree = materialsStore.getMaterialsTree(courseId)
         font-size: 0.9em
         font-weight: 500
 
-        a
+        span
           text-decoration: none
           color: var(--text-light)
 
-          &:hover
-            color: var(--secondary)
+
+.students-modal
+  &__search
+    margin-bottom: 1rem
+
+  &__list
+    max-height: 60vh
+    overflow-y: auto
 </style>

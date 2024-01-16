@@ -14,7 +14,7 @@ export default {
       component: indexView
     },
     {
-      path: ':courseId',
+      path: ':courseSlug',
       name: 'Курс',
       component: courseView,
       children: [

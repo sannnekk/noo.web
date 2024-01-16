@@ -22,13 +22,21 @@
         <user-avatar :name="author" />
       </div>
       <div class="course-card__author__name">
-        <router-link :to="authorLink">{{ author }}</router-link>
+        <span>{{ author }}</span>
       </div>
+    </div>
+    <div
+      class="course-card__edit"
+      v-if="globalStore._userRole === 'teacher'"
+    >
+      <router-link :to="`/create-course${slug}`"> Редактировать </router-link>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useGlobalStore } from '@/store'
+
 interface Props {
   image: string
   title: string
@@ -36,10 +44,13 @@ interface Props {
   description: string
   authorAvatar?: string
   authorLink: string
+  slug: string
   to: string
 }
 
 defineProps<Props>()
+
+const globalStore = useGlobalStore()
 </script>
 
 <style scoped lang="sass">
@@ -60,7 +71,7 @@ defineProps<Props>()
     border-radius: var(--border-radius)
     margin-bottom: 1rem
 
-    a
+    span
       display: block
       text-decoration: none
       width: 100%
@@ -107,4 +118,15 @@ defineProps<Props>()
 
         &:hover
           color: var(--secondary)
+
+  &__edit
+    margin-top: 1rem
+    font-size: 0.8rem
+
+    a
+      color: var(--text-light)
+      text-decoration: none
+
+      &:hover
+        color: var(--secondary)
 </style>

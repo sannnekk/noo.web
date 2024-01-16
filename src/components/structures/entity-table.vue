@@ -11,9 +11,9 @@
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody v-auto-animate>
       <tr
-        v-for="object in data"
+        v-for="(object, index) in data"
         :key="object.id"
       >
         <td
@@ -21,68 +21,77 @@
           :key="col.title"
           :class="`col-style-${col.style} col-type-${col.type}`"
         >
-          <span
-            v-if="col.type === 'text'"
-            v-html="getTextCol(object, col)"
-          ></span>
-          <span v-else-if="col.type === 'link'">
-            <common-button
-              v-if="col.value"
-              :to="unfunction(col, object, 'linkTo')"
-              alignment="center"
-              design="primary"
-            >
-              {{ unfunction(col, object) }}
-            </common-button>
-            <common-button
-              v-else
-              alignment="center"
-              :design="index === 0 ? 'primary' : 'secondary'"
-              :to="unfunction(col, object, 'linkTo')"
-              v-for="(key, index) in col.keys"
-              :key="key"
-            >
-              {{ object[key] }}
-            </common-button>
-          </span>
-          <span
-            v-else-if="col.type === 'tag'"
-            v-for="(key, index) in col.keys"
-            :key="index"
-          >
-            <status-tag
-              class="status-tag"
-              :type="col.tagFunction!(key, object[key]).type"
-            >
-              {{ col.tagFunction!(key, object[key]).text }}
-            </status-tag>
+          <span v-if="(col.if || (() => true))(object)">
+            <span v-if="col.type === 'iterator'">
+              {{ index + 1 }}
+            </span>
             <span
-              v-if="col.join"
-              v-html="col.join"
+              v-else-if="col.type === 'text'"
+              v-html="getTextCol(object, col)"
             ></span>
+            <span v-else-if="col.type === 'link'">
+              <common-button
+                v-if="col.value && ifFunctionThenNotNullable(col.value, object)"
+                :to="unfunction(col, object, 'linkTo')"
+                :design="col.design || 'primary'"
+                alignment="center"
+              >
+                {{ unfunction(col, object) }}
+              </common-button>
+              <common-button
+                v-else-if="
+                  col.keys &&
+                  col.keys.length &&
+                  col.keys.some((key) => object[key])
+                "
+                alignment="center"
+                :design="col.design || 'primary'"
+                :to="unfunction(col, object, 'linkTo')"
+                v-for="key in col.keys"
+                :key="key"
+              >
+                {{ object[key] }}
+              </common-button>
+            </span>
+            <span
+              v-else-if="col.type === 'tag'"
+              v-for="(key, index) in col.keys"
+              :key="index"
+            >
+              <status-tag
+                class="status-tag"
+                :type="col.tagFunction!(key, object[key]).type"
+              >
+                {{ col.tagFunction!(key, object[key]).text }}
+              </status-tag>
+              <span
+                v-if="col.join"
+                v-html="col.join"
+              ></span>
+            </span>
+            <span
+              v-else-if="col.type === 'date'"
+              v-html="getDateCol(object, col)"
+            ></span>
+            <span v-else-if="col.type === 'icon'">
+              <inline-icon
+                v-if="col.value"
+                :name="unfunction(col, object)"
+              />
+              <inline-icon
+                v-else
+                :name="object[key]"
+                v-for="key in col.keys"
+              />
+            </span>
+            <span v-else-if="col.type === 'avatar'">
+              <user-avatar
+                :src="object[col.keys[0]]"
+                :name="object[col.keys[1]]"
+              />
+            </span>
+            <span v-else>-</span>
           </span>
-          <span
-            v-else-if="col.type === 'date'"
-            v-html="getDateCol(object, col)"
-          ></span>
-          <span v-else-if="col.type === 'icon'">
-            <inline-icon
-              v-if="col.value"
-              :name="unfunction(col, object)"
-            />
-            <inline-icon
-              v-else
-              :name="object[key]"
-              v-for="key in col.keys"
-            />
-          </span>
-          <span v-else-if="col.type === 'avatar'">
-            <user-avatar
-              :src="object[col.keys[0]]"
-              :name="object[col.keys[1]]"
-            />
-          </span>
-          <span v-else>-</span>
         </td>
         <td v-if="editable || removeable">
           <!-- TODO: actions -->
@@ -90,6 +99,12 @@
       </tr>
     </tbody>
   </table>
+  <p
+    v-if="!data || !data.length"
+    class="entity-table__empty-text"
+  >
+    Нет данных
+  </p>
 </template>
 
 <script setup lang="ts">
@@ -103,8 +118,9 @@ interface Props {
     join?: string
     width?: string
     style?: ('bold' | 'italic' | 'centered')[]
-    type: 'text' | 'tag' | 'link' | 'icon' | 'date' | 'avatar'
+    type: 'text' | 'tag' | 'link' | 'icon' | 'date' | 'avatar' | 'iterator'
     linkTo?: string | Function
+    design?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger'
     tagFunction?: (
       key: string,
       value: string | number | Date
@@ -112,6 +128,7 @@ interface Props {
       text: string
       type: 'success' | 'warning' | 'danger' | 'info'
     }
+    if?: (row: any) => boolean
   }[]
   data: ({ id: string } & Record<string, string | number | Date>)[]
   dateConfig?: Parameters<typeof useDate>[1]
@@ -126,6 +143,13 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
+
+function ifFunctionThenNotNullable(
+  value: Props['cols'][0]['value'],
+  row: any
+): boolean {
+  return value instanceof Function ? !!value.call(undefined, row) : true
+}
 
 function unfunction(
   col: Props['cols'][0],
@@ -144,6 +168,8 @@ function getValueByKey(object: Record<string, any>, key: string): any {
   let value = object
 
   for (const key of keys) {
+    if (!value) return '-'
+
     value = value[key]
   }
 
@@ -167,7 +193,11 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
 
   return keys
     .map((key) =>
-      useDate(getValueByKey(object, key), { precision: 'day' }).toBeautiful()
+      getValueByKey(object, key)
+        ? useDate(getValueByKey(object, key), {
+            precision: 'day'
+          }).toBeautiful()
+        : '-'
     )
     .join(join)
 }
@@ -177,6 +207,11 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
 .entity-table
   width: 100%
   border-collapse: collapse
+
+  &__empty-text
+    text-align: center
+    color: var(--text-light)
+    margin: 8em 0
 
   thead
     tr

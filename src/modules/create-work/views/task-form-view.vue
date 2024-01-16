@@ -1,7 +1,7 @@
 <template>
   <div class="task-form-view">
     <create-work-task-form
-      v-if="taskId === 'new'"
+      v-if="taskSlug === 'new'"
       mode="create"
       v-model="createWorkStore.taskToAdd"
       @submit="createWorkStore.addTask()"
@@ -9,7 +9,7 @@
     <create-work-task-form
       v-else
       mode="update"
-      v-model="createWorkStore.taskMap[taskId]"
+      v-model="createWorkStore.taskMap[taskSlug]"
       @submit="createWorkStore.save()"
     />
   </div>
@@ -24,7 +24,7 @@ import { computed } from 'vue'
 const createWorkStore = useCreateWorkStore()
 const route = useRoute()
 
-const taskId = computed(() => route.params.taskId as string)
+const taskSlug = computed(() => route.params.taskSlug as string)
 </script>
 
 <style scoped lang="sass">

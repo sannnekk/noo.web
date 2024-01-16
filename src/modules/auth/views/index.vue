@@ -10,13 +10,17 @@
         <div class="col-md-4 col-12">
           <aside>
             <div class="index-auth-view__auth-titles">
-              <auth-titles />
+              <auth-titles :mode="authStore.mode" />
             </div>
             <div class="index-auth-view__auth-form">
               <auth-form
-                v-model="authStore.credentials"
-                :is-loading="authStore.isLoggingIn"
-                @submit="authStore.login()"
+                v-model:auth-credentials="authStore.loginCredentials"
+                v-model:register-credentials="authStore.registerCredentials"
+                v-model:mode="authStore.mode"
+                :error="authStore.error"
+                :is-loading="authStore.isLoading"
+                @login="authStore.login()"
+                @register="authStore.register()"
               />
             </div>
             <div class="index-auth-view__auth-rights">
@@ -52,6 +56,7 @@ const authStore = useAuthStore()
     transform: translateX(-50%)
 
   aside
+    overflow-y: hidden
     position: relative
     padding-top: 30px
     background-color: var(--primary)

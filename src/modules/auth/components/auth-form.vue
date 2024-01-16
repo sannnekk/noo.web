@@ -1,59 +1,180 @@
 <template>
-  <div class="auth-form">
-    <div class="auth-form__group">
-      <text-input
-        v-model="model.username"
-        placeholder="Логин"
-        @enter-press="onSubmit()"
-      />
+  <div
+    class="auth-form"
+    v-auto-animate
+  >
+    <div
+      class="auth-form__inner"
+      v-if="modeModel === 'login'"
+    >
+      <div class="auth-form__group">
+        <text-input
+          v-model="loginModel.username"
+          placeholder="Логин"
+          @enter-press="onLogin()"
+        />
+      </div>
+      <div class="auth-form__group">
+        <text-input
+          v-model="loginModel.password"
+          placeholder="Пароль"
+          @enter-press="onLogin()"
+          password
+        />
+      </div>
+      <div class="auth-form__group">
+        <error-block v-if="error">{{ error }}</error-block>
+      </div>
+      <div class="auth-form__group">
+        <div class="auth-form__group__login">
+          <common-button
+            contrast
+            alignment="center"
+            :loading="isLoading"
+            @click="onLogin()"
+          >
+            Войти
+          </common-button>
+        </div>
+        <div class="auth-form__group__register">
+          <span @click="modeModel = 'register'"> Зарегистрироваться </span>
+        </div>
+      </div>
     </div>
-    <div class="auth-form__group">
-      <text-input
-        v-model="model.password"
-        placeholder="Пароль"
-        @enter-press="onSubmit()"
-        password
-      />
-    </div>
-    <div class="auth-form__group">
-      <common-button
-        contrast
-        alignment="center"
-        :loading="isLoading"
-        @click="onSubmit()"
-      >
-        Войти
-      </common-button>
+    <div
+      class="auth-form__inner"
+      v-else
+    >
+      <div class="auth-form__group">
+        <text-input
+          v-model="registerModel.name"
+          placeholder="Имя и фамилия"
+          @enter-press="onRegister()"
+        />
+      </div>
+      <div class="auth-form__group">
+        <text-input
+          v-model="registerModel.email"
+          placeholder="Имейл"
+          @enter-press="onRegister()"
+        />
+      </div>
+      <div class="auth-form__group">
+        <text-input
+          v-model="registerModel.username"
+          placeholder="Никнейм"
+          @enter-press="onRegister()"
+        />
+      </div>
+      <div class="auth-form__group">
+        <text-input
+          v-model="registerModel.password"
+          placeholder="Пароль"
+          @enter-press="onRegister()"
+          password
+        />
+        <div class="auth-form__group__password-criteria">
+          <span
+            v-for="criterium in registerCredentials.passwordCriteria"
+            class="auth-form__group__password-criteria__item"
+          >
+            <inline-icon
+              :name="
+                criterium.isValid(registerCredentials.password)
+                  ? 'check-green'
+                  : 'cross-red'
+              "
+            />
+            {{ criterium.errorText }}
+          </span>
+        </div>
+      </div>
+      <div class="auth-form__group">
+        <text-input
+          v-model="registerModel.repeatPassword"
+          placeholder="Повторите пароль"
+          @enter-press="onRegister()"
+          password
+        />
+      </div>
+      <div class="auth-form__group">
+        <error-block v-if="error">{{ error }}</error-block>
+      </div>
+      <div class="auth-form__group">
+        <div class="auth-form__group__login">
+          <common-button
+            contrast
+            alignment="center"
+            :loading="isLoading"
+            @click="onRegister()"
+          >
+            Зарегистрироваться
+          </common-button>
+        </div>
+        <div class="auth-form__group__register">
+          <span @click="modeModel = 'login'"> Войти </span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
 interface Props {
-  modelValue: {
+  authCredentials: {
     username: string
     password: string
   }
+  registerCredentials: {
+    name: string
+    username: string
+    email: string
+    password: string
+    repeatPassword: string
+    passwordCriteria: {
+      errorText: string
+      isValid: (str: string) => boolean
+    }[]
+  }
+  mode: 'login' | 'register'
   isLoading?: boolean
+  error?: string
 }
 
 interface Emits {
-  (e: 'update:modelValue', value: Props['modelValue']): void
-  (e: 'submit'): void
+  (e: 'update:authCredentials', value: Props['authCredentials']): void
+  (e: 'update:registerCredentials', value: Props['registerCredentials']): void
+  (e: 'update:mode', value: Props['mode']): void
+  (e: 'login'): void
+  (e: 'register'): void
 }
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
-const model = computed({
-  get: () => props.modelValue,
-  set: (val) => emits('update:modelValue', val)
+const modeModel = computed({
+  get: () => props.mode,
+  set: (val) => emits('update:mode', val)
 })
 
-function onSubmit() {
-  emits('submit')
+const loginModel = computed({
+  get: () => props.authCredentials,
+  set: (val) => emits('update:authCredentials', val)
+})
+
+const registerModel = computed({
+  get: () => props.registerCredentials,
+  set: (val) => emits('update:registerCredentials', val)
+})
+
+function onLogin() {
+  emits('login')
+}
+
+function onRegister() {
+  emits('register')
 }
 </script>
 
@@ -61,4 +182,25 @@ function onSubmit() {
 .auth-form
   &__group
     margin-bottom: 1em
+
+    &__password-criteria
+      margin-top: 0.5em
+      font-size: 12px
+      background-color: var(--lightest)
+      border-radius: var(--border-radius)
+      padding: 1em
+
+      &__item
+        display: block
+
+    &__register
+      text-align: center
+      margin-top: 1em
+      font-size: 12px
+      color: var(--dark)
+      text-decoration: none
+      cursor: pointer
+
+      &:hover
+        text-decoration: underline
 </style>

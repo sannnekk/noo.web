@@ -11,6 +11,7 @@ export interface Course {
   authorId: User['id']
   description: string
   chapters?: Chapter[]
+  students?: User[]
   createdAt: Date
   updatedAt: Date
 }

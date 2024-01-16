@@ -8,6 +8,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { User } from '@/types/entities/User'
 import { useStudentsStore } from '../stores/students'
 
 const cols = [
@@ -33,8 +34,9 @@ const cols = [
   },
   {
     title: 'Telegram',
-    keys: ['telegramId'],
-    type: 'link'
+    keys: ['telegramUsername'],
+    type: 'link',
+    linkTo: (user: User) => `https://t.me/${user.telegramUsername}`
   }
 ]
 

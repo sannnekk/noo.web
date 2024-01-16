@@ -5,7 +5,7 @@ import taskFormView from './views/task-form-view.vue'
 import generalInfoView from './views/general-info-view.vue'
 
 export default {
-  path: '/create-work',
+  path: '/create-work:workSlug?',
   name: 'Создание работы',
   component: module, // <-- necessary
   children: [
@@ -13,7 +13,6 @@ export default {
     {
       path: '',
       name: 'Список заданий',
-      redirect: '/create-work/general-info',
       component: indexView,
       children: [
         {
@@ -22,8 +21,8 @@ export default {
           component: generalInfoView
         },
         {
-          path: ':taskId',
-          name: 'Создание работы',
+          path: ':taskSlug',
+          name: 'Список заданий',
           component: taskFormView
         }
       ]

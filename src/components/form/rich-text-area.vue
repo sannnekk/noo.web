@@ -41,7 +41,8 @@ const model = computed({
 
 const toolbar = [
   ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-  ['blockquote', 'link'],
+
+  ['link', 'image', 'video'],
 
   [{ list: 'ordered' }, { list: 'bullet' }],
   [{ script: 'sub' }, { script: 'super' }], // superscript/subscript

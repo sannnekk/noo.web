@@ -18,20 +18,31 @@ interface Props {
   label: string
   type: string
   placeholder?: string
-  modelValue: string | number
+  modelValue: string | number | Date
   readonly?: boolean
 }
 
 interface Emits {
-  (e: 'update:modelValue', value: string | number): void
+  (e: 'update:modelValue', value: string | number | Date): void
 }
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 const model = computed({
-  get: () => props.modelValue,
-  set: (value) => emits('update:modelValue', value)
+  get: () => {
+    if (props.type === 'datetime-local') {
+      return new Date(props.modelValue).toISOString().slice(0, 16)
+    }
+    return props.modelValue
+  },
+  set: (value) => {
+    if (props.type === 'datetime-local') {
+      emits('update:modelValue', new Date(value))
+    } else {
+      emits('update:modelValue', value)
+    }
+  }
 })
 </script>
 

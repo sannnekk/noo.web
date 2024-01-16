@@ -1,21 +1,20 @@
 <template>
-  <div class="task-form">
-    <div class="task-form__row">
+  <div
+    class="task-form"
+    v-auto-animate
+  >
+    <div
+      class="task-form__row"
+      v-auto-animate
+    >
       <div class="task-form__col-6 form-group">
-        <form-input
-          label="Название задания"
-          v-model="model.name"
-          type="text"
-        />
-      </div>
-      <div class="task-form__col-3 form-group">
         <select-input
           v-model="model.type"
           :options="taskTypeOptions"
           label="Тип задания"
         />
       </div>
-      <div class="task-form__col-3 form-group">
+      <div class="task-form__col-6 form-group">
         <form-input
           v-model="model.highestScore"
           label="Максимальный балл"
@@ -55,13 +54,30 @@
       </div>
     </div>
     <div class="task-form__row">
-      <div class="task-form__col-12 form-group">
+      <div class="task-form__col-4 form-group"></div>
+      <div
+        class="task-form__col-4 form-group"
+        v-if="mode == 'update'"
+      ></div>
+      <div class="task-form__col-4 form-group">
         <common-button
-          design="primary"
-          alignment="right"
+          design="secondary"
+          alignment="stretch"
           @click="$emit('submit')"
         >
-          {{ buttonTitle }}
+          Удалить задание
+        </common-button>
+      </div>
+      <div
+        class="task-form__col-4 form-group"
+        v-if="mode == 'create'"
+      >
+        <common-button
+          design="primary"
+          alignment="stretch"
+          @click="$emit('submit')"
+        >
+          Добавить задание
         </common-button>
       </div>
     </div>
@@ -95,16 +111,6 @@ const emits = defineEmits<Emits>()
 const model = computed({
   get: () => props.modelValue,
   set: (value) => emits('update:modelValue', value)
-})
-
-const buttonTitle = computed(() => {
-  switch (props.mode) {
-    case 'create':
-      return 'Добавить'
-    case 'update':
-    default:
-      return 'Сохранить'
-  }
 })
 
 const taskTypeOptions = reactive<TaskTypeOption[]>([

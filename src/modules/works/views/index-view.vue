@@ -5,19 +5,11 @@
         <search-field v-model="worksStore.search" />
       </div>
       <div class="index-works-view__header__link">
-        <common-button
-          to="/create-work"
-          design="secondary"
-        >
-          Создать работу
-        </common-button>
+        <common-button to="/create-work/new">Создать работу</common-button>
       </div>
     </div>
     <div class="index-works-view__table">
-      <works-table
-        :works="worksStore.works"
-        :get-user-action-function="worksStore.getUserAction"
-      />
+      <works-table :works="worksStore.works" />
     </div>
   </div>
 </template>
@@ -31,8 +23,10 @@ const worksStore = useWorksStore()
 
 <style lang="sass" scoped>
 .index-works-view
+  padding: 1rem
+
   &__header
-    padding: 1rem
+    padding-bottom: 1rem
     display: flex
     gap: 1rem
 

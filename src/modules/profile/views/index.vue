@@ -1,13 +1,24 @@
 <template>
-  <div class="index-profile-view">
+  <div
+    class="index-profile-view"
+    v-if="userStore.user"
+  >
     <the-sidebar-layout>
       <template #sidebar>
         <div class="index-profile-view__user-info">
           <div class="index-profile-view__credentials">
-            <profile-credentials v-model="userStore.user" />
+            <profile-credentials
+              v-model="userStore.user"
+              @save="userStore.onCredentialsUpdate()"
+            />
           </div>
           <div class="index-profile-view__password-change">
-            <profile-password-form v-model="userStore.passwordChange" />
+            <profile-password-form @save="userStore.onPasswordChange($event)" />
+          </div>
+          <br />
+          <hr />
+          <div class="index-profile-view__delete-account">
+            <delete-account @delete-account="userStore.deleteAccount()" />
           </div>
         </div>
       </template>
@@ -50,9 +61,10 @@
 
 <script lang="ts" setup>
 import { useUserStore } from '@/store'
+import { useProfileStore } from '../stores/profile'
 import ProfileCredentials from '../components/profile-credentials.vue'
 import ProfilePasswordForm from '../components/profile-password-form.vue'
-import { useProfileStore } from '../stores/profile'
+import deleteAccount from '../components/delete-account.vue'
 
 const userStore = useUserStore()
 const profileStore = useProfileStore()

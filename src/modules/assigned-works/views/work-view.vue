@@ -1,14 +1,14 @@
 <template>
   <div class="work-view">
-    <the-sidebar-layout v-if="currentWork">
+    <the-sidebar-layout v-if="worksStore.assignedWork">
       <template #sidebar>
         <div class="work-view__sidebar">
           <h2 class="work-view__sidebar__title">Вопросы</h2>
           <task-list
-            :work-id="workId"
-            :isSolvedFunction="worksStore.taskHasAnswer"
-            :base-url="baseUrl"
-            :tasks="currentWork?.work?.tasks || []"
+            :work-id="worksStore.assignedWorkId"
+            :is-solved-function="worksStore.taskHasAnswer"
+            :base-url="worksStore.baseUrl"
+            :tasks="worksStore.assignedWork?.work?.tasks || []"
           />
           <div class="work-view__sidebar__submit">
             <common-button
@@ -23,8 +23,21 @@
               }}
             </common-button>
             <common-button
+              class="work-view__sidebar__shift-button"
               alignment="stretch"
-              to="/works"
+              design="secondary"
+              @click="worksStore.shiftDeadline()"
+              v-if="['check', 'solve'].includes(worksStore.mode)"
+            >
+              {{
+                worksStore.mode === 'check'
+                  ? 'Сдвинуть дедлайн проверки'
+                  : 'Сдвинуть дедлайн сдачи'
+              }}
+            </common-button>
+            <common-button
+              alignment="stretch"
+              to="/assigned-works"
               v-else
             >
               Вернуться к списку работ
@@ -44,7 +57,7 @@
     >
       <h1 class="work-view__not-found__title">Работа не найдена</h1>
       <common-button
-        to="/works"
+        :to="['admin', 'teacher'].includes(globalStore._userRole!) ? '/works' : '/assigned-works'"
         alignment="center"
         class="work-view__not-found__link"
       >
@@ -74,24 +87,27 @@
       </warning-block>
     </template>
   </sure-modal>
+  <sure-modal
+    v-model:visible="worksStore.shiftDeadlineModalVisible"
+    @confirm="worksStore.shiftDeadline()"
+  >
+    <template #title> Сдвинуть дедлайн на 3 дня </template>
+    <template #text>
+      Вы уверены, что хотите сдвинуть дедлайн?
+      <br />
+      <br />
+      <warning-block> Сдвинуть дедлайн можно только один раз </warning-block>
+    </template>
+  </sure-modal>
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useGlobalStore } from '@/store'
 import TaskList from '../components/task-list.vue'
-import { useWorksStore } from '../stores/works'
-import { computed } from 'vue'
+import { useAssignedWorksStore } from '../stores/works'
 
-const worksStore = useWorksStore()
-const route = useRoute()
-
-const workId = computed(() => route.params.workId as string)
-const mode = computed(() => route.params.mode as string)
-const taskId = computed(() => route.params.taskId as string)
-
-const baseUrl = computed(() => `/works/${workId.value}/${mode.value}`)
-
-const currentWork = computed(() => worksStore.getWork(workId.value))
+const worksStore = useAssignedWorksStore()
+const globalStore = useGlobalStore()
 </script>
 
 <style scoped lang="sass">
@@ -99,6 +115,10 @@ const currentWork = computed(() => worksStore.getWork(workId.value))
   &__sidebar
     &__title
       margin: 0
+
+    &__shift-button
+      margin-top: 0.5em
+      transform: scale(0.8)
 
   &__not-found
     display: flex

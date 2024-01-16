@@ -35,8 +35,8 @@ const model = computed({
 .textarea
   width: 100%
   padding: 1rem 1rem
-  border-radius: 1.35rem
-  border: 1px solid var(--text-light)
+  border-radius: var(--border-radius)
+  border: 1px solid var(--border-color)
   outline: none
   transition: border-color 0.2s ease-in-out
   resize: vertical

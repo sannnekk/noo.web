@@ -5,7 +5,9 @@
         <div class="index-create-work-view__sidebar">
           <h2 class="index-create-work-view__sidebar__title">Вопросы</h2>
           <div class="index-create-work-view__sidebar__general-info">
-            <router-link to="/create-work/general-info">
+            <router-link
+              :to="`/create-work${$route.params.workSlug}/general-info`"
+            >
               Общая информация
             </router-link>
           </div>
@@ -23,7 +25,11 @@
               design="primary"
               @click="createWorkStore.submitWork()"
             >
-              Опубликовать работу
+              {{
+                $route.params.workSlug && $route.params.workSlug.length
+                  ? 'Обновить работу'
+                  : 'Опубликовать'
+              }}
             </common-button>
           </div>
         </div>

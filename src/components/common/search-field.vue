@@ -15,7 +15,12 @@
       type="text"
       v-model="model"
     />
-    <common-button class="search-field__button"> Поиск </common-button>
+    <common-button
+      class="search-field__button"
+      alignment="right"
+    >
+      Поиск
+    </common-button>
   </div>
 </template>
 

@@ -8,18 +8,10 @@
       />
     </div>
     <div class="form-group">
-      <rich-text-area
-        v-model="createWorkStore.work.description"
-        label="Описание работы"
-      />
-    </div>
-    <div class="form-group">
-      <entity-select-widget
-        label="Присвоить к теоретическому материалу (опционально)"
-        v-model="createWorkStore.work.materialId"
-        expect="id"
-        nullable
-      />
+      <label class="general-info-view__work-description">
+        Описание работы
+      </label>
+      <text-area v-model="createWorkStore.work.description" />
     </div>
   </div>
 </template>
@@ -34,4 +26,8 @@ const createWorkStore = useCreateWorkStore()
 .general-info-view
   padding: 1rem
   padding-left: 0
+
+  &__work-description
+    font-size: 0.8em
+    color: var(--text-light)
 </style>

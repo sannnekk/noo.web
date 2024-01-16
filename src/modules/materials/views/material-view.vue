@@ -5,22 +5,33 @@
   >
     <div class="material-view__header">
       <div class="material-view__header__title">
-        <h1>{{ material!.name }}</h1>
+        <h1>{{ material.name }}</h1>
       </div>
       <div
         class="material-view__header__work-link"
-        v-if="material?.workId"
+        v-if="material.workId"
       >
-        <common-button :to="material?.work?.slug">
+        <common-button
+          v-if="materialsStore.assignedWorkLink"
+          :to="materialsStore.assignedWorkLink"
+        >
           Перейти к работе
+        </common-button>
+      </div>
+      <div
+        class="material-view__header__work-link"
+        v-if="globalStore._userRole === 'teacher'"
+      >
+        <common-button @click="assignWorkStore.modalVisible = true">
+          {{ material.work ? 'Поменять работу' : 'Присвоить работу' }}
         </common-button>
       </div>
     </div>
     <div class="material-view__description">
-      <div v-html="material!.description"></div>
+      <div v-html="material.description"></div>
     </div>
     <div class="material-view__content">
-      <div v-html="material!.content"></div>
+      <rich-text-container :content="material.content" />
     </div>
   </div>
   <p
@@ -29,24 +40,58 @@
   >
     Выберите материал из дерева слева
   </p>
+  <sure-modal
+    v-model:visible="assignWorkStore.modalVisible"
+    @confirm="assignWorkStore.assign()"
+  >
+    <template #title>
+      <h3>Присвоить работу</h3>
+    </template>
+    <template #text>
+      <div class="assign-work-to-material-modal">
+        <p v-if="assignWorkStore.selectedWorkId.length">
+          Сейчас присвоена:
+          <router-link
+            class="assign-work-to-material-modal__current-work-link"
+            :to="`/create-work${materialsStore.getMaterialBySlug($route.params.slug as string)?.work?.slug}`"
+            >{{
+              materialsStore.getMaterialBySlug($route.params.slug as string)
+                ?.work?.name
+            }}</router-link
+          >
+        </p>
+        <div class="assign-work-to-material-modal__search">
+          <search-field v-model="assignWorkStore.search" />
+        </div>
+        <br />
+        <div class="assign-work-to-material-modal__list">
+          <check-list
+            v-model="assignWorkStore.selectedWorkId"
+            :items="assignWorkStore.works"
+            item-label-key="name"
+            item-key="id"
+          />
+        </div>
+      </div>
+    </template>
+  </sure-modal>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { useMaterialsStore } from '../stores/materials'
 import { computed } from 'vue'
+import { useGlobalStore } from '@/store'
+import { useAssignWorkToMaterialStore } from '../stores/assign-work'
 
 const materialsStore = useMaterialsStore()
+const assignWorkStore = useAssignWorkToMaterialStore()
+const globalStore = useGlobalStore()
 const route = useRoute()
 
 const material = computed(() =>
-  materialsStore.getMaterialBySlug(
-    route.params.courseId as string,
-    route.params.slug as string
-  )
+  materialsStore.getMaterialBySlug(route.params.slug as string)
 )
-
-console.log(material)
 </script>
 
 <style scoped lang="sass">
@@ -80,4 +125,13 @@ console.log(material)
       width: 100%
       aspect-ratio: 16 / 9
       border-radius: var(--border-radius)
+
+.assign-work-to-material-modal
+  &__current-work-link
+    text-decoration: none
+    color: var(--dark)
+    font-weight: bold
+
+    &:hover
+      text-decoration: underline
 </style>

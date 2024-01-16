@@ -23,7 +23,7 @@
         "
         @click="subject.opened = !subject.opened"
         class="materials-tree__item__name"
-        :to="`/materials/${$route.params.courseId}/${subject.slug}`"
+        :to="`/materials/${$route.params.courseSlug}/${subject.slug}`"
       >
         <inline-icon
           class="materials-tree__item__name__icon"

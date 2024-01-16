@@ -1,7 +1,7 @@
 <template>
   <div
     class="task-view"
-    v-if="worksStore.task"
+    v-if="worksStore.assignedWork && worksStore.task"
   >
     <h2 class="task-view__title">{{ worksStore.assignedWork?.work?.name }}</h2>
     <h4 class="task-view__subtitle">{{ worksStore.task?.name }}:</h4>
@@ -61,6 +61,14 @@
         :readonly="worksStore.fieldVisibility.checkBox === 'readonly'"
       />
     </div>
+    <br />
+    <common-button
+      alignment="right"
+      v-if="worksStore.nextTaskLink"
+      :to="worksStore.nextTaskLink"
+    >
+      Следующий вопрос
+    </common-button>
   </div>
   <div
     class="task-view__not-chosen"
@@ -71,14 +79,14 @@
 </template>
 
 <script setup lang="ts">
-import { useWorksStore } from '../stores/works'
+import { useAssignedWorksStore } from '../stores/works'
 import taskAnswerTextContainer from '../components/task-answer-text-container.vue'
 import taskAnswerWordContainer from '../components/task-answer-word-container.vue'
 import taskAnswerOptionsContainer from '../components/task-answer-options-container.vue'
 import taskCommentContainer from '../components/task-comment-container.vue'
 import taskScoreContainer from '../components/task-score-container.vue'
 
-const worksStore = useWorksStore()
+const worksStore = useAssignedWorksStore()
 </script>
 
 <style scoped lang="sass">

@@ -1,3 +1,4 @@
+import type { Course } from './Course'
 import type { Media } from './Media'
 
 export interface User {
@@ -8,6 +9,10 @@ export interface User {
   username: string
   email: string
   avatar?: Media
+  mentor?: User
+  courses?: Course[]
+  students?: User[]
+  telegramUsername?: string
   telegramId?: string
   password?: string
   isBlocked: boolean

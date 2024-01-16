@@ -5,4 +5,9 @@ const router = createRouter({
   routes: []
 })
 
+router.beforeEach((to, from, next) => {
+  if (to.path === '/') next('/profile')
+  else next()
+})
+
 export default router
