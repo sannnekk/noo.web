@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:3010'
+const baseUrl = 'https://api.noo-school.ru'
 
 async function request(
   url: string,
