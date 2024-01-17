@@ -8,6 +8,7 @@ export interface Material {
   name: string
   description: string
   content: DeltaContentType
+  order: number
   chapterId: string
   chapter?: Chapter
   workId?: string

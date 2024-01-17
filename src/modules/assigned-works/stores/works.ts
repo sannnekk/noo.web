@@ -255,6 +255,8 @@ export const useAssignedWorksStore = defineStore('assigned-works', () => {
   }
 
   function submitWork() {
+    if (!assignedWork.value) return
+
     const tasks = assignedWork.value!.work?.tasks || []
 
     if (mode.value === 'solve' && !tasks.every((task) => taskHasAnswer(task))) {
@@ -269,6 +271,10 @@ export const useAssignedWorksStore = defineStore('assigned-works', () => {
     }
 
     _globalStore.setLoading(true)
+
+    assignedWork.value.comments.forEach((comment, index) => {
+      assignedWork.value!.comments[index].score = Number(comment.score)
+    })
 
     http
       .patch(

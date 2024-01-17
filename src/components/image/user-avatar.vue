@@ -30,7 +30,9 @@ const props = defineProps<Props>()
 const initials = computed(() => {
   if (!props.name) return ''
   const [firstName, lastName] = props.name.split(' ')
-  return `${firstName[0]}${lastName[0]}`.toUpperCase()
+  return `${(firstName || '-')[0]}${(lastName || ' ')[0]}`
+    .toUpperCase()
+    .replace(' ', '')
 })
 
 const bgColor = computed(() => {

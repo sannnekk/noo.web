@@ -4,7 +4,6 @@
     v-if="worksStore.assignedWork && worksStore.task"
   >
     <h2 class="task-view__title">{{ worksStore.assignedWork?.work?.name }}</h2>
-    <h4 class="task-view__subtitle">{{ worksStore.task?.name }}:</h4>
     <div class="task-view__question">
       <rich-text-container :content="worksStore.task?.content" />
     </div>

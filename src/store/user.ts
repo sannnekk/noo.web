@@ -34,9 +34,12 @@ export const useUserStore = defineStore('user', () => {
         ...user.value,
         password: undefined
       })
-      _globalStore.openModal('success', 'Данные успешно изменены')
+      _globalStore.openModal(
+        'success',
+        'Данные успешно изменены. Некоторые изменения могут отобразиться после повторного входа'
+      )
+      localStorage.setItem('user', JSON.stringify(user.value))
     } catch (error) {
-      console.log(error)
       _globalStore.openModal('error', 'Ошибка при изменении данных')
     }
   }

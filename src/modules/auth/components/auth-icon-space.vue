@@ -15,7 +15,7 @@
     </div>
     <div class="auth-icon-space__image">
       <img
-        src="/img/auth-icon-space.jpg"
+        src="/img/auth-icon-space.svg"
         alt="Auth Icon Space"
       />
     </div>

@@ -13,21 +13,21 @@
       />
     </div>
     <div class="profile-credentials__username">
-      Никнейм:
+      <span class="label">Никнейм:</span>
       <inline-input
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.username"
       />
     </div>
     <div class="profile-credentials__email">
-      Email:
+      <span class="label">Email:</span>
       <inline-input
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.email"
       />
     </div>
     <div class="profile-credentials__telegram">
-      Telegram:
+      <span class="label">Telegram:</span>
       <inline-input
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.telegramUsername"
@@ -82,6 +82,10 @@ function onSomeInputChange() {
 <style scoped lang="sass">
 .profile-credentials
   text-align: center
+
+  .label
+    display: block
+    margin-top: 0.5em
 
   &__avatar
     display: inline-block

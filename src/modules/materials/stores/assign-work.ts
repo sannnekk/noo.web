@@ -19,6 +19,16 @@ export const useAssignWorkToMaterialStore = defineStore(
     const selectedWorkId = ref([
       materialsStore.getMaterialBySlug(materialSlug.value)?.work?.id
     ])
+
+    const checkDeadline = ref<Date>(new Date())
+    const solveDeadline = ref<Date>(new Date())
+
+    watch(solveDeadline, () => {
+      if (checkDeadline.value > solveDeadline.value) {
+        checkDeadline.value.setDate(solveDeadline.value.getDate() + 2)
+      }
+    })
+
     const modalVisible = ref(false)
 
     watch(search, () => {
@@ -43,7 +53,11 @@ export const useAssignWorkToMaterialStore = defineStore(
 
       http
         .patch(
-          `/course/${materialSlug.value}/assign-work/${selectedWorkId.value[0]}`
+          `/course/${materialSlug.value}/assign-work/${selectedWorkId.value[0]}`,
+          {
+            checkDeadline: checkDeadline.value,
+            solveDeadline: solveDeadline.value
+          }
         )
         .then(() =>
           globalStore.openModal('success', 'Работа успешно присвоена')
@@ -54,6 +68,14 @@ export const useAssignWorkToMaterialStore = defineStore(
         .finally(() => globalStore.setLoading(false))
     }
 
-    return { works, search, assign, modalVisible, selectedWorkId }
+    return {
+      works,
+      search,
+      assign,
+      modalVisible,
+      selectedWorkId,
+      checkDeadline,
+      solveDeadline
+    }
   }
 )

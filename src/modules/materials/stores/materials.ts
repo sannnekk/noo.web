@@ -46,7 +46,12 @@ export const useMaterialsStore = defineStore('materials', () => {
       _globalStore.setLoading(true)
       http
         .get(`/course/${_route.params.courseSlug}`)
-        .then((data) => {
+        .then((data: Course) => {
+          for (const chapter of data.chapters || []) {
+            chapter.materials = (chapter.materials || []).sort(
+              (a, b) => a.order - b.order
+            )
+          }
           course.value = data
         })
         .catch(() => {

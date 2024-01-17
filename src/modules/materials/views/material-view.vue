@@ -72,6 +72,18 @@
             item-key="id"
           />
         </div>
+        <div class="assign-work-to-material-modal__deadlines">
+          <form-input
+            type="datetime-local"
+            v-model="assignWorkStore.solveDeadline"
+            label="Дедлайн решения"
+          />
+          <form-input
+            type="datetime-local"
+            v-model="assignWorkStore.checkDeadline"
+            label="Дедлайн проверки"
+          />
+        </div>
       </div>
     </template>
   </sure-modal>
@@ -134,4 +146,9 @@ const material = computed(() =>
 
     &:hover
       text-decoration: underline
+
+  &__deadlines
+    display: flex
+    justify-content: space-between
+    gap: 1em
 </style>
