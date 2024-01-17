@@ -76,6 +76,7 @@
               <form-input
                 v-model="createCourseStore.newChapterName"
                 label="Название главы"
+                type="text"
               />
             </div>
             <div class="index-create-course-view__sidebar__add-chapter__button">
@@ -105,6 +106,7 @@
             <form-input
               v-model="createCourseStore.course!.name"
               label="Название курса"
+              type="text"
             />
           </div>
           <div class="form-group">
@@ -166,6 +168,9 @@ const createCourseStore = useCreateCourseStore()
             margin-bottom: 0.5em
 
           a
+            &.router-link-active
+              font-weight: bold
+
             &:hover
               text-decoration: underline
 

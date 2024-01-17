@@ -18,6 +18,8 @@ export const useCreateCourseStore = defineStore('create-course', () => {
 
   const newChapterName = ref('')
 
+  const currentMaterial = ref<Material>(emptyMaterial() as Material)
+
   watch(
     () => _route.params.courseSlug,
     () => {
@@ -40,6 +42,20 @@ export const useCreateCourseStore = defineStore('create-course', () => {
       }
     },
     { immediate: true }
+  )
+
+  watch(
+    () => _route.params.materialSlug,
+    () => {
+      if (_route.params.materialSlug === 'new') {
+        currentMaterial.value = emptyMaterial() as Material
+      } else {
+        currentMaterial.value = getMaterial(
+          _route.params.chapterSlug as string,
+          _route.params.materialSlug as string
+        ) as Material
+      }
+    }
   )
 
   function addChapter() {
@@ -66,9 +82,7 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     if (!chapter) return
 
     if (materialSlug === 'new') {
-      const newMaterial = emptyMaterial()
-      chapter.materials!.push(newMaterial as Material)
-      return newMaterial
+      return emptyMaterial()
     }
 
     return chapter?.materials?.find(
@@ -103,6 +117,21 @@ export const useCreateCourseStore = defineStore('create-course', () => {
         ]
       }
     }
+  }
+
+  function addMaterial() {
+    if (!currentMaterial.value.name.trim()) {
+      _globalStore.openModal('error', 'У материала должно быть название')
+      return
+    }
+
+    const chapterSlug = _route.params.chapterSlug as string
+    const chapter = getChapter(chapterSlug)
+
+    if (!chapter) return
+
+    chapter.materials!.push(currentMaterial.value)
+    currentMaterial.value = emptyMaterial() as Material
   }
 
   function removeChapter(chapterSlug: string) {
@@ -206,11 +235,13 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     addChapter,
     publishCourse,
     newChapterName,
+    currentMaterial,
     emptyMaterial,
     getChapter,
     getMaterial,
     setMaterial,
     removeChapter,
-    removeMaterial
+    removeMaterial,
+    addMaterial
   }
 })
