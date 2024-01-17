@@ -55,7 +55,7 @@
       <div class="auth-form__group">
         <text-input
           v-model="registerModel.email"
-          placeholder="Имейл"
+          placeholder="Email"
           @enter-press="onRegister()"
         />
       </div>
@@ -180,6 +180,9 @@ function onRegister() {
 
 <style lang="sass" scoped>
 .auth-form
+  max-height: 65vh
+  overflow-y: auto
+
   &__group
     margin-bottom: 1em
 

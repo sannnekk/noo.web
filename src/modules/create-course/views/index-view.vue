@@ -93,9 +93,20 @@
             <common-button
               design="primary"
               alignment="stretch"
-              @click="createCourseStore.publishCourse"
+              @click="createCourseStore.publishCourse()"
             >
               {{ $route.params.courseSlug ? 'Обновить' : 'Опубликовать' }}
+            </common-button>
+            <br />
+            <hr />
+            <br />
+            <common-button
+              v-if="$route.params.courseSlug"
+              design="danger"
+              alignment="stretch"
+              @click="createCourseStore.removeCourse()"
+            >
+              Удалить курс
             </common-button>
           </div>
         </div>
@@ -120,6 +131,17 @@
       </template>
     </the-sidebar-layout>
   </div>
+  <sure-modal
+    v-model:visible="createCourseStore.removeCourseModalVisible"
+    @confirm="createCourseStore.removeCourse()"
+  >
+    <template #title>
+      <h3>Вы уверены, что хотите удалить курс?</h3>
+    </template>
+    <template #text>
+      <p>Все данные курса будут удалены безвозвратно</p>
+    </template>
+  </sure-modal>
 </template>
 
 <script setup lang="ts">

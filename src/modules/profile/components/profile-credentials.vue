@@ -13,15 +13,24 @@
       />
     </div>
     <div class="profile-credentials__username">
+      Никнейм:
       <inline-input
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.username"
       />
     </div>
     <div class="profile-credentials__email">
+      Email:
       <inline-input
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.email"
+      />
+    </div>
+    <div class="profile-credentials__telegram">
+      Telegram:
+      <inline-input
+        @update:modelValue="onSomeInputChange()"
+        v-model="credentialsModel.telegramUsername"
       />
     </div>
     <div class="profile-credentials__role">

@@ -123,7 +123,7 @@ const taskTypeOptions = reactive<TaskTypeOption[]>([
     value: 'one_choice'
   },
   {
-    label: 'Одно слово в ответе',
+    label: 'Ответ в одну строку',
     value: 'word'
   },
   {

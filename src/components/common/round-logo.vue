@@ -3,7 +3,7 @@
     <div class="round-logo__circle">
       <div class="round-logo__circle--bordered">
         <img
-          src="/img/logo_circled.png"
+          src="/img/logo-circled.svg"
           alt="Логотип НОО"
           class="round-logo__circle__img"
         />

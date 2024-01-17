@@ -40,7 +40,9 @@
     <div v-else>
       <br />
       <br />
-      <p style="text-align: center">Курсы не найдены</p>
+      <p style="text-align: center; color: var(--text-light)">
+        Курсы не найдены
+      </p>
     </div>
   </div>
 </template>

@@ -28,7 +28,7 @@ const cols = [
     style: 'bold'
   },
   {
-    title: 'Присовенный материал',
+    title: 'Присвоенный материал',
     keys: ['material.name'],
     type: 'text',
     style: 'bold'

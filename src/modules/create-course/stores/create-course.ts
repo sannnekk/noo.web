@@ -17,6 +17,7 @@ export const useCreateCourseStore = defineStore('create-course', () => {
   } as any)
 
   const newChapterName = ref('')
+  const removeCourseModalVisible = ref(false)
 
   const currentMaterial = ref<Material>(emptyMaterial() as Material)
 
@@ -230,10 +231,27 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     }
   }
 
+  function removeCourse() {
+    if (!removeCourseModalVisible.value) {
+      removeCourseModalVisible.value = true
+      return
+    }
+
+    _globalStore.setLoading(true)
+    http
+      .remove(`/course/${course.value.id}`)
+      .then(() => _globalStore.openModal('success', 'Курс успешно удален'))
+      .catch(() =>
+        _globalStore.openModal('error', 'Произошла ошибка при удалении курса')
+      )
+      .finally(() => _globalStore.setLoading(false))
+  }
+
   return {
     course,
     addChapter,
     publishCourse,
+    removeCourse,
     newChapterName,
     currentMaterial,
     emptyMaterial,
@@ -242,6 +260,7 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     setMaterial,
     removeChapter,
     removeMaterial,
-    addMaterial
+    addMaterial,
+    removeCourseModalVisible
   }
 })

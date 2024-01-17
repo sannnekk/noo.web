@@ -5,20 +5,11 @@
         <search-field v-model="worksStore.search" />
       </div>
     </div>
-    <div
-      class="index-works-view__table"
-      v-if="worksStore.works.length > 0"
-    >
+    <div class="index-works-view__table">
       <works-table
         :works="worksStore.works"
         :get-user-action-function="worksStore.getUserAction"
       />
-    </div>
-    <div
-      class="index-works-view__empty"
-      v-else
-    >
-      <h2 style="text-align: center">Работы не найдены</h2>
     </div>
   </div>
 </template>
