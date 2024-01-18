@@ -1,5 +1,8 @@
 <template>
-  <div class="entity-table-container">
+  <div
+    class="entity-table-container"
+    v-auto-animate
+  >
     <table class="entity-table">
       <thead>
         <tr>
@@ -102,8 +105,16 @@
         </tr>
       </tbody>
     </table>
+    <div
+      v-if="isLoading"
+      class="entity-table__loading"
+    >
+      <div class="entity-table__loading__icon">
+        <loader-icon />
+      </div>
+    </div>
     <p
-      v-if="!data || !data.length"
+      v-else-if="!data || !data.length"
       class="entity-table__empty-text"
     >
       Нет данных
@@ -138,6 +149,7 @@ interface Props {
   dateConfig?: Parameters<typeof useDate>[1]
   removeable?: boolean
   editable?: boolean
+  isLoading?: boolean
 }
 
 interface Emits {
@@ -218,6 +230,15 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
 
   @media screen and (max-width: 768px)
     font-size: 12px
+
+  &__loading
+    text-align: center
+    padding: 8em 0
+    background-color: #00000088
+
+    &__icon
+      font-size: 60px
+      display: inline-block
 
   &__empty-text
     text-align: center

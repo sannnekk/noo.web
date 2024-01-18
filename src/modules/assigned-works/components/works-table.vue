@@ -3,6 +3,7 @@
     <entity-table
       :cols="cols"
       :data="works"
+      :is-loading="loading"
       :tag-function="tagFunction"
     />
   </div>
@@ -15,6 +16,7 @@ import { useGlobalStore } from '@/store'
 
 interface Props {
   works: Partial<AssignedWork>[]
+  loading?: boolean
   getUserActionFunction: (a: AssignedWork) => UserAction
 }
 

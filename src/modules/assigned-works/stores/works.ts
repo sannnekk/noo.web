@@ -37,17 +37,19 @@ export const useAssignedWorksStore = defineStore('assigned-works', () => {
 
   const works = reactive<AssignedWork[]>([])
 
-  _globalStore.setLoading(true)
+  const search = ref('')
+  const listLoading = ref(false)
 
   const assignedWorkId = computed(() => _route.params.workId as string)
   const assignedWork = ref<AssignedWork>()
 
   watch(
-    () => _route.path,
+    [() => _route.path, search],
     () => {
       if (_route.path === '/assigned-works') {
+        listLoading.value = true
         http
-          .get('/assigned-work')
+          .get('/assigned-work', { search: search.value })
           .then((response) => {
             works.splice(0, works.length)
             works.push(...response)
@@ -56,7 +58,7 @@ export const useAssignedWorksStore = defineStore('assigned-works', () => {
             _globalStore.openModal('error', 'Не удалось загрузить работы')
           })
           .finally(() => {
-            _globalStore.setLoading(false)
+            listLoading.value = false
           })
       }
     },
@@ -118,9 +120,6 @@ export const useAssignedWorksStore = defineStore('assigned-works', () => {
 
     return nextTaskSlug ? baseUrl.value + '/' + nextTaskSlug : ''
   })
-
-  const search = ref('')
-  const listLoading = ref(false)
 
   const fieldVisibility = computed<FieldVisibility>(() => {
     const role = _globalStore.getUserRole()!

@@ -68,6 +68,7 @@ export const useUsersStore = defineStore('', () => {
   const foundMentors = reactive<User[]>([])
 
   const search = ref('')
+  const listLoading = ref(false)
   const mentorsSearch = ref('')
 
   watch(
@@ -87,6 +88,7 @@ export const useUsersStore = defineStore('', () => {
             _globalStore.setLoading(false)
           })
       } else {
+        listLoading.value = true
         http
           .get('/user', { search: search.value })
           .then((data) => {
@@ -97,7 +99,7 @@ export const useUsersStore = defineStore('', () => {
             _globalStore.openModal('error', 'Ошибка при загрузке данных')
           })
           .finally(() => {
-            _globalStore.setLoading(false)
+            listLoading.value = false
           })
       }
     },
@@ -173,6 +175,7 @@ export const useUsersStore = defineStore('', () => {
     users,
     user,
     search,
+    listLoading,
     mentorsSearch,
     foundMentors,
     getUser,

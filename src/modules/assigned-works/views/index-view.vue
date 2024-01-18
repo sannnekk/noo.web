@@ -8,6 +8,7 @@
     <div class="index-works-view__table">
       <works-table
         :works="worksStore.works"
+        :loading="worksStore.listLoading"
         :get-user-action-function="worksStore.getUserAction"
       />
     </div>

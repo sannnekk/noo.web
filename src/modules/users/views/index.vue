@@ -7,6 +7,7 @@
       <entity-table
         :cols="cols"
         :data="usersStore.users"
+        :is-loading="usersStore.listLoading"
       />
     </div>
   </div>
