@@ -47,6 +47,9 @@ const title = computed(() => {
     margin: 17% auto
     transition: all 0.3s ease-in-out
 
+    @media screen and (max-width: 768px)
+      display: none
+
     &--register
       width: 20%
       margin-bottom: 0.5em

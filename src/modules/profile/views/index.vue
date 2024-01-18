@@ -81,6 +81,10 @@ const profileStore = useProfileStore()
     flex-wrap: wrap
     gap: 1em
 
+    @media screen and (max-width: 768px)
+      flex-direction: column
+      align-items: center
+
     &__huge-number
       h1
         font-size: 50px

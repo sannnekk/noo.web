@@ -1,110 +1,114 @@
 <template>
-  <table class="entity-table">
-    <thead>
-      <tr>
-        <th
-          :class="`col-style-${col.style} col-type-${col.type}`"
-          v-for="(col, index) in cols"
-          :key="index"
+  <div class="entity-table-container">
+    <table class="entity-table">
+      <thead>
+        <tr>
+          <th
+            :class="`col-style-${col.style} col-type-${col.type}`"
+            v-for="(col, index) in cols"
+            :key="index"
+          >
+            {{ col.title }}
+          </th>
+        </tr>
+      </thead>
+      <tbody v-auto-animate>
+        <tr
+          v-for="(object, index) in data"
+          :key="object.id"
         >
-          {{ col.title }}
-        </th>
-      </tr>
-    </thead>
-    <tbody v-auto-animate>
-      <tr
-        v-for="(object, index) in data"
-        :key="object.id"
-      >
-        <td
-          v-for="col in cols"
-          :key="col.title"
-          :class="`col-style-${col.style} col-type-${col.type}`"
-        >
-          <span v-if="(col.if || (() => true))(object)">
-            <span v-if="col.type === 'iterator'">
-              {{ index + 1 }}
-            </span>
-            <span
-              v-else-if="col.type === 'text'"
-              v-html="getTextCol(object, col)"
-            ></span>
-            <span v-else-if="col.type === 'link'">
-              <common-button
-                v-if="col.value && ifFunctionThenNotNullable(col.value, object)"
-                :to="unfunction(col, object, 'linkTo')"
-                :design="col.design || 'primary'"
-                alignment="center"
-              >
-                {{ unfunction(col, object) }}
-              </common-button>
-              <common-button
-                v-else-if="
-                  col.keys &&
-                  col.keys.length &&
-                  col.keys.some((key) => object[key])
-                "
-                alignment="center"
-                :design="col.design || 'primary'"
-                :to="unfunction(col, object, 'linkTo')"
-                v-for="key in col.keys"
-                :key="key"
-              >
-                {{ object[key] }}
-              </common-button>
-            </span>
-            <span
-              v-else-if="col.type === 'tag'"
-              v-for="(key, index) in col.keys"
-              :key="index"
-            >
-              <status-tag
-                class="status-tag"
-                :type="col.tagFunction!(key, object[key]).type"
-              >
-                {{ col.tagFunction!(key, object[key]).text }}
-              </status-tag>
+          <td
+            v-for="col in cols"
+            :key="col.title"
+            :class="`col-style-${col.style} col-type-${col.type}`"
+          >
+            <span v-if="(col.if || (() => true))(object)">
+              <span v-if="col.type === 'iterator'">
+                {{ index + 1 }}
+              </span>
               <span
-                v-if="col.join"
-                v-html="col.join"
+                v-else-if="col.type === 'text'"
+                v-html="getTextCol(object, col)"
               ></span>
+              <span v-else-if="col.type === 'link'">
+                <common-button
+                  v-if="
+                    col.value && ifFunctionThenNotNullable(col.value, object)
+                  "
+                  :to="unfunction(col, object, 'linkTo')"
+                  :design="col.design || 'primary'"
+                  alignment="center"
+                >
+                  {{ unfunction(col, object) }}
+                </common-button>
+                <common-button
+                  v-else-if="
+                    col.keys &&
+                    col.keys.length &&
+                    col.keys.some((key) => object[key])
+                  "
+                  alignment="center"
+                  :design="col.design || 'primary'"
+                  :to="unfunction(col, object, 'linkTo')"
+                  v-for="key in col.keys"
+                  :key="key"
+                >
+                  {{ object[key] }}
+                </common-button>
+              </span>
+              <span
+                v-else-if="col.type === 'tag'"
+                v-for="(key, index) in col.keys"
+                :key="index"
+              >
+                <status-tag
+                  class="status-tag"
+                  :type="col.tagFunction!(key, object[key]).type"
+                >
+                  {{ col.tagFunction!(key, object[key]).text }}
+                </status-tag>
+                <span
+                  v-if="col.join"
+                  v-html="col.join"
+                ></span>
+              </span>
+              <span
+                v-else-if="col.type === 'date'"
+                v-html="getDateCol(object, col)"
+              ></span>
+              <span v-else-if="col.type === 'icon'">
+                <inline-icon
+                  v-if="col.value"
+                  :name="unfunction(col, object)"
+                />
+                <inline-icon
+                  v-else
+                  :name="object[key]"
+                  v-for="key in col.keys"
+                />
+              </span>
+              <span v-else-if="col.type === 'avatar'">
+                <user-avatar
+                  :src="object[col.keys[0]]"
+                  :name="object[col.keys[1]]"
+                />
+              </span>
+              <span v-else>-</span>
             </span>
-            <span
-              v-else-if="col.type === 'date'"
-              v-html="getDateCol(object, col)"
-            ></span>
-            <span v-else-if="col.type === 'icon'">
-              <inline-icon
-                v-if="col.value"
-                :name="unfunction(col, object)"
-              />
-              <inline-icon
-                v-else
-                :name="object[key]"
-                v-for="key in col.keys"
-              />
-            </span>
-            <span v-else-if="col.type === 'avatar'">
-              <user-avatar
-                :src="object[col.keys[0]]"
-                :name="object[col.keys[1]]"
-              />
-            </span>
-            <span v-else>-</span>
-          </span>
-        </td>
-        <td v-if="editable || removeable">
-          <!-- TODO: actions -->
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <p
-    v-if="!data || !data.length"
-    class="entity-table__empty-text"
-  >
-    Нет данных
-  </p>
+          </td>
+          <td v-if="editable || removeable">
+            <!-- TODO: actions -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p
+      v-if="!data || !data.length"
+      class="entity-table__empty-text"
+    >
+      Нет данных
+    </p>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -204,9 +208,16 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
 </script>
 
 <style scoped lang="sass">
+.entity-table-container
+  overflow-x: auto
+  margin: 1em 0
+
 .entity-table
   width: 100%
   border-collapse: collapse
+
+  @media screen and (max-width: 768px)
+    font-size: 12px
 
   &__empty-text
     text-align: center

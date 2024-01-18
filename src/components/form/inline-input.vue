@@ -32,8 +32,9 @@ const model = computed({
   padding: 0
   border-radius: 0
   font-family: inherit
+  border-bottom: 1px solid var(--border-color)
 
   &:focus
     box-shadow: none
-    border-bottom: 1px solid var(--secondary)
+    border-bottom-color: var(--secondary)
 </style>

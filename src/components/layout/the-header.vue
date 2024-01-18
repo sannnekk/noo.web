@@ -31,15 +31,37 @@ const route = useRoute()
     border-radius: var(--border-radius)
     padding: 0.5em 1em
 
+    @media screen and (max-width: 768px)
+      flex-wrap: wrap
+      justify-content: flex-start
+
   &__pane-toggler
     font-size: 60px
     margin-right: 0em
     height: 1em
+    max-width: 2em
+    overflow: hidden
+
+    @media screen and (max-width: 768px)
+      font-size: 40px
 
   &__logo
-    flex: 1
+
+    @media screen and (min-width: 768px)
+      flex: 1
 
     h1
       margin: 0
       padding: 0
+
+      @media screen and (max-width: 768px)
+        margin-left: 0.4em
+        font-size: 20px
+
+  &__profile-widget
+    @media screen and (max-width: 768px)
+      width: 100%
+      border-top: 1px solid var(--border-color)
+      padding-top: 0.5em
+      margin-top: 0.5em
 </style>

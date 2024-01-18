@@ -48,6 +48,11 @@ const authStore = useAuthStore()
   &__auth-icon-space
     height: 100vh
 
+    @media screen and (max-width: 768px)
+      height: 50vh
+      overflow: hidden
+      margin-bottom: 3em
+
   &__auth-rights
     position: absolute
     bottom: 1em
@@ -63,4 +68,11 @@ const authStore = useAuthStore()
     height: 100vh
     padding: 2rem
     margin-right: -15px
+
+    @media screen and (max-width: 768px)
+      height: unset
+      overflow: hidden
+      margin-right: -15px
+      margin-left: -15px
+      width: calc(100% + 30px)
 </style>

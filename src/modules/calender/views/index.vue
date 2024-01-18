@@ -34,12 +34,23 @@ const calenderStore = useCalenderStore()
   flex-direction: row
   height: 100%
 
+  @media screen and (max-width: 768px)
+    flex-direction: column
+
   &__calender
     max-width: 330px
     width: 100%
     padding: 1em
 
+    @media screen and (max-width: 768px)
+      max-width: 100%
+      width: 100%
+
   &__events
     flex: 1
     padding: 1em
+
+    @media screen and (max-width: 768px)
+      max-width: 100%
+      width: 100%
 </style>

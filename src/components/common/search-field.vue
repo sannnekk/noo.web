@@ -50,6 +50,9 @@ const isOnHover = ref(false)
 .search-field
   position: relative
 
+  @media screen and (max-width: 768px)
+    font-size: 12px
+
   &__icon
     position: absolute
     top: 50%
@@ -58,12 +61,18 @@ const isOnHover = ref(false)
     transition: transform 0.2s ease-in-out
     font-size: 30px
 
+    @media screen and (max-width: 768px)
+      font-size: 22px
+
   &__input:deep()
 
     input
       font-size: 16px
       padding: 0.75em 1em 0.75em 3em !important
       padding-left: 4em !important
+
+      @media screen and (max-width: 768px)
+        font-size: 12px
 
   &__button
     width: 100px

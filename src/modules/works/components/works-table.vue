@@ -3,6 +3,7 @@
     <entity-table
       :cols="cols"
       :data="works"
+      :is-loading="loading"
     />
   </div>
 </template>
@@ -12,6 +13,7 @@ import type { Work } from '@/types/entities/Work'
 
 interface Props {
   works: Partial<Work>[]
+  loading?: boolean
 }
 
 defineProps<Props>()

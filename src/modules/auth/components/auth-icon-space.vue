@@ -32,6 +32,10 @@
   width: 100%
   height: 100%
 
+  @media screen and (max-width: 768px)
+    justify-content: flex-end
+    gap: 2em
+
   &__logo
     position: absolute
     top: 2rem
@@ -42,6 +46,9 @@
     width: 100%
     font-size: 40px
     height: 3em
+
+    @media screen and (max-width: 768px)
+      font-size: 20px
 
   &__image
     margin-top: 5%

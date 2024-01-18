@@ -9,7 +9,10 @@
       </div>
     </div>
     <div class="index-works-view__table">
-      <works-table :works="worksStore.works" />
+      <works-table
+        :works="worksStore.works"
+        :loading="worksStore.listLoading"
+      />
     </div>
   </div>
 </template>
@@ -30,9 +33,20 @@ const worksStore = useWorksStore()
     display: flex
     gap: 1rem
 
+    @media screen and (max-width: 768px)
+      flex-direction: column
+
     &__search
       flex: 1
 
+      @media screen and (max-width: 768px)
+        margin-bottom: 1rem
+        width: 100%
+
     &__link
-      margin-top: 0.15rem
+      @media screen and (min-width: 768px)
+        margin-top: 0.15rem
+
+      @media screen and (max-width: 768px)
+        font-size: 12px
 </style>

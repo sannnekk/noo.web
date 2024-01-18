@@ -41,6 +41,9 @@ const userStore = useUserStore()
   padding: 10px
   border-radius: var(--border-radius)
 
+  @media screen and (max-width: 768px)
+    padding: 0
+
   &:hover
     background-color: var(--light-background-color)
 
@@ -48,7 +51,12 @@ const userStore = useUserStore()
     font-size: 50px
     margin-right: 10px
 
+    @media screen and (max-width: 768px)
+      font-size: 40px
+
   &__credentials
+    @media screen and (max-width: 768px)
+      font-size: 12px
 
     &__name
       margin: 0
@@ -56,11 +64,11 @@ const userStore = useUserStore()
 
     &__actions
       display: flex
-      justify-content: space-between
+      align-items: center
       font-size: 12px
 
       &__separator
-        margin: 0 3px 0 7px
+        margin: 0 -5px 0 7px
         font-size: 20px
         line-height: 12px
 </style>

@@ -65,9 +65,19 @@ const globalStore = useGlobalStore()
     gap: 1em
     margin-bottom: 1em
 
+    @media screen and (max-width: 768px)
+      flex-direction: column
+
     &__search
       flex: 1
 
+      @media screen and (max-width: 768px)
+        margin-bottom: 1em
+
     &__create
       padding-top: 2px
+
+      @media screen and (max-width: 768px)
+        margin-bottom: 1em
+        font-size: 12px
 </style>

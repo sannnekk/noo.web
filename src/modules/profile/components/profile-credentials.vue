@@ -10,6 +10,7 @@
       <inline-input
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.name"
+        class="input"
       />
     </div>
     <div class="profile-credentials__username">
@@ -17,6 +18,7 @@
       <inline-input
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.username"
+        class="input"
       />
     </div>
     <div class="profile-credentials__email">
@@ -24,6 +26,7 @@
       <inline-input
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.email"
+        class="input"
       />
     </div>
     <div class="profile-credentials__telegram">
@@ -31,6 +34,7 @@
       <inline-input
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.telegramUsername"
+        class="input"
       />
     </div>
     <div class="profile-credentials__role">
@@ -86,6 +90,9 @@ function onSomeInputChange() {
   .label
     display: block
     margin-top: 0.5em
+
+  .input
+    width: 100%
 
   &__avatar
     display: inline-block

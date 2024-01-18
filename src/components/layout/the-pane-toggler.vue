@@ -1,5 +1,5 @@
 <template>
-  <button
+  <span
     class="pane-toggler"
     @click="globalStore.setPaneOpen(true)"
     @mouseenter="isOnHover = true"
@@ -9,7 +9,7 @@
       name="bars"
       :animation="isOnHover"
     />
-  </button>
+  </span>
 </template>
 
 <script setup lang="ts">

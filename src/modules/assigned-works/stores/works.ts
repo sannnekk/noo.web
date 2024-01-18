@@ -120,6 +120,7 @@ export const useAssignedWorksStore = defineStore('assigned-works', () => {
   })
 
   const search = ref('')
+  const listLoading = ref(false)
 
   const fieldVisibility = computed<FieldVisibility>(() => {
     const role = _globalStore.getUserRole()!
@@ -333,6 +334,7 @@ export const useAssignedWorksStore = defineStore('assigned-works', () => {
     mode,
     fieldVisibility,
     baseUrl,
-    nextTaskLink
+    nextTaskLink,
+    listLoading
   }
 })

@@ -183,6 +183,16 @@ function onRegister() {
   max-height: 65vh
   overflow-y: auto
 
+  &__inner
+    @media screen and (max-width: 768px)
+      height: unset
+      max-height: unset
+
+  @media screen and (max-width: 768px)
+    height: unset
+    max-height: unset
+    padding-bottom: 4em
+
   &__group
     margin-bottom: 1em
 

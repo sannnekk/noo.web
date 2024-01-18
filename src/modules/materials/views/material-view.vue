@@ -27,9 +27,16 @@
         </common-button>
       </div>
     </div>
-    <div class="material-view__description">
+    <div
+      class="material-view__description"
+      v-if="material.description"
+    >
       <div v-html="material.description"></div>
     </div>
+    <div
+      v-else
+      class="material-view__separator"
+    ></div>
     <div class="material-view__content">
       <rich-text-container :content="material.content" />
     </div>
@@ -114,10 +121,17 @@ const material = computed(() =>
     justify-content: space-between
     align-items: center
 
+    @media screen and (max-width: 768px)
+      flex-direction: column
+
     &__title
       flex: 1
 
     &__work-link
+
+      @media screen and (max-width: 768px)
+        margin-bottom: 1em
+
       .v-button:deep()
         button
           font-size: 1.05em
@@ -128,6 +142,12 @@ const material = computed(() =>
     border-radius: var(--border-radius)
     border: 1px solid var(--secondary)
     background: var(--secondary)
+    margin-bottom: 1rem
+
+  &__separator
+    height: 1px
+    background-color: var(--border-color)
+    margin-top: 1em
     margin-bottom: 1rem
 
   &__content:deep()

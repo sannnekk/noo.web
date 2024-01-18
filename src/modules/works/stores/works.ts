@@ -9,18 +9,23 @@ export const useWorksStore = defineStore('works', () => {
 
   const works = reactive<Work[]>([])
   const search = ref('')
+  const listLoading = ref(false)
 
   watch(
     search,
     () => {
+      listLoading.value = true
       http
         .get('/work', { search: search.value })
         .then((response) => {
           works.splice(0, works.length)
           works.push(...response)
         })
-        .catch(() => {
+        .catch((e) => {
           _globalStore.openModal('error', 'Не удалось загрузить работы')
+        })
+        .finally(() => {
+          listLoading.value = false
         })
     },
     { immediate: true }
@@ -28,6 +33,7 @@ export const useWorksStore = defineStore('works', () => {
 
   return {
     works,
-    search
+    search,
+    listLoading
   }
 })

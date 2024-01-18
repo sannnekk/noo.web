@@ -14,6 +14,9 @@
   display: flex
   flex-direction: row
 
+  @media screen and (max-width: 768px)
+    flex-direction: column
+
   &__sidebar
     width: 300px
     padding: 1rem
@@ -21,7 +24,13 @@
     border-radius: var(--border-radius)
     border: 1px solid var(--border-color)
 
+    @media screen and (max-width: 768px)
+      width: calc(100% - 2rem)
+
   &__content
     flex: 1
     padding: 1rem
+
+    @media screen and (max-width: 768px)
+      width: 100%
 </style>
