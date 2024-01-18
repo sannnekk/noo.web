@@ -17,6 +17,7 @@
       </thead>
       <tbody v-auto-animate>
         <tr
+          v-if="!isLoading"
           v-for="(object, index) in data"
           :key="object.id"
         >
