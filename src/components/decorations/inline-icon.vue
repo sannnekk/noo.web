@@ -23,6 +23,9 @@ interface Props {
     | 'minus-yellow'
     | 'check-red'
     | 'exit'
+    | 'jpg-file'
+    | 'png-file'
+    | 'pdf-file'
   animation?: boolean
 }
 

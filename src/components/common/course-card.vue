@@ -5,7 +5,7 @@
         class="router-link"
         :to="to"
       >
-        <img
+        <uploaded-image
           :src="image"
           alt="Card title"
         />

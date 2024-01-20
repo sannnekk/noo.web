@@ -6,7 +6,7 @@ export interface Course {
   id: string
   slug: string
   name: string
-  image: Media
+  images: Media[]
   author: User
   authorId: User['id']
   description: string

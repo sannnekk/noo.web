@@ -13,6 +13,7 @@ export const useCreateCourseStore = defineStore('create-course', () => {
 
   const course = ref<Course>({
     name: '',
+    images: [],
     chapters: [] as Material[]
   } as any)
 
@@ -115,6 +116,7 @@ export const useCreateCourseStore = defineStore('create-course', () => {
       name: '',
       slug: uuid(),
       description: '',
+      files: [],
       content: {
         ops: [
           {

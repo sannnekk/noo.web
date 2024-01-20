@@ -1,7 +1,6 @@
 export interface Media {
   id: string
-  slug: string
-  url: string
-  type: 'image' | 'video' | 'audio' | 'pdf'
+  src: string
+  mimeType: 'image/jpeg' | 'image/png' | 'application/pdf'
   createdAt: Date
 }

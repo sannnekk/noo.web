@@ -1,5 +1,6 @@
 import type { DeltaContentType } from '../composed/DeltaContentType'
 import type { Chapter } from './Chapter'
+import type { Media } from './Media'
 import type { Work } from './Work'
 
 export interface Material {
@@ -13,6 +14,7 @@ export interface Material {
   chapter?: Chapter
   workId?: string
   work?: Work
+  files: Media[]
   createdAt: Date
   updatedAt: Date
 }

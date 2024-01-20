@@ -20,6 +20,15 @@
     </div>
     <br />
     <div class="form-group">
+      <file-input
+        label="Файлы, прикрепленные к материалу"
+        multiple
+        max-count="5"
+        v-model="createCourseStore.currentMaterial.files"
+      />
+    </div>
+    <br />
+    <div class="form-group">
       <common-button
         alignment="right"
         design="secondary"

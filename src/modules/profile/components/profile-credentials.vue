@@ -122,4 +122,8 @@ function onSomeInputChange() {
   &__email
     input
       text-align: center
+
+  &__telegram
+    input
+      text-align: center
 </style>

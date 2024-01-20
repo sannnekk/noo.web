@@ -115,14 +115,20 @@
         <div class="index-create-course-view__course-form">
           <div class="form-group">
             <form-input
-              v-model="createCourseStore.course!.name"
+              v-model="createCourseStore.course.name"
               label="Название курса"
               type="text"
             />
           </div>
           <div class="form-group">
+            <file-input
+              label="Картинка курса"
+              v-model="createCourseStore.course.images"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-group__label">Описание курса</label>
-            <text-area v-model="createCourseStore.course!.description" />
+            <text-area v-model="createCourseStore.course.description" />
           </div>
         </div>
         <div class="index-create-course-view__content">
@@ -145,6 +151,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useCreateCourseStore } from '../stores/create-course'
 
 const createCourseStore = useCreateCourseStore()

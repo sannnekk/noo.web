@@ -27,7 +27,9 @@
       >
         <course-card
           :to="`/materials/${course.slug}`"
-          :image="course.image"
+          :image="
+            course.images[0]?.src || 'https://via.placeholder.com/300x200'
+          "
           :title="course.name"
           :description="course.description"
           :author="course.author.name"

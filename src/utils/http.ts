@@ -1,5 +1,5 @@
-const baseUrl = 'https://api.noo-school.ru'
-//const baseUrl = 'http://localhost:3000'
+//const baseUrl = 'https://api.noo-school.ru'
+const baseUrl = 'http://localhost:3000'
 
 async function request(
   url: string,
@@ -10,15 +10,18 @@ async function request(
   const options: RequestInit = {
     method,
     headers: {
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${localStorage.getItem('token')}`
     }
   }
 
   if (method === 'GET' && body) {
     url += `?${new URLSearchParams(body).toString()}`
-  } else if (body) {
+  } else if (body && !(body instanceof FormData)) {
+    // @ts-ignore
+    options.headers['Content-Type'] = 'application/json'
     options.body = JSON.stringify(body)
+  } else if (body && body instanceof FormData) {
+    options.body = body
   }
 
   try {
@@ -36,7 +39,6 @@ async function request(
         : value
     )
   } catch (error: any) {
-    console.log(error)
     if (error.status === 401 && catch401) {
       localStorage.removeItem('token')
       location.reload()
@@ -62,9 +64,20 @@ function remove(url: string, body?: any, catch401 = true) {
   return request(url, 'DELETE', body, catch401)
 }
 
+function file(files: File[]) {
+  const formData = new FormData()
+
+  for (const file of files) {
+    formData.append('files', file)
+  }
+
+  return request('/media', 'POST', formData, false)
+}
+
 export const http = {
   get,
   post,
   patch,
-  remove
+  remove,
+  file
 }
