@@ -20,12 +20,18 @@ export const useAssignWorkToMaterialStore = defineStore(
       materialsStore.getMaterialBySlug(materialSlug.value)?.work?.id
     ])
 
-    const checkDeadline = ref<Date>(new Date())
-    const solveDeadline = ref<Date>(new Date())
+    const checkDeadline = ref<Date | undefined>(new Date())
+    const solveDeadline = ref<Date | undefined>(new Date())
 
-    watch(solveDeadline, () => {
-      if (checkDeadline.value > solveDeadline.value) {
-        checkDeadline.value.setDate(solveDeadline.value.getDate() + 2)
+    const deadlinesAvailable = ref(false)
+
+    watch(deadlinesAvailable, () => {
+      if (!deadlinesAvailable.value) {
+        solveDeadline.value = undefined
+        checkDeadline.value = undefined
+      } else {
+        solveDeadline.value = new Date()
+        checkDeadline.value = new Date()
       }
     })
 
@@ -75,7 +81,8 @@ export const useAssignWorkToMaterialStore = defineStore(
       modalVisible,
       selectedWorkId,
       checkDeadline,
-      solveDeadline
+      solveDeadline,
+      deadlinesAvailable
     }
   }
 )

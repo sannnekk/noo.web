@@ -85,21 +85,24 @@ export const useAssignedWorksStore = defineStore('assigned-works', () => {
 
   const taskSlug = computed(() => _route.params.taskSlug as string)
   const taskId = ref()
+  const task = ref()
 
   watch(
     [taskSlug, works],
     () => {
       if (!assignedWork.value) return ''
 
-      const task = assignedWork.value.work!.tasks.find(
+      const _task = assignedWork.value.work!.tasks.find(
         (task) => task.slug === taskSlug.value
       )
 
-      return task?.id
+      if (!_task) return
+
+      taskId.value = _task.id
+      task.value = _task
     },
     { immediate: true }
   )
-  const task = ref()
 
   watch(
     [works, taskSlug, assignedWorkId],
@@ -282,12 +285,13 @@ export const useAssignedWorksStore = defineStore('assigned-works', () => {
         assignedWork.value
       )
       .then(() => {
-        _globalStore.setLoading(false)
-        _router.push(`/assigned-works/${works[0].id}/${mode}/success?m=done`)
+        _globalStore.openModal('success', 'Работа отправлена!')
       })
       .catch(() => {
-        _globalStore.setLoading(false)
         _globalStore.openModal('error', 'Не удалось отправить работу')
+      })
+      .finally(() => {
+        _globalStore.setLoading(false)
       })
   }
 

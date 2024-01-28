@@ -4,7 +4,7 @@
       ref="fileInput"
       type="file"
       :accept="allowedMimeTypes.join(', ')"
-      :multiple="multiple"
+      :multiple="!!maxCount && maxCount > 1"
       @change="onFilesChange()"
       area-hidden="true"
       hidden
@@ -32,13 +32,19 @@
         :key="file.id"
       >
         <div class="file-input__files__file__preview">
-          <inline-icon :name="`jpg-file`" />
-          <!-- <inline-icon
+          <uploaded-image
+            v-if="file.src && file.extension !== 'pdf'"
+            :src="file.src"
+          />
+          <inline-icon
+            v-else
             :name="`${file.extension === 'jpeg' ? 'jpg' : file.extension}-file`"
-          /> -->
+          />
         </div>
         <div class="file-input__files__file__data">
-          <p class="file-input__files__file__data__name">{{ file.fileName }}</p>
+          <p class="file-input__files__file__data__name">
+            {{ file.fileName }}
+          </p>
           <div
             class="file-input__files__file__data__error"
             v-if="file.error"
@@ -63,6 +69,12 @@
       </div>
     </div>
   </div>
+  <crop-modal
+    v-model:visible="cropModalVisible"
+    v-model:files="filesForUpload"
+    @confirm="sendFiles()"
+    @cancel="filesCancel()"
+  />
 </template>
 
 <script setup lang="ts">
@@ -71,6 +83,7 @@ import { computed, ref } from 'vue'
 import { v4 as uuid } from 'uuid'
 import { http } from '@/utils/http'
 import type { Media } from '@/types/entities/Media'
+import { type FileItem } from '@/types/composed/FileItem'
 
 interface Props {
   label: string
@@ -79,7 +92,6 @@ interface Props {
   })[]
   allowedMimeTypes: ('image/png' | 'image/jpeg' | 'application/pdf')[]
   maxFileSize?: number
-  multiple?: boolean
   maxCount?: number
 }
 
@@ -93,24 +105,11 @@ interface Emits {
 const props = withDefaults(defineProps<Props>(), {
   allowedMimeTypes: () => ['image/png', 'image/jpeg'],
   maxFileSize: 3 * 1024 * 1024,
-  multiple: false,
   maxCount: 5
 })
 const emits = defineEmits<Emits>()
 
 const globalStore = useGlobalStore()
-
-interface FileItem {
-  key: string
-  id?: string
-  fileName: string
-  src: string
-  extension: 'png' | 'jpeg' | 'pdf'
-  progress: number
-  isUploaded: boolean
-  error: string
-  file: File | null
-}
 
 const files = computed<FileItem[]>({
   get() {
@@ -143,8 +142,12 @@ const files = computed<FileItem[]>({
   }
 })
 
+const filesForUpload = ref<FileItem[]>([])
+
 const fileInput = ref<HTMLInputElement | null>(null)
 const drag = ref(false)
+
+const cropModalVisible = ref(false)
 
 let dragTimeoutId = 0
 
@@ -164,7 +167,10 @@ function onFilesChange() {
     props.maxCount &&
     files.value.length + (fileInput.value?.files?.length || 0) > props.maxCount
   ) {
-    return
+    return globalStore.openModal(
+      'error',
+      `Превышен лимит файлов, которые можно загрузить. Можно загрузить не более ${props.maxCount} файлов`
+    )
   }
   uploadFiles(Array.from(fileInput.value?.files || []))
 }
@@ -173,7 +179,6 @@ function onFilesDropped(event: DragEvent) {
   const _files = Array.from(event.dataTransfer?.files || [])
 
   if (
-    props.multiple &&
     props.maxCount &&
     files.value.length + (_files.length || 0) > props.maxCount
   ) {
@@ -184,15 +189,10 @@ function onFilesDropped(event: DragEvent) {
     return
   }
 
-  if (!props.multiple) {
-    uploadFiles(_files.slice(0, 1))
-    return
-  }
-
   uploadFiles(_files)
 }
 
-function uploadFiles(_files: File[]) {
+async function uploadFiles(_files: File[]) {
   const fileItems: FileItem[] = Array.from(_files).map((file) => ({
     key: uuid(),
     fileName: file.name,
@@ -209,7 +209,7 @@ function uploadFiles(_files: File[]) {
 
     if (!props.allowedMimeTypes.includes(file.file.type as any)) {
       file.error = 'Этот тип файла не поддерживается'
-      files.value.push(file)
+      filesForUpload.value.push(file)
       continue
     }
 
@@ -217,13 +217,21 @@ function uploadFiles(_files: File[]) {
       file.error = `Размер файла привышает допустимый (${Math.floor(
         props.maxFileSize / 1024 / 1024
       )} МБ})`
-      files.value.push(file)
+      filesForUpload.value.push(file)
       continue
     }
 
-    // upload file
+    filesForUpload.value.push(file)
+  }
+
+  cropModalVisible.value = true
+}
+
+function sendFiles() {
+  cropModalVisible.value = false
+  for (const file of filesForUpload.value) {
     http
-      .file([file.file])
+      .file([file.file as File])
       .then((response) => {
         file.src = response.links[0]
         file.isUploaded = true
@@ -236,10 +244,16 @@ function uploadFiles(_files: File[]) {
         files.value = [...files.value, file]
       })
   }
+
+  filesForUpload.value = []
 }
 
 function removeFile(file: FileItem) {
-  files.value = files.value.filter((_file) => _file.id !== file.id)
+  files.value = files.value.filter((_file) => _file.key !== file.key)
+}
+
+function filesCancel() {
+  filesForUpload.value = []
 }
 </script>
 
@@ -288,16 +302,28 @@ function removeFile(file: FileItem) {
     &__file
       display: flex
       align-items: center
-      padding: 0.3em 0
+      padding: 0.8em 0
       border: 1px solid var(--border-color)
       border-radius: var(--border-radius)
 
       &__preview
         width: 50px
         height: 50px
-        margin-right: 1em
+        margin-right: 0.2em
         margin-left: 0.3em
         font-size: 45px
+        overflow: hidden
+        display: flex
+        align-items: center
+        justify-content: center
+        border: 1px solid var(--border-color)
+        border-radius: var(--border-radius)
+        background-color: var(--border-color)
+
+        img
+          max-height: 100%
+          max-width: 100%
+
 
       &__data
         flex-grow: 1

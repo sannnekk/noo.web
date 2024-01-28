@@ -40,7 +40,7 @@ async function request(
     )
   } catch (error: any) {
     if (error.status === 401 && catch401) {
-      localStorage.removeItem('token')
+      localStorage.clear()
       location.reload()
     }
 

@@ -16,11 +16,15 @@
               <auth-form
                 v-model:auth-credentials="authStore.loginCredentials"
                 v-model:register-credentials="authStore.registerCredentials"
+                v-model:forgot-password-credentials="
+                  authStore.forgotPasswordCredentials
+                "
                 v-model:mode="authStore.mode"
                 :error="authStore.error"
                 :is-loading="authStore.isLoading"
                 @login="authStore.login()"
                 @register="authStore.register()"
+                @forgot-password="authStore.forgotPassword()"
               />
             </div>
             <div class="index-auth-view__auth-rights">

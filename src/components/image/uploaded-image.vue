@@ -6,14 +6,25 @@
 import { computed } from 'vue'
 
 interface Props {
-  src?: string
+  src?: string | File
 }
 
 const props = defineProps<Props>()
 
-const link = computed(() =>
-  props.src && props.src.startsWith('http')
-    ? props.src
-    : `https://cdn.noo-school.ru/uploads/${props.src}`
-)
+const link = computed(() => {
+  if (!props.src) return '/img/placeholder.png'
+
+  if (typeof props.src === 'string' && props.src.startsWith('http'))
+    return props.src
+
+  if (typeof props.src === 'string' && props.src.startsWith('data:'))
+    return props.src
+
+  if (typeof props.src === 'string')
+    return `https://cdn.noo-school.ru/uploads/${props.src}`
+
+  if (props.src instanceof File) return URL.createObjectURL(props.src)
+
+  return '/img/placeholder.png'
+})
 </script>

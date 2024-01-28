@@ -22,8 +22,8 @@
     <div class="form-group">
       <file-input
         label="Файлы, прикрепленные к материалу"
-        multiple
-        max-count="5"
+        :max-count="5"
+        :allowed-mime-types="['application/pdf', 'image/jpeg', 'image/png']"
         v-model="createCourseStore.currentMaterial.files"
       />
     </div>

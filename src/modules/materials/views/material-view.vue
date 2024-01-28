@@ -1,15 +1,15 @@
 <template>
   <div
     class="material-view"
-    v-if="material"
+    v-if="materialsStore.material"
   >
     <div class="material-view__header">
       <div class="material-view__header__title">
-        <h1>{{ material.name }}</h1>
+        <h1>{{ materialsStore.material.name }}</h1>
       </div>
       <div
         class="material-view__header__work-link"
-        v-if="material.workId"
+        v-if="materialsStore.material.workId"
       >
         <common-button
           v-if="materialsStore.assignedWorkLink"
@@ -23,22 +23,35 @@
         v-if="globalStore._userRole === 'teacher'"
       >
         <common-button @click="assignWorkStore.modalVisible = true">
-          {{ material.work ? 'Поменять работу' : 'Присвоить работу' }}
+          {{
+            materialsStore.material.work
+              ? 'Поменять работу'
+              : 'Присвоить работу'
+          }}
         </common-button>
       </div>
     </div>
     <div
       class="material-view__description"
-      v-if="material.description"
+      v-if="materialsStore.material.description"
     >
-      <div v-html="material.description"></div>
+      <div v-html="materialsStore.material.description"></div>
     </div>
     <div
       v-else
       class="material-view__separator"
     ></div>
     <div class="material-view__content">
-      <rich-text-container :content="material.content" />
+      <rich-text-container :content="materialsStore.material.content" />
+    </div>
+    <div
+      class="material-view__files"
+      v-if="materialsStore.material.files.length"
+    >
+      <file-list
+        :files="materialsStore.material.files"
+        label="Файлы курса"
+      />
     </div>
   </div>
   <p
@@ -79,13 +92,25 @@
             item-key="id"
           />
         </div>
-        <div class="assign-work-to-material-modal__deadlines">
+        <div class="assign-work-to-material-modal__deadline-toggle">
+          <form-checkbox
+            type="datetime-local"
+            v-model="assignWorkStore.deadlinesAvailable"
+            label="Установить дедлайны"
+          />
+        </div>
+        <div
+          class="assign-work-to-material-modal__deadlines"
+          v-if="assignWorkStore.deadlinesAvailable"
+        >
           <form-input
+            v-if="assignWorkStore.solveDeadline"
             type="datetime-local"
             v-model="assignWorkStore.solveDeadline"
             label="Дедлайн решения"
           />
           <form-input
+            v-if="assignWorkStore.checkDeadline"
             type="datetime-local"
             v-model="assignWorkStore.checkDeadline"
             label="Дедлайн проверки"
@@ -97,20 +122,13 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import { useMaterialsStore } from '../stores/materials'
-import { computed } from 'vue'
 import { useGlobalStore } from '@/store'
 import { useAssignWorkToMaterialStore } from '../stores/assign-work'
 
 const materialsStore = useMaterialsStore()
 const assignWorkStore = useAssignWorkToMaterialStore()
 const globalStore = useGlobalStore()
-const route = useRoute()
-
-const material = computed(() =>
-  materialsStore.getMaterialBySlug(route.params.slug as string)
-)
 </script>
 
 <style scoped lang="sass">

@@ -160,6 +160,28 @@ export const useGlobalStore = defineStore('global', () => {
     }
   }
 
+  async function forgotPassword(email: string): Promise<string | undefined> {
+    setLoading(true)
+
+    try {
+      await http.post('/user/forgot-password', { email }, false)
+      openModal('success', 'Письмо отправлено')
+    } catch (error: any) {
+      switch (error?.status) {
+        case 400:
+          return 'Данные введены неверно'
+        case 401:
+          return 'Неверный email'
+        case 500:
+          return 'Ошибка сервера'
+        default:
+          return 'Неизвестная ошибка'
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // getters
   const navEntries = computed(() => {
     return _navEntries.value.filter((entry) =>
@@ -179,6 +201,7 @@ export const useGlobalStore = defineStore('global', () => {
     closeModal,
     navEntries,
     auth,
-    register
+    register,
+    forgotPassword
   }
 })

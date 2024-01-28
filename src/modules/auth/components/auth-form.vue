@@ -38,12 +38,13 @@
         </div>
         <div class="auth-form__group__register">
           <span @click="modeModel = 'register'"> Зарегистрироваться </span>
+          <span @click="modeModel = 'forgot-password'"> Забыли пароль? </span>
         </div>
       </div>
     </div>
     <div
       class="auth-form__inner"
-      v-else
+      v-else-if="modeModel === 'register'"
     >
       <div class="auth-form__group">
         <text-input
@@ -85,7 +86,7 @@
                   : 'cross-red'
               "
             />
-            {{ criterium.errorText }}
+            {{ criterium.label }}
           </span>
         </div>
       </div>
@@ -116,6 +117,37 @@
         </div>
       </div>
     </div>
+    <div
+      class="auth-form__inner"
+      v-else
+    >
+      <div class="auth-form__group">
+        <text-input
+          v-model="forgotPasswordModel.email"
+          placeholder="Почта"
+          @enter-press="onLogin()"
+        />
+      </div>
+      <div class="auth-form__group">
+        <error-block v-if="error">{{ error }}</error-block>
+      </div>
+      <div class="auth-form__group">
+        <div class="auth-form__group__login">
+          <common-button
+            contrast
+            alignment="center"
+            :loading="isLoading"
+            @click="onForgotPassword()"
+          >
+            Сбросить пароль
+          </common-button>
+        </div>
+        <div class="auth-form__group__register">
+          <span @click="modeModel = 'login'"> Войти </span>
+          <span @click="modeModel = 'register'"> Зарегистрироваться </span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -136,9 +168,13 @@ interface Props {
     passwordCriteria: {
       errorText: string
       isValid: (str: string) => boolean
+      label: string
     }[]
   }
-  mode: 'login' | 'register'
+  forgotPasswordCredentials: {
+    email: string
+  }
+  mode: 'login' | 'register' | 'forgot-password'
   isLoading?: boolean
   error?: string
 }
@@ -146,9 +182,14 @@ interface Props {
 interface Emits {
   (e: 'update:authCredentials', value: Props['authCredentials']): void
   (e: 'update:registerCredentials', value: Props['registerCredentials']): void
+  (
+    e: 'update:forgotPasswordCredentials',
+    value: Props['forgotPasswordCredentials']
+  ): void
   (e: 'update:mode', value: Props['mode']): void
   (e: 'login'): void
   (e: 'register'): void
+  (e: 'forgot-password'): void
 }
 
 const props = defineProps<Props>()
@@ -169,12 +210,21 @@ const registerModel = computed({
   set: (val) => emits('update:registerCredentials', val)
 })
 
+const forgotPasswordModel = computed({
+  get: () => props.forgotPasswordCredentials,
+  set: (val) => emits('update:forgotPasswordCredentials', val)
+})
+
 function onLogin() {
   emits('login')
 }
 
 function onRegister() {
   emits('register')
+}
+
+function onForgotPassword() {
+  emits('forgot-password')
 }
 </script>
 
@@ -207,13 +257,17 @@ function onRegister() {
         display: block
 
     &__register
-      text-align: center
+      display: flex
+      justify-content: center
+      align-items: center
+      gap: 1em
       margin-top: 1em
       font-size: 12px
       color: var(--dark)
       text-decoration: none
       cursor: pointer
 
-      &:hover
-        text-decoration: underline
+      span
+        &:hover
+          text-decoration: underline
 </style>

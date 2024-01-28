@@ -1,13 +1,12 @@
 import { useGlobalStore } from '@/store'
 import { defineStore } from 'pinia'
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 export const useAuthStore = defineStore('auth', () => {
-  const _router = useRouter()
   const _globalStore = useGlobalStore()
 
-  const mode = ref<'login' | 'register'>('login')
+  const mode = ref<'login' | 'register' | 'forgot-password'>('login')
 
   const loginCredentials = reactive({
     username: '',
@@ -23,28 +22,39 @@ export const useAuthStore = defineStore('auth', () => {
     passwordCriteria: [
       {
         errorText: 'Пароль должен содержать не менее 8 символов',
+        label: '8 или более символов',
         isValid: (password: string) => password.length >= 8
       },
       {
         errorText: 'Пароль должен содержать не менее 1 цифры',
+        label: '1 цифра',
         isValid: (password: string) => /\d/.test(password)
       },
       {
         errorText:
           'Пароль должен содержать не менее 1 символа в верхнем регистре',
+        label: '1 заглавная буква',
         isValid: (password: string) => /[A-Z]/.test(password)
       },
       {
         errorText:
           'Пароль должен содержать не менее 1 символа в нижнем регистре',
+        label: '1 строчная буква',
         isValid: (password: string) => /[a-z]/.test(password)
       }
     ]
   })
 
-  const error = ref<string>()
+  const forgotPasswordCredentials = reactive({
+    email: ''
+  })
 
+  const error = ref<string>()
   const isLoading = ref(false)
+
+  watch(mode, () => {
+    error.value = undefined
+  })
 
   async function login() {
     isLoading.value = true
@@ -123,11 +133,34 @@ export const useAuthStore = defineStore('auth', () => {
     registerCredentials.repeatPassword = ''
   }
 
+  async function forgotPassword() {
+    isLoading.value = true
+
+    if (
+      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(
+        forgotPasswordCredentials.email
+      ) === false
+    ) {
+      error.value = 'Несуществующий имейл'
+      isLoading.value = false
+      return
+    }
+
+    error.value = await _globalStore.forgotPassword(
+      forgotPasswordCredentials.email
+    )
+
+    isLoading.value = false
+    forgotPasswordCredentials.email = ''
+  }
+
   return {
     loginCredentials,
     registerCredentials,
+    forgotPasswordCredentials,
     login,
     register,
+    forgotPassword,
     isLoading,
     error,
     mode

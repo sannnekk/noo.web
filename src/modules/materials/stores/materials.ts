@@ -4,7 +4,7 @@ import { type Course } from '@/types/entities/Course'
 import type { Material } from '@/types/entities/Material'
 import { http } from '@/utils/http'
 import { defineStore } from 'pinia'
-import { reactive, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 export const useMaterialsStore = defineStore('materials', () => {
@@ -13,6 +13,7 @@ export const useMaterialsStore = defineStore('materials', () => {
 
   const courses = ref<Course[]>([])
   const course = ref<Course>()
+  const material = ref<Material>()
   const search = ref('')
 
   const assignedWorkLink = ref('')
@@ -97,6 +98,17 @@ export const useMaterialsStore = defineStore('materials', () => {
     { immediate: true }
   )
 
+  watch(
+    () => _route.params.slug,
+    () => {
+      console.log('watch', _route.params.slug)
+      if (!_route.params.slug) return
+
+      material.value = getMaterialBySlug(_route.params.slug as string)
+    },
+    { immediate: true }
+  )
+
   function getMaterialsTree() {
     if (!course || !course.value?.chapters) return []
 
@@ -124,6 +136,7 @@ export const useMaterialsStore = defineStore('materials', () => {
     search,
     getMaterialsTree,
     getMaterialBySlug,
-    assignedWorkLink
+    assignedWorkLink,
+    material
   }
 })

@@ -31,6 +31,7 @@
     </div>
     <div class="profile-credentials__telegram">
       <span class="label">Telegram:</span>
+      <span class="sub-label">В виде ника без @</span>
       <inline-input
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.telegramUsername"
@@ -90,6 +91,11 @@ function onSomeInputChange() {
   .label
     display: block
     margin-top: 0.5em
+
+  .sub-label
+    display: block
+    font-size: 0.8em
+    color: var(--text-light)
 
   .input
     width: 100%

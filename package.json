@@ -25,6 +25,7 @@
     "typed.js": "^2.0.16",
     "uuid": "^9.0.1",
     "vue": "^3.3.4",
+    "vue-advanced-cropper": "^2.8.8",
     "vue-router": "^4.2.5",
     "vuedraggable": "^4.1.0",
     "vuejs3-datepicker": "^1.0.19"

@@ -6,9 +6,9 @@
     <div
       class="auth-titles__image"
       :class="
-        mode === 'login'
-          ? 'auth-titles__image--login'
-          : 'auth-titles__image--register'
+        mode === 'register'
+          ? 'auth-titles__image--register'
+          : 'auth-titles__image--login'
       "
     >
       <round-logo />
@@ -23,7 +23,7 @@
 import { computed } from 'vue'
 
 interface Props {
-  mode: 'login' | 'register'
+  mode: 'login' | 'register' | 'forgot-password'
 }
 
 const props = defineProps<Props>()
@@ -31,9 +31,11 @@ const props = defineProps<Props>()
 const title = computed(() => {
   if (props.mode === 'login') {
     return 'Вход в систему'
+  } else if (props.mode === 'register') {
+    return 'Регистрация'
   }
 
-  return 'Регистрация'
+  return 'Восстановление пароля'
 })
 </script>
 

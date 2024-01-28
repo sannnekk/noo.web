@@ -123,6 +123,8 @@
           <div class="form-group">
             <file-input
               label="Картинка курса"
+              :max-count="1"
+              :allowed-mime-types="['image/jpeg', 'image/png']"
               v-model="createCourseStore.course.images"
             />
           </div>

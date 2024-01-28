@@ -42,7 +42,7 @@ const cols = [
           return { text: 'Куратор', type: 'black' }
         case 'student':
         default:
-          return { text: 'Студент', type: 'info' }
+          return { text: 'Ученик', type: 'info' }
       }
     }
   },
