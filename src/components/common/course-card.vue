@@ -71,11 +71,12 @@ const globalStore = useGlobalStore()
     border-radius: var(--border-radius)
     margin-bottom: 1rem
 
-    span
+    a
       display: block
       text-decoration: none
       width: 100%
       height: 100%
+      overflow: hidden
 
       img
         width: 100%
