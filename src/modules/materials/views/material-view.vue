@@ -69,7 +69,10 @@
       <h3>Присвоить работу</h3>
     </template>
     <template #text>
-      <div class="assign-work-to-material-modal">
+      <div
+        class="assign-work-to-material-modal"
+        v-auto-animate
+      >
         <p v-if="assignWorkStore.selectedWorkId.length">
           Сейчас присвоена:
           <router-link
@@ -113,6 +116,10 @@
             label="Дедлайн проверки"
           />
         </div>
+        <br />
+        <warning-block v-if="assignWorkStore.deadlinesAvailable">
+          Время и дата указываются в МСК
+        </warning-block>
       </div>
     </template>
   </sure-modal>

@@ -1,6 +1,6 @@
 <template>
   <label сlass="form-input">
-    <span class="form-input__label">{{ label }} | {{ model }}</span>
+    <span class="form-input__label">{{ label }}</span>
     <input
       class="form-input__input"
       :type="type"
