@@ -22,15 +22,15 @@
           <h2 class="index-materials-view__tree__title">
             {{ materialsStore.course.name }}
           </h2>
-          <div class="index-materials-view__tree__author">
+          <!-- <div class="index-materials-view__tree__author">
             <div class="index-materials-view__tree__author__avatar">
               <user-avatar :name="materialsStore.course.author.name" />
             </div>
             <div class="index-materials-view__tree__author__name">
               <span>{{ materialsStore.course.author.name }}</span>
             </div>
-          </div>
-          <materials-tree :data="materialsTree" />
+          </div> -->
+          <materials-tree :data="materialsStore.materialsTree" />
         </div>
       </template>
       <template #content>
@@ -77,8 +77,6 @@ import { useAssignStudentsStore } from '../stores/assign-student'
 const materialsStore = useMaterialsStore()
 const assignStudentsStore = useAssignStudentsStore()
 const globalStore = useGlobalStore()
-
-const materialsTree = computed(() => materialsStore.getMaterialsTree())
 </script>
 
 <style lang="sass" scoped>

@@ -296,16 +296,13 @@ export const useAssignedWorksStore = defineStore('assigned-works', () => {
   }
 
   function shiftDeadline() {
-    console.log(1)
     if (mode.value === 'read') return
 
     if (!shiftDeadlineModalVisible.value) {
-      console.log(1.5)
       shiftDeadlineModalVisible.value = true
       return
     }
 
-    console.log(2)
     _globalStore.setLoading(true)
     http
       .patch(`/assigned-work/${assignedWork.value!.id}/shift-deadline`)

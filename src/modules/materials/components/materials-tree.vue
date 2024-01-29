@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import type { Course } from '@/types/entities/Course'
-import { ref } from 'vue'
+import { computed } from 'vue'
 
 interface Props {
   data: (Pick<Course, 'id' | 'name' | 'slug'> & {
@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<Props>(), {
   nestingLevel: 0
 })
 
-const dataModel = ref(
+const dataModel = computed(() =>
   props.data.map((subject) => ({
     ...subject,
     opened: false

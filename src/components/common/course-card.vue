@@ -17,14 +17,14 @@
     <div class="course-card__description">
       {{ description }}
     </div>
-    <div class="course-card__author">
+    <!-- <div class="course-card__author">
       <div class="course-card__author__avatar">
         <user-avatar :name="author" />
       </div>
       <div class="course-card__author__name">
         <span>{{ author }}</span>
       </div>
-    </div>
+    </div> -->
     <div
       class="course-card__edit"
       v-if="globalStore._userRole === 'teacher'"

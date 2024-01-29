@@ -73,12 +73,10 @@
           Сейчас присвоена:
           <router-link
             class="assign-work-to-material-modal__current-work-link"
-            :to="`/create-work${materialsStore.getMaterialBySlug($route.params.slug as string)?.work?.slug}`"
-            >{{
-              materialsStore.getMaterialBySlug($route.params.slug as string)
-                ?.work?.name
-            }}</router-link
+            :to="`/create-work${materialsStore.material?.work?.slug}`"
           >
+            {{ materialsStore.material?.work?.name }}
+          </router-link>
         </p>
         <div class="assign-work-to-material-modal__search">
           <search-field v-model="assignWorkStore.search" />

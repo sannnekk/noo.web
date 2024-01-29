@@ -56,7 +56,6 @@ function onSelect(key: string) {
   }
 
   value = [key]
-  console.log(value)
   emits('update:modelValue', value)
 }
 
