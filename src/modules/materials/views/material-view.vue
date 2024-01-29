@@ -51,6 +51,7 @@
       <file-list
         :files="materialsStore.material.files"
         label="Файлы курса"
+        :actions="['download']"
       />
     </div>
   </div>
@@ -173,6 +174,11 @@ const globalStore = useGlobalStore()
       width: 100%
       aspect-ratio: 16 / 9
       border-radius: var(--border-radius)
+
+  &__files
+    margin-top: 1em
+    padding-top: 1em
+    border-top: 1px solid var(--border-color)
 
 .assign-work-to-material-modal
   &__current-work-link

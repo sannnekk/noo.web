@@ -1,12 +1,19 @@
 <template>
-  <div
+  <component
+    :is="downloadable ? 'a' : 'div'"
+    :href="downloadable ? downloadLink : undefined"
+    :download="downloadable ? src : undefined"
+    target="_blank"
     class="file-card"
-    :class="{ 'file-card--selected': selected }"
+    :class="{
+      'file-card--selected': selected,
+      'file-card--downloadable': downloadable
+    }"
   >
     <div class="file-card__preview">
       <inline-icon
-        v-if="extension === 'pdf'"
-        :name="`${extension}-file`"
+        v-if="extension === 'pdf' || src.split('.').pop() === 'pdf'"
+        name="pdf-file"
       />
       <uploaded-image
         v-else
@@ -16,17 +23,23 @@
     <div class="file-card__label">
       <span>{{ fileName || src }}</span>
     </div>
-  </div>
+  </component>
 </template>
 
 <script setup lang="ts">
 import type { FileItem } from '@/types/composed/FileItem'
+import { computed } from 'vue'
 
 interface Props extends FileItem {
   selected?: boolean
+  downloadable?: boolean
 }
 
 const props = defineProps<Props>()
+
+const downloadLink = computed(() =>
+  props.src ? `https://cdn.noo-school.ru/uploads/${props.src}` : undefined
+)
 
 function getImage(): string {
   return props.isUploaded ? props.src : getBlob(props.file)
@@ -39,6 +52,7 @@ function getBlob(file: File | null): string {
 
 <style scoped lang="sass">
 .file-card
+  text-decoration: none
   display: flex
   flex-direction: column
   align-items: center
@@ -54,6 +68,10 @@ function getBlob(file: File | null): string {
 
   &--selected
     border-color: var(--secondary)
+
+  &--downloadable
+    &:hover
+
 
   &:hover
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)

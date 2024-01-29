@@ -11,7 +11,8 @@
           v-for="file in filesModel"
           v-bind="file"
           :actions="actions"
-          :selected="file.key === selectedKey"
+          :selected="selectable && file.key && file.key === selectedKey"
+          :downloadable="actions && actions.includes('download')"
           @action="onAction($event, file.key)"
           @click="onFileSelect(file.key)"
         />
