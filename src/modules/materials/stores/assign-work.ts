@@ -25,16 +25,6 @@ export const useAssignWorkToMaterialStore = defineStore(
 
     const deadlinesAvailable = ref(false)
 
-    watch(deadlinesAvailable, () => {
-      if (!deadlinesAvailable.value) {
-        solveDeadline.value = undefined
-        checkDeadline.value = undefined
-      } else {
-        solveDeadline.value = new Date()
-        checkDeadline.value = new Date()
-      }
-    })
-
     const modalVisible = ref(false)
 
     watch(search, () => {
@@ -61,8 +51,8 @@ export const useAssignWorkToMaterialStore = defineStore(
         .patch(
           `/course/${materialSlug.value}/assign-work/${selectedWorkId.value[0]}`,
           {
-            checkDeadline: checkDeadline.value,
-            solveDeadline: solveDeadline.value
+            checkDeadline: deadlinesAvailable ? checkDeadline.value : undefined,
+            solveDeadline: deadlinesAvailable ? solveDeadline.value : undefined
           }
         )
         .then(() =>

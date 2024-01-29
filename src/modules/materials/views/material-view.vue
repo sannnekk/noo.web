@@ -103,13 +103,11 @@
           v-if="assignWorkStore.deadlinesAvailable"
         >
           <form-input
-            v-if="assignWorkStore.solveDeadline"
             type="datetime-local"
             v-model="assignWorkStore.solveDeadline"
             label="Дедлайн решения"
           />
           <form-input
-            v-if="assignWorkStore.checkDeadline"
             type="datetime-local"
             v-model="assignWorkStore.checkDeadline"
             label="Дедлайн проверки"

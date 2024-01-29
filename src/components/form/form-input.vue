@@ -1,6 +1,6 @@
 <template>
   <label сlass="form-input">
-    <span class="form-input__label">{{ label }}</span>
+    <span class="form-input__label">{{ label }} | {{ model }}</span>
     <input
       class="form-input__input"
       :type="type"
@@ -32,7 +32,10 @@ const emits = defineEmits<Emits>()
 const model = computed({
   get: () => {
     if (props.type === 'datetime-local') {
-      return new Date(props.modelValue).toISOString().slice(0, 16)
+      const date = new Date(props.modelValue)
+      return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 16)
     }
     return props.modelValue
   },
