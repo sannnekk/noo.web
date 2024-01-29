@@ -40,7 +40,6 @@ export const useMaterialsStore = defineStore('materials', () => {
     () => {
       if (_route.params.courseSlug) return
 
-      _globalStore.setLoading(true)
       http
         .get('/course', { search: search.value })
         .then((response) => {
@@ -48,9 +47,6 @@ export const useMaterialsStore = defineStore('materials', () => {
         })
         .catch(() => {
           _globalStore.openModal('error', 'Ошибка при загрузке данных')
-        })
-        .finally(() => {
-          _globalStore.setLoading(false)
         })
     },
     { immediate: true }
