@@ -90,7 +90,7 @@ function tagFunction(
   } else if (value === 'checked-in-deadline') {
     return {
       type: 'info',
-      text: 'Проверено'
+      text: 'Проверено в дедлайн'
     }
   } else if (value === 'checked-after-deadline') {
     return {

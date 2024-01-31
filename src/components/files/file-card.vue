@@ -41,10 +41,6 @@ const downloadLink = computed(() =>
   props.src ? `https://cdn.noo-school.ru/uploads/${props.src}` : undefined
 )
 
-function getImage(): string {
-  return props.isUploaded ? props.src : getBlob(props.file)
-}
-
 function getBlob(file: File | null): string {
   return file ? URL.createObjectURL(file) : 'a'
 }
@@ -68,10 +64,6 @@ function getBlob(file: File | null): string {
 
   &--selected
     border-color: var(--secondary)
-
-  &--downloadable
-    &:hover
-
 
   &:hover
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)
