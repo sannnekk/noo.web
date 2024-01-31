@@ -61,6 +61,13 @@ const cols = [
     linkTo: (a: AssignedWork) => props.getUserActionFunction(a).link(a.id)
   },
   {
+    if: () => _globalStore._userRole === 'mentor',
+    title: 'Ученик',
+    keys: ['student.name', 'student.username'],
+    join: '<br>',
+    type: 'text'
+  },
+  {
     if: (a: AssignedWork) =>
       _globalStore._userRole === 'mentor' &&
       a.checkStatus === 'not-checked' &&
