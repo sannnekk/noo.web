@@ -7,7 +7,7 @@
       <thead>
         <tr>
           <th
-            :class="`col-style-${col.style} col-type-${col.type}`"
+            :class="`col-type-${col.type}`"
             v-for="(col, index) in cols"
             :key="index"
           >
@@ -24,7 +24,7 @@
           <td
             v-for="col in cols"
             :key="col.title"
-            :class="`col-style-${col.style} col-type-${col.type}`"
+            :class="`col-type-${col.type}`"
           >
             <span v-if="(col.if || (() => true))(object)">
               <span v-if="col.type === 'iterator'">
@@ -111,7 +111,7 @@
       class="entity-table__loading"
     >
       <div class="entity-table__loading__icon">
-        <loader-icon />
+        <loader-icon contrast />
       </div>
     </div>
     <p
@@ -133,7 +133,7 @@ interface Props {
     keys: string[]
     join?: string
     width?: string
-    style?: ('bold' | 'italic' | 'centered')[]
+    style?: ('bold' | 'italic' | 'centered' | 'secondary')[]
     type: 'text' | 'tag' | 'link' | 'icon' | 'date' | 'avatar' | 'iterator'
     linkTo?: string | Function
     design?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger'
@@ -199,7 +199,15 @@ function getTextCol(object: Record<string, any>, col: Props['cols'][0]) {
   const keys = col.keys
   const join = col.join || '<br>'
 
-  return keys.map((key) => getValueByKey(object, key) || '-').join(join)
+  return keys
+    .map((key) => getValueByKey(object, key) || '-')
+    .map(
+      (value, index) =>
+        `<span class='entity-table__style-${
+          col.style && col.style.length ? col.style[index] : 'default'
+        }'>${value}</span>`
+    )
+    .join(join)
 }
 
 function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
@@ -220,6 +228,21 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
 }
 </script>
 
+<style lang="sass">
+.entity-table__style-bold
+  font-weight: 600
+
+.entity-table__style-italic
+  font-style: italic
+
+.entity-table__style-centered
+  text-align: center
+
+.entity-table__style-secondary
+  color: var(--text-light)
+  font-size: 0.8em
+</style>
+
 <style scoped lang="sass">
 .entity-table-container
   overflow-x: auto
@@ -235,7 +258,6 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
   &__loading
     text-align: center
     padding: 8em 0
-    background-color: #00000088
 
     &__icon
       font-size: 60px
@@ -267,15 +289,6 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
 
         .status-tag
           margin: 0.5em 0
-
-        &.col-style-bold
-          font-weight: 500
-
-        &.col-style-italic
-          font-style: italic
-
-        &.col-style-centered
-          text-align: center
 
         &.col-type-text
           white-space: pre-wrap

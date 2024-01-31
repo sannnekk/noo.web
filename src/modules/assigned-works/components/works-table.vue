@@ -31,10 +31,11 @@ const cols = [
     type: 'icon'
   },
   {
-    title: 'Название работы',
-    keys: ['work.name'],
+    title: 'Название работы / Студент',
+    keys: ['work.name', 'student.name'],
+    join: '<br>',
     type: 'text',
-    style: 'bold'
+    style: ['bold', 'secondary']
   },
   {
     title: 'Дедлайн сдачи/проверки',
@@ -59,13 +60,6 @@ const cols = [
     value: (a: AssignedWork) => props.getUserActionFunction(a).action,
     type: 'link',
     linkTo: (a: AssignedWork) => props.getUserActionFunction(a).link(a.id)
-  },
-  {
-    if: () => _globalStore._userRole === 'mentor',
-    title: 'Ученик',
-    keys: ['student.name', 'student.username'],
-    join: '<br>',
-    type: 'text'
   },
   {
     if: (a: AssignedWork) =>
