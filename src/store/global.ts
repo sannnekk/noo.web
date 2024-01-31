@@ -96,14 +96,14 @@ export const useGlobalStore = defineStore('global', () => {
   }
 
   async function auth(
-    username: string,
+    usernameOrEmail: string,
     password: string
   ): Promise<string | undefined> {
     setLoading(true)
     try {
       const response = await http.post(
         '/user/login',
-        { username, password },
+        { usernameOrEmail, password },
         false
       )
 

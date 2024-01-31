@@ -9,8 +9,8 @@
     >
       <div class="auth-form__group">
         <text-input
-          v-model="loginModel.username"
-          placeholder="Логин"
+          v-model="loginModel.usernameOrEmail"
+          placeholder="Email или никнейм"
           @enter-press="onLogin()"
         />
       </div>
@@ -156,7 +156,7 @@ import { computed } from 'vue'
 
 interface Props {
   authCredentials: {
-    username: string
+    usernameOrEmail: string
     password: string
   }
   registerCredentials: {

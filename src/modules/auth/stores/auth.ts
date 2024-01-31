@@ -9,7 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
   const mode = ref<'login' | 'register' | 'forgot-password'>('login')
 
   const loginCredentials = reactive({
-    username: '',
+    usernameOrEmail: '',
     password: ''
   })
 
@@ -60,7 +60,7 @@ export const useAuthStore = defineStore('auth', () => {
     isLoading.value = true
 
     error.value = await _globalStore.auth(
-      loginCredentials.username,
+      loginCredentials.usernameOrEmail,
       loginCredentials.password
     )
 

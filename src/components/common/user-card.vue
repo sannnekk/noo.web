@@ -1,6 +1,5 @@
 <template>
-  <router-link
-    :to="link || ''"
+  <div
     class="user-card"
     :class="{ 'user-card--clickable': !!link }"
   >
@@ -10,14 +9,24 @@
         :name="user.name"
       />
     </div>
-    <div class="user-card__credentials">
+    <component
+      :is="link ? 'router-link' : 'div'"
+      class="user-card__credentials"
+      :to="link || ''"
+    >
       <h3 class="user-card__credentials__name">{{ user.name }}</h3>
       <p class="user-card__credentials__username">{{ user.username }}</p>
+    </component>
+    <div
+      class="user-card__telegram"
+      v-if="user.telegramUsername"
+    >
+      <telegram-button
+        v-if="user.telegramUsername"
+        :username="user.telegramUsername"
+      />
     </div>
-    <div class="user-card__actions">
-      <slot name="actions" />
-    </div>
-  </router-link>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -44,13 +53,19 @@ const props = defineProps<Props>()
   transition: 0.2s ease all
 
   &--clickable
-    &:hover
-      background-color: var(--border-color)
+    &__credentials
+      cursor: pointer
+
+      &:hover
+        color: var(--secondary)
 
   &__avatar
     font-size: 50px
 
   &__credentials
+    display: block
+    text-decoration: none
+    color: inherit
     flex: 1
 
     &__name
@@ -58,9 +73,11 @@ const props = defineProps<Props>()
       margin-bottom: -0.2em
       color: var(--dark)
       font-size: 1.2em
+      cursor: pointer
 
     &__username
       margin: 0
       color: var(--text-light)
       font-size: 0.8em
+      cursor: pointer
 </style>

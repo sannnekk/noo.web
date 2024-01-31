@@ -4,7 +4,7 @@
     :class="{ inline, [alignment]: true }"
   >
     <component
-      :is="to ? (to.startsWith('http') ? 'router-link' : 'a') : 'button'"
+      :is="to ? (to.startsWith('http') ? 'a' : 'router-link') : 'button'"
       :to="to"
       :href="to"
       :target="to?.startsWith('http') ? '_blank' : ''"

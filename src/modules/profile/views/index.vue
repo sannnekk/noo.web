@@ -23,6 +23,13 @@
         </div>
       </template>
       <template #content>
+        <div class="index-profile-view__mentor">
+          <h3>Ваш куратор:</h3>
+          <user-card
+            v-if="userStore.user.mentor"
+            :user="userStore.user.mentor"
+          />
+        </div>
         <div class="index-profile-view__charts">
           <div
             class="index-profile-view__charts__card index-profile-view__charts__card--wide"
