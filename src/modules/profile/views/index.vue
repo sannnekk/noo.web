@@ -29,6 +29,12 @@
             v-if="userStore.user.mentor"
             :user="userStore.user.mentor"
           />
+          <p
+            v-else
+            class="index-profile-view__mentor__no-mentor"
+          >
+            У вас пока нет куратора
+          </p>
         </div>
         <div class="index-profile-view__charts">
           <div
@@ -81,6 +87,12 @@ const profileStore = useProfileStore()
 .index-profile-view
   &__credentials
     margin-bottom: 1em
+
+  &__mentor
+    margin-bottom: 1em
+
+    &__no-mentor
+      color: var(--text-light)
 
   &__charts
     flex: 1
