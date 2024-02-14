@@ -10,6 +10,11 @@ export const useUsersStore = defineStore('', () => {
   const _globalStore = useGlobalStore()
   const route = useRoute()
 
+  const pagination = reactive({
+    page: 5,
+    total: 170
+  })
+
   const users = reactive<User[]>([
     /* {
       id: '1',
@@ -91,9 +96,10 @@ export const useUsersStore = defineStore('', () => {
         listLoading.value = true
         http
           .get('/user', { search: search.value })
-          .then((data) => {
+          .then((response) => {
             users.splice(0, users.length)
-            users.push(...data)
+            users.push(...response.data)
+            pagination.total = response.total
           })
           .catch((e) => {
             _globalStore.openModal('error', 'Ошибка при загрузке данных')
@@ -147,9 +153,10 @@ export const useUsersStore = defineStore('', () => {
       .get('/user/mentor/search', {
         search: searchStr
       })
-      .then((data) => {
+      .then((response) => {
         foundMentors.splice(0, foundMentors.length)
-        foundMentors.push(...data)
+        foundMentors.push(...response.data)
+        pagination.total = response.total
       })
       .catch((e) => {
         if (e.status === 404) {
@@ -173,6 +180,7 @@ export const useUsersStore = defineStore('', () => {
 
   return {
     users,
+    pagination,
     user,
     search,
     listLoading,

@@ -10,6 +10,12 @@
         :is-loading="usersStore.listLoading"
       />
     </div>
+    <div class="index-students-view__pagination">
+      <list-pagination
+        v-model:page="usersStore.pagination.page"
+        :total="usersStore.pagination.total"
+      />
+    </div>
   </div>
 </template>
 

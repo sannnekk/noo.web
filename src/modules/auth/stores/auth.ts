@@ -101,6 +101,13 @@ export const useAuthStore = defineStore('auth', () => {
       return
     }
 
+    if (!registerCredentials.username.match(/^[A-Za-z0-9_-]+$/i)) {
+      error.value =
+        'Имя пользователя может содержать только латинские буквы и цифры, а также символы _ и -'
+      isLoading.value = false
+      return
+    }
+
     if (
       /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(
         registerCredentials.email
