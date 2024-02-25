@@ -36,7 +36,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const changePage = (page: number) => {
-  emit('update:page', page)
+  emit('update:page', Number(page))
 }
 
 const pageCount = computed(() => Math.ceil(props.total / 10))
