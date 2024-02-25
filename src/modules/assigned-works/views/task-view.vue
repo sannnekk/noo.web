@@ -78,14 +78,14 @@
 </template>
 
 <script setup lang="ts">
-import { useAssignedWorksStore } from '../stores/works'
+import { useAssignedWorkStore } from '../stores/assigned-work'
 import taskAnswerTextContainer from '../components/task-answer-text-container.vue'
 import taskAnswerWordContainer from '../components/task-answer-word-container.vue'
 import taskAnswerOptionsContainer from '../components/task-answer-options-container.vue'
 import taskCommentContainer from '../components/task-comment-container.vue'
 import taskScoreContainer from '../components/task-score-container.vue'
 
-const worksStore = useAssignedWorksStore()
+const worksStore = useAssignedWorkStore()
 </script>
 
 <style scoped lang="sass">

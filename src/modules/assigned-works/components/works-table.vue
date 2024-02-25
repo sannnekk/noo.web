@@ -11,8 +11,8 @@
 
 <script setup lang="ts">
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
-import type { UserAction } from '../stores/works'
-import { useGlobalStore } from '@/store'
+import type { UserAction } from '../stores/assigned-works'
+import { Core } from '@/core/Core'
 
 interface Props {
   works: Partial<AssignedWork>[]
@@ -21,8 +21,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
-const _globalStore = useGlobalStore()
 
 const cols = [
   {
@@ -63,7 +61,7 @@ const cols = [
   },
   {
     if: (a: AssignedWork) =>
-      _globalStore._userRole === 'mentor' &&
+      Core.Context.User?.role === 'mentor' &&
       a.checkStatus === 'not-checked' &&
       (a.solveStatus === 'made-in-deadline' ||
         a.solveStatus === 'made-after-deadline'),

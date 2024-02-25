@@ -1,3 +1,4 @@
+import { Core } from '@/core/Core'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -6,7 +7,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.path === '/') next('/profile')
+  if (to.path !== '/auth' && !Core.Context.isLoggedIn()) next('/auth')
   else next()
 })
 

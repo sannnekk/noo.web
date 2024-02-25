@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import { useDate } from '@/composables/useDate'
 import { computed } from 'vue'
-import { type CalenderEvent } from '@/types/composed/CalenderEvent'
+import { type CalenderEvent } from '@/core/data/entities/CalenderEvent'
 import calenderEventItem from './calender-event-item.vue'
 
 interface Props {

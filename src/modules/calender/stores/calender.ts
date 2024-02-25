@@ -4,11 +4,20 @@ import type { CalenderEvent } from '@/core/data/entities/CalenderEvent'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 
+/**
+ * Calender store
+ */
 export const useCalenderStore = defineStore('calender', () => {
   const uiService = Core.Services.UI
 
+  /**
+   * Current date
+   */
   const currentDate = ref(new Date())
 
+  /**
+   * Events
+   */
   const events = ref<CalenderEvent[]>([
     {
       id: '1',
@@ -116,6 +125,9 @@ export const useCalenderStore = defineStore('calender', () => {
     }
   ])
 
+  /**
+   * New event object
+   */
   const newEvent = ref<Omit<CalenderEvent, 'id'>>({
     date: currentDate.value,
     title: '',
@@ -124,6 +136,9 @@ export const useCalenderStore = defineStore('calender', () => {
     to: '/calender'
   })
 
+  /**
+   * Watch for the current date change
+   */
   watch(currentDate, () => {
     newEvent.value.date = currentDate.value
     uiService.setLoading(true)
@@ -133,6 +148,9 @@ export const useCalenderStore = defineStore('calender', () => {
     }, 1000)
   })
 
+  /**
+   * Get marks for the day
+   */
   function dayFunction(date: Date): string[] {
     const dateFormatter = useDate(date, { precision: 'day' })
     const eventsOnThisDate = events.value.filter((event) => {
@@ -158,6 +176,9 @@ export const useCalenderStore = defineStore('calender', () => {
     return [...new Set(marks)]
   }
 
+  /**
+   * Submit new event
+   */
   function onEventSubmit() {
     events.value.push({
       ...newEvent.value,
@@ -172,6 +193,9 @@ export const useCalenderStore = defineStore('calender', () => {
     }
   }
 
+  /**
+   * Remove event
+   */
   function onEventRemove(id: string) {
     events.value = events.value.filter((event) => event.id !== id)
   }

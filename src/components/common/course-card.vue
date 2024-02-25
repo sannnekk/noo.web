@@ -27,7 +27,7 @@
     </div> -->
     <div
       class="course-card__edit"
-      v-if="globalStore._userRole === 'teacher'"
+      v-if="Core.Context.User?.role === 'teacher'"
     >
       <router-link :to="`/create-course${slug}`"> Редактировать </router-link>
     </div>
@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { useGlobalStore } from '@/store'
+import { Core } from '@/core/Core'
 
 interface Props {
   image: string
@@ -49,8 +49,6 @@ interface Props {
 }
 
 defineProps<Props>()
-
-const globalStore = useGlobalStore()
 </script>
 
 <style scoped lang="sass">

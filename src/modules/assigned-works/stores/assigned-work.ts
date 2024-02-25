@@ -8,12 +8,6 @@ import { Core } from '@/core/Core'
 
 export type ActionType = 'read' | 'solve' | 'check'
 
-export type UserAction = {
-  action: string
-  link: (id: string) => `/assigned-works/${typeof id}/${ActionType}`
-  icon: string
-}
-
 export type Visibility = 'visible' | 'readonly' | 'hidden'
 
 export type FieldVisibility = {
@@ -22,8 +16,8 @@ export type FieldVisibility = {
   scoreBox: Visibility
 }
 
-export const useAssignedWorksStore = defineStore(
-  'assigned-works:assigned-works',
+export const useAssignedWorkStore = defineStore(
+  'assigned-works:assigned-work-detail',
   () => {
     const assignedWorkService = Core.Services.AssignedWork
     const uiService = Core.Services.UI

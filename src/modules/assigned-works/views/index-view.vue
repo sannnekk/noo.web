@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import worksTable from '../components/works-table.vue'
-import { useAssignedWorksStore } from '../stores/works'
+import { useAssignedWorksStore } from '../stores/assigned-works'
 
 const worksStore = useAssignedWorksStore()
 </script>
@@ -35,4 +35,3 @@ const worksStore = useAssignedWorksStore()
     &__link
       margin-top: 0.15rem
 </style>
-../stores/assigned-works

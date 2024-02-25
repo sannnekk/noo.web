@@ -48,7 +48,7 @@ export class AuthService extends ApiService {
       this._context.User = response.data.user
       this._context.ApiToken = response.data.token
 
-      this._context.Events.emit('global:login')
+      this._context.Events.emit('global:login', this._context)
     }
 
     return response
@@ -59,7 +59,9 @@ export class AuthService extends ApiService {
    */
   public async logout() {
     this._context.clear()
-    this._context.Events.emit('global:logout')
+    this._context.Events.emit('global:logout', this._context)
+
+    window.location.reload()
   }
 
   /**

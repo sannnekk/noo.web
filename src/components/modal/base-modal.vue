@@ -15,16 +15,10 @@
             class="base-modal__title"
             :class="`base-modal__title--${type}`"
           >
-            {{
-              type === 'success'
-                ? 'Успешно'
-                : type === 'error'
-                ? 'Ошибка'
-                : 'Внимание'
-            }}
+            <span v-if="title">{{ title }}</span>
           </div>
           <div class="base-modal__text">
-            {{ message }}
+            {{ message || '' }}
           </div>
           <div class="base-modal__buttons">
             <common-button
@@ -44,7 +38,8 @@
 
 <script setup lang="ts">
 interface Props {
-  message: string
+  title?: string
+  message?: string
   type: 'success' | 'error' | 'warning'
   visible?: boolean
 }

@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { type CalenderEvent } from '@/types/composed/CalenderEvent'
+import { type CalenderEvent } from '@/core/data/entities/CalenderEvent'
 
 interface Emits {
   (e: 'remove'): void

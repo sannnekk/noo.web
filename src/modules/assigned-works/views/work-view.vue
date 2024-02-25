@@ -57,7 +57,7 @@
     >
       <h1 class="work-view__not-found__title">Работа не найдена</h1>
       <common-button
-        :to="['admin', 'teacher'].includes(globalStore._userRole!) ? '/works' : '/assigned-works'"
+        :to="['admin', 'teacher'].includes(Core.Context.User?.role!) ? '/works' : '/assigned-works'"
         alignment="center"
         class="work-view__not-found__link"
       >
@@ -102,12 +102,11 @@
 </template>
 
 <script setup lang="ts">
-import { useGlobalStore } from '@/store'
+import { Core } from '@/core/Core'
 import TaskList from '../components/task-list.vue'
-import { useAssignedWorksStore } from '../stores/works'
+import { useAssignedWorkStore } from '../stores/assigned-work'
 
-const worksStore = useAssignedWorksStore()
-const globalStore = useGlobalStore()
+const worksStore = useAssignedWorkStore()
 </script>
 
 <style scoped lang="sass">

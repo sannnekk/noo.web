@@ -23,6 +23,8 @@ export class UIService extends StoreService {
   public constructor(context: Context) {
     super(context)
 
+    console.log('UIService constructor')
+
     this._useStoreRef = installUIStore()
     this._store = this._useStoreRef()
   }
@@ -52,7 +54,7 @@ export class UIService extends StoreService {
    * Get nav entries for current user
    */
   public getNavEntries() {
-    const role = this._context.User!.role
+    const role = this._context.User?.role || '$'
 
     return this._store.navEntries.filter((entry) => entry.for.includes(role))
   }

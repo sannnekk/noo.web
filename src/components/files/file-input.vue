@@ -78,7 +78,6 @@
 </template>
 
 <script setup lang="ts">
-import { useGlobalStore } from '@/store'
 import { computed, ref } from 'vue'
 import { v4 as uuid } from 'uuid'
 import type { Media } from '@/core/data/entities/Media'
@@ -107,9 +106,8 @@ const props = withDefaults(defineProps<Props>(), {
   maxFileSize: 3 * 1024 * 1024,
   maxCount: 5
 })
-const emits = defineEmits<Emits>()
 
-const globalStore = useGlobalStore()
+const emits = defineEmits<Emits>()
 
 const files = computed<FileItem[]>({
   get() {
@@ -167,8 +165,7 @@ function onFilesChange() {
     props.maxCount &&
     files.value.length + (fileInput.value?.files?.length || 0) > props.maxCount
   ) {
-    return globalStore.openModal(
-      'error',
+    return Core.Services.UI.openWarningModal(
       `Превышен лимит файлов, которые можно загрузить. Можно загрузить не более ${props.maxCount} файлов`
     )
   }
@@ -182,8 +179,7 @@ function onFilesDropped(event: DragEvent) {
     props.maxCount &&
     files.value.length + (_files.length || 0) > props.maxCount
   ) {
-    globalStore.openModal(
-      'error',
+    Core.Services.UI.openWarningModal(
       `Превышен лимит файлов, которые можно загрузить. Можно загрузить не более ${props.maxCount} файлов`
     )
     return
@@ -348,4 +344,3 @@ function filesCancel() {
           &:hover
             transform: scale(1.2)
 </style>
-@/core/data/entities/Media

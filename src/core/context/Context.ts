@@ -1,6 +1,7 @@
 import type { User } from '@/core/data/entities/User'
 import { Storage } from './Storage'
 import { EventEmitter } from './EventEmitter'
+import { useRoute } from 'vue-router'
 
 /**
  * App context that holds the current user and other global data
@@ -22,11 +23,18 @@ export class Context {
   private _eventEmitter = new EventEmitter()
 
   /**
+   * Route instance
+   */
+  private _route = useRoute()
+
+  /**
    * constructor
    */
   public constructor(user?: User | undefined, apiToken?: string | undefined) {
     this._user = user || Storage.User
     this._apiToken = apiToken || Storage.ApiToken
+
+    console.log('Context created', this)
   }
 
   /**
@@ -64,6 +72,20 @@ export class Context {
   public set ApiToken(token: string | null) {
     this._apiToken = token
     Storage.ApiToken = token
+  }
+
+  /**
+   * useRoute instance getter
+   */
+  public get Route() {
+    return this._route
+  }
+
+  /**
+   * check if user is logged in
+   */
+  public isLoggedIn() {
+    return this._user !== null
   }
 
   /**

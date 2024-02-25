@@ -6,24 +6,36 @@
     <component :is="layout">
       <router-view />
     </component>
-    <the-loader-overlay v-if="globalStore._isLoading" />
-    <base-modal
-      :message="globalStore._globalModal.message"
-      :type="globalStore._globalModal.type"
-      v-model:visible="globalStore._globalModal.visible"
-    />
+    <div v-if="initialized && _core">
+      <the-loader-overlay v-if="_core.Services.UI.Store().isLoading" />
+      <base-modal
+        :title="_core.Services.UI.Store().globalModal.title"
+        :message="_core.Services.UI.Store().globalModal.message"
+        :type="_core.Services.UI.Store().globalModal.type"
+        v-model:visible="_core.Services.UI.Store().globalModal.isOpen"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useGlobalStore } from '@/store'
 import paneLayout from './layouts/pane-layout.vue'
+import { Core } from './core/Core'
 
-const globalStore = useGlobalStore()
+const _core = ref<typeof Core | null>(null)
+const initialized = ref(false)
+
+onMounted(() => {
+  console.log('App mounted')
+  _core.value = Core.init()
+  initialized.value = true
+})
 
 const layout = computed(() => {
+  if (!initialized.value) return 'div'
+
   return useRoute()?.meta?.layout || paneLayout
 })
 </script>

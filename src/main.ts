@@ -6,6 +6,13 @@ import type { ApplicationModule } from '@/types/dev/ApplicationModule'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
+const app = createApp(App)
+
+// adding plugins
+app.use(router)
+app.use(createPinia())
+app.use(autoAnimatePlugin)
+
 // adding modules
 const modules = import.meta.glob('@/modules/!(__template__)/index.ts', {
   import: 'default',
@@ -15,17 +22,6 @@ const modules = import.meta.glob('@/modules/!(__template__)/index.ts', {
 Object.values(modules).forEach((module) =>
   registerModule(module as ApplicationModule)
 )
-
-// creating the app
-const app = createApp(App)
-
-// pinia
-const pinia = createPinia()
-app.use(pinia)
-
-// adding plugins
-app.use(router)
-app.use(autoAnimatePlugin)
 
 // adding global components
 const components = import.meta.glob('@/components/**/**.vue', {

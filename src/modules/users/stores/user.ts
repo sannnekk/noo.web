@@ -79,7 +79,10 @@ export const useUsersStore = defineStore('users-module', () => {
         listLoading.value = true
 
         try {
-          const response = await userService.getUsers({ search: search.value })
+          const response = await userService.getUsers({
+            search: search.value,
+            page: pagination.page
+          })
           users.value = response.data
           pagination.total = response.meta?.total || 0
         } catch (error: any) {
