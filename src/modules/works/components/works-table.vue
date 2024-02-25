@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Work } from '@/types/entities/Work'
+import type { Work } from '@/core/data/entities/Work'
 
 interface Props {
   works: Partial<Work>[]
@@ -43,3 +43,4 @@ const cols = [
   }
 ]
 </script>
+@/core/data/entities/Work

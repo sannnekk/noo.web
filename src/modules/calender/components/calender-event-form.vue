@@ -105,3 +105,4 @@ const currentDate = computed(() =>
           font-weight: 500
           font-size: 14px
 </style>
+@/core/data/entities/CalenderEvent

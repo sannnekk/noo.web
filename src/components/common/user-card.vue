@@ -30,14 +30,14 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from '@/types/entities/User'
+import type { User } from '@/core/data/entities/User'
 
 interface Props {
   user: User
   link?: string
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>
 
 <style scoped lang="sass">

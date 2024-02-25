@@ -99,3 +99,4 @@ const worksStore = useAssignedWorksStore()
   &__question
     margin-bottom: 1rem
 </style>
+../stores/assigned-works

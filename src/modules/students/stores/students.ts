@@ -1,71 +1,59 @@
 import { defineStore } from 'pinia'
-import type { User } from '@/types/entities/User'
-import { reactive } from 'vue'
-import { http } from '@/utils/http'
-import { useGlobalStore } from '@/store'
+import type { User } from '@/core/data/entities/User'
+import { ref, watch } from 'vue'
+import { Core } from '@/core/Core'
+import { useRoute } from 'vue-router'
 
 export const useStudentsStore = defineStore('students', () => {
-  const _globalStore = useGlobalStore()
+  const userService = Core.Services.User
+  const uiService = Core.Services.UI
+  const route = useRoute()
 
-  const students = reactive<User[]>([
-    /* {
-      id: '1',
-      slug: '1',
-      name: 'Иванов Иван Иванович',
-      username: 'nukleoid',
-      role: 'student',
-      email: 'nukleoid@outlook.com',
-      avatar: 'https://i.pravatar.cc/150?img=1',
-      isBlocked: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      telegramId: '1234567890'
+  /**
+   * students list
+   */
+  const students = ref<User[]>([])
+
+  /**
+   * load student list
+   */
+  watch(
+    () => route.path,
+    async () => {
+      if (route.path === '/students') {
+        uiService.setLoading(true)
+
+        const role = Core.Context.User?.role
+
+        if (role === 'student') {
+          uiService.setLoading(false)
+          uiService.openErrorModal(
+            'Студенты не могут просматривать список других студентов'
+          )
+          return
+        }
+
+        try {
+          const response = await userService.getStudents()
+          students.value = response.data
+        } catch (error: any) {
+          uiService.openErrorModal(
+            'Произошла ошибка при получении списка студентов',
+            error.message
+          )
+        } finally {
+          uiService.setLoading(false)
+        }
+      }
     },
-    {
-      id: '2',
-      slug: '2',
-      name: 'Петров Петр Петрович',
-      username: 'petrov',
-      role: 'student',
-      email: 'maria@gmail.com',
-      avatar: 'https://i.pravatar.cc/150?img=2',
-      isBlocked: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      telegramId: '1234567890'
-    },
-    {
-      id: '3',
-      slug: '3',
-      name: 'Сидоров Сидор Сидорович',
-      username: 'sidorov',
-      role: 'student',
-      email: 'sidorov@s.ru',
-      avatar: 'https://i.pravatar.cc/150?img=3',
-      isBlocked: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      telegramId: '1234567890'
-    } */
-  ])
+    { immediate: true }
+  )
 
-  _globalStore.setLoading(true)
-
-  http
-    .get('/user')
-    .then((data) => {
-      students.splice(0, students.length)
-      students.push(...data)
-    })
-    .catch(() => {
-      _globalStore.openModal('error', 'Ошибка при загрузке пользователей')
-    })
-    .finally(() => {
-      _globalStore.setLoading(false)
-    })
-
+  /**
+   * get student by id
+   */
   function getStudent(id: string) {
-    return students.find((student) => student.id === id)
+    return students.value.find((student) => student.id === id)
   }
 
   return { students, getStudent }

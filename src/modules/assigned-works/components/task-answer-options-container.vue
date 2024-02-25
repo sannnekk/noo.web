@@ -22,12 +22,12 @@
 </template>
 
 <script setup lang="ts">
-import type { AssignedWork } from '@/types/entities/AssignedWork'
-import type { Task } from '@/types/entities/Task'
-import type { TaskOption } from '@/types/entities/TaskOption'
-import type { Answer } from '@/types/entities/Answer'
+import type { AssignedWork } from '@/core/data/entities/AssignedWork'
+import type { Task } from '@/core/data/entities/Task'
+import type { TaskOption } from '@/core/data/entities/TaskOption'
+import type { Answer } from '@/core/data/entities/Answer'
+import { entityFactory } from '@/core/utils/entityFactory'
 import { computed } from 'vue'
-import { entityFactory } from '@/utils/entityFactory'
 
 interface Props {
   modelValue: AssignedWork
@@ -96,3 +96,5 @@ const model = computed<TaskOption['id'][]>({
       *
         color: var(--dark) !important
 </style>
+@/core/data/entities/AssignedWork@/core/data/entities/Answer@/core/data/entities/Task@/core/data/entities/TaskOption
+@/core/utils/entityFactory

@@ -35,3 +35,4 @@ const worksStore = useAssignedWorksStore()
     &__link
       margin-top: 0.15rem
 </style>
+../stores/assigned-works

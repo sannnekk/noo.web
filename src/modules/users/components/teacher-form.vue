@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Course } from '@/types/entities/Course'
+import type { Course } from '@/core/data/entities/Course'
 
 interface Props {
   courses: Partial<Course>[] | undefined

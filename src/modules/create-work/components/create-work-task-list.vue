@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Task } from '@/types/entities/Task'
+import type { Task } from '@/core/data/entities/Task'
 import { computed } from 'vue'
 
 interface Props {
@@ -103,3 +103,4 @@ const model = computed({
         background-color: var(--primary)
         border-color: var(--primary)
 </style>
+@/core/data/entities/Task

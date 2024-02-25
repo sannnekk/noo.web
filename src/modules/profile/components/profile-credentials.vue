@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from '@/types/entities/User'
+import type { User } from '@/core/data/entities/User'
 import { ref, computed } from 'vue'
 
 interface Props {
@@ -133,3 +133,4 @@ function onSomeInputChange() {
     input
       text-align: center
 </style>
+@/core/data/entities/User

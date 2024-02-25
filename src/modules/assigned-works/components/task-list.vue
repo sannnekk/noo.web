@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import type { AssignedWork } from '@/types/entities/AssignedWork'
-import type { Task } from '@/types/entities/Task'
+import type { AssignedWork } from '@/core/data/entities/AssignedWork'
+import type { Task } from '@/core/data/entities/Task'
 
 interface Props {
   baseUrl: string
@@ -68,3 +68,4 @@ defineProps<Props>()
         background-color: var(--primary)
         border-color: var(--primary)
 </style>
+@/core/data/entities/AssignedWork@/core/data/entities/Task

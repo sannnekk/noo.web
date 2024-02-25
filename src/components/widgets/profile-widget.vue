@@ -5,17 +5,17 @@
   >
     <div class="profile-widget__avatar">
       <user-avatar
-        :src="userStore.user.avatar?.url"
-        :name="userStore.user.name"
+        :src="Core.Context.User?.avatar?.src"
+        :name="Core.Context.User?.name"
       />
     </div>
     <div class="profile-widget__credentials">
       <h3 class="profile-widget__credentials__name">
-        {{ userStore.user.name }}
+        {{ Core.Context.User?.name }}
       </h3>
       <div class="profile-widget__credentials__actions">
         <span class="profile-widget__credentials__actions__username">
-          {{ userStore.user.username }}
+          {{ Core.Context.User?.username }}
         </span>
         <div class="profile-widget__credentials__actions__separator">
           &bullet;
@@ -27,9 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/store'
-
-const userStore = useUserStore()
+import { Core } from '@/core/Core'
 </script>
 
 <style scoped lang="sass">

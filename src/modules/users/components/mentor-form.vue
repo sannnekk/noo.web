@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from '@/types/entities/User'
+import type { User } from '@/core/data/entities/User'
 
 interface Props {
   students: Partial<User>[] | undefined

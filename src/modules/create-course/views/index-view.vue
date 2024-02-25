@@ -153,7 +153,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useCreateCourseStore } from '../stores/create-course'
 
 const createCourseStore = useCreateCourseStore()

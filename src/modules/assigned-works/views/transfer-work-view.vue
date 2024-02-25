@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTransferWorkStore } from '../stores/useTransferWorkStore'
+import { useTransferWorkStore } from '../stores/transfer-work'
 
 const transferWorkStore = useTransferWorkStore()
 </script>
@@ -70,3 +70,4 @@ const transferWorkStore = useTransferWorkStore()
       padding: 16px
       overflow-y: auto
 </style>
+../stores/transfer-work

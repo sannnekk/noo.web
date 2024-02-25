@@ -1,6 +1,6 @@
 <template>
   <div class="user-avatar">
-    <img
+    <uploaded-image
       class="user-avatar__image"
       v-if="src"
       :src="src"

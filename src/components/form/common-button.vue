@@ -16,7 +16,12 @@
     >
       <loader-icon
         v-if="loading"
-        class="v-button__button__loader"
+        class="v-button__button__icon"
+      />
+      <inline-icon
+        v-else-if="design === 'telegram'"
+        name="telegram"
+        class="v-button__button__icon"
       />
       <slot />
     </component>
@@ -28,11 +33,12 @@ interface Props {
   alignment?: 'left' | 'center' | 'right' | 'stretch'
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
-  design?: 'primary' | 'secondary' | 'danger'
+  design?: 'primary' | 'secondary' | 'danger' | 'telegram'
   contrast?: boolean
   inline?: boolean
   loading?: boolean
   to?: string
+  color?: `#${string}`
 }
 
 interface Emits {
@@ -87,7 +93,7 @@ defineEmits<Emits>()
     font-size: inherit
     transition: 0.2s ease all
 
-    &__loader
+    &__icon
       display: block
       font-size: 20px
 
@@ -106,6 +112,14 @@ defineEmits<Emits>()
 
       &:not(.loading):hover
         border-color: var(--dark)
+
+    &.telegram
+      color: var(--light)
+      border: 1px solid transparent
+      background-color: var(--telegram)
+
+      &:not(.loading):hover
+        opacity: 0.8
 
     &.secondary
       color: var(--dark)

@@ -40,10 +40,6 @@ const props = defineProps<Props>()
 const downloadLink = computed(() =>
   props.src ? `https://cdn.noo-school.ru/uploads/${props.src}` : undefined
 )
-
-function getBlob(file: File | null): string {
-  return file ? URL.createObjectURL(file) : 'a'
-}
 </script>
 
 <style scoped lang="sass">

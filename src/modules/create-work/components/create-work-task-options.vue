@@ -51,10 +51,10 @@
 </template>
 
 <script setup lang="ts">
-import type { TaskOption } from '@/types/entities/TaskOption'
+import type { TaskOption } from '@/core/data/entities/TaskOption'
 import { computed, ref } from 'vue'
 import { v4 as uuid } from 'uuid'
-import type { Task } from '@/types/entities/Task'
+import type { Task } from '@/core/data/entities/Task'
 
 interface Props {
   task: Task
@@ -136,3 +136,4 @@ function onRemoveTaskOption(taskOption: TaskOption) {
       flex: 0 0 100px
       font-size: 0.8em
 </style>
+@/core/data/entities/TaskOption@/core/data/entities/Task

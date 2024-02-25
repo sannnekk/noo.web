@@ -135,3 +135,4 @@ const globalStore = useGlobalStore()
     &__link
       margin: 2em 0
 </style>
+../stores/assigned-works

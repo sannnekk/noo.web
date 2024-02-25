@@ -1,7 +1,7 @@
 <template>
   <span
     class="pane-toggler"
-    @click="globalStore.setPaneOpen(true)"
+    @click="Core.Services.UI.setPaneOpen(true)"
     @mouseenter="isOnHover = true"
     @mouseleave="isOnHover = false"
   >
@@ -13,10 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { useGlobalStore } from '@/store'
+import { Core } from '@/core/Core'
 import { ref } from 'vue'
-
-const globalStore = useGlobalStore()
 
 const isOnHover = ref(false)
 </script>

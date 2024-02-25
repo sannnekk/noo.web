@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AssignedWork } from '@/types/entities/AssignedWork'
+import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { UserAction } from '../stores/works'
 import { useGlobalStore } from '@/store'
 
@@ -116,3 +116,4 @@ function tagFunction(
   }
 }
 </script>
+@/core/data/entities/AssignedWork ../stores/assigned-works

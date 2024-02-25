@@ -41,9 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
 import { useCreateCourseStore } from '../stores/create-course'
-import { ref } from 'vue'
 
 const createCourseStore = useCreateCourseStore()
 </script>

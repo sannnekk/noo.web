@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { type User } from '@/types/entities/User'
+import { type User } from '@/core/data/entities/User'
 
 interface Props {
   role: User['role']

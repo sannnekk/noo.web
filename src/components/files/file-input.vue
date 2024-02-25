@@ -81,9 +81,9 @@
 import { useGlobalStore } from '@/store'
 import { computed, ref } from 'vue'
 import { v4 as uuid } from 'uuid'
-import { http } from '@/utils/http'
-import type { Media } from '@/types/entities/Media'
+import type { Media } from '@/core/data/entities/Media'
 import { type FileItem } from '@/types/composed/FileItem'
+import { Core } from '@/core/Core'
 
 interface Props {
   label: string
@@ -230,19 +230,11 @@ async function uploadFiles(_files: File[]) {
 function sendFiles() {
   cropModalVisible.value = false
   for (const file of filesForUpload.value) {
-    http
-      .file([file.file as File])
-      .then((response) => {
-        file.src = response.links[0]
-        file.isUploaded = true
-      })
-      .catch((error) => {
-        file.error = error
-      })
-      .finally(() => {
-        file.progress = 100
-        files.value = [...files.value, file]
-      })
+    try {
+      Core.Services.Media.upload([file.file as File])
+    } catch (error: any) {
+      file.error = error.message
+    }
   }
 
   filesForUpload.value = []
@@ -356,3 +348,4 @@ function filesCancel() {
           &:hover
             transform: scale(1.2)
 </style>
+@/core/data/entities/Media

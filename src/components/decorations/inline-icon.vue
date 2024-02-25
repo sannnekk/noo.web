@@ -26,6 +26,7 @@ interface Props {
     | 'jpg-file'
     | 'png-file'
     | 'pdf-file'
+    | 'telegram'
   animation?: boolean
 }
 

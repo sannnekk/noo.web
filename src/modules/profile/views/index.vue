@@ -1,24 +1,27 @@
 <template>
   <div
     class="index-profile-view"
-    v-if="userStore.user"
+    v-if="profileStore.user"
   >
     <the-sidebar-layout>
       <template #sidebar>
         <div class="index-profile-view__user-info">
           <div class="index-profile-view__credentials">
             <profile-credentials
-              v-model="userStore.user"
-              @save="userStore.onCredentialsUpdate()"
+              v-model="profileStore.user"
+              @save="profileStore.updateCredentials()"
             />
           </div>
           <div class="index-profile-view__password-change">
-            <profile-password-form @save="userStore.onPasswordChange($event)" />
+            <profile-password-form
+              v-model="profileStore.passwords"
+              @save="profileStore.changePassword()"
+            />
           </div>
           <br />
           <hr />
           <div class="index-profile-view__delete-account">
-            <delete-account @delete-account="userStore.deleteAccount()" />
+            <delete-account @delete-account="profileStore.deleteAccount()" />
           </div>
         </div>
       </template>
@@ -26,8 +29,8 @@
         <div class="index-profile-view__mentor">
           <h3>Ваш куратор:</h3>
           <user-card
-            v-if="userStore.user.mentor"
-            :user="userStore.user.mentor"
+            v-if="profileStore.mentor"
+            :user="profileStore.mentor"
           />
           <p
             v-else
@@ -73,13 +76,11 @@
 </template>
 
 <script lang="ts" setup>
-import { useUserStore } from '@/store'
 import { useProfileStore } from '../stores/profile'
 import ProfileCredentials from '../components/profile-credentials.vue'
 import ProfilePasswordForm from '../components/profile-password-form.vue'
 import deleteAccount from '../components/delete-account.vue'
 
-const userStore = useUserStore()
 const profileStore = useProfileStore()
 </script>
 

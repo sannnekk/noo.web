@@ -117,3 +117,4 @@ const eventsOnDate = computed(() => {
     &__empty
       color: var(--text-light)
 </style>
+@/core/data/entities/CalenderEvent

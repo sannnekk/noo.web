@@ -2,7 +2,7 @@
   <div
     class="pane"
     v-auto-animate
-    :class="{ open: globalStore._isPaneOpen }"
+    :class="{ open: uiStore.isPaneOpen }"
   >
     <div class="pane__inner">
       <div class="pane__logo">
@@ -13,12 +13,12 @@
           <ul>
             <li
               class="pane__nav__entry"
-              v-for="(navEntry, index) in globalStore.navEntries"
+              v-for="(navEntry, index) in navEntries"
               :key="navEntry.route"
             >
               <router-link
                 :to="navEntry.route"
-                @click="globalStore.setPaneOpen(false)"
+                @click="uiService.setPaneOpen(false)"
                 @mouseenter="isOnHover[index] = true"
                 @mouseleave="isOnHover[index] = false"
               >
@@ -49,33 +49,36 @@
   </div>
   <Teleport to="body">
     <div
-      v-if="globalStore._isPaneOpen"
+      v-if="uiStore.isPaneOpen"
       v-auto-animate
       class="overlay"
-      @click="globalStore.setPaneOpen(false)"
+      @click="uiService.setPaneOpen(false)"
     ></div>
   </Teleport>
 </template>
 
 <script setup lang="ts">
-import { useGlobalStore } from '@/store'
 import logo from '../common/logo.vue'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { Core } from '@/core/Core'
 
-const globalStore = useGlobalStore()
+const uiService = Core.Services.UI
+const uiStore = uiService.Store()
 
-const isOnHover = ref(globalStore.navEntries.map(() => false))
-const isOpening = ref(globalStore.navEntries.map(() => false))
+const navEntries = ref(uiService.getNavEntries())
+
+const isOnHover = ref(navEntries.value.map(() => false))
+const isOpening = ref(navEntries.value.map(() => false))
 
 const animationDelay = 300
 const animationStep = 100
 const animationDuration = 200
 
 watch(
-  () => globalStore._isPaneOpen,
+  () => uiStore.isPaneOpen,
   () => {
-    if (globalStore._isPaneOpen) {
-      globalStore.navEntries.forEach((_, index) => {
+    if (uiStore.isPaneOpen) {
+      navEntries.value.forEach((_, index) => {
         setTimeout(() => {
           isOnHover.value[index] = true
           isOpening.value[index] = true
@@ -85,7 +88,7 @@ watch(
         }, animationDelay + index * animationStep + animationDuration)
       })
     } else {
-      isOpening.value = globalStore.navEntries.map(() => false)
+      isOpening.value = navEntries.value.map(() => false)
     }
   }
 )

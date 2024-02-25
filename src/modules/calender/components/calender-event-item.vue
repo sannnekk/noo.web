@@ -88,3 +88,4 @@ defineEmits<Emits>()
     &__button
       font-size: 0.8em
 </style>
+@/core/data/entities/CalenderEvent

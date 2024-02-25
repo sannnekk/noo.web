@@ -49,10 +49,10 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from '@/types/entities/User'
+import type { User } from '@/core/data/entities/User'
 import { ref } from 'vue'
 import { useUsersStore } from '../stores/user'
-import { useGlobalStore } from '@/store'
+import { Core } from '@/core/Core'
 
 interface Props {
   mentor: User | undefined
@@ -61,7 +61,6 @@ interface Props {
 const props = defineProps<Props>()
 
 const usersStore = useUsersStore()
-const globalStore = useGlobalStore()
 
 const changeMentorModalVisible = ref(false)
 
@@ -69,7 +68,7 @@ const selectedMentorId = ref<string[]>(props.mentor ? [props.mentor.id] : [])
 
 function onMentorSelectConfirm() {
   if (!selectedMentorId.value.length) {
-    return globalStore.openModal('warning', 'Куратор не выбран')
+    return Core.Services.UI.openWarningModal('Куратор не выбран')
   }
 
   usersStore.assignMentor(selectedMentorId.value[0])

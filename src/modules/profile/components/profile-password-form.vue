@@ -8,27 +8,28 @@
         <text-input
           type="password"
           placeholder="Старый пароль"
-          v-model="oldPassword"
+          v-model="model.oldPassword"
         />
       </div>
       <div class="profile-password-form__form__field">
         <text-input
           type="password"
           placeholder="Новый пароль"
-          v-model="newPassword"
+          v-model="model.newPassword"
         />
+        <password-criteria :password="model.newPassword" />
       </div>
       <div class="profile-password-form__form__field">
         <text-input
           type="password"
           placeholder="Повторите новый пароль"
-          v-model="newPassword2"
+          v-model="model.repeatPassword"
         />
       </div>
       <div class="profile-password-form__form__field">
         <common-button
           alignment="center"
-          @click="onSave()"
+          @click="$emit('save')"
         >
           Сменить пароль
         </common-button>
@@ -38,26 +39,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
+import type { PasswordChangeForm } from '../types/PasswordChangeForm'
+
+interface Props {
+  modelValue: PasswordChangeForm
+}
 
 interface Emits {
-  (e: 'save', value: string): void
+  (e: 'update:modelValue', value: PasswordChangeForm): void
+  (e: 'save'): void
 }
 
+const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
-const oldPassword = ref('')
-const newPassword = ref('')
-const newPassword2 = ref('')
-
-function onSave() {
-  if (newPassword.value !== newPassword2.value) {
-    alert('Пароли не совпадают')
-    return
-  }
-
-  emits('save', newPassword.value)
-}
+const model = computed({
+  get: () => props.modelValue,
+  set: (value) => emits('update:modelValue', value)
+})
 </script>
 
 <style scoped lang="sass">

@@ -3,6 +3,7 @@
 </template>
 
 <script setup lang="ts">
+import { Core } from '@/core/Core'
 import { computed } from 'vue'
 
 interface Props {
@@ -21,7 +22,7 @@ const link = computed(() => {
     return props.src
 
   if (typeof props.src === 'string')
-    return `https://cdn.noo-school.ru/uploads/${props.src}`
+    return `${Core.Constants.MEDIA_URL}/${props.src}`
 
   if (props.src instanceof File) return URL.createObjectURL(props.src)
 

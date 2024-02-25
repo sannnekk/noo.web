@@ -1,11 +1,11 @@
 import { useDate } from '@/composables/useDate'
-import { useGlobalStore } from '@/store'
-import type { CalenderEvent } from '@/types/composed/CalenderEvent'
+import { Core } from '@/core/Core'
+import type { CalenderEvent } from '@/core/data/entities/CalenderEvent'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 
 export const useCalenderStore = defineStore('calender', () => {
-  const globalStore = useGlobalStore()
+  const uiService = Core.Services.UI
 
   const currentDate = ref(new Date())
 
@@ -126,10 +126,10 @@ export const useCalenderStore = defineStore('calender', () => {
 
   watch(currentDate, () => {
     newEvent.value.date = currentDate.value
-    globalStore.setLoading(true)
+    uiService.setLoading(true)
 
     setTimeout(() => {
-      globalStore.setLoading(false)
+      uiService.setLoading(false)
     }, 1000)
   })
 

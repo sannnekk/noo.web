@@ -24,7 +24,7 @@
       <div class="col-md-4">
         <div class="form-group is-blocked">
           <form-checkbox
-            :readonly="model.id === userStore.user.id"
+            :readonly="model.id === Core.Context.User?.id"
             v-model="model.isBlocked"
             label="Заблокирован"
           />
@@ -60,9 +60,9 @@
 import teacherForm from './teacher-form.vue'
 import mentorForm from './mentor-form.vue'
 import studentForm from './student-form.vue'
-import { useUserStore } from '@/store'
-import type { User } from '@/types/entities/User'
 import { computed } from 'vue'
+import type { User } from '@/core/data/entities/User'
+import { Core } from '@/core/Core'
 
 interface Props {
   modelValue: Partial<User>
@@ -74,8 +74,6 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
-
-const userStore = useUserStore()
 
 const model = computed({
   get: () => props.modelValue,

@@ -11,6 +11,7 @@ const modules = import.meta.glob('@/modules/!(__template__)/index.ts', {
   import: 'default',
   eager: true
 })
+
 Object.values(modules).forEach((module) =>
   registerModule(module as ApplicationModule)
 )
@@ -18,9 +19,12 @@ Object.values(modules).forEach((module) =>
 // creating the app
 const app = createApp(App)
 
+// pinia
+const pinia = createPinia()
+app.use(pinia)
+
 // adding plugins
 app.use(router)
-app.use(createPinia())
 app.use(autoAnimatePlugin)
 
 // adding global components
@@ -28,6 +32,7 @@ const components = import.meta.glob('@/components/**/**.vue', {
   import: 'default',
   eager: true
 })
+
 Object.entries(components).forEach(([path, component]) => {
   const name = path.split('/').pop()?.split('.')[0]
 

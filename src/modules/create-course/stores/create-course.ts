@@ -1,56 +1,76 @@
 import { defineStore } from 'pinia'
-import { ref, reactive, watch, computed } from 'vue'
-import { useGlobalStore } from '@/store'
-import type { Course } from '@/types/entities/Course'
+import { ref, watch } from 'vue'
+import type { Course } from '@/core/data/entities/Course'
 import { v4 as uuid } from 'uuid'
-import type { Material } from '@/types/entities/Material'
+import type { Material } from '@/core/data/entities/Material'
 import { useRoute } from 'vue-router'
-import { http } from '@/utils/http'
+import { Core } from '@/core/Core'
 
 export const useCreateCourseStore = defineStore('create-course', () => {
-  const _globalStore = useGlobalStore()
+  const courseService = Core.Services.Course
+  const uiService = Core.Services.UI
   const _route = useRoute()
 
+  /**
+   * Current course
+   */
   const course = ref<Course>({
     name: '',
     images: [],
     chapters: [] as Material[]
   } as any)
 
+  /**
+   * Name of the chapter to create
+   */
   const newChapterName = ref('')
+
+  /**
+   * Visibility of the remove course modal
+   */
   const removeCourseModalVisible = ref(false)
 
+  /**
+   * Current material
+   */
   const currentMaterial = ref<Material>(emptyMaterial() as Material)
 
+  /**
+   * Load course if course slug is present in the route
+   */
   watch(
     () => _route.params.courseSlug,
-    () => {
+    async () => {
       if (_route.params.courseSlug) {
-        _globalStore.setLoading(true)
-        http
-          .get(`/course/${_route.params.courseSlug}`)
-          .then((data: Course) => {
-            for (const chapter of data.chapters || []) {
-              chapter.materials = (chapter.materials || []).sort(
-                (a, b) => a.order - b.order
-              )
-            }
-            course.value = data
-          })
-          .catch(() => {
-            _globalStore.openModal(
-              'error',
-              'Произошла ошибка при загрузке курса'
-            )
-          })
-          .finally(() => {
-            _globalStore.setLoading(false)
-          })
+        uiService.setLoading(true)
+
+        try {
+          const response = await courseService.getCourse(
+            _route.params.courseSlug as string
+          )
+
+          if (!response.data) {
+            uiService.openErrorModal('Курс не найден')
+            return
+          }
+
+          course.value = response.data
+        } catch (error: any) {
+          uiService.openErrorModal(
+            'Произошла ошибка при загрузке курса',
+            error.message
+          )
+        } finally {
+          uiService.setLoading(false)
+        }
       }
     },
     { immediate: true }
   )
 
+  /**
+   * Load current material
+   */
   watch(
     () => _route.params.materialSlug,
     () => {
@@ -65,9 +85,12 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     }
   )
 
+  /**
+   * Add new chapter to the course
+   */
   function addChapter() {
     if (!newChapterName.value.trim()) {
-      _globalStore.openModal('error', 'У главы должно быть название')
+      uiService.openWarningModal('У главы должно быть название')
       return
     }
 
@@ -79,10 +102,16 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     newChapterName.value = ''
   }
 
+  /**
+   * Get chapter by slug
+   */
   function getChapter(slug: string) {
     return course.value.chapters?.find((chapter) => chapter.slug === slug)
   }
 
+  /**
+   * Get material by chapter and material slug
+   */
   function getMaterial(chapterSlug: string, materialSlug: string) {
     const chapter = getChapter(chapterSlug)
 
@@ -97,6 +126,9 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     )
   }
 
+  /**
+   * Set material
+   */
   function setMaterial(chapterSlug: string, material: Material) {
     const chapter = getChapter(chapterSlug)
     const materialIndex = chapter?.materials?.findIndex(
@@ -108,6 +140,9 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     chapter!.materials![materialIndex] = material
   }
 
+  /**
+   * Create empty material
+   */
   function emptyMaterial(): Omit<
     Material,
     'id' | 'chapterId' | 'createdAt' | 'updatedAt'
@@ -128,9 +163,12 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     }
   }
 
+  /**
+   * Add new material to the chapter
+   */
   function addMaterial() {
     if (!currentMaterial.value.name.trim()) {
-      _globalStore.openModal('error', 'У материала должно быть название')
+      uiService.openWarningModal('У материала должно быть название')
       return
     }
 
@@ -143,6 +181,9 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     currentMaterial.value = emptyMaterial() as Material
   }
 
+  /**
+   * Remove chapter from the course
+   */
   function removeChapter(chapterSlug: string) {
     const chapterIndex = course.value.chapters?.findIndex(
       (chapter) => chapter.slug === chapterSlug
@@ -153,6 +194,9 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     course.value.chapters?.splice(chapterIndex, 1)
   }
 
+  /**
+   * Remove material from the chapter
+   */
   function removeMaterial(materialSlug: string) {
     const chapterIndex = course.value.chapters?.findIndex(
       (chapter) => chapter.slug === _route.params.chapterSlug
@@ -169,45 +213,45 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     course.value.chapters![chapterIndex].materials?.splice(materialIndex, 1)
   }
 
-  function publishCourse() {
+  /**
+   * Save course
+   */
+  async function publishCourse() {
     if (!course.value.name.trim()) {
-      _globalStore.openModal('error', 'У курса должно быть название')
+      uiService.openWarningModal('У курса должно быть название')
       return
     }
 
     if (!course.value.chapters?.length) {
-      _globalStore.openModal('error', 'Курс должен иметь хотя бы одну главу')
+      uiService.openWarningModal('Курс должен иметь хотя бы одну главу')
       return
     }
 
     course.value.chapters?.forEach((chapter) => {
       if (!chapter.name.trim()) {
-        _globalStore.openModal('error', 'У главы должно быть название')
+        uiService.openWarningModal('У главы должно быть название')
         return
       }
 
       if (!chapter.materials?.length) {
-        _globalStore.openModal(
-          'error',
-          'Глава должна иметь хотя бы один материал'
-        )
+        uiService.openWarningModal('Глава должна иметь хотя бы один материал')
         return
       }
 
       chapter.materials?.forEach((material) => {
         if (!material.name.trim()) {
-          _globalStore.openModal('error', 'У материала должно быть название')
+          uiService.openWarningModal('У материала должно быть название')
           return
         }
 
         if (!material.content.ops.length) {
-          _globalStore.openModal('error', 'Материал не должен быть пустым')
+          uiService.openWarningModal('Материал не должен быть пустым')
           return
         }
       })
     })
 
-    _globalStore.setLoading(true)
+    uiService.setLoading(true)
 
     course.value.chapters?.forEach((chapter, index) => {
       if (chapter.materials) {
@@ -218,49 +262,55 @@ export const useCreateCourseStore = defineStore('create-course', () => {
     })
 
     if (!_route.params.courseSlug) {
-      http
-        .post('/course', course.value)
-        .then(() => {
-          _globalStore.openModal('success', 'Курс успешно создан')
-        })
-        .catch(() => {
-          _globalStore.openModal('error', 'Произошла ошибка при создании курса')
-        })
-        .finally(() => {
-          _globalStore.setLoading(false)
-        })
+      try {
+        await courseService.createCourse(course.value)
+        uiService.openSuccessModal('Курс успешно создан')
+      } catch (error: any) {
+        uiService.openErrorModal(
+          'Произошла ошибка при создании курса',
+          error.message
+        )
+      } finally {
+        uiService.setLoading(false)
+      }
     } else {
-      http
-        .patch(`/course/${course.value.id}`, course.value)
-        .then(() => {
-          _globalStore.openModal('success', 'Курс успешно обновлен')
-        })
-        .catch(() => {
-          _globalStore.openModal(
-            'error',
-            'Произошла ошибка при обновлении курса'
-          )
-        })
-        .finally(() => {
-          _globalStore.setLoading(false)
-        })
+      try {
+        await courseService.updateCourse(course.value.id, course.value)
+        uiService.openSuccessModal('Курс успешно обновлен')
+      } catch (error: any) {
+        uiService.openErrorModal(
+          'Произошла ошибка при обновлении курса',
+          error.message
+        )
+      } finally {
+        uiService.setLoading(false)
+      }
     }
   }
 
-  function removeCourse() {
+  /**
+   * Remove course
+   */
+  async function removeCourse() {
     if (!removeCourseModalVisible.value) {
       removeCourseModalVisible.value = true
       return
     }
 
-    _globalStore.setLoading(true)
-    http
-      .remove(`/course/${course.value.id}`)
-      .then(() => _globalStore.openModal('success', 'Курс успешно удален'))
-      .catch(() =>
-        _globalStore.openModal('error', 'Произошла ошибка при удалении курса')
+    uiService.setLoading(true)
+
+    try {
+      await courseService.deleteCourse(course.value.slug)
+      uiService.openSuccessModal('Курс успешно удален')
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при удалении курса',
+        error.message
       )
-      .finally(() => _globalStore.setLoading(false))
+    } finally {
+      uiService.setLoading(false)
+      removeCourseModalVisible.value = false
+    }
   }
 
   return {

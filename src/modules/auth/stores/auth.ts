@@ -1,13 +1,20 @@
-import { useGlobalStore } from '@/store'
+import { Core } from '@/core/Core'
 import { defineStore } from 'pinia'
 import { reactive, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 
 export const useAuthStore = defineStore('auth', () => {
-  const _globalStore = useGlobalStore()
-
+  /*
+   * current mode (login, register, forgot-password)
+   */
   const mode = ref<'login' | 'register' | 'forgot-password'>('login')
 
+  watch(mode, () => {
+    error.value = undefined
+  })
+
+  /*
+   * login, register, forgot password credentials
+   */
   const loginCredentials = reactive({
     usernameOrEmail: '',
     password: ''
@@ -18,57 +25,44 @@ export const useAuthStore = defineStore('auth', () => {
     password: '',
     repeatPassword: '',
     email: '',
-    name: '',
-    passwordCriteria: [
-      {
-        errorText: 'Пароль должен содержать не менее 8 символов',
-        label: '8 или более символов',
-        isValid: (password: string) => password.length >= 8
-      },
-      {
-        errorText: 'Пароль должен содержать не менее 1 цифры',
-        label: '1 цифра',
-        isValid: (password: string) => /\d/.test(password)
-      },
-      {
-        errorText:
-          'Пароль должен содержать не менее 1 символа в верхнем регистре',
-        label: '1 заглавная буква',
-        isValid: (password: string) => /[A-Z]/.test(password)
-      },
-      {
-        errorText:
-          'Пароль должен содержать не менее 1 символа в нижнем регистре',
-        label: '1 строчная буква',
-        isValid: (password: string) => /[a-z]/.test(password)
-      }
-    ]
+    name: ''
   })
 
   const forgotPasswordCredentials = reactive({
     email: ''
   })
 
+  /*
+   * error message
+   */
   const error = ref<string>()
+
+  /*
+   * local loading state
+   */
   const isLoading = ref(false)
 
-  watch(mode, () => {
-    error.value = undefined
-  })
-
+  /*
+   * send login request
+   */
   async function login() {
     isLoading.value = true
 
-    error.value = await _globalStore.auth(
-      loginCredentials.usernameOrEmail,
-      loginCredentials.password
-    )
-
-    isLoading.value = false
-    loginCredentials.password = ''
+    try {
+      await Core.Services.Auth.login(loginCredentials)
+    } catch (e: any) {
+      error.value = e.message
+    } finally {
+      isLoading.value = false
+      loginCredentials.password = ''
+    }
   }
 
+  /*
+   * check and send register request
+   */
   async function register() {
+    const passwordCriteria = Core.Services.User.passwordCriteria()
     isLoading.value = true
 
     if (!registerCredentials.password || !registerCredentials.repeatPassword) {
@@ -84,11 +78,11 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     if (
-      registerCredentials.passwordCriteria.some(
+      passwordCriteria.some(
         (criteria) => !criteria.isValid(registerCredentials.password)
       )
     ) {
-      error.value = registerCredentials.passwordCriteria.find(
+      error.value = passwordCriteria.find(
         (criteria) => !criteria.isValid(registerCredentials.password)
       )?.errorText
       isLoading.value = false
@@ -124,22 +118,24 @@ export const useAuthStore = defineStore('auth', () => {
       return
     }
 
-    error.value = await _globalStore.register(
-      registerCredentials.username,
-      registerCredentials.password,
-      registerCredentials.email,
-      registerCredentials.name
-    )
+    try {
+      await Core.Services.Auth.register(registerCredentials)
+    } catch (e: any) {
+      error.value = e.message
+    } finally {
+      isLoading.value = false
+      registerCredentials.password = ''
+      registerCredentials.repeatPassword = ''
+    }
 
     if (!error.value) {
       mode.value = 'login'
     }
-
-    isLoading.value = false
-    registerCredentials.password = ''
-    registerCredentials.repeatPassword = ''
   }
 
+  /*
+   * check and send forgot password request
+   */
   async function forgotPassword() {
     isLoading.value = true
 
@@ -153,12 +149,13 @@ export const useAuthStore = defineStore('auth', () => {
       return
     }
 
-    error.value = await _globalStore.forgotPassword(
-      forgotPasswordCredentials.email
-    )
-
-    isLoading.value = false
-    forgotPasswordCredentials.email = ''
+    try {
+      await Core.Services.Auth.forgotPassword(forgotPasswordCredentials.email)
+    } catch (e: any) {
+      error.value = e.message
+    } finally {
+      isLoading.value = false
+    }
   }
 
   return {

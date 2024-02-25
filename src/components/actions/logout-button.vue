@@ -6,7 +6,7 @@
     />
     <span
       class="logout-button__text"
-      @click.prevent="userStore.logout()"
+      @click.prevent="Core.Services.Auth.logout()"
     >
       Выйти
     </span>
@@ -14,9 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/store'
-
-const userStore = useUserStore()
+import { Core } from '@/core/Core'
 </script>
 
 <style scoped lang="sass">

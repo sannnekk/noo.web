@@ -1,6 +1,6 @@
 <template>
   <common-button
-    design="primary"
+    design="telegram"
     :to="`https://t.me/${username}`"
   >
     {{ username }}
@@ -12,5 +12,5 @@ interface Props {
   username: string
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>

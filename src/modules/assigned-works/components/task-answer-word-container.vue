@@ -9,11 +9,11 @@
 </template>
 
 <script setup lang="ts">
-import type { AssignedWork } from '@/types/entities/AssignedWork'
-import type { Task } from '@/types/entities/Task'
+import type { AssignedWork } from '@/core/data/entities/AssignedWork'
+import type { Task } from '@/core/data/entities/Task'
+import type { Answer } from '@/core/data/entities/Answer'
+import { entityFactory } from '@/core/utils/entityFactory'
 import { computed } from 'vue'
-import { entityFactory } from '@/utils/entityFactory'
-import type { Answer } from '@/types/entities/Answer'
 
 interface Props {
   modelValue: AssignedWork
@@ -64,3 +64,5 @@ const model = computed<Answer['word']>({
   &__title
     font-weight: 500
 </style>
+@/core/data/entities/AssignedWork@/core/data/entities/Answer@/core/data/entities/Task
+@/core/utils/entityFactory

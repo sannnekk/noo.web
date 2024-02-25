@@ -10,11 +10,11 @@
 </template>
 
 <script setup lang="ts">
-import type { AssignedWork } from '@/types/entities/AssignedWork'
-import type { Comment } from '@/types/entities/Comment'
-import type { Task } from '@/types/entities/Task'
+import type { AssignedWork } from '@/core/data/entities/AssignedWork'
+import type { Comment } from '@/core/data/entities/Comment'
+import type { Task } from '@/core/data/entities/Task'
+import { entityFactory } from '@/core/utils/entityFactory'
 import { computed } from 'vue'
-import { entityFactory } from '@/utils/entityFactory'
 
 interface Props {
   modelValue: AssignedWork
@@ -66,7 +66,7 @@ const model = computed<Comment['score']>({
   set(value: Comment['score']) {
     const work = { ...props.modelValue }
     work.comments.find((comment) => comment.taskId === props.task.id)!.score =
-      value
+      Number(value)
 
     emits('update:modelValue', work)
   }
@@ -78,3 +78,5 @@ const model = computed<Comment['score']>({
   &__title
     font-weight: 500
 </style>
+@/core/data/entities/Comment @/core/data/entities/AssignedWork
+@/core/data/entities/Task @/core/utils/entityFactory

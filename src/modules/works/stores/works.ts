@@ -1,32 +1,45 @@
 import { defineStore } from 'pinia'
 import { ref, reactive, watch } from 'vue'
-import { useGlobalStore } from '@/store'
-import { http } from '@/utils/http'
-import type { Work } from '@/types/entities/Work'
+import type { Work } from '@/core/data/entities/Work'
+import { Core } from '@/core/Core'
 
-export const useWorksStore = defineStore('works', () => {
-  const _globalStore = useGlobalStore()
+export const useWorksStore = defineStore('works-module', () => {
+  const uiService = Core.Services.UI
+  const workService = Core.Services.Work
 
-  const works = reactive<Work[]>([])
+  /**
+   * Works list
+   */
+  const works = ref<Work[]>([])
+
+  /**
+   * Search query for works
+   */
   const search = ref('')
+
+  /**
+   * Loading state for works list
+   */
   const listLoading = ref(false)
 
+  /**
+   * Load works list
+   */
   watch(
     search,
-    () => {
+    async () => {
       listLoading.value = true
-      http
-        .get('/work', { search: search.value })
-        .then((response) => {
-          works.splice(0, works.length)
-          works.push(...response)
-        })
-        .catch((e) => {
-          _globalStore.openModal('error', 'Не удалось загрузить работы')
-        })
-        .finally(() => {
-          listLoading.value = false
-        })
+
+      try {
+        const response = await workService.getWorks({ search: search.value })
+      } catch (error: any) {
+        uiService.openErrorModal(
+          'Произошла ошибка при получении списка работ',
+          error.message
+        )
+      } finally {
+        listLoading.value = false
+      }
     },
     { immediate: true }
   )

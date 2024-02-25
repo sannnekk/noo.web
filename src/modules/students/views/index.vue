@@ -2,13 +2,13 @@
   <div class="index-students-view">
     <entity-table
       :cols="cols"
-      :data="srudentsStore.students"
+      :data="studentsStore.students"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { User } from '@/types/entities/User'
+import type { User } from '@/core/data/entities/User'
 import { useStudentsStore } from '../stores/students'
 
 const cols = [
@@ -40,7 +40,7 @@ const cols = [
   }
 ]
 
-const srudentsStore = useStudentsStore()
+const studentsStore = useStudentsStore()
 </script>
 
 <style lang="sass" scoped></style>

@@ -19,7 +19,7 @@ import CreateWorkTaskForm from '@/modules/create-work/components/create-work-tas
 import { useCreateWorkStore } from '../stores/create-work'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
-import type { Task } from '@/types/entities/Task'
+import type { Task } from '@/core/data/entities/Task'
 
 const createWorkStore = useCreateWorkStore()
 const route = useRoute()
@@ -32,3 +32,4 @@ const taskSlug = computed(() => route.params.taskSlug as string)
   padding: 1rem
   padding-left: 0
 </style>
+@/core/data/entities/Task

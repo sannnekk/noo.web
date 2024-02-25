@@ -1,17 +1,20 @@
-import type { Task } from '@/types/entities/Task'
+import type { Task } from '@/core/data/entities/Task'
 import { defineStore } from 'pinia'
 import { computed, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { v4 as uuid } from 'uuid'
-import type { Work } from '@/types/entities/Work'
-import { http } from '@/utils/http'
-import { useGlobalStore } from '@/store'
+import type { Work } from '@/core/data/entities/Work'
+import { Core } from '@/core/Core'
 
 export const useCreateWorkStore = defineStore('create-work', () => {
+  const workService = Core.Services.Work
+  const uiService = Core.Services.UI
   const _router = useRouter()
   const _route = useRoute()
-  const _globalStore = useGlobalStore()
 
+  /**
+   * Current work
+   */
   const work = ref<
     Omit<Work, 'createdAt' | 'updatedAt' | 'slug' | 'taskIds'> & {
       tasks: Omit<Task, 'id'>[]
@@ -22,24 +25,42 @@ export const useCreateWorkStore = defineStore('create-work', () => {
     tasks: []
   } as any)
 
+  /**
+   * Load work if work slug is present in the route
+   */
   watch(
     () => _route.params.workSlug,
-    () => {
+    async () => {
       if (!_route.params.workSlug || !_route.params.workSlug.length) return
 
-      _globalStore.setLoading(true)
+      uiService.setLoading(true)
 
-      http
-        .get(`/work/${_route.params.workSlug}`)
-        .then((data) => (work.value = data))
-        .catch(() => _globalStore.openModal('error', 'Не удалось найти работу'))
-        .finally(() => _globalStore.setLoading(false))
+      try {
+        const response = await workService.getWork(
+          _route.params.workSlug as string
+        )
+
+        if (!response.data) {
+          uiService.openErrorModal('Работа не найдена')
+          return
+        }
+
+        work.value = response.data
+      } catch (error: any) {
+        uiService.openErrorModal('Произошла ошибка при загрузке работы')
+      } finally {
+        uiService.setLoading(false)
+      }
     },
     { immediate: true }
   )
 
+  /**
+   * Get mpty task
+   */
   function _emptyTask(): Omit<Task, 'id'> {
     return {
+      order: work.value.tasks.length + 1,
       content: {
         ops: [
           {
@@ -56,6 +77,9 @@ export const useCreateWorkStore = defineStore('create-work', () => {
     }
   }
 
+  /**
+   * Task as an object
+   */
   const taskMap = computed({
     get() {
       return work.value.tasks.reduce((acc, task) => {
@@ -72,18 +96,38 @@ export const useCreateWorkStore = defineStore('create-work', () => {
     }
   })
 
+  /**
+   * New task to add
+   */
   const taskToAdd = ref<Omit<Task, 'id'>>(_emptyTask())
 
+  /**
+   * Add new task to the work
+   */
   function addTask() {
     work.value.tasks.push(taskToAdd.value)
     taskToAdd.value = _emptyTask()
   }
 
+  /**
+   * Save work
+   */
   async function submitWork() {
-    _globalStore.setLoading(true)
-
     const payload = work.value
 
+    if (!payload.name.trim()) {
+      uiService.openWarningModal('У работы должно быть название')
+      return
+    }
+
+    if (!payload.tasks.length) {
+      uiService.openWarningModal('У работы должны быть задания')
+      return
+    }
+
+    uiService.setLoading(true)
+
+    // Remove ids from tasks and options
     payload.tasks.forEach((task, index) => {
       payload.tasks[index]!.optionsIds = undefined
       payload.tasks[index]!.options = task.options?.map((option) => {
@@ -94,30 +138,41 @@ export const useCreateWorkStore = defineStore('create-work', () => {
       })
     })
 
+    // add order to tasks
+    payload.tasks = payload.tasks.map((task, index) => {
+      return {
+        ...task,
+        order: index + 1
+      }
+    })
+
     if (_route.params.workSlug && _route.params.workSlug.length) {
-      await http
-        .patch(`/work/${work.value.id}`, payload)
-        .then(() => {
-          _router.push(`/create-work${_route.params.workSlug}/success`)
-        })
-        .catch(() =>
-          _globalStore.openModal('error', 'Не удалось обновить работу')
+      try {
+        await workService.updateWork(
+          _route.params.workSlug as string,
+          payload as Work
         )
-        .finally(() => {
-          _globalStore.setLoading(false)
-        })
+        _router.push('/create-work/success')
+      } catch (error: any) {
+        uiService.openErrorModal(
+          'Произошла ошибка при обновлении работы',
+          error.message
+        )
+      } finally {
+        uiService.setLoading(false)
+      }
     } else {
-      await http
-        .post('/work', payload)
-        .then(() => {
-          _router.push('/create-work/success')
-        })
-        .catch(() => {
-          _globalStore.openModal('error', 'Не удалось создать работу')
-        })
-        .finally(() => {
-          _globalStore.setLoading(false)
-        })
+      try {
+        await workService.createWork(payload as Work)
+        _router.push('/create-work/success')
+      } catch (error: any) {
+        uiService.openErrorModal(
+          'Произошла ошибка при создании работы',
+          error.message
+        )
+      } finally {
+        uiService.setLoading(false)
+      }
     }
   }
 

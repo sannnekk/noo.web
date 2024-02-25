@@ -74,21 +74,7 @@
           @enter-press="onRegister()"
           password
         />
-        <div class="auth-form__group__password-criteria">
-          <span
-            v-for="criterium in registerCredentials.passwordCriteria"
-            class="auth-form__group__password-criteria__item"
-          >
-            <inline-icon
-              :name="
-                criterium.isValid(registerCredentials.password)
-                  ? 'check-green'
-                  : 'cross-red'
-              "
-            />
-            {{ criterium.label }}
-          </span>
-        </div>
+        <password-criteria :password="registerModel.password" />
       </div>
       <div class="auth-form__group">
         <text-input
@@ -165,11 +151,6 @@ interface Props {
     email: string
     password: string
     repeatPassword: string
-    passwordCriteria: {
-      errorText: string
-      isValid: (str: string) => boolean
-      label: string
-    }[]
   }
   forgotPasswordCredentials: {
     email: string
@@ -245,16 +226,6 @@ function onForgotPassword() {
 
   &__group
     margin-bottom: 1em
-
-    &__password-criteria
-      margin-top: 0.5em
-      font-size: 12px
-      background-color: var(--lightest)
-      border-radius: var(--border-radius)
-      padding: 1em
-
-      &__item
-        display: block
 
     &__register
       display: flex

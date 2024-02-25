@@ -86,7 +86,7 @@
 
 <script setup lang="ts">
 import createWorkTaskOptions from './create-work-task-options.vue'
-import type { Task } from '@/types/entities/Task'
+import type { Task } from '@/core/data/entities/Task'
 import { computed, reactive } from 'vue'
 
 interface Props {
@@ -180,3 +180,4 @@ const taskTypeOptions = reactive<TaskTypeOption[]>([
     display: flex
     flex-wrap: wrap
 </style>
+@/core/data/entities/Task

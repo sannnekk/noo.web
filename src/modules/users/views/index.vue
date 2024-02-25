@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { User } from '@/types/entities/User'
+import type { User } from '@/core/data/entities/User'
 import { useUsersStore } from '../stores/user'
 
 const cols = [
@@ -86,3 +86,4 @@ const usersStore = useUsersStore()
   &__search
     padding: 1rem
 </style>
+@/core/data/entities/User
