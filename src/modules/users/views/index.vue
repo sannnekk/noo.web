@@ -10,7 +10,10 @@
         :is-loading="usersStore.listLoading"
       />
     </div>
-    <div class="index-students-view__pagination">
+    <div
+      class="index-students-view__pagination"
+      v-if="usersStore.pagination.total"
+    >
       <list-pagination
         v-model:page="usersStore.pagination.page"
         :total="usersStore.pagination.total"
