@@ -1,60 +1,32 @@
 import { defineStore } from 'pinia'
 import type { User } from '@/core/data/entities/User'
-import { ref, watch } from 'vue'
 import { Core } from '@/core/Core'
-import { useRoute } from 'vue-router'
+import type { Pagination } from '@/core/data/Pagination'
+import { useSearch } from '@/composables/useSearch'
 
-export const useStudentsStore = defineStore('students', () => {
+export const useStudentsStore = defineStore('students-module:students', () => {
   const userService = Core.Services.User
   const uiService = Core.Services.UI
-  const route = useRoute()
 
   /**
-   * students list
+   * search
    */
-  const students = ref<User[]>([])
+  const { pagination, results, resultsMeta, isListLoading } =
+    useSearch<User>(fetchStudents)
 
   /**
    * load student list
    */
-  watch(
-    () => route.path,
-    async () => {
-      if (route.path === '/students') {
-        uiService.setLoading(true)
-
-        const role = Core.Context.User?.role
-
-        if (role === 'student') {
-          uiService.setLoading(false)
-          uiService.openErrorModal(
-            'Студенты не могут просматривать список других студентов'
-          )
-          return
-        }
-
-        try {
-          const response = await userService.getStudents()
-          students.value = response.data
-        } catch (error: any) {
-          uiService.openErrorModal(
-            'Произошла ошибка при получении списка студентов',
-            error.message
-          )
-        } finally {
-          uiService.setLoading(false)
-        }
-      }
-    },
-    { immediate: true }
-  )
-
-  /**
-   * get student by id
-   */
-  function getStudent(id: string) {
-    return students.value.find((student) => student.id === id)
+  async function fetchStudents(pagination: Pagination) {
+    try {
+      return await userService.getStudents(pagination)
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при получении списка студентов',
+        error.message
+      )
+    }
   }
 
-  return { students, getStudent }
+  return { pagination, results, resultsMeta, isListLoading }
 })

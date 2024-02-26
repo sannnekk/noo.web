@@ -29,6 +29,7 @@ defineProps<Props>()
   background-color: var(--lightest)
   border-radius: var(--border-radius)
   padding: 1em
+  text-align: left
 
   &__item
     display: block

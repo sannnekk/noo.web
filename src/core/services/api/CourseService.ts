@@ -31,7 +31,7 @@ export class CourseService extends ApiService {
    * Get courses
    */
   public async getCourses(pagination: Pagination) {
-    return this.httpGet<Course[]>(this._route)
+    return this.httpGet<Course[]>(this._route, pagination as any)
   }
 
   /**

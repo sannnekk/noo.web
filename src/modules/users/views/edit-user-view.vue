@@ -1,42 +1,42 @@
 <template>
   <div class="edit-user-view">
-    <the-sidebar-layout v-if="usersStore.user">
+    <the-sidebar-layout v-if="userStore.user">
       <template #sidebar>
         <div class="edit-user-view__credentials">
           <div class="edit-user-view__credentials__avatar">
             <user-avatar
-              :src="usersStore.user.avatar"
-              :name="usersStore.user.name"
+              :src="userStore.user.avatar"
+              :name="userStore.user.name"
             />
           </div>
           <div class="edit-user-view__credentials__name">
-            <h2>{{ usersStore.user.name }}</h2>
+            <h2>{{ userStore.user.name }}</h2>
           </div>
           <div class="edit-user-view__credentials__username">
             <p>
-              Никнейм: <b>{{ usersStore.user.username }}</b>
+              Никнейм: <b>{{ userStore.user.username }}</b>
             </p>
           </div>
           <div class="edit-user-view__credentials__email">
             <p>
-              Email: <b>{{ usersStore.user.email }}</b>
+              Email: <b>{{ userStore.user.email }}</b>
             </p>
           </div>
           <div class="edit-user-view__credentials__role">
-            <role-tag :role="usersStore.user.role" />
+            <role-tag :role="userStore.user.role" />
           </div>
           <div
             class="edit-user-view__credentials__telegram"
-            v-if="usersStore.user.telegramUsername"
+            v-if="userStore.user.telegramUsername"
           >
-            <telegram-button :username="usersStore.user.telegramUsername" />
+            <telegram-button :username="userStore.user.telegramUsername" />
           </div>
         </div>
       </template>
       <template #content>
         <div class="edit-user-view__content">
           <div class="edit-user-view__content__form">
-            <user-form v-model="usersStore.user" />
+            <user-form v-model="userStore.user" />
           </div>
           <div class="edit-user-view__content__actions">
             <div class="edit-user-view__content__actions__return">
@@ -50,7 +50,7 @@
             </div>
             <div class="edit-user-view__content__actions__save">
               <common-button
-                @click="usersStore.saveUser()"
+                @click="userStore.saveUser()"
                 alignment="right"
                 design="primary"
               >
@@ -67,9 +67,11 @@
 <script setup lang="ts">
 import CommonButton from '@/components/form/common-button.vue'
 import userForm from '../components/user-form.vue'
-import { useUsersStore } from '../stores/user'
+import { useUserStore } from '../stores/user'
 
-const usersStore = useUsersStore()
+const userStore = useUserStore()
+
+userStore.fetchUser()
 </script>
 
 <style scoped lang="sass">

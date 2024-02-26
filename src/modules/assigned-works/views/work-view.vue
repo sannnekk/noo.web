@@ -1,23 +1,23 @@
 <template>
   <div class="work-view">
-    <the-sidebar-layout v-if="worksStore.assignedWork">
+    <the-sidebar-layout v-if="assignedWorkStore.assignedWork">
       <template #sidebar>
         <div class="work-view__sidebar">
           <h2 class="work-view__sidebar__title">Вопросы</h2>
           <task-list
-            :work-id="worksStore.assignedWorkId"
-            :is-solved-function="worksStore.taskHasAnswer"
-            :base-url="worksStore.baseUrl"
-            :tasks="worksStore.assignedWork?.work?.tasks || []"
+            :work-id="assignedWorkStore.assignedWorkId"
+            :is-solved-function="assignedWorkStore.taskHasAnswer"
+            :base-url="assignedWorkStore.baseUrl"
+            :tasks="assignedWorkStore.assignedWork.work?.tasks || []"
           />
           <div class="work-view__sidebar__submit">
             <common-button
               alignment="stretch"
-              @click="worksStore.submitWork()"
-              v-if="['check', 'solve'].includes(worksStore.mode)"
+              @click="assignedWorkStore.submitWork()"
+              v-if="['check', 'solve'].includes(assignedWorkStore.mode)"
             >
               {{
-                worksStore.mode === 'check'
+                assignedWorkStore.mode === 'check'
                   ? 'Завершить проверку'
                   : 'Завершить работу'
               }}
@@ -26,11 +26,11 @@
               class="work-view__sidebar__shift-button"
               alignment="stretch"
               design="secondary"
-              @click="worksStore.shiftDeadline()"
-              v-if="['check', 'solve'].includes(worksStore.mode)"
+              @click="assignedWorkStore.shiftDeadline()"
+              v-if="['check', 'solve'].includes(assignedWorkStore.mode)"
             >
               {{
-                worksStore.mode === 'check'
+                assignedWorkStore.mode === 'check'
                   ? 'Сдвинуть дедлайн проверки'
                   : 'Сдвинуть дедлайн сдачи'
               }}
@@ -47,7 +47,7 @@
       </template>
       <template #content>
         <div class="work-view__content">
-          <router-view />
+          <router-view :key="$route.fullPath" />
         </div>
       </template>
     </the-sidebar-layout>
@@ -66,30 +66,32 @@
     </div>
   </div>
   <sure-modal
-    v-model:visible="worksStore.sureSubmitModalVisible"
-    @confirm="worksStore.submitWork()"
+    v-model:visible="assignedWorkStore.sureSubmitModalVisible"
+    @confirm="assignedWorkStore.submitWork()"
   >
     <template #title>
       {{
-        worksStore.mode === 'check' ? 'Завершить проверку' : 'Завершить работу'
+        assignedWorkStore.mode === 'check'
+          ? 'Завершить проверку'
+          : 'Завершить работу'
       }}
     </template>
     <template #text>
       {{
-        worksStore.mode === 'check'
+        assignedWorkStore.mode === 'check'
           ? 'Вы уверены, что хотите завершить проверку?'
           : 'Вы уверены, что хотите завершить работу?'
       }}
       <br />
       <br />
-      <warning-block v-if="worksStore.sureSubmitModalError">
-        {{ worksStore.sureSubmitModalError }}
+      <warning-block v-if="assignedWorkStore.sureSubmitModalError">
+        {{ assignedWorkStore.sureSubmitModalError }}
       </warning-block>
     </template>
   </sure-modal>
   <sure-modal
-    v-model:visible="worksStore.shiftDeadlineModalVisible"
-    @confirm="worksStore.shiftDeadline()"
+    v-model:visible="assignedWorkStore.shiftDeadlineModalVisible"
+    @confirm="assignedWorkStore.shiftDeadline()"
   >
     <template #title> Сдвинуть дедлайн на 3 дня </template>
     <template #text>
@@ -102,11 +104,12 @@
 </template>
 
 <script setup lang="ts">
-import { Core } from '@/core/Core'
 import TaskList from '../components/task-list.vue'
+import { Core } from '@/core/Core'
 import { useAssignedWorkStore } from '../stores/assigned-work'
 
-const worksStore = useAssignedWorkStore()
+const assignedWorkStore = useAssignedWorkStore()
+assignedWorkStore.fetchAssignedWork()
 </script>
 
 <style scoped lang="sass">

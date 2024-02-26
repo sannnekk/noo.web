@@ -1,39 +1,37 @@
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
-import { useMaterialsStore } from './materials'
+import { useCourseStore } from './course'
 import type { User } from '@/core/data/entities/User'
 import { Core } from '@/core/Core'
+import { useSearch } from '@/composables/useSearch'
+import type { Pagination } from '@/core/data/Pagination'
 
 export const useAssignStudentsStore = defineStore(
-  'assign-students-to-course',
+  'courses-module:assign-student',
   () => {
     const courseService = Core.Services.Course
     const userService = Core.Services.User
     const uiService = Core.Services.UI
-    const materialsStore = useMaterialsStore()
+    const courseStore = useCourseStore()
 
     /**
-     * Students list
+     * Search
      */
-    const students = ref<User[]>([])
-
-    /**
-     * Student search query
-     */
-    const search = ref('')
+    const { pagination, results, resultsMeta, isListLoading } =
+      useSearch<User>(fetchStudents)
 
     /**
      * Select student ids
      */
     const selectedStudentIds = ref(
-      (materialsStore.course?.students || []).map((student) => student.id)
+      (courseStore.course?.students || []).map((student) => student.id)
     )
 
     /**
      * Students count
      */
     const studentsCount = computed(
-      () => (materialsStore.course?.students || []).length
+      () => (courseStore.course?.students || []).length
     )
 
     /**
@@ -45,9 +43,9 @@ export const useAssignStudentsStore = defineStore(
      * Watch for course change and update selected student ids
      */
     watch(
-      () => materialsStore.course,
+      () => courseStore.course,
       () => {
-        selectedStudentIds.value = (materialsStore.course?.students || []).map(
+        selectedStudentIds.value = (courseStore.course?.students || []).map(
           (student) => student.id
         )
       }
@@ -56,24 +54,13 @@ export const useAssignStudentsStore = defineStore(
     /**
      * Load students
      */
-    watch(
-      search,
-      async () => {
-        if (Core.Context.User?.role !== 'teacher') return
-
-        try {
-          const response = await userService.getStudents({
-            search: search.value
-          })
-        } catch (error: any) {
-          uiService.openErrorModal(
-            'Произошла ошибка при загрузке студентов',
-            error.message
-          )
-        }
-      },
-      { immediate: true }
-    )
+    async function fetchStudents(pagination: Pagination) {
+      try {
+        return await userService.getStudents(pagination)
+      } catch (error) {
+        uiService.openErrorModal('Произошла ошибка при загрузке студентов')
+      }
+    }
 
     /**
      * Submit students to course
@@ -83,7 +70,7 @@ export const useAssignStudentsStore = defineStore(
 
       try {
         await courseService.assignStudentsToCourse(
-          materialsStore.course!.id,
+          courseStore.course!.id,
           selectedStudentIds.value
         )
 
@@ -100,8 +87,10 @@ export const useAssignStudentsStore = defineStore(
     }
 
     return {
-      students,
-      search,
+      pagination,
+      results,
+      resultsMeta,
+      isListLoading,
       save,
       modalVisible,
       selectedStudentIds,

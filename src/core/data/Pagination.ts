@@ -4,5 +4,4 @@ export interface Pagination {
   order?: 'ASC' | 'DESC'
   sort?: string
   search?: string
-  [key: string]: string | number | undefined
 }

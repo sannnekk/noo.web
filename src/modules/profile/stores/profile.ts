@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { type PasswordChangeForm } from '../types/PasswordChangeForm'
 import { Core } from '@/core/Core'
 
-export const useProfileStore = defineStore('profile', () => {
+export const useProfileStore = defineStore('profile-module:profile', () => {
   const userService = Core.Services.User
   const authService = Core.Services.Auth
   const uiService = Core.Services.UI
@@ -37,6 +37,11 @@ export const useProfileStore = defineStore('profile', () => {
 
     if (passwords.value.newPassword !== passwords.value.repeatPassword) {
       uiService.openWarningModal('Пароли не совпадают')
+      return
+    }
+
+    if (!userService.validatePassword(passwords.value.newPassword)) {
+      uiService.openWarningModal('Пароль не соответствует требованиям')
       return
     }
 

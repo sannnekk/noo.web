@@ -85,6 +85,15 @@ export class UserService extends ApiService {
   }
 
   /**
+   * validate password
+   */
+  public validatePassword(password: string): boolean {
+    return this.passwordCriteria().every((criteria) =>
+      criteria.isValid(password)
+    )
+  }
+
+  /**
    * get users password criteria
    */
   public passwordCriteria() {

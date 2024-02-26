@@ -53,6 +53,8 @@ const createWorkStore = useCreateWorkStore()
 const route = useRoute()
 
 const taskId = computed(() => route.params.taskId as string)
+
+createWorkStore.fetchWork()
 </script>
 
 <style lang="sass" scoped>

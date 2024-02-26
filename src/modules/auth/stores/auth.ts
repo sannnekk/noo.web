@@ -2,7 +2,7 @@ import { Core } from '@/core/Core'
 import { defineStore } from 'pinia'
 import { reactive, ref, watch } from 'vue'
 
-export const useAuthStore = defineStore('auth', () => {
+export const useAuthStore = defineStore('auth-module:auth', () => {
   /*
    * current mode (login, register, forgot-password)
    */
@@ -77,11 +77,7 @@ export const useAuthStore = defineStore('auth', () => {
       return
     }
 
-    if (
-      passwordCriteria.some(
-        (criteria) => !criteria.isValid(registerCredentials.password)
-      )
-    ) {
+    if (!Core.Services.User.validatePassword(registerCredentials.password)) {
       error.value = passwordCriteria.find(
         (criteria) => !criteria.isValid(registerCredentials.password)
       )?.errorText

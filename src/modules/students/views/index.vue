@@ -2,7 +2,7 @@
   <div class="index-students-view">
     <entity-table
       :cols="cols"
-      :data="studentsStore.students"
+      :data="studentsStore.results"
     />
   </div>
 </template>

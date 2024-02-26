@@ -33,14 +33,22 @@
       </template>
       <template #text>
         <div class="change-mentor-modal__search">
-          <search-field v-model="usersStore.mentorsSearch" />
+          <search-field
+            v-model="userStore.mentorSearch.pagination.search"
+            :is-loading="userStore.mentorSearch.isListLoading"
+          />
         </div>
         <div class="change-mentor-modal__list">
           <check-list
-            :items="usersStore.foundMentors"
+            :items="userStore.mentorSearch.results"
             item-label-key="name"
             item-key="id"
             v-model="selectedMentorId"
+          />
+          <list-pagination
+            v-model:page="userStore.mentorSearch.pagination.page"
+            :total="userStore.mentorSearch.resultsMeta.total"
+            :limit="userStore.mentorSearch.pagination.limit"
           />
         </div>
       </template>
@@ -51,16 +59,21 @@
 <script setup lang="ts">
 import type { User } from '@/core/data/entities/User'
 import { ref } from 'vue'
-import { useUsersStore } from '../stores/user'
 import { Core } from '@/core/Core'
+import { useUserStore } from '../stores/user'
 
 interface Props {
   mentor: User | undefined
 }
 
-const props = defineProps<Props>()
+interface Emits {
+  (e: 'assignMentor', mentorId: User['id']): void
+}
 
-const usersStore = useUsersStore()
+const props = defineProps<Props>()
+const emits = defineEmits<Emits>()
+
+const userStore = useUserStore()
 
 const changeMentorModalVisible = ref(false)
 
@@ -71,7 +84,7 @@ function onMentorSelectConfirm() {
     return Core.Services.UI.openWarningModal('Куратор не выбран')
   }
 
-  usersStore.assignMentor(selectedMentorId.value[0])
+  userStore.assignMentor(selectedMentorId.value[0])
 }
 </script>
 

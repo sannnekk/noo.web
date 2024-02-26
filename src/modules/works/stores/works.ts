@@ -2,51 +2,37 @@ import { defineStore } from 'pinia'
 import { ref, reactive, watch } from 'vue'
 import type { Work } from '@/core/data/entities/Work'
 import { Core } from '@/core/Core'
+import { useSearch } from '@/composables/useSearch'
+import type { Pagination } from '@/core/data/Pagination'
 
 export const useWorksStore = defineStore('works-module', () => {
   const uiService = Core.Services.UI
   const workService = Core.Services.Work
 
   /**
-   * Works list
+   * Search
    */
-  const works = ref<Work[]>([])
+  const { pagination, results, resultsMeta, isListLoading } =
+    useSearch(fetchWorks)
 
   /**
-   * Search query for works
+   * Fetch works list
    */
-  const search = ref('')
-
-  /**
-   * Loading state for works list
-   */
-  const listLoading = ref(false)
-
-  /**
-   * Load works list
-   */
-  watch(
-    search,
-    async () => {
-      listLoading.value = true
-
-      try {
-        const response = await workService.getWorks({ search: search.value })
-      } catch (error: any) {
-        uiService.openErrorModal(
-          'Произошла ошибка при получении списка работ',
-          error.message
-        )
-      } finally {
-        listLoading.value = false
-      }
-    },
-    { immediate: true }
-  )
+  async function fetchWorks(pagination: Pagination) {
+    try {
+      return await workService.getWorks(pagination)
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при получении списка работ',
+        error.message
+      )
+    }
+  }
 
   return {
-    works,
-    search,
-    listLoading
+    pagination,
+    results,
+    resultsMeta,
+    isListLoading
   }
 })

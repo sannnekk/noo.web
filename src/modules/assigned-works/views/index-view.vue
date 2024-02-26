@@ -2,14 +2,24 @@
   <div class="index-works-view">
     <div class="index-works-view__header">
       <div class="index-works-view__header__search">
-        <search-field v-model="worksStore.search" />
+        <search-field
+          v-model="assignedWorksStore.pagination.search"
+          :is-loading="assignedWorksStore.isListLoading"
+        />
       </div>
     </div>
     <div class="index-works-view__table">
       <works-table
-        :works="worksStore.works"
-        :loading="worksStore.listLoading"
-        :get-user-action-function="worksStore.getUserAction"
+        :works="assignedWorksStore.results"
+        :loading="assignedWorksStore.isListLoading"
+        :get-user-action-function="assignedWorksStore.getUserAction"
+      />
+    </div>
+    <div class="index-works-view__pagination">
+      <list-pagination
+        v-model:page="assignedWorksStore.pagination.page"
+        :total="assignedWorksStore.resultsMeta.total"
+        :limit="assignedWorksStore.pagination.limit"
       />
     </div>
   </div>
@@ -19,7 +29,7 @@
 import worksTable from '../components/works-table.vue'
 import { useAssignedWorksStore } from '../stores/assigned-works'
 
-const worksStore = useAssignedWorksStore()
+const assignedWorksStore = useAssignedWorksStore()
 </script>
 
 <style lang="sass" scoped>

@@ -156,6 +156,8 @@
 import { useCreateCourseStore } from '../stores/create-course'
 
 const createCourseStore = useCreateCourseStore()
+
+createCourseStore.fetchCourse()
 </script>
 
 <style lang="sass" scoped>

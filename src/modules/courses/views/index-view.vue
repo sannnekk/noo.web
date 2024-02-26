@@ -1,8 +1,14 @@
 <template>
-  <div class="index-view">
+  <div
+    class="index-view"
+    v-auto-animate
+  >
     <div class="index-view__header">
       <div class="index-view__header__search">
-        <search-field v-model="materialsStore.search" />
+        <search-field
+          v-model="coursesStore.pagination.search"
+          :is-loading="coursesStore.isListLoading"
+        />
       </div>
       <div
         class="index-view__header__create"
@@ -18,11 +24,12 @@
     </div>
     <div
       class="row"
-      v-if="materialsStore.courses.length > 0"
+      v-if="coursesStore.resultsMeta.total > 0 && !coursesStore.isListLoading"
+      v-auto-animate
     >
       <div
         class="col-md-4"
-        v-for="course in materialsStore.courses"
+        v-for="course in coursesStore.results"
         :key="course.id"
       >
         <course-card
@@ -39,6 +46,12 @@
         />
       </div>
     </div>
+    <div
+      class="index-view__loading"
+      v-else-if="coursesStore.isListLoading"
+    >
+      <loader-icon contrast />
+    </div>
     <div v-else>
       <br />
       <br />
@@ -46,20 +59,37 @@
         Курсы не найдены
       </p>
     </div>
+    <div
+      class="index-view__pagination"
+      v-if="coursesStore.resultsMeta.total > 0"
+    >
+      <list-pagination
+        v-model:page="coursesStore.pagination.page"
+        :total="coursesStore.resultsMeta.total"
+        :limit="coursesStore.pagination.limit"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import CommonButton from '@/components/form/common-button.vue'
-import { useMaterialsStore } from '../stores/materials'
+import { useCoursesStore } from '../stores/courses'
 import { Core } from '@/core/Core'
 
-const materialsStore = useMaterialsStore()
+const coursesStore = useCoursesStore()
 </script>
 
 <style scoped lang="sass">
 .index-view
   padding: 1rem
+
+  &__loading
+    height: 400px
+    display: flex
+    justify-content: center
+    margin-top: 2em
+    font-size: 50px
 
   &__header
     display: flex

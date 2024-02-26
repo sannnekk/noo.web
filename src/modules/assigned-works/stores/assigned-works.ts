@@ -1,10 +1,10 @@
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import { defineStore } from 'pinia'
-import { ref, reactive, computed, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import type { Task } from '@/core/data/entities/Task'
-import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
+import { ref, watch } from 'vue'
 import { Core } from '@/core/Core'
+import { debounce } from '@/core/utils/debounce'
+import { useSearch } from '@/composables/useSearch'
+import type { Pagination } from '@/core/data/Pagination'
 
 export type ActionType = 'read' | 'solve' | 'check'
 
@@ -23,53 +23,29 @@ export type FieldVisibility = {
 }
 
 export const useAssignedWorksStore = defineStore(
-  'assigned-works:assigned-works',
+  'assigned-works-module:assigned-works',
   () => {
     const assignedWorkService = Core.Services.AssignedWork
     const uiService = Core.Services.UI
-    const _route = useRoute()
 
     /**
-     * List of assigned works
+     * Load assigned works
      */
-    const works = ref<AssignedWork[]>([])
+    async function fetchAssignedWorks(pagination?: Pagination) {
+      try {
+        return await assignedWorkService.getAssignedWorks(pagination || {})
+      } catch (e: any) {
+        uiService.openErrorModal('Ошибка при загрузке списка работ', e.message)
+      }
+    }
 
     /**
-     * Search query
+     * Search
      */
-    const search = ref('')
-
-    /**
-     * Loading state of the list
-     */
-    const listLoading = ref(false)
-
-    /**
-     * Watch for route change to load assigned works
-     */
-    watch(
-      [() => _route.path, search],
-      async () => {
-        if (_route.path === '/assigned-works') {
-          listLoading.value = true
-
-          try {
-            const response = await assignedWorkService.getAssignedWorks({
-              search: search.value
-            })
-            works.value = response.data
-          } catch (e: any) {
-            uiService.openErrorModal(
-              'Ошибка при загрузке списка работ',
-              e.message
-            )
-          } finally {
-            listLoading.value = false
-          }
-        }
-      },
-      { immediate: true }
-    )
+    const { pagination, results, resultsMeta, isListLoading } =
+      useSearch<AssignedWork>(fetchAssignedWorks, {
+        immediate: true
+      })
 
     /**
      * Get user action for assigned work based on its role
@@ -145,10 +121,11 @@ export const useAssignedWorksStore = defineStore(
     }
 
     return {
-      works,
-      search,
-      getUserAction,
-      listLoading
+      pagination,
+      isListLoading,
+      results,
+      resultsMeta,
+      getUserAction
     }
   }
 )

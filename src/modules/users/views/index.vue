@@ -1,22 +1,25 @@
 <template>
   <div class="index-students-view">
     <div class="index-students-view__search">
-      <search-field v-model="usersStore.search" />
+      <search-field
+        v-model="usersStore.pagination.search"
+        :is-loading="usersStore.isListLoading"
+      />
     </div>
     <div class="index-students-view__table">
       <entity-table
         :cols="cols"
-        :data="usersStore.users"
-        :is-loading="usersStore.listLoading"
+        :data="usersStore.results"
+        :is-loading="usersStore.isListLoading"
       />
     </div>
     <div
       class="index-students-view__pagination"
-      v-if="usersStore.pagination.total"
+      v-if="usersStore.resultsMeta.total"
     >
       <list-pagination
         v-model:page="usersStore.pagination.page"
-        :total="usersStore.pagination.total"
+        :total="usersStore.resultsMeta.total"
         :limit="usersStore.pagination.limit"
       />
     </div>
@@ -25,7 +28,7 @@
 
 <script lang="ts" setup>
 import type { User } from '@/core/data/entities/User'
-import { useUsersStore } from '../stores/user'
+import { useUsersStore } from '../stores/users'
 
 const cols = [
   {
@@ -90,4 +93,3 @@ const usersStore = useUsersStore()
   &__search
     padding: 1rem
 </style>
-@/core/data/entities/User

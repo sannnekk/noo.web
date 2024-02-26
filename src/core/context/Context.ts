@@ -33,8 +33,6 @@ export class Context {
   public constructor(user?: User | undefined, apiToken?: string | undefined) {
     this._user = user || Storage.User
     this._apiToken = apiToken || Storage.ApiToken
-
-    console.log('Context created', this)
   }
 
   /**

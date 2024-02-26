@@ -4,7 +4,7 @@
     v-auto-animate
   >
     <component :is="layout">
-      <router-view />
+      <router-view :key="Object.values($route.params).join('')" />
     </component>
     <div v-if="initialized && _core">
       <the-loader-overlay v-if="_core.Services.UI.Store().isLoading" />
@@ -29,6 +29,7 @@ const initialized = ref(false)
 
 onMounted(() => {
   console.log('App mounted')
+
   _core.value = Core.init()
   initialized.value = true
 })

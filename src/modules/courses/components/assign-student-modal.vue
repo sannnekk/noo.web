@@ -9,12 +9,15 @@
     <template #text>
       <div class="students-modal">
         <div class="students-modal__search">
-          <search-field v-model="assignStudentsStore.search" />
+          <search-field
+            v-model="assignStudentsStore.pagination.search"
+            :is-loading="assignStudentsStore.isListLoading"
+          />
         </div>
         <br />
         <div class="students-modal__list">
           <check-list
-            :items="assignStudentsStore.students"
+            :items="assignStudentsStore.results"
             v-model="assignStudentsStore.selectedStudentIds"
             multiple
             item-label-key="name,username"

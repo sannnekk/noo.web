@@ -1,7 +1,7 @@
 <template>
   <div
     class="index-materials-view"
-    v-if="materialsStore.course"
+    v-if="courseStore.course"
   >
     <the-sidebar-layout>
       <template #sidebar>
@@ -20,7 +20,7 @@
             Ученики курса ({{ assignStudentsStore.studentsCount }})
           </span>
           <h2 class="index-materials-view__tree__title">
-            {{ materialsStore.course.name }}
+            {{ courseStore.course.name }}
           </h2>
           <!-- <div class="index-materials-view__tree__author">
             <div class="index-materials-view__tree__author__avatar">
@@ -30,12 +30,12 @@
               <span>{{ materialsStore.course.author.name }}</span>
             </div>
           </div> -->
-          <materials-tree :data="materialsStore.materialsTree" />
+          <materials-tree :data="courseStore.materialsTree" />
         </div>
       </template>
       <template #content>
         <div class="index-materials-view__content">
-          <router-view />
+          <router-view :key="$route.fullPath" />
         </div>
       </template>
     </the-sidebar-layout>
@@ -44,13 +44,15 @@
 </template>
 
 <script lang="ts" setup>
-import { useMaterialsStore } from '../stores/materials'
+import { useCourseStore } from '../stores/course'
 import MaterialsTree from '../components/materials-tree.vue'
 import { useAssignStudentsStore } from '../stores/assign-student'
 import { Core } from '@/core/Core'
 
-const materialsStore = useMaterialsStore()
+const courseStore = useCourseStore()
 const assignStudentsStore = useAssignStudentsStore()
+
+courseStore.fetchCourse()
 </script>
 
 <style lang="sass" scoped>
@@ -107,3 +109,4 @@ const assignStudentsStore = useAssignStudentsStore()
     max-height: 60vh
     overflow-y: auto
 </style>
+../stores/courses

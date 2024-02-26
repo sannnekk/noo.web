@@ -23,8 +23,6 @@ export class UIService extends StoreService {
   public constructor(context: Context) {
     super(context)
 
-    console.log('UIService constructor')
-
     this._useStoreRef = installUIStore()
     this._store = this._useStoreRef()
   }

@@ -10,11 +10,11 @@
     </div>
     <div class="transfer-work-view__body">
       <div class="transfer-work-view__body__search">
-        <search-field v-model="transferWorkStore.search" />
+        <search-field v-model="transferWorkStore.pagination.search" />
       </div>
       <div class="transfer-work-view__body__table">
         <check-list
-          :items="transferWorkStore.mentors"
+          :items="transferWorkStore.results"
           item-label-key="name"
           item-key="id"
           v-model="transferWorkStore.selectedMentorId"
@@ -37,9 +37,14 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue'
 import { useTransferWorkStore } from '../stores/transfer-work'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const transferWorkStore = useTransferWorkStore()
+
+transferWorkStore.fetchAssignedWork()
 </script>
 
 <style scoped lang="sass">

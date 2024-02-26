@@ -2,31 +2,29 @@ import type { Work } from '@/core/data/entities/Work'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useMaterialsStore } from './materials'
+import { useCourseStore } from './course'
 import { Core } from '@/core/Core'
+import type { Pagination } from '@/core/data/Pagination'
+import { useSearch } from '@/composables/useSearch'
 
 export const useAssignWorkToMaterialStore = defineStore(
-  'assign-work-to-material',
+  'courses-module:assign-work',
   () => {
     const uiService = Core.Services.UI
     const workService = Core.Services.Work
     const courseService = Core.Services.Course
 
-    const materialsStore = useMaterialsStore()
+    const courseStore = useCourseStore()
     const route = useRoute()
 
     /**
-     * Works list to assign to material
+     * search
      */
-    const works = ref<Work[]>([])
+    const { pagination, results, resultsMeta, isListLoading } =
+      useSearch<Work>(fetchWorks)
 
     /**
-     * Work search query
-     */
-    const search = ref('')
-
-    /**
-     * Current aterial slug
+     * Current material slug
      */
     const materialSlug = computed(() => route.params.slug as string)
 
@@ -35,7 +33,7 @@ export const useAssignWorkToMaterialStore = defineStore(
      * TODO: make it single value instead of array
      */
     const selectedWorkId = ref([
-      materialsStore.getMaterialBySlug(materialSlug.value)?.work?.id
+      courseStore.getMaterialBySlug(materialSlug.value)?.work?.id
     ])
 
     /**
@@ -61,22 +59,16 @@ export const useAssignWorkToMaterialStore = defineStore(
     /**
      * Watch for search query and load works
      */
-    watch(search, async () => {
-      if (search.value.length < 2) return
-
+    async function fetchWorks(pagination: Pagination) {
       try {
-        const response = await workService.getWorks({
-          search: search.value
-        })
-
-        works.value = response.data
+        return await workService.getWorks(pagination)
       } catch (error: any) {
         uiService.openErrorModal(
           'Произошла ошибка при загрузке работ',
           error.message
         )
       }
-    })
+    }
 
     /**
      * Submit work to material
@@ -112,8 +104,10 @@ export const useAssignWorkToMaterialStore = defineStore(
     }
 
     return {
-      works,
-      search,
+      pagination,
+      results,
+      resultsMeta,
+      isListLoading,
       assign,
       modalVisible,
       selectedWorkId,

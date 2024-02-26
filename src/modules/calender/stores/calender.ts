@@ -7,7 +7,7 @@ import { ref, watch } from 'vue'
 /**
  * Calender store
  */
-export const useCalenderStore = defineStore('calender', () => {
+export const useCalenderStore = defineStore('calender-module:calender', () => {
   const uiService = Core.Services.UI
 
   /**

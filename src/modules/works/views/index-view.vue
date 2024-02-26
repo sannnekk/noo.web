@@ -2,7 +2,10 @@
   <div class="index-works-view">
     <div class="index-works-view__header">
       <div class="index-works-view__header__search">
-        <search-field v-model="worksStore.search" />
+        <search-field
+          v-model="worksStore.pagination.search"
+          :is-loading="worksStore.isListLoading"
+        />
       </div>
       <div class="index-works-view__header__link">
         <common-button to="/create-work/new">Создать работу</common-button>
@@ -10,8 +13,15 @@
     </div>
     <div class="index-works-view__table">
       <works-table
-        :works="worksStore.works"
-        :loading="worksStore.listLoading"
+        :works="worksStore.results"
+        :loading="worksStore.isListLoading"
+      />
+    </div>
+    <div class="index-works-view__pagination">
+      <list-pagination
+        v-model:page="worksStore.pagination.page"
+        :total="worksStore.resultsMeta.total"
+        :limit="worksStore.pagination.limit"
       />
     </div>
   </div>

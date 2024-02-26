@@ -4,7 +4,13 @@
     @mouseenter="isOnHover = true"
     @mouseleave="isOnHover = false"
   >
+    <loader-icon
+      class="search-field__icon"
+      v-if="isLoading"
+      contrast
+    />
     <inline-icon
+      v-else
       class="search-field__icon"
       name="search"
       :animation="isOnHover"
@@ -29,6 +35,7 @@ import { computed, ref } from 'vue'
 
 interface Props {
   modelValue: string
+  isLoading?: boolean
 }
 
 interface Emits {

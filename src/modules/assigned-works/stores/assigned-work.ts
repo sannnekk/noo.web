@@ -1,6 +1,6 @@
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import { defineStore } from 'pinia'
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import type { Task } from '@/core/data/entities/Task'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
@@ -17,7 +17,7 @@ export type FieldVisibility = {
 }
 
 export const useAssignedWorkStore = defineStore(
-  'assigned-works:assigned-work-detail',
+  'assigned-works-module:assigned-work',
   () => {
     const assignedWorkService = Core.Services.AssignedWork
     const uiService = Core.Services.UI
@@ -46,27 +46,21 @@ export const useAssignedWorkStore = defineStore(
     const assignedWork = ref<AssignedWork | null>(null)
 
     /**
-     * Watch for route change to load assigned work
+     * Load assigned work
      */
-    watch(
-      () => _route.params.workId,
-      async () => {
-        if (_route.params.workId) {
-          uiService.setLoading(true)
-          try {
-            const response = await assignedWorkService.getAssignedWork(
-              _route.params.workId as string
-            )
-            assignedWork.value = response.data
-          } catch (e: any) {
-            uiService.openErrorModal('Ошибка при загрузке работы', e.message)
-          } finally {
-            uiService.setLoading(false)
-          }
-        }
-      },
-      { immediate: true }
-    )
+    async function fetchAssignedWork() {
+      uiService.setLoading(true)
+      try {
+        const response = await assignedWorkService.getAssignedWork(
+          assignedWorkId.value
+        )
+        assignedWork.value = response.data
+      } catch (e: any) {
+        uiService.openErrorModal('Ошибка при загрузке работы', e.message)
+      } finally {
+        uiService.setLoading(false)
+      }
+    }
 
     /**
      * Base url for the page
@@ -89,6 +83,7 @@ export const useAssignedWorkStore = defineStore(
       [taskSlug, assignedWorkId],
       () => {
         if (!assignedWork.value) return
+        if (!taskSlug.value) return
 
         const _task = getTaskBySlug(taskSlug.value)
 
@@ -295,7 +290,8 @@ export const useAssignedWorkStore = defineStore(
       fieldVisibility,
       baseUrl,
       nextTaskLink,
-      previousTaskLink
+      previousTaskLink,
+      fetchAssignedWork
     }
   }
 )

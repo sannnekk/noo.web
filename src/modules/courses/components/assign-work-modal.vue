@@ -15,19 +15,22 @@
           Сейчас присвоена:
           <router-link
             class="assign-work-to-material-modal__current-work-link"
-            :to="`/create-work${materialsStore.material?.work?.slug}`"
+            :to="`/create-work${courseStore.material?.work?.slug}`"
           >
-            {{ materialsStore.material?.work?.name }}
+            {{ courseStore.material?.work?.name }}
           </router-link>
         </p>
         <div class="assign-work-to-material-modal__search">
-          <search-field v-model="assignWorkStore.search" />
+          <search-field
+            v-model="assignWorkStore.pagination.search"
+            :is-loading="assignWorkStore.isListLoading"
+          />
         </div>
         <br />
         <div class="assign-work-to-material-modal__list">
           <check-list
             v-model="assignWorkStore.selectedWorkId"
-            :items="assignWorkStore.works"
+            :items="assignWorkStore.results"
             item-label-key="name"
             item-key="id"
           />
@@ -65,8 +68,8 @@
 
 <script setup lang="ts">
 import { useAssignWorkToMaterialStore } from '../stores/assign-work'
-import { useMaterialsStore } from '../stores/materials'
+import { useCourseStore } from '../stores/course'
 
 const assignWorkStore = useAssignWorkToMaterialStore()
-const materialsStore = useMaterialsStore()
+const courseStore = useCourseStore()
 </script>

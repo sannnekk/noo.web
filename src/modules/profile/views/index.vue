@@ -26,7 +26,10 @@
         </div>
       </template>
       <template #content>
-        <div class="index-profile-view__mentor">
+        <div
+          class="index-profile-view__mentor"
+          v-if="Core.Context.User?.role === 'student'"
+        >
           <h3>Ваш куратор:</h3>
           <user-card
             v-if="profileStore.mentor"
@@ -80,6 +83,7 @@ import { useProfileStore } from '../stores/profile'
 import ProfileCredentials from '../components/profile-credentials.vue'
 import ProfilePasswordForm from '../components/profile-password-form.vue'
 import deleteAccount from '../components/delete-account.vue'
+import { Core } from '@/core/Core'
 
 const profileStore = useProfileStore()
 </script>

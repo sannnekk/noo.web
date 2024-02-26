@@ -1,19 +1,19 @@
 <template>
   <div
     class="material-view"
-    v-if="materialsStore.material"
+    v-if="courseStore.material"
   >
     <div class="material-view__header">
       <div class="material-view__header__title">
-        <h1>{{ materialsStore.material.name }}</h1>
+        <h1>{{ courseStore.material.name }}</h1>
       </div>
       <div
         class="material-view__header__work-link"
-        v-if="materialsStore.material.workId"
+        v-if="courseStore.material.workId"
       >
         <common-button
-          v-if="materialsStore.assignedWorkLink"
-          :to="materialsStore.assignedWorkLink"
+          v-if="courseStore.assignedWorkLink"
+          :to="courseStore.assignedWorkLink"
         >
           Перейти к работе
         </common-button>
@@ -24,32 +24,30 @@
       >
         <common-button @click="assignWorkStore.modalVisible = true">
           {{
-            materialsStore.material.work
-              ? 'Поменять работу'
-              : 'Присвоить работу'
+            courseStore.material.work ? 'Поменять работу' : 'Присвоить работу'
           }}
         </common-button>
       </div>
     </div>
     <div
       class="material-view__description"
-      v-if="materialsStore.material.description"
+      v-if="courseStore.material.description"
     >
-      <div v-html="materialsStore.material.description"></div>
+      <div v-html="courseStore.material.description"></div>
     </div>
     <div
       v-else
       class="material-view__separator"
     ></div>
     <div class="material-view__content">
-      <rich-text-container :content="materialsStore.material.content" />
+      <rich-text-container :content="courseStore.material.content" />
     </div>
     <div
       class="material-view__files"
-      v-if="materialsStore.material.files.length"
+      v-if="courseStore.material.files.length"
     >
       <file-list
-        :files="materialsStore.material.files"
+        :files="courseStore.material.files"
         label="Файлы курса"
         :actions="['download']"
       />
@@ -66,11 +64,13 @@
 
 <script setup lang="ts">
 import { Core } from '@/core/Core'
-import { useMaterialsStore } from '../stores/materials'
+import { useCourseStore } from '../stores/course'
 import { useAssignWorkToMaterialStore } from '../stores/assign-work'
 
-const materialsStore = useMaterialsStore()
+const courseStore = useCourseStore()
 const assignWorkStore = useAssignWorkToMaterialStore()
+
+courseStore.fetchAssignedWorkToMaterial()
 </script>
 
 <style scoped lang="sass">
@@ -137,3 +137,4 @@ const assignWorkStore = useAssignWorkToMaterialStore()
     justify-content: space-between
     gap: 1em
 </style>
+../stores/courses

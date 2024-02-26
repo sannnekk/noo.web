@@ -95,8 +95,6 @@ class CoreClass {
    * Add core events
    */
   private _subscribeCoreEvents() {
-    console.log('Events subscribed')
-
     this._context.Events.onMany(events)
   }
 }
