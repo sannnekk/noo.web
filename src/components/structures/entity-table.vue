@@ -136,7 +136,13 @@ interface Props {
     style?: ('bold' | 'italic' | 'centered' | 'secondary')[]
     type: 'text' | 'tag' | 'link' | 'icon' | 'date' | 'avatar' | 'iterator'
     linkTo?: string | Function
-    design?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger'
+    design?:
+      | 'primary'
+      | 'secondary'
+      | 'success'
+      | 'warning'
+      | 'danger'
+      | 'telegram'
     tagFunction?: (
       key: string,
       value: string | number | Date

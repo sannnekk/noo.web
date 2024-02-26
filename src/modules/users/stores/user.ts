@@ -57,7 +57,7 @@ export const useUsersStore = defineStore('users-module', () => {
    * Load user data
    */
   watch(
-    [() => route.path, search],
+    [() => route.path, search, pagination],
     async () => {
       if (route.params.username) {
         uiService.setLoading(true)

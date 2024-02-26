@@ -29,13 +29,7 @@
             class="edit-user-view__credentials__telegram"
             v-if="usersStore.user.telegramUsername"
           >
-            <common-button
-              :to="`https://t.me/${usersStore.user.telegramUsername}`"
-              design="primary"
-              alignment="stretch"
-            >
-              Telegram: {{ usersStore.user.telegramUsername }}
-            </common-button>
+            <telegram-button :username="usersStore.user.telegramUsername" />
           </div>
         </div>
       </template>
