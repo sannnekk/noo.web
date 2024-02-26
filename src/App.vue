@@ -4,7 +4,7 @@
     v-auto-animate
   >
     <component :is="layout">
-      <router-view :key="Object.values($route.params).join('')" />
+      <router-view :key="$route.path.split('/')[1]" />
     </component>
     <div v-if="initialized && _core">
       <the-loader-overlay v-if="_core.Services.UI.Store().isLoading" />
