@@ -17,6 +17,7 @@
       <list-pagination
         v-model:page="usersStore.pagination.page"
         :total="usersStore.pagination.total"
+        :limit="usersStore.pagination.limit"
       />
     </div>
   </div>

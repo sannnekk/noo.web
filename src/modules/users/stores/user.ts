@@ -15,7 +15,8 @@ export const useUsersStore = defineStore('users-module', () => {
    */
   const pagination = reactive({
     page: 1,
-    total: undefined as number | undefined
+    total: undefined as number | undefined,
+    limit: 25
   })
 
   /**

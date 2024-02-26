@@ -21,6 +21,7 @@ import { computed } from 'vue'
 interface Props {
   page: number
   total: number
+  limit: number
 }
 
 interface Emits {
@@ -39,7 +40,7 @@ const changePage = (page: number) => {
   emit('update:page', Number(page))
 }
 
-const pageCount = computed(() => Math.ceil(props.total / 10))
+const pageCount = computed(() => Math.ceil(props.total / props.limit))
 
 const pages = computed(() => {
   return Array.from({ length: pageCount.value }, (_, i) => i + 1)
