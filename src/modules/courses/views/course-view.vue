@@ -8,7 +8,7 @@
         <div class="index-materials-view__tree">
           <router-link
             class="index-materials-view__tree__back-button"
-            to="/materials"
+            to="/courses"
           >
             &#8249; Ко всем курсам
           </router-link>

@@ -16,6 +16,10 @@ export const useCourseStore = defineStore('courses-module:course', () => {
    */
   const course = ref<Course | null>(null)
 
+  if (course.value === null) {
+    fetchCourse()
+  }
+
   /**
    * The link to the assigned work
    */

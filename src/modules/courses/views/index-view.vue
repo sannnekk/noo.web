@@ -33,7 +33,7 @@
         :key="course.id"
       >
         <course-card
-          :to="`/materials/${course.slug}`"
+          :to="`/courses/${course.slug}`"
           :image="
             course.images[0]?.src || 'https://via.placeholder.com/300x200'
           "
