@@ -62,6 +62,7 @@ export const useMaterialsStore = defineStore('materials', () => {
     [search, () => _route.path],
     async () => {
       if (_route.params.courseSlug) return
+      if (_route.path === '/courses') return
 
       try {
         const response = await courseService.getCourses({
