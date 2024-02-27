@@ -30,12 +30,6 @@ const cols = [
     style: 'bold'
   },
   {
-    title: 'Присвоенный материал',
-    keys: ['material.name'],
-    type: 'text',
-    style: 'bold'
-  },
-  {
     title: '',
     value: 'Посмотреть / Редактировать',
     type: 'link',
@@ -43,4 +37,3 @@ const cols = [
   }
 ]
 </script>
-@/core/data/entities/Work

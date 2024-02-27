@@ -23,6 +23,11 @@
             item-label-key="name,username"
             item-key="id"
           />
+          <list-pagination
+            v-model:page="assignStudentsStore.pagination.page"
+            :limit="assignStudentsStore.pagination.limit"
+            :total="assignStudentsStore.resultsMeta.total"
+          />
         </div>
       </div>
     </template>

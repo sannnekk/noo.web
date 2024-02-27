@@ -34,6 +34,11 @@
             item-label-key="name"
             item-key="id"
           />
+          <list-pagination
+            v-model:page="assignWorkStore.pagination.page"
+            :limit="assignWorkStore.pagination.limit"
+            :total="assignWorkStore.resultsMeta.total"
+          />
         </div>
         <div class="assign-work-to-material-modal__deadline-toggle">
           <form-checkbox
