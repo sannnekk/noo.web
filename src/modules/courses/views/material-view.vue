@@ -63,6 +63,7 @@
 </template>
 
 <script setup lang="ts">
+import AssignWorkModal from '../components/assign-work-modal.vue'
 import { Core } from '@/core/Core'
 import { useCourseStore } from '../stores/course'
 import { useAssignWorkToMaterialStore } from '../stores/assign-work'

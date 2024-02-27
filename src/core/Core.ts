@@ -1,6 +1,5 @@
 import { Constants } from './constants'
 import { Context } from './context/Context'
-import type { EventName } from './context/EventEmitter'
 import { events } from './events'
 import { ServiceFactory, type ServiceName } from './services/ServiceFactory'
 

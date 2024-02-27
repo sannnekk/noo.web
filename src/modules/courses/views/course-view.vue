@@ -44,8 +44,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useCourseStore } from '../stores/course'
 import MaterialsTree from '../components/materials-tree.vue'
+import AssignStudentModal from '../components/assign-student-modal.vue'
+import { useCourseStore } from '../stores/course'
 import { useAssignStudentsStore } from '../stores/assign-student'
 import { Core } from '@/core/Core'
 

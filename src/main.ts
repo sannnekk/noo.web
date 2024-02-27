@@ -8,11 +8,6 @@ import { createPinia } from 'pinia'
 
 const app = createApp(App)
 
-// adding plugins
-app.use(router)
-app.use(createPinia())
-app.use(autoAnimatePlugin)
-
 // adding modules
 const modules = import.meta.glob('@/modules/!(__template__)/index.ts', {
   import: 'default',
@@ -34,6 +29,11 @@ Object.entries(components).forEach(([path, component]) => {
 
   if (name) app.component(name, component as any)
 })
+
+// adding plugins
+app.use(router)
+app.use(createPinia())
+app.use(autoAnimatePlugin)
 
 // mounting the app
 app.mount('#root')

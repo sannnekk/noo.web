@@ -70,7 +70,7 @@ export const useAssignStudentsStore = defineStore(
 
       try {
         await courseService.assignStudentsToCourse(
-          courseStore.course!.id,
+          courseStore.course!.slug,
           selectedStudentIds.value
         )
 
