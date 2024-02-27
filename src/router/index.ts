@@ -12,9 +12,4 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.path !== '/auth' && !Core.Context.isLoggedIn()) next('/auth')
-  else next()
-})
-
 export default router
