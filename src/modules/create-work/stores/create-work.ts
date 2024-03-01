@@ -15,23 +15,51 @@ export const useCreateWorkStore = defineStore(
     const _route = useRoute()
 
     /**
+     * Work types
+     */
+    const workTypeOptions = [
+      {
+        value: 'type1',
+        label: 'Тип 1'
+      },
+      {
+        value: 'type2',
+        label: 'Тип 2'
+      },
+      {
+        value: 'type3',
+        label: 'Тип 3'
+      }
+    ]
+
+    /**
+     * Empty work
+     */
+    const emptyWork = () =>
+      ({
+        name: '',
+        description: '',
+        tasks: [],
+        type: 'type1'
+      } as any)
+
+    /**
      * Current work
      */
     const work = ref<
       Omit<Work, 'createdAt' | 'updatedAt' | 'slug' | 'taskIds'> & {
         tasks: Omit<Task, 'id'>[]
       }
-    >({
-      name: '',
-      description: '',
-      tasks: []
-    } as any)
+    >(emptyWork())
 
     /**
      * Load work if work slug is present in the route
      */
     async function fetchWork() {
-      if (!_route.params.workSlug) return
+      if (!_route.params.workSlug) {
+        work.value = emptyWork()
+        return
+      }
 
       uiService.setLoading(true)
 
@@ -47,6 +75,7 @@ export const useCreateWorkStore = defineStore(
 
         work.value = response.data
       } catch (error: any) {
+        work.value = emptyWork()
         uiService.openErrorModal('Произошла ошибка при загрузке работы')
       } finally {
         uiService.setLoading(false)
@@ -174,6 +203,14 @@ export const useCreateWorkStore = defineStore(
       }
     }
 
-    return { work, taskToAdd, addTask, taskMap, submitWork, fetchWork }
+    return {
+      work,
+      taskToAdd,
+      addTask,
+      taskMap,
+      submitWork,
+      fetchWork,
+      workTypeOptions
+    }
   }
 )

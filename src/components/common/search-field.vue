@@ -21,12 +21,12 @@
       type="text"
       v-model="model"
     />
-    <common-button
-      class="search-field__button"
-      alignment="right"
-    >
-      Поиск
-    </common-button>
+    <inline-icon
+      v-show="model && model.length"
+      name="cross-red"
+      class="search-field__empty-button"
+      @click="model = ''"
+    />
   </div>
 </template>
 
@@ -81,11 +81,16 @@ const isOnHover = ref(false)
       @media screen and (max-width: 768px)
         font-size: 12px
 
-  &__button
-    width: 100px
+  &__empty-button
     position: absolute
     top: 50%
-    right: 0.4em
+    right: 0.25em
     transform: translateY(-50%)
-    font-size: 1em
+    font-size: 2em
+    cursor: pointer
+    color: var(--text-light)
+    transition: transform 0.2s ease-in-out
+
+    &:hover
+      transform: translateY(-50%) rotate(90deg)
 </style>

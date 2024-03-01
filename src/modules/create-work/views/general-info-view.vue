@@ -1,11 +1,22 @@
 <template>
   <div class="general-info-view">
-    <div class="form-group">
-      <form-input
-        v-model="createWorkStore.work.name"
-        label="Название работы"
-        type="text"
-      />
+    <div class="row">
+      <div class="col-md-8">
+        <div class="form-group">
+          <form-input
+            v-model="createWorkStore.work.name"
+            label="Название работы"
+            type="text"
+          />
+        </div>
+      </div>
+      <div class="col-md-4">
+        <select-input
+          label="Тип работы"
+          v-model="createWorkStore.work.type"
+          :options="createWorkStore.workTypeOptions"
+        />
+      </div>
     </div>
     <div class="form-group">
       <label class="general-info-view__work-description">

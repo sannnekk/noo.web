@@ -73,7 +73,7 @@ const cols = [
     title: 'Telegram',
     keys: ['telegramUsername'],
     type: 'link',
-    desiпт: 'telegram',
+    design: 'telegram',
     linkTo: (user: User) => `https://t.me/${user.telegramUsername}`
   },
   {

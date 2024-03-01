@@ -18,7 +18,7 @@ export function useSearch<EntityType>(
       search: '',
       page: 1,
       limit: 25,
-      order: 'ASC',
+      order: 'DESC',
       sort: 'id'
     },
     debounceTime: 250,

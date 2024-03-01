@@ -3,13 +3,53 @@
     <the-sidebar-layout v-if="assignedWorkStore.assignedWork">
       <template #sidebar>
         <div class="work-view__sidebar">
-          <h2 class="work-view__sidebar__title">Вопросы</h2>
+          <h2 class="work-view__sidebar__title">
+            {{ assignedWorkStore.mode === 'check' ? 'Проверка' : 'Работа' }}
+          </h2>
+          <p v-if="assignedWorkStore.mode === 'solve'"></p>
+          <div class="work-view__sidebar__info">
+            <p
+              v-if="
+                Core.Context.User?.role === 'mentor' &&
+                assignedWorkStore.assignedWork.checkDeadlineAt
+              "
+              class="work-view__sidebar__info__check-deadline"
+            >
+              Дедлайн проверки:
+              {{
+                useDate(assignedWorkStore.assignedWork.checkDeadlineAt, {
+                  precision: 'day'
+                }).toBeautiful()
+              }}
+            </p>
+            <p
+              class="work-view__sidebar__info__solve-deadline"
+              v-if="assignedWorkStore.assignedWork.solveDeadlineAt"
+            >
+              Дедлайн сдачи:
+              {{
+                useDate(assignedWorkStore.assignedWork.solveDeadlineAt, {
+                  precision: 'day'
+                }).toBeautiful()
+              }}
+            </p>
+          </div>
           <task-list
             :work-id="assignedWorkStore.assignedWorkId"
             :is-solved-function="assignedWorkStore.taskHasAnswer"
             :base-url="assignedWorkStore.baseUrl"
             :tasks="assignedWorkStore.assignedWork.work?.tasks || []"
           />
+          <p class="work-view__sidebar__score">
+            Оценка:
+            <b>
+              {{
+                assignedWorkStore.workScoreText === null
+                  ? 'не выставлена'
+                  : assignedWorkStore.workScoreText
+              }}
+            </b>
+          </p>
           <div class="work-view__sidebar__submit">
             <common-button
               alignment="stretch"
@@ -36,17 +76,38 @@
               }}
             </common-button>
             <common-button
+              :to="['admin', 'teacher'].includes(Core.Context.User?.role!) ? '/works' : '/assigned-works'"
               alignment="stretch"
-              to="/assigned-works"
-              v-else
+              design="inline"
+              class="work-view__sidebar__back-button"
             >
               Вернуться к списку работ
             </common-button>
+            <div class="work-view__sidebar__people">
+              <div class="work-view__sidebar__people__student">
+                <label>Ученик: </label>
+                <user-card :user="assignedWorkStore.assignedWork.student" />
+              </div>
+              <div class="work-view__sidebar__people__mentor">
+                <label>Проверяющие кураторы: </label>
+                <user-card
+                  v-for="mentor in assignedWorkStore.assignedWork.mentors"
+                  :user="mentor"
+                  :key="mentor.id"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </template>
       <template #content>
-        <div class="work-view__content">
+        <div
+          class="work-view__content"
+          v-auto-animate
+        >
+          <h2 class="task-view__title">
+            {{ assignedWorkStore.assignedWork?.work?.name }}
+          </h2>
           <router-view :key="$route.fullPath" />
         </div>
       </template>
@@ -56,13 +117,6 @@
       v-else
     >
       <h1 class="work-view__not-found__title">Работа не найдена</h1>
-      <common-button
-        :to="['admin', 'teacher'].includes(Core.Context.User?.role!) ? '/works' : '/assigned-works'"
-        alignment="center"
-        class="work-view__not-found__link"
-      >
-        Вернуться к списку работ
-      </common-button>
     </div>
   </div>
   <sure-modal
@@ -107,8 +161,10 @@
 import TaskList from '../components/task-list.vue'
 import { Core } from '@/core/Core'
 import { useAssignedWorkStore } from '../stores/assigned-work'
+import { useDate } from '@/composables/useDate'
 
 const assignedWorkStore = useAssignedWorkStore()
+
 assignedWorkStore.fetchAssignedWork()
 </script>
 
@@ -118,9 +174,44 @@ assignedWorkStore.fetchAssignedWork()
     &__title
       margin: 0
 
+    &__info
+      margin-top: 1em
+      color: var(--text-light)
+      font-size: 0.9em
+
+      &__check-deadline
+        margin: 0
+
+      &__solve-deadline
+        margin: 0
+
+      &__student-name
+        margin: 0
+
     &__shift-button
       margin-top: 0.5em
       transform: scale(0.8)
+
+    &__back-button
+      font-size: 0.8em
+
+    &__people
+      margin-top: 1em
+      padding-top: 1em
+      border-top: 1px solid var(--border-color)
+      font-size: 0.8em
+
+      label
+        color: var(--text-light)
+        margin: 0
+        margin-bottom: 0.5em
+        display: inline-block
+
+      &__student
+        margin-bottom: 1em
+
+      &__mentor
+        margin-bottom: 1em
 
   &__not-found
     display: flex
@@ -137,4 +228,3 @@ assignedWorkStore.fetchAssignedWork()
     &__link
       margin: 2em 0
 </style>
-../stores/assigned-works

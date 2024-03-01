@@ -60,6 +60,10 @@ export const useAssignWorkToMaterialStore = defineStore(
      * Watch for search query and load works
      */
     async function fetchWorks(pagination: Pagination) {
+      if (Core.Context.User?.role !== 'teacher') {
+        return
+      }
+
       try {
         return await workService.getWorks(pagination)
       } catch (error: any) {
@@ -74,6 +78,10 @@ export const useAssignWorkToMaterialStore = defineStore(
      * Submit work to material
      */
     async function assign() {
+      if (Core.Context.User?.role !== 'teacher') {
+        return
+      }
+
       if (selectedWorkId.value.length !== 1 || !selectedWorkId.value[0]) {
         uiService.openWarningModal('Выберите одну работу для добавления')
         return

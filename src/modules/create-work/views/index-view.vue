@@ -3,6 +3,12 @@
     <the-sidebar-layout>
       <template #sidebar>
         <div class="index-create-work-view__sidebar">
+          <h2
+            class="index-create-work-view__sidebar__workname"
+            v-if="createWorkStore.work.name"
+          >
+            {{ createWorkStore.work.name }}
+          </h2>
           <h2 class="index-create-work-view__sidebar__title">Вопросы</h2>
           <div class="index-create-work-view__sidebar__general-info">
             <router-link
@@ -32,6 +38,16 @@
               }}
             </common-button>
           </div>
+          <br />
+          <div
+            class="index-create-work-view__sidebar__attention"
+            v-if="createWorkStore.work.id"
+          >
+            <warning-block>
+              При изменении работы будут изменены все её экземпляры, присвоенные
+              ученикам
+            </warning-block>
+          </div>
         </div>
       </template>
       <template #content>
@@ -60,6 +76,14 @@ createWorkStore.fetchWork()
 <style lang="sass" scoped>
 .index-create-work-view
   &__sidebar
+    &__workname
+      margin-top: 0.2em
+      margin-bottom: 1em
+      padding-bottom: 1em
+      font-size: 1.3rem
+      font-weight: bold
+      border-bottom: 1px solid var(--border-color)
+
     &__title
       margin-top: 0
       margin-bottom: 0.5em
@@ -86,4 +110,7 @@ createWorkStore.fetchWork()
       &:deep() button
         justify-content: center
         width: 100%
+
+    &__attention
+      font-size: 0.8em
 </style>

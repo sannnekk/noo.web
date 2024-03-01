@@ -4,7 +4,7 @@
     v-if="Core.isInitialized()"
   >
     <component :is="layout">
-      <router-view :key="$route.path.split('/')[1]" />
+      <router-view />
     </component>
     <div>
       <the-loader-overlay v-if="Core.Services.UI.Store().isLoading" />

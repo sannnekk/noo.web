@@ -3,9 +3,6 @@
     class="task-view"
     v-if="assignedWorkStore.assignedWork && assignedWorkStore.task"
   >
-    <h2 class="task-view__title">
-      {{ assignedWorkStore.assignedWork?.work?.name }}
-    </h2>
     <div class="task-view__question">
       <rich-text-container :content="assignedWorkStore.task?.content" />
     </div>
@@ -68,20 +65,29 @@
         :readonly="assignedWorkStore.fieldVisibility.checkBox === 'readonly'"
       />
     </div>
-    <br />
-    <common-button
-      alignment="right"
-      v-if="assignedWorkStore.nextTaskLink"
-      :to="assignedWorkStore.nextTaskLink"
-    >
-      Следующий вопрос
-    </common-button>
+    <div class="task-view__action-buttons">
+      <common-button
+        alignment="left"
+        design="secondary"
+        v-if="assignedWorkStore.previousTaskLink"
+        :to="assignedWorkStore.previousTaskLink"
+      >
+        Предыдущий вопрос
+      </common-button>
+      <common-button
+        alignment="right"
+        v-if="assignedWorkStore.nextTaskLink"
+        :to="assignedWorkStore.nextTaskLink"
+      >
+        Следующий вопрос
+      </common-button>
+    </div>
   </div>
   <div
     class="task-view__not-chosen"
     v-else
   >
-    <h2 class="task-view__title">Выберите задание</h2>
+    <p class="task-view__task-not-found">Выберите задание</p>
   </div>
 </template>
 
@@ -98,13 +104,14 @@ const assignedWorkStore = useAssignedWorkStore()
 
 <style scoped lang="sass">
 .task-view
-  &__title
-    font-weight: 500
-
-  &__subtitle
-    font-weight: 500
-
   &__question
     margin-bottom: 1rem
+    padding-bottom: 1em
+    padding-top: 1em
+    border-top: 1px solid var(--border-color)
+    border-bottom: 1px solid var(--border-color)
+
+  &__action-buttons
+    margin-top: 2rem
+    display: flex
 </style>
-../stores/assigned-works

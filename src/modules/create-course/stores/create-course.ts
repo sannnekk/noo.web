@@ -14,13 +14,19 @@ export const useCreateCourseStore = defineStore(
     const _route = useRoute()
 
     /**
+     * Empty course
+     */
+    const emptyCourse = () =>
+      ({
+        name: '',
+        description: '',
+        chapters: []
+      } as any)
+
+    /**
      * Current course
      */
-    const course = ref<Course>({
-      name: '',
-      images: [],
-      chapters: [] as Material[]
-    } as any)
+    const course = ref<Course>(emptyCourse() as any)
 
     /**
      * Name of the chapter to create
@@ -41,7 +47,10 @@ export const useCreateCourseStore = defineStore(
      * Load course
      */
     async function fetchCourse() {
-      if (!_route.params.courseSlug) return
+      if (!_route.params.courseSlug) {
+        course.value = emptyCourse()
+        return
+      }
 
       uiService.setLoading(true)
 
@@ -57,6 +66,7 @@ export const useCreateCourseStore = defineStore(
 
         course.value = response.data
       } catch (error: any) {
+        course.value = emptyCourse()
         uiService.openErrorModal(
           'Произошла ошибка при загрузке курса',
           error.message

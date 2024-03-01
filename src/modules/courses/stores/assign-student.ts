@@ -55,6 +55,10 @@ export const useAssignStudentsStore = defineStore(
      * Load students
      */
     async function fetchStudents(pagination: Pagination) {
+      if (Core.Context.User?.role !== 'teacher') {
+        return
+      }
+
       try {
         return await userService.getStudents(pagination)
       } catch (error) {
@@ -66,6 +70,10 @@ export const useAssignStudentsStore = defineStore(
      * Submit students to course
      */
     async function save() {
+      if (Core.Context.User?.role !== 'teacher') {
+        return
+      }
+
       uiService.setLoading(true)
 
       try {

@@ -5,6 +5,11 @@
       :readonly="readonly"
       v-model="model"
     />
+    <br />
+    <br />
+    <info-block>
+      Пробелы и регистр не учитываются в процессе оценки
+    </info-block>
   </div>
 </template>
 

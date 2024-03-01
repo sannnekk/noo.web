@@ -12,7 +12,7 @@ body {
   --success: #279c27;
   --info: var(--secondary);
 
-  --teelgram: #229ed9;
+  --telegram: #229ed9;
 
   /* Background */
   --light-background-color: var(--light);

@@ -22,11 +22,11 @@ interface Props {
     | 'attention-yellow'
     | 'minus-yellow'
     | 'check-red'
-    | 'exit'
     | 'jpg-file'
     | 'png-file'
     | 'pdf-file'
     | 'telegram'
+    | 'info'
   animation?: boolean
 }
 

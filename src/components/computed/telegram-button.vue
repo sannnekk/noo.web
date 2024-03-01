@@ -1,6 +1,7 @@
 <template>
   <common-button
     design="telegram"
+    alignment="stretch"
     :to="`https://t.me/${username}`"
   >
     {{ username }}

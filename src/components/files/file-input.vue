@@ -111,7 +111,7 @@ const emits = defineEmits<Emits>()
 
 const files = computed<FileItem[]>({
   get() {
-    return props.modelValue.map((media) => ({
+    return (props.modelValue || []).map((media) => ({
       id: media.id,
       key: uuid(),
       fileName: media.src.split('/').pop() as string,

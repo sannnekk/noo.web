@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="entity-table-container"
-    v-auto-animate
-  >
+  <div class="entity-table-container">
     <table class="entity-table">
       <thead>
         <tr>

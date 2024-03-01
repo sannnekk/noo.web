@@ -96,6 +96,7 @@ defineEmits<Emits>()
     &__icon
       display: block
       font-size: 20px
+      margin-right: 0.3em
 
     &.primary
       color: var(--dark)

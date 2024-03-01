@@ -96,6 +96,61 @@ export const useAssignedWorkStore = defineStore(
     )
 
     /**
+     * Current work score
+     */
+    const workScore = computed(() => {
+      if (!assignedWork.value) return null
+
+      const role = Core.Context.User!.role
+
+      if (role === 'student' && mode.value === 'read') {
+        return assignedWork.value.score || 0
+      }
+
+      if (role === 'mentor' && mode.value === 'check') {
+        return assignedWork.value.comments.reduce((acc, comment) => {
+          return acc + (comment.score || 0)
+        }, 0)
+      }
+
+      if (
+        assignedWork.value.checkStatus === 'checked-in-deadline' ||
+        assignedWork.value.checkStatus === 'checked-after-deadline'
+      ) {
+        return assignedWork.value.score || 0
+      }
+
+      return null
+    })
+
+    /**
+     * Work score text
+     */
+    const workScoreText = computed(() => {
+      if (workScore.value === null) return null
+
+      if (workScore.value === 0) {
+        return '0 баллов'
+      }
+
+      const lastDigit = workScore.value % 10
+
+      if (workScore.value > 10 && workScore.value < 20) {
+        return `${workScore.value} баллов`
+      }
+
+      if (lastDigit === 1) {
+        return `${workScore.value} балл`
+      }
+
+      if (lastDigit > 1 && lastDigit < 5) {
+        return `${workScore.value} балла`
+      }
+
+      return `${workScore.value} баллов`
+    })
+
+    /**
      * Next task link
      */
     const nextTaskLink = computed(() => {
@@ -291,7 +346,8 @@ export const useAssignedWorkStore = defineStore(
       baseUrl,
       nextTaskLink,
       previousTaskLink,
-      fetchAssignedWork
+      fetchAssignedWork,
+      workScoreText
     }
   }
 )
