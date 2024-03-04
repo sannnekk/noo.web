@@ -41,6 +41,11 @@ export const useCalenderStore = defineStore('calender-module:calender', () => {
   const newEvent = ref<Omit<CalenderEvent, 'id'>>(emptyEvent())
 
   /**
+   * Loading
+   */
+  const isLoading = ref(false)
+
+  /**
    * Watch for the current date change
    */
   watch(
@@ -68,7 +73,7 @@ export const useCalenderStore = defineStore('calender-module:calender', () => {
    * Fetch events
    */
   async function fetchEvents(date: Date) {
-    uiService.setLoading(true)
+    isLoading.value = true
 
     try {
       const startDate = new Date(date.getFullYear(), date.getMonth(), 1)
@@ -85,7 +90,7 @@ export const useCalenderStore = defineStore('calender-module:calender', () => {
     } catch (error: any) {
       uiService.openErrorModal('Ошибка при получении событий', error.message)
     } finally {
-      uiService.setLoading(false)
+      isLoading.value = false
     }
   }
 
@@ -159,6 +164,7 @@ export const useCalenderStore = defineStore('calender-module:calender', () => {
     newEvent,
     dayFunction,
     onEventSubmit,
-    onEventRemove
+    onEventRemove,
+    isLoading
   }
 })

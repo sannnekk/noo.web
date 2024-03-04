@@ -1,9 +1,26 @@
 <template>
   <div class="index-students-view">
+    <div class="index-students-view__search">
+      <search-field
+        v-model="studentsStore.pagination.search"
+        :is-loading="studentsStore.isListLoading"
+      />
+    </div>
     <entity-table
       :cols="cols"
       :data="studentsStore.results"
+      :is-loading="studentsStore.isListLoading"
     />
+    <div
+      class="index-students-view__pagination"
+      v-if="studentsStore.resultsMeta.total"
+    >
+      <list-pagination
+        v-model:page="studentsStore.pagination.page"
+        :total="studentsStore.resultsMeta.total"
+        :limit="studentsStore.pagination.limit"
+      />
+    </div>
   </div>
 </template>
 

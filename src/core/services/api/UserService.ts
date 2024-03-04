@@ -42,6 +42,15 @@ export class UserService extends ApiService {
   }
 
   /**
+   * get own students
+   */
+  public async getOwnStudents(
+    pagination?: Pagination
+  ): Promise<ApiResponse<User[]>> {
+    return this.httpGet<User[]>(`${this._route}/student/search/own`, pagination)
+  }
+
+  /**
    * get mentors
    */
   public async getMentors(

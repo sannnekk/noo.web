@@ -6,16 +6,30 @@
         :day-function="calenderStore.dayFunction"
       />
     </div>
-    <div class="index-calender-view__events">
-      <calender-event-list
-        :date="calenderStore.currentDate"
-        :events="calenderStore.events"
-        @remove="calenderStore.onEventRemove($event)"
-      />
-      <calender-event-form
-        v-model="calenderStore.newEvent"
-        @submit="calenderStore.onEventSubmit()"
-      />
+    <div
+      class="index-calender-view__events"
+      v-auto-animate
+    >
+      <div
+        class="index-calender-view__events__loading"
+        v-if="calenderStore.isLoading"
+      >
+        <loading-icon />
+      </div>
+      <div
+        class="index-calender-view__events__inner"
+        v-else
+      >
+        <calender-event-list
+          :date="calenderStore.currentDate"
+          :events="calenderStore.events"
+          @remove="calenderStore.onEventRemove($event)"
+        />
+        <calender-event-form
+          v-model="calenderStore.newEvent"
+          @submit="calenderStore.onEventSubmit()"
+        />
+      </div>
     </div>
   </div>
 </template>

@@ -7,7 +7,9 @@
             v-model="model.role"
             label="Роль"
             :options="roles"
-            :readonly="model.role !== 'student'"
+            :readonly="
+              model.role !== 'student' || Core.Context.User?.role === 'mentor'
+            "
           />
         </div>
       </div>

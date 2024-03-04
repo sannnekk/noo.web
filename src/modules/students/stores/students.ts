@@ -19,7 +19,7 @@ export const useStudentsStore = defineStore('students-module:students', () => {
    */
   async function fetchStudents(pagination: Pagination) {
     try {
-      return await userService.getStudents(pagination)
+      return await userService.getOwnStudents(pagination)
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при получении списка студентов',

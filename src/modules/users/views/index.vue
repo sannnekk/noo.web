@@ -30,6 +30,7 @@
 import type { User } from '@/core/data/entities/User'
 import { useUsersStore } from '../stores/users'
 import { setPageTitle } from '@/core/utils/setPageTitle'
+import { Core } from '@/core/Core'
 
 const cols = [
   {
@@ -79,7 +80,7 @@ const cols = [
   },
   {
     title: '',
-    value: () => 'Редактировать',
+    value: Core.Context.User?.role === 'mentor' ? 'Перейти' : 'Редактировать',
     type: 'link',
     design: 'secondary',
     linkTo: (user: User) => `/users/edit/${user.username}`
