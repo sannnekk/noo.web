@@ -48,7 +48,7 @@ export function installUIStore() {
         title: 'Пользователи',
         icon: 'users',
         route: '/users',
-        for: ['admin', 'teacher']
+        for: ['admin', 'teacher', 'mentor']
       },
       {
         title: 'Календарь',

@@ -22,7 +22,10 @@
         </div>
       </div>
       <div class="col-md-4">
-        <div class="form-group is-blocked">
+        <div
+          class="form-group is-blocked"
+          v-if="['admin', 'teacher'].includes(Core.Context.User?.role!)"
+        >
           <form-checkbox
             :readonly="model.id === Core.Context.User?.id"
             v-model="model.isBlocked"

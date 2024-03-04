@@ -29,8 +29,8 @@
 
 <script setup lang="ts">
 import { setPageTitle } from '@/core/utils/setPageTitle'
-import worksTable from '../components/works-table.vue'
 import { useWorksStore } from '../stores/works'
+import worksTable from '../components/works-table.vue'
 
 const worksStore = useWorksStore()
 
