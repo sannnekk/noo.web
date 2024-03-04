@@ -114,4 +114,7 @@ const assignedWorkStore = useAssignedWorkStore()
   &__action-buttons
     margin-top: 2rem
     display: flex
+
+    @media (max-width: 768px)
+      font-size: 0.8rem
 </style>

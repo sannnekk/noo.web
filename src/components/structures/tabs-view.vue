@@ -46,7 +46,8 @@ const activeTabIndex = ref(0)
 
     @media (max-width: 768px)
       flex-direction: column
-      gap: 1em
+      justify-content: center
+      gap: 0.5em
 
     &__title
       padding: 10px
