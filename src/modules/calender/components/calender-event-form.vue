@@ -9,10 +9,16 @@
       <div class="calender-event-form__body__form">
         <div class="form-row">
           <div class="form-group form-group--input">
-            <text-input
-              placeholder="Название"
+            <form-input
+              label="Название"
               type="text"
               v-model="eventModel.title"
+            />
+          </div>
+          <div class="form-group form-group--checkbox">
+            <form-checkbox
+              label="Показывать другим"
+              v-model="eventModel.isPrivate"
             />
           </div>
           <div class="form-group form-group--button">
@@ -27,7 +33,7 @@
         <div class="form-group from-group--textarea">
           <text-area
             v-model="eventModel.description"
-            placeholder="Описание"
+            label="Описание"
           />
         </div>
       </div>
@@ -82,27 +88,29 @@ const currentDate = computed(() =>
         display: flex
         gap: 1rem
         flex-direction: row
+        align-items: center
 
         .form-group
           &--input
             flex: 1
+
+            &:deep() input
+              padding: 0.7em 1.3em
+
+          &--checkbox
             font-size: 14px
+            margin-top: 1.7em
+
 
             &:deep() input
               padding: 0.7em 1.3em
 
           &--button
+            margin-top: 1.5em
+
             :deep()
               button
                 font-size: 14px
                 width: 100%
                 padding: 0.6em 2em
-
-      .form-group
-        label
-          display: block
-          margin-bottom: 0.5rem
-          font-weight: 500
-          font-size: 14px
 </style>
-@/core/data/entities/CalenderEvent

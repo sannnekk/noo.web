@@ -84,8 +84,11 @@ import ProfileCredentials from '../components/profile-credentials.vue'
 import ProfilePasswordForm from '../components/profile-password-form.vue'
 import deleteAccount from '../components/delete-account.vue'
 import { Core } from '@/core/Core'
+import { setPageTitle } from '@/core/utils/setPageTitle'
 
 const profileStore = useProfileStore()
+
+setPageTitle('Мой профиль')
 </script>
 
 <style lang="sass" scoped>

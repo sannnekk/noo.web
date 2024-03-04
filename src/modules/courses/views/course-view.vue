@@ -49,11 +49,26 @@ import AssignStudentModal from '../components/assign-student-modal.vue'
 import { useCourseStore } from '../stores/course'
 import { useAssignStudentsStore } from '../stores/assign-student'
 import { Core } from '@/core/Core'
+import { setPageTitle } from '@/core/utils/setPageTitle'
+import { watch } from 'vue'
 
 const courseStore = useCourseStore()
 const assignStudentsStore = useAssignStudentsStore()
 
 courseStore.fetchCourse()
+
+if (courseStore.course?.name) {
+  setPageTitle(courseStore.course.name)
+}
+watch(
+  () => courseStore.course,
+  () => {
+    if (courseStore.course?.name) {
+      setPageTitle(courseStore.course.name)
+    }
+  },
+  { deep: true, immediate: true }
+)
 </script>
 
 <style lang="sass" scoped>

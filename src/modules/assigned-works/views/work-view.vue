@@ -162,10 +162,22 @@ import TaskList from '../components/task-list.vue'
 import { Core } from '@/core/Core'
 import { useAssignedWorkStore } from '../stores/assigned-work'
 import { useDate } from '@/composables/useDate'
+import { setPageTitle } from '@/core/utils/setPageTitle'
+import { watch } from 'vue'
 
 const assignedWorkStore = useAssignedWorkStore()
 
 assignedWorkStore.fetchAssignedWork()
+
+watch(
+  () => assignedWorkStore.assignedWork,
+  () => {
+    if (assignedWorkStore.assignedWork?.work) {
+      setPageTitle(assignedWorkStore.assignedWork.work.name)
+    }
+  },
+  { deep: true, immediate: true }
+)
 </script>
 
 <style scoped lang="sass">

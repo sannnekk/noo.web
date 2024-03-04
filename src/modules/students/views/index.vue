@@ -10,6 +10,7 @@
 <script lang="ts" setup>
 import type { User } from '@/core/data/entities/User'
 import { useStudentsStore } from '../stores/students'
+import { setPageTitle } from '@/core/utils/setPageTitle'
 
 const cols = [
   {
@@ -42,6 +43,8 @@ const cols = [
 ]
 
 const studentsStore = useStudentsStore()
+
+setPageTitle('Мои ученики')
 </script>
 
 <style lang="sass" scoped></style>

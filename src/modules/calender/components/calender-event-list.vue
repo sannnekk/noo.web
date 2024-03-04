@@ -70,7 +70,7 @@ import calenderEventItem from './calender-event-item.vue'
 
 interface Props {
   date: Date
-  events: CalenderEvent[]
+  events: (CalenderEvent & { to?: string })[]
 }
 
 interface Emits {
@@ -83,6 +83,7 @@ const emits = defineEmits<Emits>()
 const dateFormatter = computed(() => useDate(props.date, { precision: 'day' }))
 
 const eventsOnDate = computed(() => {
+  console.log('eventsOnDate', props.events)
   return props.events.filter((event) => {
     return dateFormatter.value.isOnSameDay(event.date)
   })
@@ -104,6 +105,7 @@ const eventsOnDate = computed(() => {
       flex-wrap: wrap
       gap: 0.5em 1em
       margin-bottom: 1rem
+      font-size: 0.7em
 
       &__color
         display: inline-block

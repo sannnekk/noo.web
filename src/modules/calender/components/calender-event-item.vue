@@ -14,7 +14,7 @@
       </p>
       <div class="calender-event-item__body__button">
         <common-button
-          v-if="type !== 'event'"
+          v-if="type !== 'event' && to"
           :to="to"
         >
           Перейти
@@ -38,7 +38,7 @@ interface Emits {
   (e: 'remove'): void
 }
 
-defineProps<CalenderEvent>()
+defineProps<CalenderEvent & { to?: string }>()
 defineEmits<Emits>()
 </script>
 

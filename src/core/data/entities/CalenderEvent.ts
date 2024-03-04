@@ -4,10 +4,11 @@ export interface CalenderEvent extends Entity {
   title: string
   description: string
   date: Date
-  to: string
+  isPrivate: boolean
+  url?: string
   type:
     | 'student-deadline' // red
-    | 'teacher-deadline' // lila
+    | 'mentor-deadline' // lila
     | 'work-checked' // green
     | 'work-made' // yellow
     | 'event' // grey

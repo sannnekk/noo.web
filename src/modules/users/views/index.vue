@@ -29,6 +29,7 @@
 <script lang="ts" setup>
 import type { User } from '@/core/data/entities/User'
 import { useUsersStore } from '../stores/users'
+import { setPageTitle } from '@/core/utils/setPageTitle'
 
 const cols = [
   {
@@ -86,6 +87,8 @@ const cols = [
 ]
 
 const usersStore = useUsersStore()
+
+setPageTitle('Пользователи')
 </script>
 
 <style lang="sass" scoped>

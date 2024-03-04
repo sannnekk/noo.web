@@ -3,12 +3,14 @@ import { Core } from '@/core/Core'
 import type { CalenderEvent } from '@/core/data/entities/CalenderEvent'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
+import { v4 as uuid } from 'uuid'
 
 /**
  * Calender store
  */
 export const useCalenderStore = defineStore('calender-module:calender', () => {
   const uiService = Core.Services.UI
+  const calenderService = Core.Services.Calender
 
   /**
    * Current date
@@ -18,135 +20,74 @@ export const useCalenderStore = defineStore('calender-module:calender', () => {
   /**
    * Events
    */
-  const events = ref<CalenderEvent[]>([
-    {
-      id: '1',
-      title: 'Homework Assignment 1',
-      description: 'Complete the first homework assignment',
-      date: new Date('2023-10-15T23:59:59'),
-      type: 'student-deadline',
-      to: '/works/1'
-    },
-    {
-      id: '2',
-      title: 'Quiz 1',
-      description: 'Take the first quiz',
-      date: new Date('2023-10-15T09:00:00'),
-      type: 'teacher-deadline',
-      to: '/works/1'
-    },
-    {
-      id: '3',
-      title: 'Midterm Exam',
-      description: 'Take the midterm exam',
-      date: new Date('2023-10-16T13:00:00'),
-      type: 'work-checked',
-      to: '/works/1'
-    },
-    {
-      id: '4',
-      title: 'Final Project Proposal',
-      description: 'Submit the final project proposal',
-      date: new Date('2023-10-09T23:59:59'),
-      type: 'work-made',
-      to: '/works/1'
-    },
-    {
-      id: '5',
-      title: 'Final Project Presentation',
-      description: 'Present the final project',
-      date: new Date('2023-10-11T10:00:00'),
+  const events = ref<(CalenderEvent & { to?: string })[]>([])
+
+  /**
+   * Empty event
+   */
+  function emptyEvent(): Omit<CalenderEvent, 'id'> {
+    return {
+      date: new Date(),
+      title: '',
+      description: '',
       type: 'event',
-      to: '/works/1'
-    },
-    {
-      id: '6',
-      title: 'Grading Deadline',
-      description: 'Submit grades for the semester',
-      date: new Date('2023-10-15T23:59:59'),
-      type: 'teacher-deadline',
-      to: '/works/1'
-    },
-    {
-      id: '65',
-      title: 'Grading Deadline',
-      description: 'Submit grades for the semester',
-      date: new Date('2023-10-15T23:59:59'),
-      type: 'work-checked',
-      to: '/works/1'
-    },
-    {
-      id: '66',
-      title: 'Grading Deadline',
-      description: 'Submit grades for the semester',
-      date: new Date('2023-10-15T23:59:59'),
-      type: 'event',
-      to: '/works/1'
-    },
-    {
-      id: '67',
-      title: 'Grading Deadline',
-      description: 'Submit grades for the semester',
-      date: new Date('2023-10-15T23:59:59'),
-      type: 'work-made',
-      to: '/works/1'
-    },
-    {
-      id: '7',
-      title: 'Code Review',
-      description: 'Review code for the new feature',
-      date: new Date('2022-01-25T15:00:00'),
-      type: 'work-checked',
-      to: '/works/1'
-    },
-    {
-      id: '8',
-      title: 'Bug Fixing',
-      description: 'Fix bugs in the application',
-      date: new Date('2022-02-10T23:59:59'),
-      type: 'work-made',
-      to: '/works/1'
-    },
-    {
-      id: '9',
-      title: 'Team Building Event',
-      description: 'Attend the team building event',
-      date: new Date('2022-03-05T14:00:00'),
-      type: 'event',
-      to: '/works/1'
-    },
-    {
-      id: '10',
-      title: 'Holiday',
-      description: 'Enjoy the holiday',
-      date: new Date('2022-05-30T00:00:00'),
-      type: 'event',
-      to: '/works/1'
+      isPrivate: false
     }
-  ])
+  }
 
   /**
    * New event object
    */
-  const newEvent = ref<Omit<CalenderEvent, 'id'>>({
-    date: currentDate.value,
-    title: '',
-    description: '',
-    type: 'event',
-    to: '/calender'
-  })
+  const newEvent = ref<Omit<CalenderEvent, 'id'>>(emptyEvent())
 
   /**
    * Watch for the current date change
    */
-  watch(currentDate, () => {
-    newEvent.value.date = currentDate.value
+  watch(
+    currentDate,
+    async (oldDate, newDate) => {
+      if (!newDate) {
+        await fetchEvents(oldDate)
+        return
+      }
+
+      newEvent.value.date = currentDate.value
+
+      if (
+        oldDate.getMonth() !== newDate.getMonth() ||
+        oldDate.getFullYear() !== newDate?.getFullYear() ||
+        events.value.length === 0
+      ) {
+        await fetchEvents(oldDate)
+      }
+    },
+    { immediate: true }
+  )
+
+  /**
+   * Fetch events
+   */
+  async function fetchEvents(date: Date) {
     uiService.setLoading(true)
 
-    setTimeout(() => {
+    try {
+      const startDate = new Date(date.getFullYear(), date.getMonth(), 1)
+      const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0)
+
+      const response = await calenderService.getEvents({
+        'filter[date]': {
+          type: 'range',
+          value: [startDate, endDate]
+        }
+      })
+
+      events.value = response.data
+    } catch (error: any) {
+      uiService.openErrorModal('Ошибка при получении событий', error.message)
+    } finally {
       uiService.setLoading(false)
-    }, 1000)
-  })
+    }
+  }
 
   /**
    * Get marks for the day
@@ -161,7 +102,7 @@ export const useCalenderStore = defineStore('calender-module:calender', () => {
       switch (event.type) {
         case 'student-deadline':
           return 'var(--danger)'
-        case 'teacher-deadline':
+        case 'mentor-deadline':
           return 'var(--lila)'
         case 'work-checked':
           return 'var(--success)'
@@ -179,25 +120,37 @@ export const useCalenderStore = defineStore('calender-module:calender', () => {
   /**
    * Submit new event
    */
-  function onEventSubmit() {
-    events.value.push({
-      ...newEvent.value,
-      id: String(events.value.length + 1)
-    })
-    newEvent.value = {
-      date: currentDate.value,
-      title: '',
-      description: '',
-      type: 'event',
-      to: '/calender'
+  async function onEventSubmit() {
+    uiService.setLoading(true)
+
+    try {
+      await calenderService.createEvent({
+        ...newEvent.value,
+        id: undefined
+      } as any)
+      events.value.push({ ...newEvent.value, id: uuid() })
+      newEvent.value = emptyEvent()
+    } catch (error: any) {
+      uiService.openErrorModal('Ошибка при создании события', error.message)
+    } finally {
+      uiService.setLoading(false)
     }
   }
 
   /**
    * Remove event
    */
-  function onEventRemove(id: string) {
-    events.value = events.value.filter((event) => event.id !== id)
+  async function onEventRemove(id: string) {
+    uiService.setLoading(true)
+
+    try {
+      await calenderService.deleteEvent(id)
+      events.value = events.value.filter((event) => event.id !== id)
+    } catch (error: any) {
+      uiService.openErrorModal('Ошибка при удалении события', error.message)
+    } finally {
+      uiService.setLoading(false)
+    }
   }
 
   return {

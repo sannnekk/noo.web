@@ -68,10 +68,22 @@
 import CommonButton from '@/components/form/common-button.vue'
 import userForm from '../components/user-form.vue'
 import { useUserStore } from '../stores/user'
+import { watch } from 'vue'
+import { setPageTitle } from '@/core/utils/setPageTitle'
 
 const userStore = useUserStore()
 
 userStore.fetchUser()
+
+watch(
+  () => userStore.user,
+  () => {
+    if (userStore.user) {
+      setPageTitle(userStore.user.name)
+    }
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <style scoped lang="sass">

@@ -1,7 +1,7 @@
 import type { Context } from '../context/Context'
-import type { Service } from './Service'
 import { AssignedWorkService } from './api/AssignedWorkService'
 import { AuthService } from './api/AuthService'
+import { CalenderService } from './api/CalenderService'
 import { CourseService } from './api/CourseService'
 import { MediaService } from './api/MediaService'
 import { NotificationService } from './api/NotificationService'
@@ -20,6 +20,7 @@ export type ServiceName =
   | 'Statistics'
   | 'Notification'
   | 'UI'
+  | 'Calender'
 
 export type Services = {
   Auth: AuthService
@@ -31,6 +32,7 @@ export type Services = {
   Statistics: StatisticsService
   Notification: NotificationService
   UI: UIService
+  Calender: CalenderService
 }
 
 /**
@@ -50,6 +52,7 @@ export class ServiceFactory {
     Media: MediaService,
     Statistics: StatisticsService,
     Notification: NotificationService,
+    Calender: CalenderService,
     // storage
     UI: UIService
   }

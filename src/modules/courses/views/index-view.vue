@@ -76,6 +76,9 @@
 import CommonButton from '@/components/form/common-button.vue'
 import { useCoursesStore } from '../stores/courses'
 import { Core } from '@/core/Core'
+import { setPageTitle } from '@/core/utils/setPageTitle'
+
+setPageTitle('Мои курсы')
 
 const coursesStore = useCoursesStore()
 </script>

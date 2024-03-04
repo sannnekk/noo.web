@@ -1,4 +1,4 @@
-import type { Pagination } from '../data/Pagination'
+import type { FilterType, Pagination } from '../data/Pagination'
 import { Constants } from '../constants'
 import { Service } from './Service'
 
@@ -24,7 +24,7 @@ export class ApiService extends Service {
    */
   protected httpGet<T>(
     route: ApiRoute,
-    params = {} as { [key: string]: string | number | undefined },
+    params = {} as Pagination,
     additionalHeaders = {} as { [key: string]: string }
   ) {
     const url: ApiRoute = `${route}?${this._getParams(params)}`
@@ -156,8 +156,65 @@ export class ApiService extends Service {
   /**
    * Get url params
    */
-  private _getParams(params: Record<string, string | number | undefined>) {
-    return new URLSearchParams(params as Record<string, string>).toString()
+  private _getParams(params: Pagination) {
+    const nonFilterParams = Object.keys(params)
+      .filter((param) => !param.startsWith('filter['))
+      .reduce((acc, key) => {
+        acc[key as any] = params[key as any]
+        return acc
+      }, {} as Pagination)
+
+    const filters = Object.keys(params).filter((param) =>
+      param.startsWith('filter[')
+    )
+
+    let query = new URLSearchParams(
+      nonFilterParams as unknown as Record<string, string>
+    ).toString()
+
+    for (const filter of filters) {
+      query += `&${filter}=${this._stringifyFilter(
+        params[filter as any] as FilterType
+      )}`
+    }
+    console.log(query, nonFilterParams, filters, params)
+
+    return query
+  }
+
+  /**
+   * Stringify filter
+   */
+  private _stringifyFilter(filter: FilterType) {
+    switch (filter.type) {
+      case 'range':
+        return `range(${this._stringifyType(
+          filter.value[0]
+        )}|${this._stringifyType(filter.value[1])})`
+      case 'arr':
+        return `Array(${filter.value.map(this._stringifyType).join('|')})`
+      case 'string':
+      case 'number':
+      case 'boolean':
+      case 'null':
+      default:
+        return this._stringifyType(filter.value)
+    }
+  }
+
+  /**
+   * Stringify type
+   */
+  private _stringifyType(value: string | Date | number | boolean | null) {
+    if (value === null) {
+      return 'null'
+    }
+
+    if (value instanceof Date) {
+      return value.toISOString()
+    }
+
+    return value.toString()
   }
 
   /**

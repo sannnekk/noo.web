@@ -24,8 +24,11 @@
 import calenderEventList from '../components/calender-event-list.vue'
 import calenderEventForm from '../components/calender-event-form.vue'
 import { useCalenderStore } from '../stores/calender'
+import { setPageTitle } from '@/core/utils/setPageTitle'
 
 const calenderStore = useCalenderStore()
+
+setPageTitle('Календарь')
 </script>
 
 <style lang="sass" scoped>

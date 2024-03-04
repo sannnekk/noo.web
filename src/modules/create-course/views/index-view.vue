@@ -153,11 +153,14 @@
 </template>
 
 <script setup lang="ts">
+import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useCreateCourseStore } from '../stores/create-course'
 
 const createCourseStore = useCreateCourseStore()
 
 createCourseStore.fetchCourse()
+
+setPageTitle('Создание/редактирование курса')
 </script>
 
 <style lang="sass" scoped>

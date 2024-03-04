@@ -64,6 +64,7 @@ import CreateWorkTaskList from '../components/create-work-task-list.vue'
 import { useCreateWorkStore } from '../stores/create-work'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
+import { setPageTitle } from '@/core/utils/setPageTitle'
 
 const createWorkStore = useCreateWorkStore()
 const route = useRoute()
@@ -71,6 +72,8 @@ const route = useRoute()
 const taskId = computed(() => route.params.taskId as string)
 
 createWorkStore.fetchWork()
+
+setPageTitle('Создание/редактирование работы')
 </script>
 
 <style lang="sass" scoped>

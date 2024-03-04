@@ -28,10 +28,13 @@
 </template>
 
 <script setup lang="ts">
+import { setPageTitle } from '@/core/utils/setPageTitle'
 import worksTable from '../components/works-table.vue'
 import { useWorksStore } from '../stores/works'
 
 const worksStore = useWorksStore()
+
+setPageTitle('Работы')
 </script>
 
 <style lang="sass" scoped>

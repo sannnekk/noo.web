@@ -73,6 +73,18 @@ export const useAssignedWorksStore = defineStore(
           }
         }
 
+        if (
+          assignedWork.checkStatus === 'not-checked' &&
+          (assignedWork.solveStatus === 'made-in-deadline' ||
+            assignedWork.solveStatus === 'made-after-deadline')
+        ) {
+          return {
+            action: 'Ожидает проверки',
+            link: (id: string) => `/assigned-works/${id}/check`,
+            icon: 'attention-yellow'
+          }
+        }
+
         if (assignedWork.checkStatus === 'not-checked') {
           return {
             action: 'Проверить',
@@ -110,6 +122,18 @@ export const useAssignedWorksStore = defineStore(
           action: 'Продолжить выполнение',
           link: (id: string) => `/assigned-works/${id}/solve`,
           icon: 'cross-red'
+        }
+      }
+
+      if (
+        assignedWork.checkStatus === 'not-checked' &&
+        (assignedWork.solveStatus === 'made-in-deadline' ||
+          assignedWork.solveStatus === 'made-after-deadline')
+      ) {
+        return {
+          action: 'Ожидает проверки',
+          link: (id: string) => `/assigned-works/${id}/read`,
+          icon: 'attention-yellow'
         }
       }
 

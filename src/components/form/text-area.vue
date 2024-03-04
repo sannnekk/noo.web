@@ -1,15 +1,23 @@
 <template>
-  <textarea
-    class="textarea"
-    :placeholder="placeholder"
-    v-model="model"
-  />
+  <div class="text-area">
+    <label
+      class="text-area__label"
+      v-if="label"
+      >{{ label }}</label
+    >
+    <textarea
+      class="text-area__textarea"
+      :placeholder="placeholder"
+      v-model="model"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 
 interface Props {
+  label?: string
   modelValue: string
   placeholder?: string
 }
@@ -32,19 +40,24 @@ const model = computed({
 </script>
 
 <style scoped lang="sass">
-.textarea
-  width: 100%
-  padding: 1rem 1rem
-  border-radius: var(--border-radius)
-  border: 1px solid var(--border-color)
-  outline: none
-  transition: border-color 0.2s ease-in-out
-  resize: vertical
-  font-family: inherit
-  min-height: 5em
+.text-area
+  &__label
+    font-size: 0.8em
+    color: var(--text-light)
 
-  &:focus
+  &__textarea
+    width: 100%
+    padding: 1rem 1rem
+    border-radius: var(--border-radius)
+    border: 1px solid var(--border-color)
     outline: none
-    border-color: var(--secondary)
-    box-shadow: 0px 0px 5px var(--secondary)
+    transition: border-color 0.2s ease-in-out
+    resize: vertical
+    font-family: inherit
+    min-height: 5em
+
+    &:focus
+      outline: none
+      border-color: var(--secondary)
+      box-shadow: 0px 0px 5px var(--secondary)
 </style>
