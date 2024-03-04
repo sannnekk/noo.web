@@ -27,6 +27,7 @@ interface Props {
     | 'pdf-file'
     | 'telegram'
     | 'info'
+    | 'delete'
   animation?: boolean
 }
 

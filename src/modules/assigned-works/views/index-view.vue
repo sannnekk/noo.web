@@ -1,34 +1,147 @@
 <template>
   <div class="index-works-view">
-    <div class="index-works-view__header">
-      <div class="index-works-view__header__search">
-        <search-field
-          v-model="assignedWorksStore.pagination.search"
-          :is-loading="assignedWorksStore.isListLoading"
-        />
-      </div>
-    </div>
-    <div class="index-works-view__table">
-      <works-table
-        :works="assignedWorksStore.results"
-        :loading="assignedWorksStore.isListLoading"
-        :get-user-action-function="assignedWorksStore.getUserAction"
-      />
-    </div>
-    <div class="index-works-view__pagination">
-      <list-pagination
-        v-model:page="assignedWorksStore.pagination.page"
-        :total="assignedWorksStore.resultsMeta.total"
-        :limit="assignedWorksStore.pagination.limit"
-      />
-    </div>
+    <tabs-view
+      :titles="[
+        'Все',
+        'Не решенные',
+        'Не проверенные',
+        'Проверенные',
+        'Архивированные'
+      ]"
+    >
+      <template #tab-0>
+        <!-- All assigned works -->
+        <div class="index-works-view__header">
+          <div class="index-works-view__header__search">
+            <search-field
+              v-model="assignedWorksStore.allSearch.pagination.search"
+              :is-loading="assignedWorksStore.allSearch.isListLoading"
+            />
+          </div>
+        </div>
+        <div class="index-works-view__table">
+          <works-table
+            :works="assignedWorksStore.allSearch.results"
+            :loading="assignedWorksStore.allSearch.isListLoading"
+            :get-user-action-function="assignedWorksStore.getUserAction"
+          />
+        </div>
+        <div class="index-works-view__pagination">
+          <list-pagination
+            v-model:page="assignedWorksStore.allSearch.pagination.page"
+            :total="assignedWorksStore.allSearch.resultsMeta.total"
+            :limit="assignedWorksStore.allSearch.pagination.limit"
+          />
+        </div>
+      </template>
+      <template #tab-1>
+        <!-- Not solved assigned works -->
+        <div class="index-works-view__header">
+          <div class="index-works-view__header__search">
+            <search-field
+              v-model="assignedWorksStore.notSolvedSearch.pagination.search"
+              :is-loading="assignedWorksStore.notSolvedSearch.isListLoading"
+            />
+          </div>
+        </div>
+        <div class="index-works-view__table">
+          <works-table
+            :works="assignedWorksStore.notSolvedSearch.results"
+            :loading="assignedWorksStore.notSolvedSearch.isListLoading"
+            :get-user-action-function="assignedWorksStore.getUserAction"
+          />
+        </div>
+        <div class="index-works-view__pagination">
+          <list-pagination
+            v-model:page="assignedWorksStore.notSolvedSearch.pagination.page"
+            :total="assignedWorksStore.notSolvedSearch.resultsMeta.total"
+            :limit="assignedWorksStore.notSolvedSearch.pagination.limit"
+          />
+        </div>
+      </template>
+      <template #tab-2>
+        <!-- Not checked assigned works -->
+        <div class="index-works-view__header">
+          <div class="index-works-view__header__search">
+            <search-field
+              v-model="assignedWorksStore.notCheckedSearch.pagination.search"
+              :is-loading="assignedWorksStore.notCheckedSearch.isListLoading"
+            />
+          </div>
+        </div>
+        <div class="index-works-view__table">
+          <works-table
+            :works="assignedWorksStore.notCheckedSearch.results"
+            :loading="assignedWorksStore.notCheckedSearch.isListLoading"
+            :get-user-action-function="assignedWorksStore.getUserAction"
+          />
+        </div>
+        <div class="index-works-view__pagination">
+          <list-pagination
+            v-model:page="assignedWorksStore.notCheckedSearch.pagination.page"
+            :total="assignedWorksStore.notCheckedSearch.resultsMeta.total"
+            :limit="assignedWorksStore.notCheckedSearch.pagination.limit"
+          />
+        </div>
+      </template>
+      <template #tab-3>
+        <!-- checked assigned works -->
+        <div class="index-works-view__header">
+          <div class="index-works-view__header__search">
+            <search-field
+              v-model="assignedWorksStore.checkedSearch.pagination.search"
+              :is-loading="assignedWorksStore.checkedSearch.isListLoading"
+            />
+          </div>
+        </div>
+        <div class="index-works-view__table">
+          <works-table
+            :works="assignedWorksStore.checkedSearch.results"
+            :loading="assignedWorksStore.checkedSearch.isListLoading"
+            :get-user-action-function="assignedWorksStore.getUserAction"
+          />
+        </div>
+        <div class="index-works-view__pagination">
+          <list-pagination
+            v-model:page="assignedWorksStore.checkedSearch.pagination.page"
+            :total="assignedWorksStore.checkedSearch.resultsMeta.total"
+            :limit="assignedWorksStore.checkedSearch.pagination.limit"
+          />
+        </div>
+      </template>
+      <template #tab-4>
+        <!-- archived assigned works -->
+        <div class="index-works-view__header">
+          <div class="index-works-view__header__search">
+            <search-field
+              v-model="assignedWorksStore.archivedSearch.pagination.search"
+              :is-loading="assignedWorksStore.archivedSearch.isListLoading"
+            />
+          </div>
+        </div>
+        <div class="index-works-view__table">
+          <works-table
+            :works="assignedWorksStore.archivedSearch.results"
+            :loading="assignedWorksStore.archivedSearch.isListLoading"
+            :get-user-action-function="assignedWorksStore.getUserAction"
+          />
+        </div>
+        <div class="index-works-view__pagination">
+          <list-pagination
+            v-model:page="assignedWorksStore.archivedSearch.pagination.page"
+            :total="assignedWorksStore.archivedSearch.resultsMeta.total"
+            :limit="assignedWorksStore.archivedSearch.pagination.limit"
+          />
+        </div>
+      </template>
+    </tabs-view>
   </div>
 </template>
 
 <script setup lang="ts">
 import { setPageTitle } from '@/core/utils/setPageTitle'
-import worksTable from '../components/works-table.vue'
 import { useAssignedWorksStore } from '../stores/assigned-works'
+import worksTable from '../components/works-table.vue'
 
 const assignedWorksStore = useAssignedWorksStore()
 

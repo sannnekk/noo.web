@@ -40,8 +40,10 @@ export const useCreateWorkStore = defineStore(
         name: '',
         description: '',
         tasks: [],
-        type: 'type1'
-      } as any)
+        type: 'type1',
+        solveHint: '',
+        checkHint: ''
+      } as unknown as Work)
 
     /**
      * Current work
@@ -98,6 +100,21 @@ export const useCreateWorkStore = defineStore(
         slug: uuid(),
         highestScore: 1,
         type: 'one_choice',
+        solveHint: {
+          ops: [
+            {
+              insert: '\n'
+            }
+          ]
+        },
+        checkHint: {
+          ops: [
+            {
+              insert: '\n'
+            }
+          ]
+        },
+        checkingStrategy: 'type1',
         createdAt: new Date(),
         updatedAt: new Date(),
         workId: ''
@@ -203,6 +220,20 @@ export const useCreateWorkStore = defineStore(
       }
     }
 
+    /**
+     * Checking strategy options
+     */
+    const checkingStrategyOptions = [
+      {
+        label: 'Тип 1',
+        value: 'type1'
+      },
+      {
+        label: 'Тип 2',
+        value: 'type2'
+      }
+    ]
+
     return {
       work,
       taskToAdd,
@@ -210,7 +241,8 @@ export const useCreateWorkStore = defineStore(
       taskMap,
       submitWork,
       fetchWork,
-      workTypeOptions
+      workTypeOptions,
+      checkingStrategyOptions
     }
   }
 )

@@ -177,7 +177,6 @@ export class ApiService extends Service {
         params[filter as any] as FilterType
       )}`
     }
-    console.log(query, nonFilterParams, filters, params)
 
     return query
   }
@@ -192,7 +191,7 @@ export class ApiService extends Service {
           filter.value[0]
         )}|${this._stringifyType(filter.value[1])})`
       case 'arr':
-        return `Array(${filter.value.map(this._stringifyType).join('|')})`
+        return `arr(${filter.value.map(this._stringifyType).join('|')})`
       case 'string':
       case 'number':
       case 'boolean':

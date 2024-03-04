@@ -12,12 +12,12 @@
 <script setup lang="ts">
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { UserAction } from '../stores/assigned-works'
-import { Core } from '@/core/Core'
 
 interface Props {
   works: Partial<AssignedWork>[]
   loading?: boolean
-  getUserActionFunction: (a: AssignedWork) => UserAction
+  getUserActionFunction?: (a: AssignedWork) => UserAction
+  noAction?: boolean
 }
 
 const props = defineProps<Props>()
@@ -25,11 +25,11 @@ const props = defineProps<Props>()
 const cols = [
   {
     title: '',
-    value: (a: AssignedWork) => props.getUserActionFunction(a).icon,
+    value: (a: AssignedWork) => props.getUserActionFunction!(a).icon,
     type: 'icon'
   },
   {
-    title: 'Название работы / Студент',
+    title: 'Название работы / Ученик',
     keys: ['work.name', 'student.name'],
     join: '<br>',
     type: 'text',
@@ -55,20 +55,9 @@ const cols = [
   },
   {
     title: '',
-    value: (a: AssignedWork) => props.getUserActionFunction(a).action,
+    value: (a: AssignedWork) => props.getUserActionFunction!(a).action,
     type: 'link',
-    linkTo: (a: AssignedWork) => props.getUserActionFunction(a).link(a.id)
-  },
-  {
-    if: (a: AssignedWork) =>
-      Core.Context.User?.role === 'mentor' &&
-      a.checkStatus === 'not-checked' &&
-      (a.solveStatus === 'made-in-deadline' ||
-        a.solveStatus === 'made-after-deadline'),
-    title: '',
-    value: 'Передать проверку',
-    type: 'link',
-    linkTo: (a: AssignedWork) => `/assigned-works/transfer-${a.id}`
+    linkTo: (a: AssignedWork) => props.getUserActionFunction!(a).link(a.id)
   }
 ]
 

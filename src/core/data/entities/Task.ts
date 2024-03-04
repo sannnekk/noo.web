@@ -1,8 +1,5 @@
 import type { DeltaContentType } from '../../../types/composed/DeltaContentType'
 import type { Entity } from '../Entity'
-import type { Answer } from './Answer'
-import type { AssignedWork } from './AssignedWork'
-import type { Comment } from './Comment'
 import type { TaskOption } from './TaskOption'
 import type { Work } from './Work'
 
@@ -15,6 +12,9 @@ export interface Task extends Entity {
   workId: Work['id']
   work?: Work
   rightAnswer?: string
+  solveHint?: DeltaContentType
+  checkHint?: DeltaContentType
+  checkingStrategy?: 'type1' | 'type2'
   options?: TaskOption[]
   optionsIds?: TaskOption['id'][]
   createdAt: Date

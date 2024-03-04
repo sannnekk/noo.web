@@ -31,21 +31,96 @@ export const useAssignedWorksStore = defineStore(
     /**
      * Load assigned works
      */
-    async function fetchAssignedWorks(pagination?: Pagination) {
-      try {
-        return await assignedWorkService.getAssignedWorks(pagination || {})
-      } catch (e: any) {
-        uiService.openErrorModal('Ошибка при загрузке списка работ', e.message)
+    function useFetchAssignedWorks(filters?: Pagination) {
+      return async function (pagination?: Pagination) {
+        try {
+          return await assignedWorkService.getAssignedWorks({
+            ...(pagination || {}),
+            ...(filters || {})
+          })
+        } catch (e: any) {
+          uiService.openErrorModal(
+            'Ошибка при загрузке списка работ',
+            e.message
+          )
+        }
       }
     }
 
     /**
-     * Search
+     * Search for all works
      */
-    const { pagination, results, resultsMeta, isListLoading } =
-      useSearch<AssignedWork>(fetchAssignedWorks, {
+    const allSearch = useSearch<AssignedWork>(
+      useFetchAssignedWorks({
+        'filter[isArchived]': {
+          type: 'boolean',
+          value: false
+        }
+      }),
+      {
         immediate: true
+      }
+    )
+
+    /**
+     * Search for not solved works
+     */
+    const notSolvedSearch = useSearch<AssignedWork>(
+      useFetchAssignedWorks({
+        'filter[solveStatus]': {
+          type: 'arr',
+          value: ['not-started', 'in-progress']
+        },
+        'filter[isArchived]': {
+          type: 'boolean',
+          value: false
+        }
       })
+    )
+
+    /**
+     * Search for not checked works
+     */
+    const notCheckedSearch = useSearch<AssignedWork>(
+      useFetchAssignedWorks({
+        'filter[checkStatus]': {
+          type: 'arr',
+          value: ['not-checked', 'in-progress']
+        },
+        'filter[isArchived]': {
+          type: 'boolean',
+          value: false
+        }
+      })
+    )
+
+    /**
+     * Search for checked works
+     */
+    const checkedSearch = useSearch<AssignedWork>(
+      useFetchAssignedWorks({
+        'filter[checkStatus]': {
+          type: 'arr',
+          value: ['checked-in-deadline', 'checked-after-deadline']
+        },
+        'filter[isArchived]': {
+          type: 'boolean',
+          value: false
+        }
+      })
+    )
+
+    /**
+     * Search for archived works
+     */
+    const archivedSearch = useSearch<AssignedWork>(
+      useFetchAssignedWorks({
+        'filter[isArchived]': {
+          type: 'boolean',
+          value: true
+        }
+      })
+    )
 
     /**
      * Get user action for assigned work based on its role
@@ -53,11 +128,11 @@ export const useAssignedWorksStore = defineStore(
     function getUserAction(assignedWork: AssignedWork): UserAction {
       const role = Core.Context.User!.role
 
-      if (role === 'admin' || role === 'teacher') {
+      if (role === 'admin' || role === 'teacher' || assignedWork.isArchived) {
         return {
           action: 'Просмотреть',
           link: (id: string) => `/assigned-works/${id}/read`,
-          icon: ''
+          icon: 'delete'
         }
       }
 
@@ -145,10 +220,11 @@ export const useAssignedWorksStore = defineStore(
     }
 
     return {
-      pagination,
-      isListLoading,
-      results,
-      resultsMeta,
+      allSearch,
+      notSolvedSearch,
+      notCheckedSearch,
+      archivedSearch,
+      checkedSearch,
       getUserAction
     }
   }

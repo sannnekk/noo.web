@@ -32,6 +32,7 @@ export interface AssignedWork {
   commentIds: Comment['id'][]
   score?: number
   maxScore: number
+  isArchived: boolean
   createdAt: Date
   updatedAt: Date
 }

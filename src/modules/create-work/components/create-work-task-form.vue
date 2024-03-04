@@ -7,18 +7,28 @@
       class="task-form__row"
       v-auto-animate
     >
-      <div class="task-form__col-6 form-group">
+      <div class="task-form__col-4 form-group">
         <select-input
           v-model="model.type"
           :options="taskTypeOptions"
           label="Тип задания"
         />
       </div>
-      <div class="task-form__col-6 form-group">
+      <div class="task-form__col-4 form-group">
         <form-input
           v-model="model.highestScore"
           label="Максимальный балл"
           type="number"
+        />
+      </div>
+      <div
+        class="task-form__col-4 form-group"
+        v-if="model.type !== 'text'"
+      >
+        <select-input
+          v-model="model.highestScore"
+          label="Способ проверки"
+          :options="checkingStrategyOptions"
         />
       </div>
     </div>
@@ -50,6 +60,22 @@
           label="Правильный ответ"
           type="text"
           v-model="model.rightAnswer"
+        />
+      </div>
+    </div>
+    <div class="task-form__row">
+      <div class="task-form__col-12 form-group">
+        <rich-text-area
+          v-model="model.solveHint"
+          label="Подсказка для ученика"
+        />
+      </div>
+    </div>
+    <div class="task-form__row">
+      <div class="task-form__col-12 form-group">
+        <rich-text-area
+          v-model="model.checkHint"
+          label="Подсказка для проверяющего (видна также ученику после проверки)"
         />
       </div>
     </div>
@@ -91,6 +117,7 @@ import { computed, reactive } from 'vue'
 
 interface Props {
   modelValue: Task
+  checkingStrategyOptions: { label: string; value: string }[]
   mode: 'create' | 'update'
 }
 
@@ -180,4 +207,3 @@ const taskTypeOptions = reactive<TaskTypeOption[]>([
     display: flex
     flex-wrap: wrap
 </style>
-@/core/data/entities/Task

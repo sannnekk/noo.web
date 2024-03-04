@@ -5,11 +5,13 @@
       mode="create"
       v-model="(createWorkStore.taskToAdd as Task)"
       @submit="createWorkStore.addTask()"
+      :checking-strategy-options="createWorkStore.checkingStrategyOptions"
     />
     <create-work-task-form
       v-else
       mode="update"
       v-model="createWorkStore.taskMap[taskSlug]"
+      :checking-strategy-options="createWorkStore.checkingStrategyOptions"
     />
   </div>
 </template>

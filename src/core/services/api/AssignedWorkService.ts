@@ -38,6 +38,13 @@ export class AssignedWorkService extends ApiService {
   }
 
   /**
+   * Archive assigned work
+   */
+  public async archiveAssignedWork(id: AssignedWork['id']) {
+    this.httpPatch(`${this._route}/${id}/archive`)
+  }
+
+  /**
    * Solve assigned work
    */
   public async solveAssignedWork(
