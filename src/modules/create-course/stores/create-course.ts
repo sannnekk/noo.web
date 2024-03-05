@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid'
 import type { Material } from '@/core/data/entities/Material'
 import { useRoute } from 'vue-router'
 import { Core } from '@/core/Core'
+import type { Chapter } from '@/core/data/entities/Chapter'
 
 export const useCreateCourseStore = defineStore(
   'create-course-module:create-course',
@@ -20,8 +21,8 @@ export const useCreateCourseStore = defineStore(
       ({
         name: '',
         description: '',
-        chapters: []
-      } as any)
+        images: []
+      } as unknown as Course)
 
     /**
      * Current course
@@ -106,7 +107,7 @@ export const useCreateCourseStore = defineStore(
         name: newChapterName.value,
         slug: uuid(),
         materials: []
-      } as any)
+      } as unknown as Chapter)
       newChapterName.value = ''
     }
 

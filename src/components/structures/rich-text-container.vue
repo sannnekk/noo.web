@@ -1,28 +1,20 @@
 <template>
   <div class="rich-text-container">
-    <QuillEditor
-      :read-only="true"
-      :content="model"
-      :toolbar="[]"
-      theme="snow"
-      content-type="delta"
+    <quill-editor
+      :model-value="content"
+      :readonly="true"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { DeltaContentType } from '@/types/composed/DeltaContentType'
-import { Delta, QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { computed } from 'vue'
 
 interface Props {
   content: DeltaContentType
 }
 
-const props = defineProps<Props>()
-
-const model = computed(() => new Delta(props.content))
+defineProps<Props>()
 </script>
 
 <style scoped lang="sass">

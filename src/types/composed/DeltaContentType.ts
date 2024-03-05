@@ -1,7 +1,7 @@
 interface Op {
-  insert?: string | object
+  insert?: string | Record<string, unknown> | undefined
   delete?: number
-  retain?: number
+  retain?: Record<string, unknown> | number
   attributes?: {
     [key: string]: any
   }
