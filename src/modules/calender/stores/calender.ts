@@ -4,6 +4,7 @@ import type { CalenderEvent } from '@/core/data/entities/CalenderEvent'
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { v4 as uuid } from 'uuid'
+import type { User } from '@/core/data/entities/User'
 
 /**
  * Calender store
@@ -31,7 +32,7 @@ export const useCalenderStore = defineStore('calender-module:calender', () => {
       title: '',
       description: '',
       type: 'event',
-      isPrivate: false
+      visibility: 'private'
     }
   }
 
@@ -158,6 +159,40 @@ export const useCalenderStore = defineStore('calender-module:calender', () => {
     }
   }
 
+  /**
+   * Event isibility options
+   */
+  const allVisibilityOptions: {
+    for: User['role'][]
+    value: CalenderEvent['visibility']
+    label: string
+  }[] = [
+    { for: ['admin', 'teacher'], value: 'all', label: 'Все' },
+    { for: ['mentor'], value: 'own-students', label: 'Мои ученики' },
+    {
+      for: ['admin', 'teacher', 'mentor'],
+      value: 'all-mentors',
+      label: 'Все кураторы'
+    },
+    {
+      for: ['student'],
+      value: 'own-mentor',
+      label: 'Мой куратор'
+    },
+    {
+      for: ['admin', 'teacher', 'mentor', 'student'],
+      value: 'private',
+      label: 'Только я'
+    }
+  ]
+
+  /**
+   * Event visibility options available for current user
+   */
+  const visibilityOptions = allVisibilityOptions.filter((option) =>
+    option.for.includes(Core.Context.User!.role)
+  )
+
   return {
     currentDate,
     events,
@@ -165,6 +200,7 @@ export const useCalenderStore = defineStore('calender-module:calender', () => {
     dayFunction,
     onEventSubmit,
     onEventRemove,
-    isLoading
+    isLoading,
+    visibilityOptions
   }
 })

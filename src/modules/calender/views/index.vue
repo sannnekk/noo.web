@@ -27,6 +27,7 @@
         />
         <calender-event-form
           v-model="calenderStore.newEvent"
+          :visibility-options="calenderStore.visibilityOptions"
           @submit="calenderStore.onEventSubmit()"
         />
       </div>

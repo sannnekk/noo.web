@@ -16,9 +16,10 @@
             />
           </div>
           <div class="form-group form-group--checkbox">
-            <form-checkbox
-              label="Показывать другим"
-              v-model="eventModel.isPrivate"
+            <select-input
+              label="Кто может видеть?"
+              v-model="eventModel.visibility"
+              :options="visibilityOptions"
             />
           </div>
           <div class="form-group form-group--button">
@@ -48,6 +49,7 @@ import { computed } from 'vue'
 
 interface Props {
   modelValue: Omit<CalenderEvent, 'id'>
+  visibilityOptions: { label: string; value: string }[]
 }
 
 interface Emits {
@@ -96,10 +98,6 @@ const currentDate = computed(() =>
 
             &:deep() input
               padding: 0.7em 1.3em
-
-          &--checkbox
-            font-size: 14px
-            margin-top: 1.7em
 
 
             &:deep() input

@@ -4,7 +4,7 @@ export interface CalenderEvent extends Entity {
   title: string
   description: string
   date: Date
-  isPrivate: boolean
+  visibility: 'all' | 'own-students' | 'all-mentors' | 'own-mentor' | 'private'
   url?: string
   type:
     | 'student-deadline' // red
