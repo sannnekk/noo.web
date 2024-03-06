@@ -10,10 +10,9 @@ import { Core } from '@/core/Core'
 // Quill
 import Quill from 'quill'
 import { Delta } from 'quill/core'
-import quillBlotFormatter from 'quill-blot-formatter'
+import 'quill/dist/quill.snow.css'
 // @ts-ignore
 import ImageUploader from 'quill-image-uploader'
-import 'quill/dist/quill.snow.css'
 
 interface Props {
   readonly?: boolean
@@ -34,7 +33,6 @@ onMounted(() => {
   // modules
   Quill.register(
     {
-      'modules/quill-blot-formatter': quillBlotFormatter,
       'modules/image-uploader': ImageUploader
     },
     true
@@ -60,7 +58,6 @@ onMounted(() => {
 
             ['clean']
           ],
-          'quill-blot-formatter': {},
           'image-uploader': {
             upload: (file: File) => {
               console.log('UPLOAD', file)

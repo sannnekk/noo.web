@@ -19,16 +19,20 @@ export const useCreateWorkStore = defineStore(
      */
     const workTypeOptions = [
       {
-        value: 'type1',
-        label: 'Тип 1'
+        value: 'trial-work',
+        label: 'Пробник'
       },
       {
-        value: 'type2',
-        label: 'Тип 2'
+        value: 'mini-test',
+        label: 'Мини-зачет'
       },
       {
-        value: 'type3',
-        label: 'Тип 3'
+        value: 'test',
+        label: 'Тест'
+      },
+      {
+        value: 'second-part',
+        label: 'Вторая часть'
       }
     ]
 
@@ -40,7 +44,7 @@ export const useCreateWorkStore = defineStore(
         name: '',
         description: '',
         tasks: [],
-        type: 'type1',
+        type: 'trial-work',
         solveHint: '',
         checkHint: ''
       } as unknown as Work)
@@ -99,7 +103,7 @@ export const useCreateWorkStore = defineStore(
         },
         slug: uuid(),
         highestScore: 1,
-        type: 'one_choice',
+        type: 'word',
         solveHint: {
           ops: [
             {
@@ -225,12 +229,20 @@ export const useCreateWorkStore = defineStore(
      */
     const checkingStrategyOptions = [
       {
-        label: 'Тип 1',
+        label: '1 символ неверный: 0 б.',
         value: 'type1'
       },
       {
-        label: 'Тип 2',
+        label: '1 символ неверный: -1 б.',
         value: 'type2'
+      },
+      {
+        label: '1 символ неверный, включая лишний/недостающий: -1 б.',
+        value: 'type3'
+      },
+      {
+        label: 'Последовательность',
+        value: 'type4'
       }
     ]
 

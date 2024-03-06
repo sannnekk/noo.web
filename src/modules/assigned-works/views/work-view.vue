@@ -63,9 +63,18 @@
               }}
             </common-button>
             <common-button
+              class="work-view__sidebar__save-button"
+              alignment="stretch"
+              design="inline"
+              @click="assignedWorkStore.saveProgress()"
+              v-if="['check', 'solve'].includes(assignedWorkStore.mode)"
+            >
+              Сохранить без сдачи
+            </common-button>
+            <common-button
               class="work-view__sidebar__shift-button"
               alignment="stretch"
-              design="secondary"
+              design="inline"
               @click="assignedWorkStore.shiftDeadline()"
               v-if="['check', 'solve'].includes(assignedWorkStore.mode)"
             >
@@ -199,6 +208,10 @@ watch(
 
       &__student-name
         margin: 0
+
+    &__save-button
+      margin-top: 0.5em
+      transform: scale(0.8)
 
     &__shift-button
       margin-top: 0.5em

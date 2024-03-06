@@ -40,7 +40,7 @@
         />
       </div>
     </div>
-    <div
+    <!-- <div
       class="task-form__row"
       v-if="['one_choice', 'multiple_choice'].includes(model.type)"
     >
@@ -50,7 +50,7 @@
           :task="model"
         />
       </div>
-    </div>
+    </div> -->
     <div
       class="task-form__row"
       v-if="['word'].includes(model.type)"
@@ -141,14 +141,14 @@ const model = computed({
 })
 
 const taskTypeOptions = reactive<TaskTypeOption[]>([
-  {
+  /* {
     label: 'Несколько вариантов ответа',
     value: 'multiple_choice'
   },
   {
     label: 'Один вариант ответа',
     value: 'one_choice'
-  },
+  }, */
   {
     label: 'Ответ в одну строку',
     value: 'word'

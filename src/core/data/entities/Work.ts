@@ -4,7 +4,7 @@ import type { Entity } from '../Entity'
 
 export interface Work extends Entity {
   slug: string
-  type: 'type1' | 'type2' | 'type3'
+  type: 'trial-work' | 'mini-test' | 'test' | 'second-part'
   name: string
   description: string
   materialId?: string

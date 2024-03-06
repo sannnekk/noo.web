@@ -14,7 +14,7 @@ export interface Task extends Entity {
   rightAnswer?: string
   solveHint?: DeltaContentType
   checkHint?: DeltaContentType
-  checkingStrategy?: 'type1' | 'type2'
+  checkingStrategy?: 'type1' | 'type2' | 'type3' | 'type4'
   options?: TaskOption[]
   optionsIds?: TaskOption['id'][]
   createdAt: Date

@@ -276,6 +276,23 @@ export const useAssignedWorksStore = defineStore(
       }
     }
 
+    /**
+     * Archive works
+     */
+    async function archiveWorks(works: AssignedWork[]) {
+      uiService.setLoading(true)
+      try {
+        await Promise.all(
+          works.map((work) => assignedWorkService.archiveAssignedWork(work.id))
+        )
+        uiService.openSuccessModal('Работы успешно архивированы!')
+      } catch (e: any) {
+        uiService.openErrorModal('Ошибка при архивировании работ', e.message)
+      } finally {
+        uiService.setLoading(false)
+      }
+    }
+
     return {
       allSearch,
       allSearchChecklist,
@@ -292,7 +309,8 @@ export const useAssignedWorksStore = defineStore(
       checkedSearch,
       checkedSearchChecklist,
       checkedSearchSelectedWorks,
-      getUserAction
+      getUserAction,
+      archiveWorks
     }
   }
 )

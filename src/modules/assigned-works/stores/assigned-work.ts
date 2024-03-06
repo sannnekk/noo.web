@@ -329,17 +329,21 @@ export const useAssignedWorkStore = defineStore(
     }
 
     /**
-     * Archive works
+     * Save progress
      */
-    async function archiveWorks(works: AssignedWork[]) {
+    async function saveProgress() {
+      if (!assignedWork.value) return
+
       uiService.setLoading(true)
+
       try {
-        await Promise.all(
-          works.map((work) => assignedWorkService.archiveAssignedWork(work.id))
+        await assignedWorkService.saveAssignedWorkProgress(
+          assignedWork.value.id,
+          assignedWork.value
         )
-        uiService.openSuccessModal('Работы успешно архивированы!')
+        uiService.openSuccessModal('Прогресс успешно сохранен!')
       } catch (e: any) {
-        uiService.openErrorModal('Ошибка при архивировании работ', e.message)
+        uiService.openErrorModal('Ошибка при сохранении прогресса', e.message)
       } finally {
         uiService.setLoading(false)
       }
@@ -366,7 +370,7 @@ export const useAssignedWorkStore = defineStore(
       fetchAssignedWork,
       workScoreText,
       workScore,
-      archiveWorks
+      saveProgress
     }
   }
 )

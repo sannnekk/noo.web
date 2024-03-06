@@ -1,7 +1,7 @@
 <template>
   <sure-modal
     v-model:visible="visibilityModel"
-    @confirm="assignedWorkStore.archiveWorks(assignedWorks)"
+    @confirm="assignedWorksStore.archiveWorks(assignedWorks)"
   >
     <template #title>
       <h2>Архивировать работы</h2>
@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
-import { useAssignedWorkStore } from '../stores/assigned-work'
+import { useAssignedWorksStore } from '../stores/assigned-works'
 
 interface Props {
   visible: boolean
@@ -31,7 +31,7 @@ interface Emits {
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
-const assignedWorkStore = useAssignedWorkStore()
+const assignedWorksStore = useAssignedWorksStore()
 
 const visibilityModel = computed({
   get: () => props.visible,

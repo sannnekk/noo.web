@@ -34,14 +34,14 @@ export class AssignedWorkService extends ApiService {
    * Create assigned work
    */
   public async createAssignedWork(data: AssignedWork) {
-    this.httpPost(`${this._route}`, data)
+    await this.httpPost(`${this._route}`, data)
   }
 
   /**
    * Archive assigned work
    */
   public async archiveAssignedWork(id: AssignedWork['id']) {
-    this.httpPatch(`${this._route}/${id}/archive`)
+    await this.httpPatch(`${this._route}/${id}/archive`)
   }
 
   /**
@@ -51,7 +51,7 @@ export class AssignedWorkService extends ApiService {
     id: AssignedWork['id'],
     data: Partial<AssignedWork>
   ) {
-    this.httpPatch(`${this._route}/${id}/solve`)
+    await this.httpPatch(`${this._route}/${id}/solve`, data)
   }
 
   /**
@@ -61,7 +61,14 @@ export class AssignedWorkService extends ApiService {
     id: AssignedWork['id'],
     data: Partial<AssignedWork>
   ) {
-    this.httpPatch(`${this._route}/${id}/check`)
+    await this.httpPatch(`${this._route}/${id}/check`, data)
+  }
+
+  public async saveAssignedWorkProgress(
+    id: AssignedWork['id'],
+    data: Partial<AssignedWork>
+  ) {
+    await this.httpPatch(`${this._route}/${id}/save`, data)
   }
 
   /**
@@ -71,20 +78,22 @@ export class AssignedWorkService extends ApiService {
     assignedWorkId: AssignedWork['id'],
     mentorId: string
   ) {
-    this.httpPatch(`${this._route}/${assignedWorkId}/transfer/${mentorId}`)
+    await this.httpPatch(
+      `${this._route}/${assignedWorkId}/transfer/${mentorId}`
+    )
   }
 
   /**
    * Shift the deadline of the assigned work
    */
   public async shiftAssignedWorkDeadline(assignedWorkId: AssignedWork['id']) {
-    this.httpPatch(`${this._route}/${assignedWorkId}/shift-deadline`)
+    await this.httpPatch(`${this._route}/${assignedWorkId}/shift-deadline`)
   }
 
   /**
    * Delete the assigned work
    */
   public async deleteAssignedWork(assignedWorkId: AssignedWork['id']) {
-    this.httpDelete(`${this._route}/${assignedWorkId}`)
+    await this.httpDelete(`${this._route}/${assignedWorkId}`)
   }
 }
