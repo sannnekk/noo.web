@@ -309,7 +309,7 @@ export const useCreateCourseStore = defineStore(
       uiService.setLoading(true)
 
       try {
-        await courseService.deleteCourse(course.value.slug)
+        await courseService.deleteCourse(course.value.id)
         uiService.openSuccessModal('Курс успешно удален')
       } catch (error: any) {
         uiService.openErrorModal(

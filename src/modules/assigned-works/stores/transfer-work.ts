@@ -3,10 +3,9 @@ import { Core } from '@/core/Core'
 import type { Pagination } from '@/core/data/Pagination'
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { User } from '@/core/data/entities/User'
-import { debounce } from '@/core/utils/debounce'
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, ref } from 'vue'
+import { useAssignedWorksStore } from './assigned-works'
 
 export const useTransferWorkStore = defineStore(
   'assigned-works-module:transfer-work',
@@ -14,8 +13,6 @@ export const useTransferWorkStore = defineStore(
     const assignedWorkService = Core.Services.AssignedWork
     const uiService = Core.Services.UI
     const userService = Core.Services.User
-
-    const _route = useRoute()
 
     /**
      * Load mentors
@@ -34,15 +31,8 @@ export const useTransferWorkStore = defineStore(
     /**
      * search
      */
-    const { results, resultsMeta, isListLoading, pagination } = useSearch<User>(
-      fetchMentors,
-      { immediate: true }
-    )
-
-    /**
-     * current work to transfer
-     */
-    const work = ref<AssignedWork>()
+    const { results, resultsMeta, isListLoading, pagination } =
+      useSearch<User>(fetchMentors)
 
     /**
      * Mentor id to transfer work to
@@ -50,26 +40,9 @@ export const useTransferWorkStore = defineStore(
     const selectedMentorId = ref('')
 
     /**
-     * Load assigned work
-     */
-    async function fetchAssignedWork() {
-      uiService.setLoading(true)
-
-      try {
-        await assignedWorkService.getAssignedWork(
-          _route.params.workId as string
-        )
-      } catch (e: any) {
-        uiService.openErrorModal('Ошибка при загрузке работы', e.message)
-      } finally {
-        uiService.setLoading(false)
-      }
-    }
-
-    /**
      * Submit transfer work request
      */
-    function transfer() {
+    async function transfer(workId: AssignedWork['id']) {
       if (!selectedMentorId.value) {
         uiService.openWarningModal('Выберите ментора')
         return
@@ -78,13 +51,36 @@ export const useTransferWorkStore = defineStore(
       uiService.setLoading(true)
 
       try {
-        assignedWorkService.transferAssignedWork(
-          _route.params.workId as string,
+        await assignedWorkService.transferAssignedWork(
+          workId,
           selectedMentorId.value
         )
         uiService.openSuccessModal('Работа успешно передана другому ментору')
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при передаче работы', e.message)
+      } finally {
+        uiService.setLoading(false)
+      }
+    }
+
+    /**
+     * Transfer works to mentor
+     */
+    async function transferWorks(works: AssignedWork[]) {
+      uiService.setLoading(true)
+
+      try {
+        await Promise.all(
+          works.map((work) =>
+            assignedWorkService.transferAssignedWork(
+              work.id,
+              selectedMentorId.value
+            )
+          )
+        )
+        uiService.openSuccessModal('Работы успешно переданы другому ментору')
+      } catch (error: any) {
+        uiService.openErrorModal('Ошибка при передаче работ', error.message)
       } finally {
         uiService.setLoading(false)
       }
@@ -97,8 +93,7 @@ export const useTransferWorkStore = defineStore(
       isListLoading,
       selectedMentorId,
       transfer,
-      work,
-      fetchAssignedWork
+      transferWorks
     }
   }
 )

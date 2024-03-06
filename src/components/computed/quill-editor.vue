@@ -4,10 +4,16 @@
 
 <script setup lang="ts">
 import type { DeltaContentType } from '@/types/composed/DeltaContentType'
+import { onMounted, ref } from 'vue'
+import { Core } from '@/core/Core'
+
+// Quill
 import Quill from 'quill'
 import { Delta } from 'quill/core'
+import quillBlotFormatter from 'quill-blot-formatter'
+// @ts-ignore
+import ImageUploader from 'quill-image-uploader'
 import 'quill/dist/quill.snow.css'
-import { onMounted, ref } from 'vue'
 
 interface Props {
   readonly?: boolean
@@ -25,6 +31,15 @@ const container = ref<HTMLElement | null>(null)
 let quill = null as Quill | null
 
 onMounted(() => {
+  // modules
+  Quill.register(
+    {
+      'modules/quill-blot-formatter': quillBlotFormatter,
+      'modules/image-uploader': ImageUploader
+    },
+    true
+  )
+
   quill = new Quill(container.value!, {
     theme: 'snow',
     readOnly: props.readonly,
@@ -44,7 +59,26 @@ onMounted(() => {
             [{ align: [] }],
 
             ['clean']
-          ]
+          ],
+          'quill-blot-formatter': {},
+          'image-uploader': {
+            upload: (file: File) => {
+              console.log('UPLOAD', file)
+              return new Promise((resolve, reject) => {
+                Core.Services.Media.upload([file])
+                  .then((res) => {
+                    resolve(Core.Constants.MEDIA_URL + '/' + res.data?.links[0])
+                  })
+                  .catch((err) => {
+                    Core.Services.UI.openErrorModal(
+                      'Не удалось загрузить изображение',
+                      err.message
+                    )
+                    reject(err)
+                  })
+              })
+            }
+          }
         }
   })
 

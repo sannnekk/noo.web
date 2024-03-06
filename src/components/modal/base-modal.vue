@@ -20,6 +20,7 @@
           <div class="base-modal__text">
             {{ message || '' }}
           </div>
+          <slot />
           <div class="base-modal__buttons">
             <common-button
               alignment="stretch"

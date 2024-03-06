@@ -66,21 +66,14 @@ export class ApiService extends Service {
   /**
    * Upload files request
    */
-  protected uploadFiles(
-    files: File[],
-    additionalHeaders = {} as { [key: string]: string }
-  ) {
+  protected uploadFiles(files: File[]) {
     const formData = new FormData()
 
     for (const file of files) {
       formData.append('files', file)
     }
 
-    return this.httpPost<{ links: string[] }>(
-      '/media',
-      formData,
-      additionalHeaders
-    )
+    return this.httpPost<{ links: string[] }>('/media', formData)
   }
 
   /**
@@ -101,7 +94,10 @@ export class ApiService extends Service {
 
     const options: RequestInit = {
       method,
-      headers: this._getHeaders(additionalHeaders),
+      headers: this._getHeaders(
+        additionalHeaders,
+        body instanceof FormData ? 'form' : 'json'
+      ),
       body: this._getBody(body)
     }
 
@@ -139,14 +135,14 @@ export class ApiService extends Service {
    */
   private _getHeaders(
     additionalHeaders: Record<string, string>,
-    contextType: 'json' | 'form' = 'json'
+    contentType: 'json' | 'form' = 'json'
   ) {
     const headers: Record<string, string> = {
       Authorization: `Bearer ${this._context.ApiToken}`,
       ...additionalHeaders
     }
 
-    if (contextType === 'json') {
+    if (contentType === 'json') {
       headers['Content-Type'] = 'application/json'
     }
 

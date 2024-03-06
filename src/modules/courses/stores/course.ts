@@ -72,7 +72,7 @@ export const useCourseStore = defineStore('courses-module:course', () => {
    */
   async function fetchAssignedWorkToMaterial() {
     if (!_route.params.slug) return
-    if (!['student', 'mentor'].includes(Core.Context.User?.role!)) return
+    if (Core.Context.User?.role !== 'student') return
 
     try {
       const response = await courseService.getAssignedWorkToMaterial(
@@ -93,7 +93,10 @@ export const useCourseStore = defineStore('courses-module:course', () => {
           return (assignedWorkLink.value = `/assigned-works/${assignedWork.id}/read`)
       }
     } catch (error: any) {
-      uiService.openErrorModal('Произошла ошибка при загрузке работы')
+      uiService.openErrorModal(
+        'Произошла ошибка при загрузке работы',
+        error.message
+      )
     } finally {
       uiService.setLoading(false)
     }

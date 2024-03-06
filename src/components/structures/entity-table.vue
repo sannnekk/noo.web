@@ -19,10 +19,16 @@
           :key="object.id"
         >
           <td
-            v-for="col in cols"
+            v-for="(col, colIndex) in cols"
             :key="col.title"
             :class="`col-type-${col.type}`"
           >
+            <b
+              class="edit-checkbox"
+              :class="{ 'edit-checkbox--checked': checkList[object.id] }"
+              v-if="editable && colIndex === 0"
+              @click="checkList[object.id] = !checkList[object.id]"
+            ></b>
             <span v-if="(col.if || (() => true))(object)">
               <span v-if="col.type === 'iterator'">
                 {{ index + 1 }}
@@ -97,9 +103,6 @@
               <span v-else>-</span>
             </span>
           </td>
-          <td v-if="editable || removeable">
-            <!-- TODO: actions -->
-          </td>
         </tr>
       </tbody>
     </table>
@@ -122,6 +125,7 @@
 
 <script setup lang="ts">
 import { useDate } from '@/composables/useDate'
+import { ref, watch } from 'vue'
 
 interface Props {
   cols: {
@@ -151,7 +155,6 @@ interface Props {
   }[]
   data: ({ id: string } & Record<string, string | number | Date>)[]
   dateConfig?: Parameters<typeof useDate>[1]
-  removeable?: boolean
   editable?: boolean
   isLoading?: boolean
 }
@@ -159,6 +162,7 @@ interface Props {
 interface Emits {
   (e: 'remove', id: string): void
   (e: 'edit', id: string): void
+  (e: 'select', ids: string[]): void
 }
 
 const props = defineProps<Props>()
@@ -180,7 +184,7 @@ function unfunction(
     return (getValueByKey(col, key) as Function).call(undefined, row)
   }
 
-  return getValueByKey(col, key) || '-'
+  return getValueByKey(col, key)
 }
 
 function getValueByKey(object: Record<string, any>, key: string): any {
@@ -188,12 +192,12 @@ function getValueByKey(object: Record<string, any>, key: string): any {
   let value = object
 
   for (const key of keys) {
-    if (!value) return '-'
+    if (typeof value === 'undefined' || value === null) return '-'
 
     value = value[key]
   }
 
-  return value
+  return typeof value === 'undefined' || value === null ? '-' : value
 }
 
 function getTextCol(object: Record<string, any>, col: Props['cols'][0]) {
@@ -203,7 +207,7 @@ function getTextCol(object: Record<string, any>, col: Props['cols'][0]) {
   const join = col.join || '<br>'
 
   return keys
-    .map((key) => getValueByKey(object, key) || '-')
+    .map((key) => getValueByKey(object, key))
     .map(
       (value, index) =>
         `<span class='entity-table__style-${
@@ -221,7 +225,7 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
 
   return keys
     .map((key) =>
-      getValueByKey(object, key)
+      getValueByKey(object, key) !== '-'
         ? useDate(getValueByKey(object, key), {
             precision: 'day'
           }).toBeautiful()
@@ -229,21 +233,33 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
     )
     .join(join)
 }
+
+const checkList = ref<Record<string, boolean>>({})
+
+watch(
+  checkList,
+  (newVal) => {
+    const ids = Object.keys(newVal).filter((id) => newVal[id])
+    emits('select', ids)
+  },
+  { deep: true }
+)
 </script>
 
 <style lang="sass">
-.entity-table__style-bold
-  font-weight: 600
+.entity-table
+  &__style-bold
+    font-weight: 600
 
-.entity-table__style-italic
-  font-style: italic
+  &__style-italic
+    font-style: italic
 
-.entity-table__style-centered
-  text-align: center
+  &__style-centered
+    text-align: center
 
-.entity-table__style-secondary
-  color: var(--text-light)
-  font-size: 0.8em
+  &__style-secondary
+    color: var(--text-light)
+    font-size: 0.8em
 </style>
 
 <style scoped lang="sass">
@@ -287,8 +303,31 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
     tr
       border-top: 1px solid var(--border-color)
 
+      &:hover
+        td
+          .edit-checkbox
+            width: 15px
+
       td
         padding: 0.5rem
+        position: relative
+
+        .edit-checkbox
+          display: block
+          position: absolute
+          top: 0
+          left: 0
+          width: 0
+          height: 100%
+          background-color: var(--primary)
+          transition: width 0.2s ease
+
+          *
+            display: none
+
+          &--checked
+            width: 8px
+            background-color: var(--lila)
 
         .status-tag
           margin: 0.5em 0

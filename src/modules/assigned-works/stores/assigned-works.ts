@@ -1,6 +1,6 @@
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { Core } from '@/core/Core'
 import { debounce } from '@/core/utils/debounce'
 import { useSearch } from '@/composables/useSearch'
@@ -63,6 +63,17 @@ export const useAssignedWorksStore = defineStore(
     )
 
     /**
+     * Checked works for allSearch
+     */
+    const allSearchChecklist = ref<AssignedWork['id'][]>([])
+    const allSearchSelectedWorks = computed(
+      () =>
+        allSearchChecklist.value
+          .map((id) => allSearch.results.value.find((aw) => aw.id === id))
+          .filter(Boolean) as AssignedWork[]
+    )
+
+    /**
      * Search for not solved works
      */
     const notSolvedSearch = useSearch<AssignedWork>(
@@ -76,6 +87,17 @@ export const useAssignedWorksStore = defineStore(
           value: false
         }
       })
+    )
+
+    /**
+     * Checked works for notSolvedSearch
+     */
+    const notSolvedSearchChecklist = ref<AssignedWork['id'][]>([])
+    const notSolvedSearchSelectedWorks = computed(
+      () =>
+        notSolvedSearchChecklist.value
+          .map((id) => notSolvedSearch.results.value.find((aw) => aw.id === id))
+          .filter(Boolean) as AssignedWork[]
     )
 
     /**
@@ -95,6 +117,19 @@ export const useAssignedWorksStore = defineStore(
     )
 
     /**
+     * Checked works for notCheckedSearch
+     */
+    const notCheckedSearchChecklist = ref<AssignedWork['id'][]>([])
+    const notCheckedSearchSelectedWorks = computed(
+      () =>
+        notCheckedSearchChecklist.value
+          .map((id) =>
+            notCheckedSearch.results.value.find((aw) => aw.id === id)
+          )
+          .filter(Boolean) as AssignedWork[]
+    )
+
+    /**
      * Search for checked works
      */
     const checkedSearch = useSearch<AssignedWork>(
@@ -111,6 +146,17 @@ export const useAssignedWorksStore = defineStore(
     )
 
     /**
+     * Checked works for checkedSearch
+     */
+    const checkedSearchChecklist = ref<AssignedWork['id'][]>([])
+    const checkedSearchSelectedWorks = computed(
+      () =>
+        checkedSearchChecklist.value
+          .map((id) => checkedSearch.results.value.find((aw) => aw.id === id))
+          .filter(Boolean) as AssignedWork[]
+    )
+
+    /**
      * Search for archived works
      */
     const archivedSearch = useSearch<AssignedWork>(
@@ -120,6 +166,17 @@ export const useAssignedWorksStore = defineStore(
           value: true
         }
       })
+    )
+
+    /**
+     * Checked works for archivedSearch
+     */
+    const archivedSearchChecklist = ref<AssignedWork['id'][]>([])
+    const archivedSearchSelectedWorks = computed(
+      () =>
+        archivedSearchChecklist.value
+          .map((id) => archivedSearch.results.value.find((aw) => aw.id === id))
+          .filter(Boolean) as AssignedWork[]
     )
 
     /**
@@ -221,10 +278,20 @@ export const useAssignedWorksStore = defineStore(
 
     return {
       allSearch,
+      allSearchChecklist,
+      allSearchSelectedWorks,
       notSolvedSearch,
+      notSolvedSearchChecklist,
+      notSolvedSearchSelectedWorks,
       notCheckedSearch,
+      notCheckedSearchChecklist,
+      notCheckedSearchSelectedWorks,
       archivedSearch,
+      archivedSearchChecklist,
+      archivedSearchSelectedWorks,
       checkedSearch,
+      checkedSearchChecklist,
+      checkedSearchSelectedWorks,
       getUserAction
     }
   }

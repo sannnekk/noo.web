@@ -20,11 +20,6 @@ export default {
       component: indexView
     },
     {
-      path: 'transfer-:workId',
-      name: 'Передать работу',
-      component: transferWorkView
-    },
-    {
       path: ':workId',
       name: 'Работа',
       component: workView,

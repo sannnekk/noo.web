@@ -328,6 +328,23 @@ export const useAssignedWorkStore = defineStore(
       }
     }
 
+    /**
+     * Archive works
+     */
+    async function archiveWorks(works: AssignedWork[]) {
+      uiService.setLoading(true)
+      try {
+        await Promise.all(
+          works.map((work) => assignedWorkService.archiveAssignedWork(work.id))
+        )
+        uiService.openSuccessModal('Работы успешно архивированы!')
+      } catch (e: any) {
+        uiService.openErrorModal('Ошибка при архивировании работ', e.message)
+      } finally {
+        uiService.setLoading(false)
+      }
+    }
+
     return {
       assignedWorkId,
       assignedWork,
@@ -347,7 +364,9 @@ export const useAssignedWorkStore = defineStore(
       nextTaskLink,
       previousTaskLink,
       fetchAssignedWork,
-      workScoreText
+      workScoreText,
+      workScore,
+      archiveWorks
     }
   }
 )

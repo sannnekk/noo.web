@@ -1,26 +1,36 @@
 <template>
   <div class="works-table">
-    <entity-table
-      :cols="cols"
-      :data="works"
-      :is-loading="loading"
-      :tag-function="tagFunction"
-    />
+    <div class="works-table__table">
+      <entity-table
+        :cols="cols"
+        :data="works"
+        :is-loading="loading"
+        :tag-function="tagFunction"
+        :editable="Core.Context.User?.role === 'mentor' && editable"
+        @select="onSelect($event)"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { UserAction } from '../stores/assigned-works'
+import { Core } from '@/core/Core'
 
 interface Props {
   works: Partial<AssignedWork>[]
   loading?: boolean
   getUserActionFunction?: (a: AssignedWork) => UserAction
-  noAction?: boolean
+  editable?: boolean
+}
+
+interface Emits {
+  (e: 'select', ids: string[]): void
 }
 
 const props = defineProps<Props>()
+const emits = defineEmits<Emits>()
 
 const cols = [
   {
@@ -102,5 +112,8 @@ function tagFunction(
     text: '-'
   }
 }
+
+function onSelect(ids: string[]) {
+  emits('select', ids)
+}
 </script>
-@/core/data/entities/AssignedWork ../stores/assigned-works

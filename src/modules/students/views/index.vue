@@ -64,4 +64,8 @@ const studentsStore = useStudentsStore()
 setPageTitle('Мои ученики')
 </script>
 
-<style lang="sass" scoped></style>
+<style lang="sass" scoped>
+.index-students-view
+  &__search
+    padding: 1em
+</style>

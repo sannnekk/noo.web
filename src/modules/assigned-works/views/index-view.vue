@@ -19,11 +19,18 @@
             />
           </div>
         </div>
+        <div class="index-works-view__selected-actions">
+          <actions-with-selected
+            :selected-assigned-works="assignedWorksStore.allSearchSelectedWorks"
+          />
+        </div>
         <div class="index-works-view__table">
           <works-table
             :works="assignedWorksStore.allSearch.results"
             :loading="assignedWorksStore.allSearch.isListLoading"
             :get-user-action-function="assignedWorksStore.getUserAction"
+            @select="assignedWorksStore.allSearchChecklist = $event"
+            editable
           />
         </div>
         <div class="index-works-view__pagination">
@@ -142,6 +149,7 @@
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useAssignedWorksStore } from '../stores/assigned-works'
 import worksTable from '../components/works-table.vue'
+import actionsWithSelected from '../components/actions-with-selected.vue'
 
 const assignedWorksStore = useAssignedWorksStore()
 
