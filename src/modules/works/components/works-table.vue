@@ -30,10 +30,51 @@ const cols = [
     style: 'bold'
   },
   {
+    title: 'Тип',
+    keys: ['type'],
+    type: 'tag',
+    tagFunction
+  },
+  {
     title: '',
     value: 'Посмотреть / Редактировать',
     type: 'link',
     linkTo: (work: Work) => `/create-work${work.slug}`
   }
 ]
+
+function tagFunction(_: string, value: string) {
+  switch (value) {
+    case 'trial-work':
+      return {
+        text: 'Пробник',
+        type: 'danger'
+      }
+    case 'phrase':
+      return {
+        text: 'Фраза',
+        type: 'success'
+      }
+    case 'mini-test':
+      return {
+        text: 'Мини-тест',
+        type: 'primary'
+      }
+    case 'test':
+      return {
+        text: 'Тест',
+        type: 'warning'
+      }
+    case 'second-part':
+      return {
+        text: 'Вторая часть',
+        type: 'info'
+      }
+    default:
+      return {
+        text: '-',
+        type: 'info'
+      }
+  }
+}
 </script>
