@@ -26,7 +26,7 @@
         v-if="model.type !== 'text'"
       >
         <select-input
-          v-model="model.highestScore"
+          v-model="model.checkingStrategy"
           label="Способ проверки"
           :options="checkingStrategyOptions"
         />

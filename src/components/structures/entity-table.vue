@@ -193,6 +193,12 @@ function getValueByKey(object: Record<string, any>, key: string): any {
 
   for (const key of keys) {
     if (typeof value === 'undefined' || value === null) return '-'
+    if (key === 'each') {
+      value = value
+        .map((v: any) => v[keys[keys.indexOf('each') + 1]])
+        .join(', ')
+      break
+    }
 
     value = value[key]
   }

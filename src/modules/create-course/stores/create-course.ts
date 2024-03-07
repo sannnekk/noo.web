@@ -17,10 +17,11 @@ export const useCreateCourseStore = defineStore(
     /**
      * Empty course
      */
-    const emptyCourse = () =>
+    const emptyCourse = (): Course =>
       ({
         name: '',
         description: '',
+        chapters: [],
         images: []
       } as unknown as Course)
 

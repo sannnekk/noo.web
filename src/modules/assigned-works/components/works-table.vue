@@ -39,11 +39,11 @@ const cols = [
     type: 'icon'
   },
   {
-    title: 'Название работы / Ученик',
-    keys: ['work.name', 'student.name'],
+    title: 'Название работы / Ученик / Куратор(ы)',
+    keys: ['work.name', 'student.name', 'mentors.each.name'],
     join: '<br>',
     type: 'text',
-    style: ['bold', 'secondary']
+    style: ['bold', 'secondary', 'secondary']
   },
   {
     title: 'Дедлайн сдачи/проверки',

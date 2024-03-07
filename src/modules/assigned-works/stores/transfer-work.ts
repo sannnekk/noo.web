@@ -31,8 +31,10 @@ export const useTransferWorkStore = defineStore(
     /**
      * search
      */
-    const { results, resultsMeta, isListLoading, pagination } =
-      useSearch<User>(fetchMentors)
+    const { results, resultsMeta, isListLoading, pagination } = useSearch<User>(
+      fetchMentors,
+      { immediate: false }
+    )
 
     /**
      * Mentor id to transfer work to
