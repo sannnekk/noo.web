@@ -75,7 +75,7 @@
       <div class="task-form__col-12 form-group">
         <rich-text-area
           v-model="model.checkHint"
-          label="Подсказка для проверяющего (видна также ученику после проверки)"
+          label="Подсказка/пояснение для проверяющего (видна также ученику после проверки)"
         />
       </div>
     </div>

@@ -25,10 +25,6 @@ export function useSearch<EntityType>(
     immediate: true
   }
 ) {
-  /**
-   * 'as' is used to fix the issue with the type of the results
-   * @issue https://github.com/vuejs/core/issues/2136
-   */
   const pagination = ref<Pagination>(options.initialPagination || {})
 
   const results = ref<EntityType[]>([]) as Ref<EntityType[]>
@@ -40,6 +36,8 @@ export function useSearch<EntityType>(
 
   const isListLoading = ref(false)
 
+  const prevSearch = ref(options.initialPagination?.search || '')
+
   watch(pagination, () => (isListLoading.value = true), {
     immediate: options.immediate,
     deep: true
@@ -48,6 +46,11 @@ export function useSearch<EntityType>(
   watch(
     pagination,
     debounce(async (_pagination: Pagination) => {
+      if (_pagination.search !== prevSearch.value) {
+        _pagination.page = 1
+        prevSearch.value = _pagination.search || ''
+      }
+
       const response = await loadFunction(_pagination)
 
       isListLoading.value = false
