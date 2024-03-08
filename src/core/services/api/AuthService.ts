@@ -44,7 +44,12 @@ export class AuthService extends ApiService {
       }
     )
 
-    if (response.data && 'token' in response.data) {
+    if (
+      response &&
+      'data' in response &&
+      response.data &&
+      'token' in response.data
+    ) {
       this._context.User = response.data.user
       this._context.ApiToken = response.data.token
 

@@ -119,8 +119,6 @@ export class ApiService extends Service {
     } catch (error: any) {
       if (error.status === 401) {
         this._context.Events.emit('global:logout', this._context)
-
-        return undefined as T extends void ? void : ApiResponse<T>
       }
 
       throw {
