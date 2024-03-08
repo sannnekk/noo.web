@@ -116,6 +116,11 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
 
     try {
       await Core.Services.Auth.register(registerCredentials)
+      Core.Services.UI.openSuccessModal(
+        'Регистрация прошла успешно',
+        'Чтобы продолжить, подтвердите свой имейл. Письмо с инструкциями отправлено на вашу почту'
+      )
+      mode.value = 'login'
     } catch (e: any) {
       error.value = e.message
     } finally {
@@ -133,24 +138,27 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
    * check and send forgot password request
    */
   async function forgotPassword() {
-    isLoading.value = true
-
     if (
       /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(
         forgotPasswordCredentials.email
       ) === false
     ) {
       error.value = 'Несуществующий имейл'
-      isLoading.value = false
       return
     }
 
+    Core.Services.UI.setLoading(true)
+
     try {
       await Core.Services.Auth.forgotPassword(forgotPasswordCredentials.email)
-    } catch (e: any) {
-      error.value = e.message
+      Core.Services.UI.openSuccessModal(
+        'Письмо с инструкциями отправлено на вашу почту'
+      )
+      mode.value = 'login'
+    } catch (error: any) {
+      error.value = error.message || 'Что-то пошло не так'
     } finally {
-      isLoading.value = false
+      Core.Services.UI.setLoading(true)
     }
   }
 
