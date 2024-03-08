@@ -5,8 +5,13 @@ import type { EventFunc } from '../context/EventEmitter'
 export const initTrigger: EventFunc = (context: Context) => {
   console.log('Event triggered: global:init')
 
-  if (context.Route.path !== '/auth' && context.User === null) {
+  if (
+    context.Route.path !== '/auth' &&
+    context.Route.path !== '/' &&
+    context.User === null
+  ) {
     context.clear()
+    console.log('Redirect to /auth', context.Route.path)
     useRouter().push('/auth')
   }
 }
