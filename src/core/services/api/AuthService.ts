@@ -68,13 +68,20 @@ export class AuthService extends ApiService {
    * Register
    */
   public async register(payload: RegisterPayload) {
-    this.httpPost(`${this._route}/register`, payload)
+    await this.httpPost(`${this._route}/register`, payload)
+  }
+
+  public async verify(username: string, token: string) {
+    await this.httpPatch(`${this._route}/verify`, {
+      username,
+      token
+    })
   }
 
   /**
    * Forgot password
    */
   public async forgotPassword(email: string) {
-    this.httpPost(`${this._route}/forgot-password`, { email })
+    await this.httpPost(`${this._route}/forgot-password`, { email })
   }
 }

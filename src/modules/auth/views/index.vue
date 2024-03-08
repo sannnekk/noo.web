@@ -43,8 +43,13 @@ import authTitles from '../components/auth-titles.vue'
 import authForm from '../components/auth-form.vue'
 import authRights from '../components/auth-rights.vue'
 import { useAuthStore } from '../stores/auth'
+import { watch } from 'vue'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const authStore = useAuthStore()
+
+watch(() => route.query, authStore.verify, { immediate: true })
 </script>
 
 <style lang="sass" scoped>

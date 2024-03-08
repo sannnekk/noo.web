@@ -1,8 +1,11 @@
 import { Core } from '@/core/Core'
 import { defineStore } from 'pinia'
 import { reactive, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 export const useAuthStore = defineStore('auth-module:auth', () => {
+  const route = useRoute()
+
   /*
    * current mode (login, register, forgot-password)
    */
@@ -162,6 +165,35 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     }
   }
 
+  /**
+   * Verify account
+   */
+  async function verify() {
+    if (!route.query.token || !route.query.username) {
+      return
+    }
+
+    Core.Services.UI.setLoading(true)
+
+    try {
+      await Core.Services.Auth.verify(
+        route.query.username as string,
+        route.query.token as string
+      )
+      Core.Services.UI.openSuccessModal(
+        'Аккаунт подтвержден',
+        'Теперь вы можете войти в свой аккаунт'
+      )
+    } catch (error: any) {
+      Core.Services.UI.openErrorModal(
+        'Не удалось подтвердить аккаунт',
+        error.message
+      )
+    } finally {
+      Core.Services.UI.setLoading(true)
+    }
+  }
+
   return {
     loginCredentials,
     registerCredentials,
@@ -171,6 +203,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     forgotPassword,
     isLoading,
     error,
-    mode
+    mode,
+    verify
   }
 })
