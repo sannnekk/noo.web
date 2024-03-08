@@ -161,7 +161,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     } catch (error: any) {
       error.value = error.message || 'Что-то пошло не так'
     } finally {
-      Core.Services.UI.setLoading(true)
+      Core.Services.UI.setLoading(false)
     }
   }
 
@@ -190,7 +190,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
         error.message
       )
     } finally {
-      Core.Services.UI.setLoading(true)
+      Core.Services.UI.setLoading(false)
     }
   }
 
