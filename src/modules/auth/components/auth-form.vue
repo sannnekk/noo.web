@@ -111,7 +111,7 @@
         <text-input
           v-model="forgotPasswordModel.email"
           placeholder="Почта"
-          @enter-press="onLogin()"
+          @enter-press="onForgotPassword()"
         />
       </div>
       <div class="auth-form__group">
