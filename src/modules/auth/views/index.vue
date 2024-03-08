@@ -46,10 +46,9 @@ import { useAuthStore } from '../stores/auth'
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-const route = useRoute()
 const authStore = useAuthStore()
 
-watch(() => route.query, authStore.verify, { immediate: true })
+authStore.verify()
 </script>
 
 <style lang="sass" scoped>
