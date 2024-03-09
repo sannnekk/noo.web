@@ -9,14 +9,16 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
   /*
    * current mode (login, register, forgot-password)
    */
-  const mode = ref<'login' | 'register' | 'forgot-password'>('login')
+  const mode = ref<
+    'login' | 'register' | 'forgot-password' | 'resend-verification'
+  >('login')
 
   watch(mode, () => {
     error.value = undefined
   })
 
   /*
-   * login, register, forgot password credentials
+   * login, register, forgot password and resend verification credentials
    */
   const loginCredentials = reactive({
     usernameOrEmail: '',
@@ -32,6 +34,10 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
   })
 
   const forgotPasswordCredentials = reactive({
+    email: ''
+  })
+
+  const resendVerificationCredentials = reactive({
     email: ''
   })
 
@@ -194,13 +200,45 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     }
   }
 
+  /*
+   * check and send resend verification request
+   */
+  async function resendVerification() {
+    if (
+      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(
+        resendVerificationCredentials.email
+      ) === false
+    ) {
+      error.value = 'Несуществующий имейл'
+      return
+    }
+
+    Core.Services.UI.setLoading(true)
+
+    try {
+      await Core.Services.Auth.resendVerification(
+        resendVerificationCredentials.email
+      )
+      Core.Services.UI.openSuccessModal(
+        'Письмо с инструкциями повторно отправлено на вашу почту'
+      )
+      mode.value = 'login'
+    } catch (error: any) {
+      error.value = error.message || 'Что-то пошло не так'
+    } finally {
+      Core.Services.UI.setLoading(false)
+    }
+  }
+
   return {
     loginCredentials,
     registerCredentials,
     forgotPasswordCredentials,
+    resendVerificationCredentials,
     login,
     register,
     forgotPassword,
+    resendVerification,
     isLoading,
     error,
     mode,

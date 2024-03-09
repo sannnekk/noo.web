@@ -76,11 +76,21 @@ export class AuthService extends ApiService {
     await this.httpPost(`${this._route}/register`, payload)
   }
 
+  /**
+   * Verify
+   */
   public async verify(username: string, token: string) {
     await this.httpPatch(`${this._route}/verify`, {
       username,
       token
     })
+  }
+
+  /**
+   * Resend verification email
+   */
+  public async resendVerification(email: string) {
+    await this.httpPost(`${this._route}/resend-verification`, { email })
   }
 
   /**

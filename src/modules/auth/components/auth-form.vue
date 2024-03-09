@@ -100,12 +100,16 @@
         </div>
         <div class="auth-form__group__register">
           <span @click="modeModel = 'login'"> Войти </span>
+          <br />
+          <span @click="modeModel = 'resend-verification'">
+            Отправить подтверждение заново
+          </span>
         </div>
       </div>
     </div>
     <div
       class="auth-form__inner"
-      v-else
+      v-else-if="modeModel === 'forgot-password'"
     >
       <div class="auth-form__group">
         <text-input
@@ -131,6 +135,42 @@
         <div class="auth-form__group__register">
           <span @click="modeModel = 'login'"> Войти </span>
           <span @click="modeModel = 'register'"> Зарегистрироваться </span>
+          <br />
+          <span @click="modeModel = 'resend-verification'">
+            Отправить подтверждение заново
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="auth-form__inner"
+      v-else
+    >
+      <div class="auth-form__group">
+        <text-input
+          v-model="resendVerificationModel.email"
+          placeholder="Почта"
+          @enter-press="onResendVerification()"
+        />
+      </div>
+      <div class="auth-form__group">
+        <error-block v-if="error">{{ error }}</error-block>
+      </div>
+      <div class="auth-form__group">
+        <div class="auth-form__group__login">
+          <common-button
+            contrast
+            alignment="center"
+            :loading="isLoading"
+            @click="onResendVerification()"
+          >
+            Отправить
+          </common-button>
+        </div>
+        <div class="auth-form__group__register">
+          <span @click="modeModel = 'login'"> Войти </span>
+          <span @click="modeModel = 'register'"> Зарегистрироваться </span>
+          <span @click="modeModel = 'forgot-password'"> Забыли пароль? </span>
         </div>
       </div>
     </div>
@@ -155,7 +195,10 @@ interface Props {
   forgotPasswordCredentials: {
     email: string
   }
-  mode: 'login' | 'register' | 'forgot-password'
+  resendVerificationCredentials: {
+    email: string
+  }
+  mode: 'login' | 'register' | 'forgot-password' | 'resend-verification'
   isLoading?: boolean
   error?: string
 }
@@ -167,10 +210,15 @@ interface Emits {
     e: 'update:forgotPasswordCredentials',
     value: Props['forgotPasswordCredentials']
   ): void
+  (
+    e: 'update:resendVerificationCredentials',
+    value: Props['resendVerificationCredentials']
+  ): void
   (e: 'update:mode', value: Props['mode']): void
   (e: 'login'): void
   (e: 'register'): void
   (e: 'forgot-password'): void
+  (e: 'resend-verification'): void
 }
 
 const props = defineProps<Props>()
@@ -196,6 +244,11 @@ const forgotPasswordModel = computed({
   set: (val) => emits('update:forgotPasswordCredentials', val)
 })
 
+const resendVerificationModel = computed({
+  get: () => props.resendVerificationCredentials,
+  set: (val) => emits('update:resendVerificationCredentials', val)
+})
+
 function onLogin() {
   emits('login')
 }
@@ -206,6 +259,10 @@ function onRegister() {
 
 function onForgotPassword() {
   emits('forgot-password')
+}
+
+function onResendVerification() {
+  emits('resend-verification')
 }
 </script>
 
@@ -229,6 +286,7 @@ function onForgotPassword() {
 
     &__register
       display: flex
+      flex-wrap: wrap
       justify-content: center
       align-items: center
       gap: 1em

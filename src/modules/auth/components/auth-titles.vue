@@ -23,7 +23,7 @@
 import { computed } from 'vue'
 
 interface Props {
-  mode: 'login' | 'register' | 'forgot-password'
+  mode: 'login' | 'register' | 'forgot-password' | 'resend-verification'
 }
 
 const props = defineProps<Props>()
@@ -33,9 +33,11 @@ const title = computed(() => {
     return 'Вход в систему'
   } else if (props.mode === 'register') {
     return 'Регистрация'
+  } else if (props.mode === 'forgot-password') {
+    return 'Восстановление пароля'
   }
 
-  return 'Восстановление пароля'
+  return 'Подтверждение почты'
 })
 </script>
 

@@ -19,12 +19,16 @@
                 v-model:forgot-password-credentials="
                   authStore.forgotPasswordCredentials
                 "
+                v-model:resend-verification-credentials="
+                  authStore.resendVerificationCredentials
+                "
                 v-model:mode="authStore.mode"
                 :error="authStore.error"
                 :is-loading="authStore.isLoading"
                 @login="authStore.login()"
                 @register="authStore.register()"
                 @forgot-password="authStore.forgotPassword()"
+                @resend-verification="authStore.resendVerification()"
               />
             </div>
             <div class="index-auth-view__auth-rights">
