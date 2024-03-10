@@ -1,6 +1,6 @@
 import type { Task } from '@/core/data/entities/Task'
 import { defineStore } from 'pinia'
-import { computed, reactive, ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { v4 as uuid } from 'uuid'
 import type { Work } from '@/core/data/entities/Work'
@@ -33,6 +33,10 @@ export const useCreateWorkStore = defineStore(
       {
         value: 'second-part',
         label: 'Вторая часть'
+      },
+      {
+        value: 'phrase',
+        label: 'Фраза'
       }
     ]
 
@@ -137,7 +141,6 @@ export const useCreateWorkStore = defineStore(
      * Add new task to the work
      */
     function addTask() {
-      console.log('addTask')
       work.value.tasks.push(_emptyTask())
     }
 

@@ -71,7 +71,9 @@
         :username="userStore.user.name"
       />
     </template>
-    <template #tab-2>Stats</template>
+    <template #tab-2>
+      <p class="statistics">Пока нет статистики</p>
+    </template>
   </tabs-view>
 </template>
 
@@ -107,6 +109,11 @@ watch(
   border-bottom: 1px solid var(--border-color)
 
 .edit-user-view
+  &__statistics
+    text-align: center
+    color: var(--text-light)
+    padding: 3em 0
+
   &__credentials
     text-align: center
 

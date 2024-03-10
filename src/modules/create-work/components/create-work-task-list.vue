@@ -65,6 +65,7 @@ const model = computed({
       padding: 0.6em
       font-weight: bold
       border-radius: var(--border-radius)
+      user-select: none
 
       &:hover
         background-color: var(--text-light)
