@@ -21,6 +21,7 @@
             <create-work-task-list
               v-model="createWorkStore.work.tasks"
               :current-task-id="taskId"
+              @create-task="createWorkStore.addTask()"
             />
           </div>
           <div
@@ -52,7 +53,7 @@
       </template>
       <template #content>
         <div class="index-create-work-view__content">
-          <router-view />
+          <router-view :key="$route.fullPath" />
         </div>
       </template>
     </the-sidebar-layout>

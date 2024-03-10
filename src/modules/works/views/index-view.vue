@@ -8,7 +8,7 @@
         />
       </div>
       <div class="index-works-view__header__link">
-        <common-button to="/create-work/new">Создать работу</common-button>
+        <common-button to="/create-work">Создать работу</common-button>
       </div>
     </div>
     <div class="index-works-view__table">

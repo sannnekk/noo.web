@@ -3,10 +3,7 @@
     class="task-list"
     v-auto-animate
   >
-    <div
-      class="task-list__items"
-      v-auto-animate
-    >
+    <div class="task-list__items">
       <div
         class="task-list__item"
         v-for="(item, index) in model"
@@ -21,9 +18,7 @@
       class="task-list__add"
       v-if="currentTaskId !== 'new'"
     >
-      <router-link :to="`/create-work${$route.params.workSlug}/new`">
-        + Добавить вопрос
-      </router-link>
+      <span @click="$emit('create-task')"> + Добавить вопрос </span>
     </div>
   </div>
 </template>
@@ -34,11 +29,12 @@ import { computed } from 'vue'
 
 interface Props {
   modelValue: Task[]
-  currentTaskId: string
+  currentTaskId?: string
 }
 
 interface Emits {
   (event: 'update:modelValue', value: Task[]): void
+  (event: 'create-task'): void
 }
 
 const props = defineProps<Props>()
@@ -62,7 +58,7 @@ const model = computed({
     cursor: pointer
     border-radius: var(--border-radius)
 
-    a
+    span
       color: var(--secondary)
       text-decoration: none
       display: block

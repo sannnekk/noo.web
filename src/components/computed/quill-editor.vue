@@ -29,7 +29,9 @@ const emits = defineEmits<Emits>()
 const container = ref<HTMLElement | null>(null)
 let quill = null as Quill | null
 
-onMounted(() => {
+onMounted(() => initQuill())
+
+function initQuill() {
   // modules
   Quill.register(
     {
@@ -83,5 +85,5 @@ onMounted(() => {
   quill.on('text-change', () => {
     emits('update:modelValue', quill!.getContents())
   })
-})
+}
 </script>

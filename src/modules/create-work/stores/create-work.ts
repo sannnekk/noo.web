@@ -119,6 +119,7 @@ export const useCreateWorkStore = defineStore(
           ]
         },
         checkingStrategy: 'type1',
+        rightAnswer: '',
         createdAt: new Date(),
         updatedAt: new Date(),
         workId: ''
@@ -128,33 +129,25 @@ export const useCreateWorkStore = defineStore(
     /**
      * Task as an object
      */
-    const taskMap = computed({
-      get() {
-        return work.value.tasks.reduce((acc, task) => {
-          acc[task.slug] = task
-          return acc
-        }, {} as Record<string, Task>)
-      },
-      set(value) {
-        work.value.tasks.splice(
-          0,
-          work.value.tasks.length,
-          ...Object.values(value)
-        )
-      }
-    })
-
-    /**
-     * New task to add
-     */
-    const taskToAdd = ref<Omit<Task, 'id'>>(_emptyTask())
+    function getTask(taskSlug: Task['slug']) {
+      return work.value.tasks.find((task) => task.slug === taskSlug)
+    }
 
     /**
      * Add new task to the work
      */
     function addTask() {
-      work.value.tasks.push(taskToAdd.value)
-      taskToAdd.value = _emptyTask()
+      console.log('addTask')
+      work.value.tasks.push(_emptyTask())
+    }
+
+    /**
+     * Remove task from the work
+     */
+    function removeTask(taskSlug: Task['slug']) {
+      work.value.tasks = work.value.tasks.filter(
+        (task) => task.slug !== taskSlug
+      )
     }
 
     /**
@@ -248,9 +241,9 @@ export const useCreateWorkStore = defineStore(
 
     return {
       work,
-      taskToAdd,
       addTask,
-      taskMap,
+      removeTask,
+      getTask,
       submitWork,
       fetchWork,
       workTypeOptions,

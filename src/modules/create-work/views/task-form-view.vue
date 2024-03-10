@@ -1,18 +1,12 @@
 <template>
   <div class="task-form-view">
     <create-work-task-form
-      v-if="taskSlug === 'new'"
-      mode="create"
-      v-model="(createWorkStore.taskToAdd as Task)"
-      @submit="createWorkStore.addTask()"
+      v-if="task"
+      v-model="task"
       :checking-strategy-options="createWorkStore.checkingStrategyOptions"
+      @remove-task="createWorkStore.removeTask(taskSlug)"
     />
-    <create-work-task-form
-      v-else
-      mode="update"
-      v-model="createWorkStore.taskMap[taskSlug]"
-      :checking-strategy-options="createWorkStore.checkingStrategyOptions"
-    />
+    <p v-else>Создайте задание</p>
   </div>
 </template>
 
@@ -21,12 +15,12 @@ import CreateWorkTaskForm from '@/modules/create-work/components/create-work-tas
 import { useCreateWorkStore } from '../stores/create-work'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
-import type { Task } from '@/core/data/entities/Task'
 
 const createWorkStore = useCreateWorkStore()
 const route = useRoute()
 
 const taskSlug = computed(() => route.params.taskSlug as string)
+const task = computed(() => createWorkStore.getTask(taskSlug.value))
 </script>
 
 <style scoped lang="sass">
@@ -34,4 +28,3 @@ const taskSlug = computed(() => route.params.taskSlug as string)
   padding: 1rem
   padding-left: 0
 </style>
-@/core/data/entities/Task

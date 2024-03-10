@@ -80,30 +80,14 @@
       </div>
     </div>
     <div class="task-form__row">
-      <div class="task-form__col-4 form-group"></div>
-      <div
-        class="task-form__col-4 form-group"
-        v-if="mode == 'update'"
-      ></div>
+      <div class="task-form__col-8 form-group"></div>
       <div class="task-form__col-4 form-group">
         <common-button
-          design="secondary"
+          design="danger"
           alignment="stretch"
-          @click="$emit('submit')"
+          @click="$emit('remove-task', model.id)"
         >
           Удалить задание
-        </common-button>
-      </div>
-      <div
-        class="task-form__col-4 form-group"
-        v-if="mode == 'create'"
-      >
-        <common-button
-          design="primary"
-          alignment="stretch"
-          @click="$emit('submit')"
-        >
-          Добавить задание
         </common-button>
       </div>
     </div>
@@ -111,19 +95,17 @@
 </template>
 
 <script setup lang="ts">
-import createWorkTaskOptions from './create-work-task-options.vue'
 import type { Task } from '@/core/data/entities/Task'
 import { computed, reactive } from 'vue'
 
 interface Props {
   modelValue: Task
   checkingStrategyOptions: { label: string; value: string }[]
-  mode: 'create' | 'update'
 }
 
 interface Emits {
   (event: 'update:modelValue', value: Task): void
-  (event: 'submit'): void
+  (event: 'remove-task', taskId: string): void
 }
 
 type TaskType = Task['type']
