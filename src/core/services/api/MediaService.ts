@@ -15,9 +15,9 @@ export class MediaService extends ApiService {
   /**
    * Upload files
    */
-  public upload(
+  public async upload(
     files: File[]
   ): Promise<ApiResponse<{ links: string[] } | null>> {
-    return this.uploadFiles(files)
+    return await this.uploadFiles(files)
   }
 }

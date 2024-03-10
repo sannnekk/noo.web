@@ -24,21 +24,21 @@ export class CourseService extends ApiService {
    * Get course
    */
   public async getCourse(slug: string) {
-    return this.httpGet<Course>(`${this._route}/${slug}`)
+    return await this.httpGet<Course>(`${this._route}/${slug}`)
   }
 
   /**
    * Get courses
    */
   public async getCourses(pagination: Pagination) {
-    return this.httpGet<Course[]>(this._route, pagination as any)
+    return await this.httpGet<Course[]>(this._route, pagination as any)
   }
 
   /**
    * Get assigned work to course
    */
   public async getAssignedWorkToMaterial(slug: string) {
-    return this.httpGet<AssignedWork>(
+    return await this.httpGet<AssignedWork>(
       `${this._route}/material/${slug}/assigned-work`
     )
   }
@@ -47,14 +47,14 @@ export class CourseService extends ApiService {
    * Create course
    */
   public async createCourse(course: Course) {
-    this.httpPost<Course>(this._route, course)
+    await this.httpPost<Course>(this._route, course)
   }
 
   /**
    * Update course
    */
   public async updateCourse(slug: string, course: Course) {
-    this.httpPatch<Course>(`${this._route}/${slug}`, course)
+    await this.httpPatch<Course>(`${this._route}/${slug}`, course)
   }
 
   /**
@@ -65,7 +65,7 @@ export class CourseService extends ApiService {
     workId: string,
     deadlines: Deadlines
   ) {
-    this.httpPatch<AssignedWork>(
+    await this.httpPatch<AssignedWork>(
       `${this._route}/${materialSlug}/assign-work/${workId}`,
       deadlines
     )
@@ -74,8 +74,11 @@ export class CourseService extends ApiService {
   /**
    * Assign students to course
    */
-  public assignStudentsToCourse(courseSlug: string, studentIds: User['id'][]) {
-    this.httpPatch(`${this._route}/${courseSlug}/assign-students`, {
+  public async assignStudentsToCourse(
+    courseSlug: string,
+    studentIds: User['id'][]
+  ) {
+    await this.httpPatch(`${this._route}/${courseSlug}/assign-students`, {
       studentIds
     })
   }
@@ -84,6 +87,6 @@ export class CourseService extends ApiService {
    * Delete course
    */
   public async deleteCourse(slug: string) {
-    this.httpDelete(`${this._route}/${slug}`)
+    await this.httpDelete(`${this._route}/${slug}`)
   }
 }

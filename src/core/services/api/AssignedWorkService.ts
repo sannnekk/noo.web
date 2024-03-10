@@ -20,14 +20,14 @@ export class AssignedWorkService extends ApiService {
    * Get assigned work
    */
   public async getAssignedWork(id: AssignedWork['id']) {
-    return this.httpGet<AssignedWork>(`${this._route}/${id}`)
+    return await this.httpGet<AssignedWork>(`${this._route}/${id}`)
   }
 
   /**
    * Get assigned works
    */
   public async getAssignedWorks(pagination: Pagination) {
-    return this.httpGet<AssignedWork[]>(`${this._route}`, pagination)
+    return await this.httpGet<AssignedWork[]>(`${this._route}`, pagination)
   }
 
   /**

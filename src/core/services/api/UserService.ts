@@ -22,14 +22,14 @@ export class UserService extends ApiService {
    * get user by slug
    */
   public async getUser(username: string): Promise<ApiResponse<User | null>> {
-    return this.httpGet<User>(`${this._route}/${username}`)
+    return await this.httpGet<User>(`${this._route}/${username}`)
   }
 
   /**
    * get users
    */
   public async getUsers(pagination?: Pagination): Promise<ApiResponse<User[]>> {
-    return this.httpGet<User[]>(this._route, pagination)
+    return await this.httpGet<User[]>(this._route, pagination)
   }
 
   /**
@@ -38,7 +38,10 @@ export class UserService extends ApiService {
   public async getStudents(
     pagination?: Pagination
   ): Promise<ApiResponse<User[]>> {
-    return this.httpGet<User[]>(`${this._route}/student/search`, pagination)
+    return await this.httpGet<User[]>(
+      `${this._route}/student/search`,
+      pagination
+    )
   }
 
   /**
@@ -47,7 +50,10 @@ export class UserService extends ApiService {
   public async getOwnStudents(
     pagination?: Pagination
   ): Promise<ApiResponse<User[]>> {
-    return this.httpGet<User[]>(`${this._route}/student/search/own`, pagination)
+    return await this.httpGet<User[]>(
+      `${this._route}/student/search/own`,
+      pagination
+    )
   }
 
   /**
@@ -56,14 +62,17 @@ export class UserService extends ApiService {
   public async getMentors(
     pagination?: Pagination
   ): Promise<ApiResponse<User[]>> {
-    return this.httpGet<User[]>(`${this._route}/mentor/search`, pagination)
+    return await this.httpGet<User[]>(
+      `${this._route}/mentor/search`,
+      pagination
+    )
   }
 
   /**
    * create user
    */
   public async createUser(user: User): Promise<void> {
-    this.httpPost<User>(`${this._route}/register`, user)
+    await this.httpPost<User>(`${this._route}/register`, user)
   }
 
   /**
@@ -73,7 +82,9 @@ export class UserService extends ApiService {
     studentId: User['id'],
     mentorId: User['id']
   ): Promise<void> {
-    this.httpPatch(`${this._route}/${studentId}/assign-mentor/${mentorId}`)
+    await this.httpPatch(
+      `${this._route}/${studentId}/assign-mentor/${mentorId}`
+    )
   }
 
   /**
@@ -83,14 +94,14 @@ export class UserService extends ApiService {
     userId: User['id'],
     user: Partial<User> & { id: User['id'] }
   ): Promise<void> {
-    this.httpPatch(`${this._route}/${userId}`, user)
+    await this.httpPatch(`${this._route}/${userId}`, user)
   }
 
   /**
    * delete user
    */
   public async deleteUser(id: User['id']): Promise<void> {
-    this.httpDelete(`${this._route}/${id}`)
+    await this.httpDelete(`${this._route}/${id}`)
   }
 
   /**

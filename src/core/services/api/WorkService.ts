@@ -20,34 +20,34 @@ export class WorkService extends ApiService {
    * get work by slug
    */
   public async getWork(slug: string): Promise<ApiResponse<Work | undefined>> {
-    return this.httpGet<Work>(`${this._route}/${slug}`) as any
+    return (await this.httpGet<Work>(`${this._route}/${slug}`)) as any
   }
 
   /**
    * get works
    */
   public async getWorks(pagination: Pagination): Promise<ApiResponse<Work[]>> {
-    return this.httpGet<Work[]>(this._route, pagination) as any
+    return (await this.httpGet<Work[]>(this._route, pagination)) as any
   }
 
   /**
    * create work
    */
   public async createWork(work: Work): Promise<void> {
-    this.httpPost(this._route, work)
+    await this.httpPost(this._route, work)
   }
 
   /**
    * update work
    */
   public async updateWork(workId: Work['id'], work: Work): Promise<void> {
-    this.httpPatch(`${this._route}/${workId}`, work)
+    await this.httpPatch(`${this._route}/${workId}`, work)
   }
 
   /**
    * delete work
    */
   public async deleteWork(id: string): Promise<void> {
-    this.httpDelete(`${this._route}/${id}`)
+    await this.httpDelete(`${this._route}/${id}`)
   }
 }

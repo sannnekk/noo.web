@@ -22,14 +22,14 @@ export class CalenderService extends ApiService {
   public async getEvents(
     pagination?: Pagination
   ): Promise<ApiResponse<CalenderEvent[]>> {
-    return this.httpGet(this._route, pagination)
+    return await this.httpGet(this._route, pagination)
   }
 
   /**
    * Create event
    */
   public async createEvent(event: CalenderEvent): Promise<void> {
-    this.httpPost(this._route, event)
+    await this.httpPost(this._route, event)
   }
 
   /**
@@ -39,13 +39,13 @@ export class CalenderService extends ApiService {
     id: CalenderEvent['id'],
     event: CalenderEvent
   ): Promise<void> {
-    this.httpPatch(`${this._route}/${id}`, event)
+    await this.httpPatch(`${this._route}/${id}`, event)
   }
 
   /**
    * Delete event
    */
   public async deleteEvent(id: CalenderEvent['id']): Promise<void> {
-    this.httpDelete(`${this._route}/${id}`)
+    await this.httpDelete(`${this._route}/${id}`)
   }
 }
