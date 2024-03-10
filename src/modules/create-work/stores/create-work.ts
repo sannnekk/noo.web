@@ -192,10 +192,7 @@ export const useCreateWorkStore = defineStore(
 
       if (_route.params.workSlug && _route.params.workSlug.length) {
         try {
-          await workService.updateWork(
-            _route.params.workSlug as string,
-            payload as Work
-          )
+          await workService.updateWork(work.value.id, payload as Work)
           _router.push('/create-work/success')
         } catch (error: any) {
           uiService.openErrorModal(

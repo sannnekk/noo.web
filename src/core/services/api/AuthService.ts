@@ -65,8 +65,6 @@ export class AuthService extends ApiService {
   public async logout() {
     this._context.clear()
     this._context.Events.emit('global:logout', this._context)
-
-    window.location.reload()
   }
 
   /**
