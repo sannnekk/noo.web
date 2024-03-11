@@ -44,6 +44,7 @@ const cols = [
     title: '',
     value: 'Копировать',
     type: 'link',
+    design: 'secondary',
     action: (work: Work) => emits('copy-work', work.slug)
   },
   {

@@ -42,7 +42,10 @@
                   v-if="
                     col.value && ifFunctionThenNotNullable(col.value, object)
                   "
-                  :to="unfunction(col, object, 'linkTo')"
+                  :to="
+                    col.linkTo ? unfunction(col, object, 'linkTo') : undefined
+                  "
+                  @click="unfunction(col, object, 'action')"
                   :design="col.design || 'primary'"
                   alignment="center"
                 >
@@ -137,6 +140,7 @@ interface Props {
     style?: ('bold' | 'italic' | 'centered' | 'secondary')[]
     type: 'text' | 'tag' | 'link' | 'icon' | 'date' | 'avatar' | 'iterator'
     linkTo?: string | Function
+    action?: (row: any) => void
     design?:
       | 'primary'
       | 'secondary'
