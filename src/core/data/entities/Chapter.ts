@@ -8,6 +8,7 @@ export interface Chapter {
   courseId: string
   course?: Course
   materials?: Material[]
+  order: number
   createdAt: Date
   updatedAt: Date
 }

@@ -41,11 +41,6 @@ export const useCreateCourseStore = defineStore(
     const removeCourseModalVisible = ref(false)
 
     /**
-     * Current material
-     */
-    const currentMaterial = ref<Material>(emptyMaterial() as Material)
-
-    /**
      * Load course
      */
     async function fetchCourse() {
@@ -79,23 +74,6 @@ export const useCreateCourseStore = defineStore(
     }
 
     /**
-     * Load current material
-     */
-    watch(
-      () => _route.params.materialSlug,
-      () => {
-        if (_route.params.materialSlug === 'new') {
-          currentMaterial.value = emptyMaterial() as Material
-        } else {
-          currentMaterial.value = getMaterial(
-            _route.params.chapterSlug as string,
-            _route.params.materialSlug as string
-          ) as Material
-        }
-      }
-    )
-
-    /**
      * Add new chapter to the course
      */
     function addChapter() {
@@ -109,6 +87,7 @@ export const useCreateCourseStore = defineStore(
         slug: uuid(),
         materials: []
       } as unknown as Chapter)
+
       newChapterName.value = ''
     }
 
@@ -137,28 +116,13 @@ export const useCreateCourseStore = defineStore(
     }
 
     /**
-     * Set material
-     */
-    function setMaterial(chapterSlug: string, material: Material) {
-      const chapter = getChapter(chapterSlug)
-      const materialIndex = chapter?.materials?.findIndex(
-        (material) => material.slug === material.slug
-      )
-
-      if (materialIndex === undefined) return chapter!.materials!.push(material)
-
-      chapter!.materials![materialIndex] = material
-    }
-
-    /**
      * Create empty material
      */
-    function emptyMaterial(): Omit<
-      Material,
-      'id' | 'chapterId' | 'createdAt' | 'updatedAt'
-    > {
+    function emptyMaterial(
+      name?: string
+    ): Omit<Material, 'id' | 'chapterId' | 'createdAt' | 'updatedAt'> {
       return {
-        name: '',
+        name: name || 'Новый материал',
         slug: uuid(),
         description: '',
         files: [],
@@ -176,19 +140,12 @@ export const useCreateCourseStore = defineStore(
     /**
      * Add new material to the chapter
      */
-    function addMaterial() {
-      if (!currentMaterial.value.name.trim()) {
-        uiService.openWarningModal('У материала должно быть название')
-        return
-      }
-
-      const chapterSlug = _route.params.chapterSlug as string
-      const chapter = getChapter(chapterSlug)
-
-      if (!chapter) return
-
-      chapter.materials!.push(currentMaterial.value)
-      currentMaterial.value = emptyMaterial() as Material
+    function addMaterial(chapter: Chapter) {
+      chapter.materials!.push(
+        emptyMaterial(
+          `Новый материал ${chapter.materials?.length || 0}`
+        ) as Material
+      )
     }
 
     /**
@@ -237,7 +194,7 @@ export const useCreateCourseStore = defineStore(
         return
       }
 
-      course.value.chapters?.forEach((chapter) => {
+      for (const chapter of course.value.chapters!) {
         if (!chapter.name.trim()) {
           uiService.openWarningModal('У главы должно быть название')
           return
@@ -248,7 +205,7 @@ export const useCreateCourseStore = defineStore(
           return
         }
 
-        chapter.materials?.forEach((material) => {
+        for (const material of chapter.materials!) {
           if (!material.name.trim()) {
             uiService.openWarningModal('У материала должно быть название')
             return
@@ -258,13 +215,14 @@ export const useCreateCourseStore = defineStore(
             uiService.openWarningModal('Материал не должен быть пустым')
             return
           }
-        })
-      })
+        }
+      }
 
       uiService.setLoading(true)
 
       course.value.chapters?.forEach((chapter, index) => {
         if (chapter.materials) {
+          course.value.chapters![index].order = index
           course.value.chapters![index].materials = chapter.materials?.map(
             (material, i) => ({ ...material, order: i })
           )
@@ -329,11 +287,9 @@ export const useCreateCourseStore = defineStore(
       publishCourse,
       removeCourse,
       newChapterName,
-      currentMaterial,
       emptyMaterial,
       getChapter,
       getMaterial,
-      setMaterial,
       removeChapter,
       removeMaterial,
       addMaterial,

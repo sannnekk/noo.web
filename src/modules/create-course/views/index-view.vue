@@ -56,15 +56,15 @@
                       </template>
                     </draggable-list>
                     <li>
-                      <router-link
-                        :to="`/create-course${$route.params.courseSlug}/${chapter.item.slug}--new`"
+                      <span
+                        @click="createCourseStore.addMaterial(chapter.item)"
                       >
                         <span
                           class="index-create-course-view__sidebar__chapters__item__materials__add"
                         >
                           Добавить материал
                         </span>
-                      </router-link>
+                      </span>
                     </li>
                   </ul>
                 </li>
@@ -134,7 +134,7 @@
           </div>
         </div>
         <div class="index-create-course-view__content">
-          <router-view />
+          <router-view :key="$route.fullPath" />
         </div>
       </template>
     </the-sidebar-layout>
