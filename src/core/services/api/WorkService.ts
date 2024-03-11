@@ -38,6 +38,13 @@ export class WorkService extends ApiService {
   }
 
   /**
+   * copy work
+   */
+  public async copyWork(workSlug: Work['slug']): Promise<void> {
+    await this.httpPost(`${this._route}/copy/${workSlug}`)
+  }
+
+  /**
    * update work
    */
   public async updateWork(workId: Work['id'], work: Work): Promise<void> {

@@ -16,7 +16,12 @@ interface Props {
   loading?: boolean
 }
 
+interface Emits {
+  (e: 'copy-work', workSlug: Work['slug']): void
+}
+
 defineProps<Props>()
+const emits = defineEmits<Emits>()
 
 const cols = [
   {
@@ -34,6 +39,12 @@ const cols = [
     keys: ['type'],
     type: 'tag',
     tagFunction
+  },
+  {
+    title: '',
+    value: 'Копировать',
+    type: 'link',
+    action: (work: Work) => emits('copy-work', work.slug)
   },
   {
     title: '',

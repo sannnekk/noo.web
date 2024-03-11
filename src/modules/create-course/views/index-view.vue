@@ -127,7 +127,6 @@
               :allowed-mime-types="['image/jpeg', 'image/png']"
               v-model="createCourseStore.course.images"
             />
-            {{ createCourseStore.course.images }}
           </div>
           <div class="form-group">
             <label class="form-group__label">Описание курса</label>

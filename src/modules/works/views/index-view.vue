@@ -15,6 +15,7 @@
       <works-table
         :works="worksStore.results"
         :loading="worksStore.isListLoading"
+        @copy-work="worksStore.copyWork($event)"
       />
     </div>
     <div class="index-works-view__pagination">

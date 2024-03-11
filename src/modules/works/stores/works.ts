@@ -29,10 +29,35 @@ export const useWorksStore = defineStore('works-module', () => {
     }
   }
 
+  /**
+   * Copy work
+   */
+  async function copyWork(workSlug: Work['slug']) {
+    uiService.setLoading(true)
+    try {
+      await workService.copyWork(workSlug)
+
+      pagination.value.page = 1
+
+      // trigger reload
+      pagination.value.search = '$$$'
+      pagination.value.search = ''
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при копировании работы',
+        error.message
+      )
+    } finally {
+      uiService.setLoading(false)
+    }
+  }
+
   return {
     pagination,
     results,
     resultsMeta,
-    isListLoading
+    isListLoading,
+    fetchWorks,
+    copyWork
   }
 })

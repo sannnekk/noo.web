@@ -93,10 +93,12 @@ export const useAssignWorkToMaterialStore = defineStore(
         await courseService.assignWorkToMaterial(
           materialSlug.value,
           selectedWorkId.value[0],
-          {
-            checkDeadline: checkDeadline.value,
-            solveDeadline: solveDeadline.value
-          }
+          deadlinesAvailable.value
+            ? {
+                checkDeadline: checkDeadline.value,
+                solveDeadline: solveDeadline.value
+              }
+            : {}
         )
 
         uiService.openSuccessModal('Работа успешно добавлена к материалу')
