@@ -1,5 +1,6 @@
 import type { Context } from '@/core/context/Context'
 import { ApiService, type ApiResponse } from '@/core/services/ApiService'
+import { ref, type Ref } from 'vue'
 
 /**
  * Media service
@@ -16,8 +17,9 @@ export class MediaService extends ApiService {
    * Upload files
    */
   public async upload(
-    files: File[]
+    files: File[],
+    progress: (progress: number) => void = () => {}
   ): Promise<ApiResponse<{ links: string[] } | null>> {
-    return await this.uploadFiles(files)
+    return await this.uploadFiles(files, progress)
   }
 }

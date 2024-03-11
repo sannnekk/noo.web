@@ -166,7 +166,10 @@ function dataURLtoFile(dataurl: string, filename: string) {
 }
 
 function getBase64Image(file: FileItem) {
-  if (!file.file) return
+  if (!file.file) {
+    currentImage.value = ''
+    return
+  }
 
   currentImage.value = ''
 

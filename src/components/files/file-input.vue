@@ -32,18 +32,18 @@
         :key="file.id"
       >
         <div class="file-input__files__file__preview">
-          <uploaded-image
-            v-if="file.src && file.extension !== 'pdf'"
-            :src="file.src"
-          />
           <inline-icon
+            v-if="file.src && file.extension === 'pdf'"
+            name="pdf-file"
+          />
+          <uploaded-image
             v-else
-            :name="`${file.extension === 'jpeg' ? 'jpg' : file.extension}-file`"
+            :src="file.src"
           />
         </div>
         <div class="file-input__files__file__data">
           <p class="file-input__files__file__data__name">
-            {{ file.fileName }}
+            {{ file.fileName }} | {{ file.progress }}
           </p>
           <div
             class="file-input__files__file__data__error"
@@ -223,11 +223,45 @@ async function uploadFiles(_files: File[]) {
   cropModalVisible.value = true
 }
 
-function sendFiles() {
+async function sendFiles() {
   cropModalVisible.value = false
   for (const file of filesForUpload.value) {
     try {
-      Core.Services.Media.upload([file.file as File])
+      files.value.push(file)
+
+      const response = await Core.Services.Media.upload(
+        [file.file as File],
+        (progress) => {
+          file.progress = progress
+        }
+      )
+
+      if (!response || !response.data) {
+        Core.Services.UI.openErrorModal('Ошибка при загрузке файла')
+        continue
+      }
+
+      if ('links' in response.data === false) {
+        Core.Services.UI.openErrorModal('Ошибка при загрузке файла')
+        continue
+      }
+
+      file.src = response.data.links[0]
+      file.isUploaded = true
+      file.progress = 100
+      emits(
+        'update:modelValue',
+        files.value.map((file) => ({
+          id: file.id,
+          src: file.src,
+          mimeType:
+            file.extension === 'pdf'
+              ? 'application/pdf'
+              : file.extension === 'png'
+              ? 'image/png'
+              : 'image/jpeg'
+        }))
+      )
     } catch (error: any) {
       file.error = error.message
     }

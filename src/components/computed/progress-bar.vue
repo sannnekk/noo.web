@@ -28,14 +28,15 @@ const props = defineProps<Props>()
   &__bar
     width: 100%
     height: 100%
-    background-color: var(--light)
+    background-color: transparent
+    border: 1px solid var(--border-color)
     border-radius: var(--border-radius)
     overflow: hidden
 
     &__progress
       width: 0
       height: 100%
-      background-color: var(--primary)
+      background-color: var(--secondary)
       border-radius: var(--border-radius)
       overflow: hidden
 </style>
