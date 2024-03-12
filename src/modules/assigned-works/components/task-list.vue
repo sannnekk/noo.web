@@ -4,7 +4,14 @@
       v-for="(task, index) in tasks"
       :key="task.id"
     >
-      <router-link :to="`${baseUrl}/${task.slug}`">
+      <router-link
+        :to="`${baseUrl}/${task.slug}`"
+        :class="{
+          success: scoreFunction(task) === 'success',
+          warning: scoreFunction(task) === 'warning',
+          error: scoreFunction(task) === 'error'
+        }"
+      >
         <inline-icon
           class="task-list__icon"
           v-if="isSolvedFunction(task)"
@@ -25,6 +32,7 @@ interface Props {
   tasks: Task[]
   workId: AssignedWork['id']
   isSolvedFunction: (task: Task) => boolean
+  scoreFunction: (task: Task) => 'success' | 'warning' | 'error' | null
 }
 
 defineProps<Props>()
@@ -35,7 +43,7 @@ defineProps<Props>()
   margin: 1em 0
   padding: 0
   display: flex
-  gap: 0.2em
+  gap: 0.7em
   flex-wrap: wrap
   list-style: none
 
@@ -58,7 +66,19 @@ defineProps<Props>()
       font-weight: normal
       color: var(--dark)
 
-      &:hover
+      &.success
+        border-width: 2px
+        border-color: var(--success) !important
+
+      &.warning
+        border-width: 2px
+        border-color: #ffe400 !important
+
+      &.error
+        border-width: 2px
+        border-color: var(--danger) !important
+
+      &:not(.router-link-active):hover
         background-color: var(--text-light)
         color: var(--lightest) !important
 
@@ -68,4 +88,3 @@ defineProps<Props>()
         background-color: var(--primary)
         border-color: var(--primary)
 </style>
-@/core/data/entities/AssignedWork@/core/data/entities/Task

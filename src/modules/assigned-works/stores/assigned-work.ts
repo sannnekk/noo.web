@@ -56,7 +56,11 @@ export const useAssignedWorkStore = defineStore(
         )
         assignedWork.value = response.data
       } catch (e: any) {
-        uiService.openErrorModal('Ошибка при загрузке работы', e.message)
+        uiService.openErrorModal(
+          'Ошибка при загрузке работы. Возможно, она была удалена и остался только экземпляр',
+          e.message
+        )
+        assignedWork.value = null
       } finally {
         uiService.setLoading(false)
       }
@@ -239,6 +243,8 @@ export const useAssignedWorkStore = defineStore(
      * Check if task has answer
      */
     function taskHasAnswer(task: Task): boolean {
+      if (mode.value === 'read') return false
+
       const answer = assignedWork.value?.answers.find(
         (answer) => answer.taskId === task.id
       )
@@ -256,6 +262,38 @@ export const useAssignedWorkStore = defineStore(
         case 'text':
           return !isDeltaEmptyOrWhitespace(answer.content)
       }
+    }
+
+    /**
+     * Get score badge for the task
+     */
+    function taskScoreStatus(
+      task: Task
+    ): 'success' | 'warning' | 'error' | null {
+      if (
+        mode.value === 'solve' ||
+        assignedWork.value?.solveStatus === 'not-started' ||
+        assignedWork.value?.solveStatus === 'in-progress'
+      ) {
+        return null
+      }
+
+      const comment = assignedWork.value?.comments.find(
+        (comment) => comment.taskId === task.id
+      )
+
+      if (!comment) {
+        return null
+      }
+
+      if (comment.score === 0) {
+        return 'error'
+      }
+      if (comment.score === task.highestScore) {
+        return 'success'
+      }
+
+      return 'warning'
     }
 
     /**
@@ -361,6 +399,7 @@ export const useAssignedWorkStore = defineStore(
       shiftDeadline,
       getTask,
       taskHasAnswer,
+      taskScoreStatus,
       submitWork,
       mode,
       fieldVisibility,

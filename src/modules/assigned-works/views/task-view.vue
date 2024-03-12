@@ -37,6 +37,19 @@
         :multiple="assignedWorkStore.task.type === 'multiple_choice'"
       />
     </div>
+    <br />
+    <div
+      class="taks-view__right-answer"
+      v-if="
+        ['visible', 'readonly'].includes(
+          assignedWorkStore.fieldVisibility.scoreBox
+        ) && assignedWorkStore.task?.type === 'word'
+      "
+    >
+      Правильный ответ: <b>{{ assignedWorkStore.task?.rightAnswer }}</b>
+      <br />
+      <br />
+    </div>
     <div
       class="taks-view__score"
       v-if="
@@ -65,7 +78,10 @@
         :readonly="assignedWorkStore.fieldVisibility.checkBox === 'readonly'"
       />
     </div>
-    <div class="task-view__action-buttons">
+    <div
+      class="task-view__action-buttons"
+      v-if="(assignedWorkStore.assignedWork?.work?.tasks.length || 0) > 1"
+    >
       <common-button
         alignment="left"
         design="secondary"

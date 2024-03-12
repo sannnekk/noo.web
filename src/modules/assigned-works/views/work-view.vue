@@ -37,6 +37,7 @@
           <task-list
             :work-id="assignedWorkStore.assignedWorkId"
             :is-solved-function="assignedWorkStore.taskHasAnswer"
+            :score-function="assignedWorkStore.taskScoreStatus"
             :base-url="assignedWorkStore.baseUrl"
             :tasks="assignedWorkStore.assignedWork.work?.tasks || []"
           />
