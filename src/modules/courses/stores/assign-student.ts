@@ -52,6 +52,13 @@ export const useAssignStudentsStore = defineStore(
     )
 
     /**
+     * Handle student selection
+     */
+    function onStudentSelected(userIds: User['id'][]) {
+      selectedStudentIds.value = Array.from(new Set(userIds))
+    }
+
+    /**
      * Load students
      */
     async function fetchStudents(pagination: Pagination) {
@@ -102,7 +109,8 @@ export const useAssignStudentsStore = defineStore(
       save,
       modalVisible,
       selectedStudentIds,
-      studentsCount
+      studentsCount,
+      onStudentSelected
     }
   }
 )

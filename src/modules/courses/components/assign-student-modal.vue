@@ -14,11 +14,14 @@
             :is-loading="assignStudentsStore.isListLoading"
           />
         </div>
-        <br />
+        <p>
+          Выбрано: <b>{{ assignStudentsStore.selectedStudentIds.length }}</b>
+        </p>
         <div class="students-modal__list">
           <check-list
             :items="assignStudentsStore.results"
-            v-model="assignStudentsStore.selectedStudentIds"
+            :model-value="assignStudentsStore.selectedStudentIds"
+            @update:model-value="assignStudentsStore.onStudentSelected($event)"
             multiple
             item-label-key="name,username"
             item-key="id"
