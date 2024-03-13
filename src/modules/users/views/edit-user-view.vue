@@ -72,7 +72,7 @@
       />
     </template>
     <template #tab-2>
-      <p class="statistics">Пока нет статистики</p>
+      <p class="statistics">&nbsp;&nbsp;&nbsp;Пока нет статистики</p>
     </template>
   </tabs-view>
 </template>
