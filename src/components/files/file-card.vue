@@ -30,7 +30,7 @@
 import type { FileItem } from '@/types/composed/FileItem'
 import { computed } from 'vue'
 
-interface Props extends FileItem {
+interface Props extends /* @vue-ignore */ FileItem {
   selected?: boolean
   downloadable?: boolean
 }
