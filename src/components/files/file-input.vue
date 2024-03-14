@@ -81,8 +81,19 @@
 import { computed, ref } from 'vue'
 import { v4 as uuid } from 'uuid'
 import type { Media } from '@/core/data/entities/Media'
-import { type FileItem } from '@/types/composed/FileItem'
 import { Core } from '@/core/Core'
+
+interface FileItem {
+  key: string
+  id?: string
+  fileName: string
+  src: string
+  extension: 'png' | 'jpeg' | 'pdf'
+  progress: number
+  isUploaded: boolean
+  error: string
+  file: File | null
+}
 
 interface Props {
   label: string

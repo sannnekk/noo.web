@@ -74,7 +74,18 @@
 import { computed, ref, watch } from 'vue'
 import { Cropper } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css'
-import { type FileItem } from '@/types/composed/FileItem'
+
+interface FileItem {
+  key: string
+  id?: string
+  fileName: string
+  src: string
+  extension: 'png' | 'jpeg' | 'pdf'
+  progress: number
+  isUploaded: boolean
+  error: string
+  file: File | null
+}
 
 interface Props {
   visible: boolean
