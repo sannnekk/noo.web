@@ -157,7 +157,7 @@ function onDragEnter() {
 function onDragLeave() {
   dragTimeoutId = setTimeout(() => {
     drag.value = false
-  }, 50)
+  }, 50) as any
 }
 
 function onFilesChange() {
