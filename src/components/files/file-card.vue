@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FileItem } from '@/types/composed/FileItem'
+import { type FileItem } from '@/types/composed/FileItem'
 import { computed } from 'vue'
 
 interface Props extends /* @vue-ignore */ FileItem {
