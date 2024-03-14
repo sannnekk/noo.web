@@ -6,6 +6,8 @@ RUN npm install --legacy-peer-deps
 COPY . .
 RUN npm run build-only
 
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # production stage
 FROM nginx:stable-alpine as production-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
