@@ -27,12 +27,20 @@
 </template>
 
 <script setup lang="ts">
-import { type FileItem } from '@/types/composed/FileItem'
 import { computed } from 'vue'
 
-interface Props extends /* @vue-ignore */ FileItem {
+interface Props {
   selected?: boolean
   downloadable?: boolean
+  key: string
+  id?: string
+  fileName: string
+  src: string
+  extension: 'png' | 'jpeg' | 'pdf'
+  progress: number
+  isUploaded: boolean
+  error: string
+  file: File | null
 }
 
 const props = defineProps<Props>()
