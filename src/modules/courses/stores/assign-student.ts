@@ -85,7 +85,9 @@ export const useAssignStudentsStore = defineStore(
           selectedStudentIds.value
         )
 
-        uiService.openSuccessModal('Студенты успешно добавлены курс')
+        uiService.openSuccessModal(
+          'Ученики успешно добавлены к курсу/откреплены от курса'
+        )
         modalVisible.value = false
       } catch (error: any) {
         uiService.openErrorModal(

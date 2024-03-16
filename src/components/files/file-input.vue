@@ -43,7 +43,7 @@
         </div>
         <div class="file-input__files__file__data">
           <p class="file-input__files__file__data__name">
-            {{ file.fileName }} | {{ file.progress }}
+            {{ file.fileName }}
           </p>
           <div
             class="file-input__files__file__data__error"
