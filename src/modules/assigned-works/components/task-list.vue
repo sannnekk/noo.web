@@ -46,6 +46,8 @@ defineProps<Props>()
   gap: 0.7em
   flex-wrap: wrap
   list-style: none
+  max-height: 305px
+  overflow-y: auto
 
   &__icon
     font-size: 1.3em

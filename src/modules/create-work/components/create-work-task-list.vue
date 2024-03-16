@@ -50,6 +50,8 @@ const model = computed({
 .task-list
   padding: 0
   margin: 0
+  max-height: 305px
+  overflow-y: auto
 
   &__add
     margin-top: 1rem
