@@ -23,15 +23,13 @@ export const useAssignStudentsStore = defineStore(
     /**
      * Select student ids
      */
-    const selectedStudentIds = ref(
-      (courseStore.course?.students || []).map((student) => student.id)
-    )
+    const selectedStudentIds = ref(courseStore.course?.studentIds || [])
 
     /**
      * Students count
      */
     const studentsCount = computed(
-      () => (courseStore.course?.students || []).length
+      () => (courseStore.course?.studentIds || []).length
     )
 
     /**
@@ -45,9 +43,7 @@ export const useAssignStudentsStore = defineStore(
     watch(
       () => courseStore.course,
       () => {
-        selectedStudentIds.value = (courseStore.course?.students || []).map(
-          (student) => student.id
-        )
+        selectedStudentIds.value = courseStore.course?.studentIds || []
       }
     )
 

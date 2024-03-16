@@ -12,6 +12,7 @@ export interface Course extends Entity {
   description: string
   chapters?: Chapter[]
   students?: User[]
+  studentIds?: User['id'][]
   createdAt: Date
   updatedAt: Date
 }
