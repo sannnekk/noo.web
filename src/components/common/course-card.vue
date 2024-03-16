@@ -17,14 +17,17 @@
     <div class="course-card__description">
       {{ description }}
     </div>
-    <!-- <div class="course-card__author">
+    <div
+      class="course-card__author"
+      v-if="author && authorLink"
+    >
       <div class="course-card__author__avatar">
         <user-avatar :name="author" />
       </div>
       <div class="course-card__author__name">
         <span>{{ author }}</span>
       </div>
-    </div> -->
+    </div>
     <div
       class="course-card__edit"
       v-if="Core.Context.User?.role === 'teacher'"
@@ -40,10 +43,10 @@ import { Core } from '@/core/Core'
 interface Props {
   image: string
   title: string
-  author: string
+  author?: string
   description: string
   authorAvatar?: string
-  authorLink: string
+  authorLink?: string
   slug: string
   to: string
 }

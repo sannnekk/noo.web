@@ -185,6 +185,8 @@ setPageTitle('Создание/редактирование курса')
           display: flex
           justify-content: space-between
           align-items: center
+          margin: 0.5em 0
+          font-size: 1.1em
 
           .icon
             cursor: pointer

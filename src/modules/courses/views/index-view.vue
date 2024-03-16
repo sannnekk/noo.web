@@ -39,9 +39,9 @@
           "
           :title="course.name"
           :description="course.description"
-          :author="course.author.name"
-          :author-avatar="course.author.avatar"
-          :author-link="`/users/${course.author.id}`"
+          :author="course?.author?.name"
+          :author-avatar="course?.author?.avatar"
+          :author-link="`/users/${course?.author?.id}`"
           :slug="course.slug"
         />
       </div>
