@@ -50,6 +50,7 @@
                   : assignedWorkStore.workScoreText
               }}
             </b>
+            из <b>{{ assignedWorkStore.assignedWork!.maxScore }}</b>
           </p>
           <div class="work-view__sidebar__submit">
             <common-button

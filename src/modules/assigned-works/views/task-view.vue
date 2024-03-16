@@ -4,7 +4,8 @@
     v-if="assignedWorkStore.assignedWork && assignedWorkStore.task"
   >
     <div class="task-view__question">
-      <rich-text-container :content="assignedWorkStore.task?.content" />
+      <rich-text-container :content="assignedWorkStore.task.content" />
+      <p>Максимальный балл: {{ assignedWorkStore.task.highestScore }}</p>
     </div>
     <div
       class="task-view__answer"
