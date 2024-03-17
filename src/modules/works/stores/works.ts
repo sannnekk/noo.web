@@ -52,12 +52,34 @@ export const useWorksStore = defineStore('works-module', () => {
     }
   }
 
+  /**
+   * Delete work
+   */
+  async function deleteWork(workSlug: Work['slug']) {
+    uiService.setLoading(true)
+    try {
+      await workService.deleteWork(workSlug)
+
+      // trigger reload
+      pagination.value.search = '$$$'
+      pagination.value.search = ''
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при удалении работы',
+        error.message
+      )
+    } finally {
+      uiService.setLoading(false)
+    }
+  }
+
   return {
     pagination,
     results,
     resultsMeta,
     isListLoading,
     fetchWorks,
-    copyWork
+    copyWork,
+    deleteWork
   }
 })

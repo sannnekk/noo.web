@@ -16,6 +16,7 @@
         :works="worksStore.results"
         :loading="worksStore.isListLoading"
         @copy-work="worksStore.copyWork($event)"
+        @delete-work="onWorkDelete($event)"
       />
     </div>
     <div class="index-works-view__pagination">
@@ -26,16 +27,43 @@
       />
     </div>
   </div>
+  <sure-modal
+    v-model:visible="deleteWorkModal.visible"
+    @confirm="worksStore.deleteWork(deleteWorkModal.workId)"
+  >
+    <template #title> Удаление работы </template>
+    <template #text>
+      Вы уверены, что хотите удалить работу <br />
+      <b>
+        {{
+          worksStore.results.find((work) => work.id === deleteWorkModal.workId)
+            ?.name
+        }}
+      </b>
+      ?
+    </template>
+  </sure-modal>
 </template>
 
 <script setup lang="ts">
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useWorksStore } from '../stores/works'
 import worksTable from '../components/works-table.vue'
+import { reactive } from 'vue'
+
+setPageTitle('Работы')
 
 const worksStore = useWorksStore()
 
-setPageTitle('Работы')
+const deleteWorkModal = reactive({
+  visible: false,
+  workId: ''
+})
+
+function onWorkDelete(workId: string) {
+  deleteWorkModal.workId = workId
+  deleteWorkModal.visible = true
+}
 </script>
 
 <style lang="sass" scoped>

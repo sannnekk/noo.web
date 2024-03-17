@@ -18,6 +18,7 @@ interface Props {
 
 interface Emits {
   (e: 'copy-work', workSlug: Work['slug']): void
+  (e: 'delete-work', workSlug: Work['id']): void
 }
 
 defineProps<Props>()
@@ -52,6 +53,13 @@ const cols = [
     value: 'Посмотреть / Редактировать',
     type: 'link',
     linkTo: (work: Work) => `/create-work${work.slug}`
+  },
+  {
+    title: '',
+    value: 'Удалить',
+    type: 'link',
+    design: 'danger',
+    action: (work: Work) => emits('delete-work', work.id)
   }
 ]
 
@@ -88,5 +96,9 @@ function tagFunction(_: string, value: string) {
         type: 'info'
       }
   }
+}
+
+function onSelect(work: Work) {
+  console.log('Selected work:', work)
 }
 </script>
