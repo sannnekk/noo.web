@@ -180,6 +180,27 @@ function onFilesChange() {
       `Превышен лимит файлов, которые можно загрузить. Можно загрузить не более ${props.maxCount} файлов`
     )
   }
+
+  for (const file of Array.from(fileInput.value?.files || [])) {
+    if (!file) continue
+
+    if (!props.allowedMimeTypes.includes(file.type as any)) {
+      Core.Services.UI.openWarningModal(
+        'Этот тип файла не поддерживается. Поддерживаемые типы: .jpeg, .png, .pdf'
+      )
+      return
+    }
+
+    if (file.size > props.maxFileSize) {
+      Core.Services.UI.openWarningModal(
+        `Размер файла привышает допустимый (${Math.floor(
+          props.maxFileSize / 1024 / 1024
+        )} МБ)`
+      )
+      return
+    }
+  }
+
   uploadFiles(Array.from(fileInput.value?.files || []))
 }
 
