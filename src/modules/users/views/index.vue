@@ -40,7 +40,8 @@ const cols = [
   },
   {
     title: 'Имя',
-    keys: ['name'],
+    value: (user: User) =>
+      user.verificationToken ? `[не подтвержден] ${user.name}` : user.name,
     type: 'text'
   },
   {

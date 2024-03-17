@@ -33,7 +33,13 @@ interface Props {
   alignment?: 'left' | 'center' | 'right' | 'stretch'
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
-  design?: 'primary' | 'secondary' | 'danger' | 'telegram' | 'inline'
+  design?:
+    | 'primary'
+    | 'secondary'
+    | 'danger'
+    | 'warning'
+    | 'telegram'
+    | 'inline'
   contrast?: boolean
   inline?: boolean
   loading?: boolean
@@ -147,4 +153,13 @@ defineEmits<Emits>()
 
       &:not(.loading):hover
         opacity: 0.8
+
+    &.warning
+      color: var(--lightest)
+      border: 1px solid var(--warning)
+      background-color: var(--warning)
+
+      &:not(.loading):hover
+        background-color: transparent
+        color: var(--dark)
 </style>

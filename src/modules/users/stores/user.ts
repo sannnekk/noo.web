@@ -102,11 +102,35 @@ export const useUserStore = defineStore('users-module:user', () => {
     }
   }
 
+  /**
+   * Confirm user
+   */
+  async function confirmUser() {
+    if (!user.value) {
+      return
+    }
+
+    uiService.setLoading(true)
+
+    try {
+      await userService.confirmUser(user.value.username)
+      uiService.openSuccessModal('Пользователь подтвержден')
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при подтверждении пользователя',
+        error.message
+      )
+    } finally {
+      uiService.setLoading(false)
+    }
+  }
+
   return {
     mentorSearch,
     user,
     fetchUser,
     saveUser,
-    assignMentor
+    assignMentor,
+    confirmUser
   }
 })

@@ -37,6 +37,28 @@
           </template>
           <template #content>
             <div class="edit-user-view__content">
+              <warning-block v-if="userStore.user.verificationToken">
+                <div class="edit-user-view__content__unverified-block">
+                  <p>
+                    <b>Пользователь не подтвержден</b>
+                    <br />
+                    Пользователь не сможет войти в систему, пока не подтвердит
+                    свой аккаунт через имейл
+                  </p>
+                  <common-button
+                    v-if="
+                      ['admin', 'teacher'].includes(
+                        Core.Context.User?.role || '$$anonymous$$'
+                      )
+                    "
+                    design="warning"
+                    alignment="right"
+                    @click="userStore.confirmUser()"
+                  >
+                    Подтвердить
+                  </common-button>
+                </div>
+              </warning-block>
               <div class="edit-user-view__content__form">
                 <user-form v-model="userStore.user" />
               </div>
@@ -82,6 +104,7 @@ import userForm from '../components/user-form.vue'
 import { useUserStore } from '../stores/user'
 import { watch } from 'vue'
 import { setPageTitle } from '@/core/utils/setPageTitle'
+import { Core } from '@/core/Core'
 
 const userStore = useUserStore()
 
@@ -135,6 +158,17 @@ watch(
       margin-bottom: 1em
 
   &__content
+    &__unverified-block
+      display: flex
+
+      p
+        margin: 0
+        font-size: 0.8em
+        width: 100%
+
+        b
+          font-size: 1.3em
+
     &__form
       padding: 1em
 

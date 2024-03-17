@@ -114,6 +114,13 @@ export class UserService extends ApiService {
   }
 
   /**
+   * confirm user
+   */
+  public async confirmUser(username: string): Promise<void> {
+    await this.httpPatch(`${this._route}/${username}/verify-manual`)
+  }
+
+  /**
    * get users password criteria
    */
   public passwordCriteria() {

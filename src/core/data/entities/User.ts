@@ -19,4 +19,5 @@ export interface User extends Entity {
   forbidden?: number
   createdAt: Date
   updatedAt: Date
+  verificationToken?: string
 }
