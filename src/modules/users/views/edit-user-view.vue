@@ -68,7 +68,7 @@
     <template #tab-1>
       <calender-view
         v-if="userStore.user"
-        :username="userStore.user.name"
+        :username="userStore.user.username"
       />
     </template>
     <template #tab-2>

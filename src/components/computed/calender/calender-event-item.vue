@@ -14,15 +14,15 @@
       </p>
       <div class="calender-event-item__body__button">
         <common-button
-          v-if="type !== 'event' && to"
-          :to="to"
+          v-if="url"
+          :to="url"
         >
           Перейти
         </common-button>
         <common-button
           @click="$emit('remove')"
           design="secondary"
-          v-else
+          v-else-if="type === 'event'"
         >
           Удалить
         </common-button>
@@ -38,7 +38,7 @@ interface Emits {
   (e: 'remove'): void
 }
 
-defineProps<CalenderEvent & { to?: string }>()
+defineProps<CalenderEvent>()
 defineEmits<Emits>()
 </script>
 
@@ -55,7 +55,7 @@ defineEmits<Emits>()
   &.student-deadline
     border-left: 0.5rem solid var(--danger)
 
-  &.teacher-deadline
+  &.mentor-deadline
     border-left: 0.5rem solid var(--lila)
 
   &.work-checked
@@ -88,4 +88,3 @@ defineEmits<Emits>()
     &__button
       font-size: 0.8em
 </style>
-@/core/data/entities/CalenderEvent

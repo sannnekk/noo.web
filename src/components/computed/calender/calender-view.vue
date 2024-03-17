@@ -66,19 +66,17 @@ watch(currentDate, (oldDate, newDate) => fetchEvents(oldDate, newDate), {
 })
 
 async function fetchEvents(oldDate: Date, newDate?: Date) {
-  if (!oldDate || !newDate) {
-    return
-  }
-
-  if (oldDate.getMonth() === newDate.getMonth()) {
+  if (!newDate) {
+    newDate = oldDate
+  } else if (oldDate.getMonth() === newDate.getMonth()) {
     return
   }
 
   isLoading.value = true
 
   try {
-    const startDate = new Date(newDate.getFullYear(), newDate.getMonth(), 1)
-    const endDate = new Date(newDate.getFullYear(), newDate.getMonth() + 1, 0)
+    const startDate = new Date(newDate.getFullYear(), newDate.getMonth(), 0)
+    const endDate = new Date(newDate.getFullYear(), newDate.getMonth() + 1, 1)
 
     const response = await calenderService.getEvents({
       'filter[date]': {
