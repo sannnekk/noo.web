@@ -65,6 +65,7 @@ const downloadLink = computed(() =>
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
   border: 3px dashed transparent
   cursor: pointer
+  max-height: 200px
 
   &--selected
     border-color: var(--secondary)
@@ -80,7 +81,7 @@ const downloadLink = computed(() =>
     height: 100%
     margin-bottom: 10px
     font-size: 3.5em
-    aspect-ratio: 1
+    aspect-ratio: 1 / 1
     overflow: hidden
 
     img
