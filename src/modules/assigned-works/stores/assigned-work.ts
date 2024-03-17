@@ -55,10 +55,39 @@ export const useAssignedWorkStore = defineStore(
           assignedWorkId.value
         )
         assignedWork.value = response.data
+
+        if (
+          mode.value === 'solve' &&
+          ['made-in-deadline', 'made-after-deadline'].includes(
+            assignedWork.value?.solveStatus || ''
+          )
+        ) {
+          throw new Error('Работа уже сдана и не может быть изменена')
+        }
+
+        if (
+          mode.value === 'check' &&
+          ['not-started', 'in-progress'].includes(
+            assignedWork.value?.solveStatus || ''
+          )
+        ) {
+          throw new Error('Работа еще не сдана и не может быть проверена')
+        }
+
+        if (
+          mode.value === 'check' &&
+          ['checked-in-deadline', 'checked-after-deadline'].includes(
+            assignedWork.value?.checkStatus || ''
+          )
+        ) {
+          throw new Error('Работа уже проверена и не может быть изменена')
+        }
       } catch (e: any) {
         uiService.openErrorModal(
-          'Ошибка при загрузке работы. Возможно, она была удалена и остался только экземпляр',
-          e.message
+          'Ошибка',
+          e?.status === 404
+            ? 'Работа не найдена. Возможно, работа была удалена и остался только этот экземпляр'
+            : e.message
         )
         assignedWork.value = null
       } finally {

@@ -92,6 +92,17 @@ export const useCreateCourseStore = defineStore(
     }
 
     /**
+     * Change chapter name
+     */
+    function changeChapterName(chapterSlug: string, name: string) {
+      const chapter = getChapter(chapterSlug)
+
+      if (!chapter) return
+
+      chapter.name = name
+    }
+
+    /**
      * Get chapter by slug
      */
     function getChapter(slug: string) {
@@ -284,6 +295,7 @@ export const useCreateCourseStore = defineStore(
     return {
       course,
       addChapter,
+      changeChapterName,
       publishCourse,
       removeCourse,
       newChapterName,

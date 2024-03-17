@@ -14,7 +14,9 @@
                   <div
                     class="index-create-course-view__sidebar__chapters__item__item-title"
                   >
-                    <span>{{ chapter.item.name }}</span>
+                    <span @dblclick="onChapterNameChange(chapter.item.slug)">
+                      {{ chapter.item.name }}
+                    </span>
                     <span class="icon">
                       <inline-icon
                         name="delete"
@@ -161,6 +163,13 @@ const createCourseStore = useCreateCourseStore()
 createCourseStore.fetchCourse()
 
 setPageTitle('Создание/редактирование курса')
+
+const onChapterNameChange = (slug: string) => {
+  const newName = prompt('Введите новое название главы')
+  if (newName) {
+    createCourseStore.changeChapterName(slug, newName)
+  }
+}
 </script>
 
 <style lang="sass" scoped>
