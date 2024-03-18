@@ -1,8 +1,6 @@
 <template>
+  <the-pane />
   <div class="pane-layout">
-    <div class="pane-layout__pane">
-      <the-pane />
-    </div>
     <div class="container">
       <div class="pane-layout__content">
         <div class="pane-layout__header">

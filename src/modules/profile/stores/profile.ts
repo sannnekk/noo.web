@@ -11,7 +11,7 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
   /*
    * logged in user
    */
-  const user = ref(Core.Context.User)
+  const user = ref(JSON.parse(JSON.stringify(Core.Context.User)))
 
   /*
    * users mentor if its a student
