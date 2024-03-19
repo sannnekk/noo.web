@@ -26,6 +26,11 @@ export const useCourseStore = defineStore('courses-module:course', () => {
   const assignedWorkLink = ref('')
 
   /**
+   * I don't see works
+   */
+  const iDontSeeWorks = ref(false)
+
+  /**
    * The current material
    */
   const material = computed<Material | undefined>(() => {
@@ -115,13 +120,54 @@ export const useCourseStore = defineStore('courses-module:course', () => {
     return materials.find((material) => material?.slug === slug)
   }
 
+  /**
+   * Assign me works
+   */
+  async function assignMeWorks() {
+    if (!course.value) {
+      uiService.openErrorModal(
+        'Не удалось запросить доступ к работам',
+        'Не удалось получить информацию о курсе. Возможно, курс был удален. Попробуйте обновить страницу.'
+      )
+      return
+    }
+
+    if (Core.Context.User?.role !== 'student') {
+      uiService.openErrorModal(
+        'Не удалось запросить доступ к работам',
+        'Только студенты могут запрашивать доступ к работам'
+      )
+      return
+    }
+
+    uiService.setLoading(true)
+
+    try {
+      await courseService.assignMeWorks(course.value.slug)
+      iDontSeeWorks.value = false
+      uiService.openSuccessModal(
+        'Работа успешно назначена',
+        'Теперь у вас есть доступ к работам. Перезагрузите страницу, чтобы увидеть изменения'
+      )
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при запросе доступа к работам',
+        error.message
+      )
+    } finally {
+      uiService.setLoading(false)
+    }
+  }
+
   return {
     course,
     material,
     materialsTree,
     assignedWorkLink,
+    assignMeWorks,
     fetchCourse,
     fetchAssignedWorkToMaterial,
-    getMaterialBySlug
+    getMaterialBySlug,
+    iDontSeeWorks
   }
 })

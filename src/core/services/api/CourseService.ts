@@ -72,6 +72,13 @@ export class CourseService extends ApiService {
   }
 
   /**
+   * Assign me works
+   */
+  public async assignMeWorks(courseSlug: string) {
+    await this.httpPatch(`${this._route}/${courseSlug}/assign-me-works`)
+  }
+
+  /**
    * Assign students to course
    */
   public async assignStudentsToCourse(

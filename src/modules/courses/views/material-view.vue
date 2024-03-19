@@ -2,7 +2,49 @@
   <div
     class="material-view"
     v-if="courseStore.material"
+    v-auto-animate
   >
+    <p
+      v-if="!courseStore.iDontSeeWorks"
+      class="material-view__i-dont-see-works"
+      @click="courseStore.iDontSeeWorks = true"
+    >
+      Не видно работ?
+    </p>
+    <warning-block
+      v-if="Core.Context.User?.role === 'student' && courseStore.iDontSeeWorks"
+      closable
+    >
+      <b>Вам не видно работ?</b>
+      <br />
+      1. А они точно есть на этом курсе? Материалы с прикрепленной работой
+      помечены иконкой
+      <inline-icon
+        name="uni-cap"
+        style="font-size: 1.5em; vertical-align: middle"
+      />
+      <br />
+      2. Убедитесь, что у вас есть куратор. Возможно, он был добавлен после
+      входа в систему. <br />
+      3. Попробуйте перезайти. <br />
+      4. Если ничего не помогло, запросите доступ к работам.
+      <br /><br />
+      <b
+        @click="courseStore.iDontSeeWorks = false"
+        class="material-view__i-dont-see-works__i-see-works"
+        >Уже вижу</b
+      >
+      или
+      <br />
+      <br />
+      <common-button
+        design="warning"
+        alignment="stretch"
+        @click="courseStore.assignMeWorks()"
+      >
+        Запросить доступ к работам
+      </common-button>
+    </warning-block>
     <div class="material-view__header">
       <div class="material-view__header__title">
         <h1>{{ courseStore.material.name }}</h1>
@@ -76,6 +118,23 @@ courseStore.fetchAssignedWorkToMaterial()
 
 <style scoped lang="sass">
 .material-view
+  &__i-dont-see-works
+    font-size: 1.1em
+    color: var(--warning)
+    margin: 0
+    cursor: pointer
+
+    &:hover
+      text-decoration: underline
+
+    &__i-see-works
+      cursor: pointer
+      color: var(--secondary)
+      font-weight: bold
+
+      &:hover
+        text-decoration: underline
+
   &__header
     width: 100%
     display: flex
