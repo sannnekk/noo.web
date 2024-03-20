@@ -20,6 +20,6 @@ export class MediaService extends ApiService {
     files: File[],
     progress: (progress: number) => void = () => {}
   ): Promise<ApiResponse<{ links: string[] } | null>> {
-    return await this.uploadFiles(files, progress)
+    return this.uploadFiles(files, progress)
   }
 }

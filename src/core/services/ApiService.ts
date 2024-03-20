@@ -102,13 +102,28 @@ export class ApiService extends Service {
 
         request.addEventListener('load', () => {
           if (request.status < 400) {
-            resolve(JSON.parse(request.responseText))
+            try {
+              resolve(JSON.parse(request.responseText))
+            } catch (error) {
+              reject({
+                status: request.status,
+                message: 'Неизвестная ошибка'
+              })
+            }
           } else {
-            reject({
-              status: request.status,
-              message:
-                JSON.parse(request.responseText)?.error || 'Неизвестная ошибка'
-            })
+            try {
+              reject({
+                status: request.status,
+                message:
+                  JSON.parse(request.responseText)?.error ||
+                  'Неизвестная ошибка'
+              })
+            } catch (error) {
+              reject({
+                status: request.status,
+                message: 'Неизвестная ошибка'
+              })
+            }
           }
         })
 
@@ -116,6 +131,7 @@ export class ApiService extends Service {
           'Authorization',
           `Bearer ${this._context.ApiToken}`
         )
+
         request.send(formData)
       }
     )

@@ -62,18 +62,22 @@ function initQuill() {
           ],
           'image-uploader': {
             upload: (file: File) => {
-              console.log('UPLOAD', file)
               return new Promise((resolve, reject) => {
+                Core.Services.UI.setLoading(true)
                 Core.Services.Media.upload([file])
-                  .then((res) => {
-                    resolve(Core.Constants.MEDIA_URL + '/' + res.data?.links[0])
-                  })
                   .catch((err) => {
+                    Core.Services.UI.setLoading(false)
                     Core.Services.UI.openErrorModal(
                       'Не удалось загрузить изображение',
-                      err.message
+                      err.status + ' ' + err.message
                     )
-                    reject(err)
+                    reject()
+                  })
+                  .then((res) => {
+                    Core.Services.UI.setLoading(false)
+                    resolve(
+                      Core.Constants.MEDIA_URL + '/' + res!.data?.links[0]
+                    )
                   })
               })
             }
