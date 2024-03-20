@@ -68,73 +68,70 @@ export class ApiService extends Service {
    * Upload files request
    */
   protected uploadFiles(files: File[], progress: (progress: number) => void) {
-    return new Promise<ApiResponse<{ links: string[] } | null>>(
-      (resolve, reject) => {
-        const formData = new FormData()
+    return new Promise<ApiResponse<string[] | null>>((resolve, reject) => {
+      const formData = new FormData()
 
-        for (const file of files) {
-          formData.append('files', file)
-        }
-
-        const request = new XMLHttpRequest()
-
-        request.open('POST', `${Constants.API_URL}/media`, true)
-
-        request.upload.addEventListener('progress', (event) => {
-          if (event.lengthComputable) {
-            progress.call(
-              undefined,
-              Math.round((event.loaded / event.total) * 100)
-            )
-          }
-        })
-
-        request.addEventListener('error', () => {
-          reject({
-            status: 400,
-            message: 'Неизвестная ошибка'
-          })
-        })
-
-        request.addEventListener('abort', () => {
-          reject({ status: 0, message: 'Загрузка отменена' })
-        })
-
-        request.addEventListener('load', () => {
-          if (request.status < 400) {
-            try {
-              resolve(JSON.parse(request.responseText))
-            } catch (error) {
-              reject({
-                status: request.status,
-                message: 'Неизвестная ошибка'
-              })
-            }
-          } else {
-            try {
-              reject({
-                status: request.status,
-                message:
-                  JSON.parse(request.responseText)?.error ||
-                  'Неизвестная ошибка'
-              })
-            } catch (error) {
-              reject({
-                status: request.status,
-                message: 'Неизвестная ошибка'
-              })
-            }
-          }
-        })
-
-        request.setRequestHeader(
-          'Authorization',
-          `Bearer ${this._context.ApiToken}`
-        )
-
-        request.send(formData)
+      for (const file of files) {
+        formData.append('files', file)
       }
-    )
+
+      const request = new XMLHttpRequest()
+
+      request.open('POST', `${Constants.API_URL}/media`, true)
+
+      request.upload.addEventListener('progress', (event) => {
+        if (event.lengthComputable) {
+          progress.call(
+            undefined,
+            Math.round((event.loaded / event.total) * 100)
+          )
+        }
+      })
+
+      request.addEventListener('error', () => {
+        reject({
+          status: 400,
+          message: 'Неизвестная ошибка'
+        })
+      })
+
+      request.addEventListener('abort', () => {
+        reject({ status: 0, message: 'Загрузка отменена' })
+      })
+
+      request.addEventListener('load', () => {
+        if (request.status < 400) {
+          try {
+            resolve(JSON.parse(request.responseText))
+          } catch (error) {
+            reject({
+              status: request.status,
+              message: 'Неизвестная ошибка'
+            })
+          }
+        } else {
+          try {
+            reject({
+              status: request.status,
+              message:
+                JSON.parse(request.responseText)?.error || 'Неизвестная ошибка'
+            })
+          } catch (error) {
+            reject({
+              status: request.status,
+              message: 'Неизвестная ошибка'
+            })
+          }
+        }
+      })
+
+      request.setRequestHeader(
+        'Authorization',
+        `Bearer ${this._context.ApiToken}`
+      )
+
+      request.send(formData)
+    })
   }
 
   /**

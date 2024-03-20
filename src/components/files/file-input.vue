@@ -273,12 +273,7 @@ async function sendFiles() {
         continue
       }
 
-      if ('links' in response.data === false) {
-        Core.Services.UI.openErrorModal('Ошибка при загрузке файла')
-        continue
-      }
-
-      file.src = response.data.links[0]
+      file.src = response.data[0]
       file.isUploaded = true
       file.progress = 100
       emits(

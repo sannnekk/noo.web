@@ -19,7 +19,7 @@ export class MediaService extends ApiService {
   public async upload(
     files: File[],
     progress: (progress: number) => void = () => {}
-  ): Promise<ApiResponse<{ links: string[] } | null>> {
+  ): Promise<ApiResponse<string[] | null>> {
     return this.uploadFiles(files, progress)
   }
 }
