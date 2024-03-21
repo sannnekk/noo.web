@@ -33,7 +33,7 @@ export const useAssignWorkToMaterialStore = defineStore(
      * TODO: make it single value instead of array
      */
     const selectedWorkId = ref([
-      courseStore.getMaterialBySlug(materialSlug.value)?.work?.id
+      courseStore.getMaterialBySlug(materialSlug.value)?.workId
     ])
 
     /**
