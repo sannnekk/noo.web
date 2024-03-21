@@ -4,60 +4,18 @@
     v-if="courseStore.material"
     v-auto-animate
   >
-    <p
-      v-if="!courseStore.iDontSeeWorks"
-      class="material-view__i-dont-see-works"
-      @click="courseStore.iDontSeeWorks = true"
-    >
-      Не видно работ?
-    </p>
-    <warning-block
-      v-if="Core.Context.User?.role === 'student' && courseStore.iDontSeeWorks"
-      closable
-    >
-      <b>Вам не видно работ?</b>
-      <br />
-      1. А они точно есть на этом курсе? Материалы с прикрепленной работой
-      помечены иконкой
-      <inline-icon
-        name="uni-cap"
-        style="font-size: 1.5em; vertical-align: middle"
-      />
-      <br />
-      2. Убедитесь, что у вас есть куратор. Возможно, он был добавлен после
-      входа в систему. <br />
-      3. Попробуйте перезайти. <br />
-      4. Если ничего не помогло, запросите доступ к работам.
-      <br /><br />
-      <b
-        @click="courseStore.iDontSeeWorks = false"
-        class="material-view__i-dont-see-works__i-see-works"
-        >Уже вижу</b
-      >
-      или
-      <br />
-      <br />
-      <common-button
-        design="warning"
-        alignment="stretch"
-        @click="courseStore.assignMeWorks()"
-      >
-        Запросить доступ к работам
-      </common-button>
-    </warning-block>
     <div class="material-view__header">
       <div class="material-view__header__title">
         <h1>{{ courseStore.material.name }}</h1>
       </div>
       <div
         class="material-view__header__work-link"
-        v-if="courseStore.material.workId"
+        v-if="
+          courseStore.material.workId && Core.Context.User?.role === 'student'
+        "
       >
-        <common-button
-          v-if="courseStore.assignedWorkLink"
-          :to="courseStore.assignedWorkLink"
-        >
-          Перейти к работе
+        <common-button @click="courseStore.assignMeWork()">
+          Запросить работу
         </common-button>
       </div>
       <div
@@ -112,8 +70,6 @@ import { useAssignWorkToMaterialStore } from '../stores/assign-work'
 
 const courseStore = useCourseStore()
 const assignWorkStore = useAssignWorkToMaterialStore()
-
-courseStore.fetchAssignedWorkToMaterial()
 </script>
 
 <style scoped lang="sass">

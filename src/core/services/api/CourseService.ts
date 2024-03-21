@@ -35,15 +35,6 @@ export class CourseService extends ApiService {
   }
 
   /**
-   * Get assigned work to course
-   */
-  public async getAssignedWorkToMaterial(slug: string) {
-    return await this.httpGet<AssignedWork>(
-      `${this._route}/material/${slug}/assigned-work`
-    )
-  }
-
-  /**
    * Create course
    */
   public async createCourse(course: Course) {
@@ -69,13 +60,6 @@ export class CourseService extends ApiService {
       `${this._route}/${materialSlug}/assign-work/${workId}`,
       deadlines
     )
-  }
-
-  /**
-   * Assign me works
-   */
-  public async assignMeWorks(courseSlug: string) {
-    await this.httpPatch(`${this._route}/${courseSlug}/assign-me-works`)
   }
 
   /**

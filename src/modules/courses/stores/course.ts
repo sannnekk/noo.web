@@ -4,9 +4,11 @@ import { type Course } from '@/core/data/entities/Course'
 import type { Material } from '@/core/data/entities/Material'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 
 export const useCourseStore = defineStore('courses-module:course', () => {
   const courseService = Core.Services.Course
+  const assignedWorkService = Core.Services.AssignedWork
   const uiService = Core.Services.UI
 
   const _route = useRoute()
@@ -19,16 +21,6 @@ export const useCourseStore = defineStore('courses-module:course', () => {
   if (course.value === null) {
     fetchCourse()
   }
-
-  /**
-   * The link to the assigned work
-   */
-  const assignedWorkLink = ref('')
-
-  /**
-   * I don't see works
-   */
-  const iDontSeeWorks = ref(false)
 
   /**
    * The current material
@@ -73,41 +65,6 @@ export const useCourseStore = defineStore('courses-module:course', () => {
   }
 
   /**
-   * Fetch assigned work to material
-   */
-  async function fetchAssignedWorkToMaterial() {
-    if (!_route.params.slug) return
-    if (Core.Context.User?.role !== 'student') return
-
-    try {
-      const response = await courseService.getAssignedWorkToMaterial(
-        _route.params.slug as string
-      )
-
-      const assignedWork = response.data
-
-      if (!assignedWork) return
-
-      switch (assignedWork.solveStatus) {
-        case 'not-started':
-        case 'in-progress':
-          return (assignedWorkLink.value = `/assigned-works/${assignedWork.id}/solve`)
-        case 'made-in-deadline':
-        case 'made-after-deadline':
-        default:
-          return (assignedWorkLink.value = `/assigned-works/${assignedWork.id}/read`)
-      }
-    } catch (error: any) {
-      uiService.openErrorModal(
-        'Произошла ошибка при загрузке работы',
-        error.message
-      )
-    } finally {
-      uiService.setLoading(false)
-    }
-  }
-
-  /**
    * Get the material by its slug
    */
   function getMaterialBySlug(slug: string): Material | undefined {
@@ -123,10 +80,10 @@ export const useCourseStore = defineStore('courses-module:course', () => {
   /**
    * Assign me works
    */
-  async function assignMeWorks() {
-    if (!course.value) {
+  async function assignMeWork() {
+    if (!course.value || !material.value) {
       uiService.openErrorModal(
-        'Не удалось запросить доступ к работам',
+        'Не удалось запросить доступ к работе',
         'Не удалось получить информацию о курсе. Возможно, курс был удален. Попробуйте обновить страницу.'
       )
       return
@@ -135,19 +92,25 @@ export const useCourseStore = defineStore('courses-module:course', () => {
     if (Core.Context.User?.role !== 'student') {
       uiService.openErrorModal(
         'Не удалось запросить доступ к работам',
-        'Только студенты могут запрашивать доступ к работам'
+        'Только студенты могут запрашивать доступ к работе'
       )
       return
     }
 
     uiService.setLoading(true)
 
+    const payload = {
+      studentId: Core.Context.User.id,
+      workId: material.value.workId,
+      solveDeadlineAt: material.value.workSolveDeadline,
+      checkDeadlineAt: material.value.workCheckDeadline
+    } as AssignedWork
+
     try {
-      await courseService.assignMeWorks(course.value.slug)
-      iDontSeeWorks.value = false
+      await assignedWorkService.createAssignedWork(payload)
       uiService.openSuccessModal(
         'Работа успешно назначена',
-        'Теперь у вас есть доступ к работам. Перезагрузите страницу, чтобы увидеть изменения'
+        'Теперь работа доступна в вашем списке работ'
       )
     } catch (error: any) {
       uiService.openErrorModal(
@@ -163,11 +126,8 @@ export const useCourseStore = defineStore('courses-module:course', () => {
     course,
     material,
     materialsTree,
-    assignedWorkLink,
-    assignMeWorks,
+    assignMeWork,
     fetchCourse,
-    fetchAssignedWorkToMaterial,
-    getMaterialBySlug,
-    iDontSeeWorks
+    getMaterialBySlug
   }
 })
