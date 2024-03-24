@@ -165,7 +165,13 @@ export const useAssignedWorksStore = defineStore(
           type: 'boolean',
           value: true
         }
-      })
+      }),
+      {
+        initialPagination: {
+          page: 1,
+          limit: 5
+        }
+      }
     )
 
     /**

@@ -349,17 +349,19 @@ export const useAssignedWorkStore = defineStore(
 
       uiService.setLoading(true)
 
+      const payload = { ...assignedWork.value, work: undefined }
+
       try {
         if (mode.value === 'solve') {
           await assignedWorkService.solveAssignedWork(
             assignedWork.value.id,
-            assignedWork.value
+            payload
           )
           uiService.openSuccessModal('Работа успешно сдана!')
         } else if (mode.value === 'check') {
           await assignedWorkService.checkAssignedWork(
             assignedWork.value.id,
-            assignedWork.value
+            payload
           )
           uiService.openSuccessModal('Работа успешно проверена!')
         }
@@ -403,10 +405,12 @@ export const useAssignedWorkStore = defineStore(
 
       uiService.setLoading(true)
 
+      const payload = { ...assignedWork.value, work: undefined }
+
       try {
         await assignedWorkService.saveAssignedWorkProgress(
           assignedWork.value.id,
-          assignedWork.value
+          payload
         )
         uiService.openSuccessModal('Прогресс успешно сохранен!')
       } catch (e: any) {
