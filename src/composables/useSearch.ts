@@ -68,10 +68,25 @@ export function useSearch<EntityType>(
     }
   )
 
+  function trigger() {
+    pagination.value = { ...pagination.value }
+  }
+
+  let triggered = false
+
+  function triggerOnce() {
+    if (!triggered) {
+      trigger()
+      triggered = true
+    }
+  }
+
   return {
     pagination,
     results,
     resultsMeta,
-    isListLoading
+    isListLoading,
+    trigger,
+    triggerOnce
   }
 }

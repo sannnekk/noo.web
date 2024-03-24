@@ -6,7 +6,7 @@
         :class="{ active: titles.indexOf(title) === activeTabIndex }"
         v-for="(title, index) in titles"
         :key="`${title}-title`"
-        @click="activeTabIndex = index"
+        @click="onTabChange(index)"
       >
         {{ title }}
       </div>
@@ -31,9 +31,19 @@ interface Props {
   titles: string[]
 }
 
+interface Emits {
+  (e: 'tabChange', index: number): void
+}
+
 defineProps<Props>()
+const emits = defineEmits<Emits>()
 
 const activeTabIndex = ref(0)
+
+function onTabChange(index: number) {
+  activeTabIndex.value = index
+  emits('tabChange', index)
+}
 </script>
 
 <style scoped lang="sass">

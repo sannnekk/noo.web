@@ -86,7 +86,8 @@ export const useAssignedWorksStore = defineStore(
           type: 'boolean',
           value: false
         }
-      })
+      }),
+      { immediate: false }
     )
 
     /**
@@ -113,7 +114,8 @@ export const useAssignedWorksStore = defineStore(
           type: 'boolean',
           value: false
         }
-      })
+      }),
+      { immediate: false }
     )
 
     /**
@@ -142,7 +144,8 @@ export const useAssignedWorksStore = defineStore(
           type: 'boolean',
           value: false
         }
-      })
+      }),
+      { immediate: false }
     )
 
     /**
@@ -166,12 +169,7 @@ export const useAssignedWorksStore = defineStore(
           value: true
         }
       }),
-      {
-        initialPagination: {
-          page: 1,
-          limit: 5
-        }
-      }
+      { immediate: false }
     )
 
     /**
@@ -299,6 +297,26 @@ export const useAssignedWorksStore = defineStore(
       }
     }
 
+    function changeTab(tab: number) {
+      switch (tab) {
+        case 0:
+          allSearch.triggerOnce()
+          break
+        case 1:
+          notSolvedSearch.triggerOnce()
+          break
+        case 2:
+          notCheckedSearch.triggerOnce()
+          break
+        case 3:
+          checkedSearch.triggerOnce()
+          break
+        case 4:
+          archivedSearch.triggerOnce()
+          break
+      }
+    }
+
     return {
       allSearch,
       allSearchChecklist,
@@ -316,7 +334,8 @@ export const useAssignedWorksStore = defineStore(
       checkedSearchChecklist,
       checkedSearchSelectedWorks,
       getUserAction,
-      archiveWorks
+      archiveWorks,
+      changeTab
     }
   }
 )

@@ -8,6 +8,7 @@
         'Проверенные',
         'Архивированные'
       ]"
+      @tab-change="assignedWorksStore.changeTab($event)"
     >
       <template #tab-0>
         <!-- All assigned works -->
