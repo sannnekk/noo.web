@@ -35,7 +35,7 @@ const emits = defineEmits<Emits>()
 
 const model = computed<Answer['word']>({
   get() {
-    const existingAnswer = props.modelValue.answers.find(
+    const existingAnswer = (props.modelValue.answers || []).find(
       (answer) => answer.taskId === props.task.id
     )
 

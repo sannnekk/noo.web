@@ -67,5 +67,3 @@ const model = computed<Comment['content']>({
   &__title
     font-weight: 500
 </style>
-@/core/data/entities/Comment@/core/data/entities/AssignedWork
-@/core/data/entities/Task @/core/utils/entityFactory

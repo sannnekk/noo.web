@@ -66,6 +66,23 @@
       />
     </div>
     <div
+      class="task-view__hint"
+      v-if="assignedWorkStore.task.solveHint"
+    >
+      <h4 class="task-view__hint__title">Подсказка:</h4>
+      <rich-text-container :content="assignedWorkStore.task.solveHint" />
+    </div>
+    <div
+      class="task-view__hint"
+      v-if="
+        assignedWorkStore.task.checkHint &&
+        ['check', 'read'].includes(assignedWorkStore.mode)
+      "
+    >
+      <h4 class="task-view__hint__title">Пояснение:</h4>
+      <rich-text-container :content="assignedWorkStore.task.checkHint" />
+    </div>
+    <div
       class="task-view__comment"
       v-if="
         ['visible', 'readonly'].includes(
@@ -127,6 +144,12 @@ const assignedWorkStore = useAssignedWorkStore()
     padding-top: 1em
     border-top: 1px solid var(--border-color)
     border-bottom: 1px solid var(--border-color)
+
+  &__hint
+    margin-top: 1rem
+
+    &__title
+      font-weight: 500
 
   &__action-buttons
     margin-top: 2rem

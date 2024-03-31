@@ -56,10 +56,10 @@
       v-if="['word'].includes(model.type)"
     >
       <div class="task-form__col-12 form-group">
-        <form-input
-          label="Правильный ответ"
-          type="text"
+        <tag-input
+          label="Правильные ответы (нажмите Enter для добавления)"
           v-model="model.rightAnswer"
+          separator="|"
         />
       </div>
     </div>

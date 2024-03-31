@@ -274,7 +274,9 @@ export const useAssignedWorkStore = defineStore(
     function taskHasAnswer(task: Task): boolean {
       if (mode.value === 'read') return false
 
-      const answer = assignedWork.value?.answers.find(
+      if (!assignedWork.value || !assignedWork.value?.answers) return false
+
+      const answer = assignedWork.value.answers.find(
         (answer) => answer.taskId === task.id
       )
 
