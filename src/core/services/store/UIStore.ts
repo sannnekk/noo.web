@@ -79,11 +79,22 @@ export function installUIStore() {
       message: undefined
     })
 
+    const retryLoginModal = ref<{
+      isOpen: boolean
+      usernameOrEmail: string
+      password: string
+    }>({
+      isOpen: false,
+      usernameOrEmail: '',
+      password: ''
+    })
+
     return {
       isLoading,
       isPaneOpen,
       navEntries,
-      globalModal
+      globalModal,
+      retryLoginModal
     }
   })
 }

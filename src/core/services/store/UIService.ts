@@ -67,6 +67,10 @@ export class UIService extends StoreService {
     this._store.globalModal.isOpen = true
   }
 
+  public openRetryLoginModal() {
+    this._store.retryLoginModal.isOpen = true
+  }
+
   /**
    * Open warning modal
    */

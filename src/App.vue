@@ -14,6 +14,10 @@
         :type="Core.Services.UI.Store().globalModal.type"
         v-model:visible="Core.Services.UI.Store().globalModal.isOpen"
       />
+      <retry-login-modal
+        v-if="Core.Services.UI.Store().retryLoginModal.isOpen"
+        v-model="Core.Services.UI.Store().retryLoginModal"
+      />
     </div>
   </div>
 </template>

@@ -1,3 +1,4 @@
+import { Context } from './../context/Context'
 import type { FilterType, Pagination } from '../data/Pagination'
 import { Constants } from '../constants'
 import { Service } from './Service'
@@ -176,13 +177,14 @@ export class ApiService extends Service {
       )
     } catch (error: any) {
       if (error.status === 401) {
-        this._context.Events.emit('global:logout', this._context)
+        if (this._context.isInitialized()) {
+          this._context.Events.emit('global:retry-login', this._context)
+        } else {
+          this._context.Events.emit('global:logout', this._context)
+        }
       }
 
-      throw {
-        status: error.status,
-        message: error.message || 'Неизвестная ошибка'
-      }
+      throw error
     }
   }
 

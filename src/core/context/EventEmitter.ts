@@ -1,6 +1,10 @@
 import type { Context } from './Context'
 
-export type EventName = 'global:logout' | 'global:login' | 'global:init'
+export type EventName =
+  | 'global:logout'
+  | 'global:login'
+  | 'global:init'
+  | 'global:retry-login'
 
 export type EventFunc = (context: Context, ...args: any[]) => void
 

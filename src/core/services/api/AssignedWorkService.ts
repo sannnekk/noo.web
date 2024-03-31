@@ -38,6 +38,13 @@ export class AssignedWorkService extends ApiService {
   }
 
   /**
+   * Get or create assigned work
+   */
+  public async getOrCreateAssignedWork(materialSlug: string) {
+    return await this.httpPost<string>(`${this._route}/${materialSlug}`)
+  }
+
+  /**
    * Archive assigned work
    */
   public async archiveAssignedWork(id: AssignedWork['id']) {

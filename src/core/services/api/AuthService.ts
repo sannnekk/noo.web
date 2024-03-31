@@ -59,6 +59,33 @@ export class AuthService extends ApiService {
     return response
   }
 
+  public async retryLogin({
+    usernameOrEmail,
+    password
+  }: LoginPayload): Promise<boolean> {
+    const response = await this.httpPost<LoginResponse>(
+      `${this._route}/login`,
+      {
+        usernameOrEmail,
+        password
+      }
+    )
+
+    if (
+      response &&
+      'data' in response &&
+      response.data &&
+      'token' in response.data
+    ) {
+      this._context.User = response.data.user
+      this._context.ApiToken = response.data.token
+
+      return true
+    }
+
+    return false
+  }
+
   /**
    * Logout
    */

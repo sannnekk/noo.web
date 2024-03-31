@@ -1,7 +1,7 @@
 import { Constants } from './constants'
 import { Context } from './context/Context'
 import { events } from './events'
-import { ServiceFactory, type ServiceName } from './services/ServiceFactory'
+import { ServiceFactory } from './services/ServiceFactory'
 
 /**
  * App core class as a singletone

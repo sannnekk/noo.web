@@ -8,16 +8,6 @@ import { useRoute } from 'vue-router'
  */
 export class Context {
   /**
-   * current user
-   */
-  private _user: User | null = null
-
-  /**
-   * current api token
-   */
-  private _apiToken: string | null = null
-
-  /**
    * event emitter
    */
   private _eventEmitter = new EventEmitter()
@@ -31,22 +21,33 @@ export class Context {
    * constructor
    */
   public constructor(user?: User | undefined, apiToken?: string | undefined) {
-    this._user = user || Storage.User
-    this._apiToken = apiToken || Storage.ApiToken
+    if (user && apiToken) {
+      Storage.User = user
+      Storage.ApiToken = apiToken
+    } else {
+      this._eventEmitter.emit('global:logout', this)
+    }
   }
 
   /**
    * get current User
    */
   public get User() {
-    return Object.freeze(this._user)
+    return Object.freeze(Storage.User)
   }
 
   /**
    * get current api token
    */
   public get ApiToken() {
-    return this._apiToken
+    return Storage.ApiToken
+  }
+
+  /**
+   * check if context is initialized
+   */
+  public isInitialized() {
+    return Storage.User && Storage.ApiToken
   }
 
   /**
@@ -60,7 +61,6 @@ export class Context {
    * set current user
    */
   public set User(user: User | null) {
-    this._user = user
     Storage.User = user
   }
 
@@ -68,7 +68,6 @@ export class Context {
    * set current api token
    */
   public set ApiToken(token: string | null) {
-    this._apiToken = token
     Storage.ApiToken = token
   }
 
@@ -83,16 +82,13 @@ export class Context {
    * check if user is logged in
    */
   public isLoggedIn() {
-    return this._user !== null
+    return Storage.User !== null
   }
 
   /**
    * clear the context
    */
   public clear() {
-    this._user = null
-    this._apiToken = null
-
     Storage.clear()
   }
 }

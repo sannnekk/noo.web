@@ -3,8 +3,7 @@ import { defineStore } from 'pinia'
 import { type Course } from '@/core/data/entities/Course'
 import type { Material } from '@/core/data/entities/Material'
 import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import type { AssignedWork } from '@/core/data/entities/AssignedWork'
+import { useRoute, useRouter } from 'vue-router'
 
 export const useCourseStore = defineStore('courses-module:course', () => {
   const courseService = Core.Services.Course
@@ -12,6 +11,7 @@ export const useCourseStore = defineStore('courses-module:course', () => {
   const uiService = Core.Services.UI
 
   const _route = useRoute()
+  const _router = useRouter()
 
   /**
    * The current course
@@ -99,19 +99,18 @@ export const useCourseStore = defineStore('courses-module:course', () => {
 
     uiService.setLoading(true)
 
-    const payload = {
-      studentId: Core.Context.User.id,
-      workId: material.value.workId,
-      solveDeadlineAt: material.value.workSolveDeadline,
-      checkDeadlineAt: material.value.workCheckDeadline
-    } as AssignedWork
-
     try {
-      await assignedWorkService.createAssignedWork(payload)
-      uiService.openSuccessModal(
-        'Работа успешно назначена',
-        'Теперь работа доступна в вашем списке работ'
+      const response = await assignedWorkService.getOrCreateAssignedWork(
+        material.value.slug
       )
+
+      if (!response.data) {
+        throw new Error('Не удалось получить информацию о работе')
+      }
+
+      const link = response.data
+
+      _router.push(link)
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при запросе доступа к работам',

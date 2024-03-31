@@ -15,7 +15,7 @@
         "
       >
         <common-button @click="courseStore.assignMeWork()">
-          Запросить работу
+          К работе
         </common-button>
       </div>
       <div

@@ -1,3 +1,5 @@
+import Cookie from 'js-cookie'
+
 /**
  * Local Storage wrapper
  */
@@ -14,15 +16,15 @@ export class Storage {
    * Sets storage key
    */
   private static set(key: string, value: any) {
-    localStorage.setItem(key, JSON.stringify(value))
+    Cookie.set(key, JSON.stringify(value), { expires: 365 })
   }
 
   /**
    * Gets storage value
    */
   private static get(key: string) {
-    const value = localStorage.getItem(key)
-    return value !== null ? JSON.parse(value) : null
+    const value = Cookie.get(key)
+    return value !== undefined ? JSON.parse(value) : null
   }
 
   /**
@@ -58,7 +60,7 @@ export class Storage {
    */
   public static clear() {
     for (const key in this._aliases) {
-      localStorage.removeItem(this._aliases[key as keyof typeof this._aliases])
+      Cookie.remove(this._aliases[key as keyof typeof this._aliases])
     }
   }
 }

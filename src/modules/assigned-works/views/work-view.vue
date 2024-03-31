@@ -33,6 +33,29 @@
                 }).toBeautiful()
               }}
             </p>
+            <p
+              class="work-view__sidebar__info__solve-deadline"
+              v-if="assignedWorkStore.assignedWork.checkDeadlineAt"
+            >
+              Дедлайн проверки:
+              {{
+                useDate(assignedWorkStore.assignedWork.checkDeadlineAt, {
+                  precision: 'day'
+                }).toBeautiful()
+              }}
+            </p>
+            <p class="work-view__sidebar__info__solve-status">
+              Статус работы:
+              <assigned-work-solve-status
+                :status="assignedWorkStore.assignedWork.solveStatus"
+              />
+            </p>
+            <p class="work-view__sidebar__info__check-status">
+              Статус проверки:
+              <assigned-work-check-status
+                :status="assignedWorkStore.assignedWork.checkStatus"
+              />
+            </p>
           </div>
           <task-list
             :work-id="assignedWorkStore.assignedWorkId"
