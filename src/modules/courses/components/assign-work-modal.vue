@@ -11,6 +11,15 @@
         class="assign-work-to-material-modal"
         v-auto-animate
       >
+        <p v-if="assignWorkStore.selectedWorkId.length">
+          Сейчас присвоена:
+          <router-link
+            class="assign-work-to-material-modal__current-work-link"
+            :to="`/create-work${courseStore.material?.work?.slug}`"
+          >
+            {{ courseStore.material?.work?.name }}
+          </router-link>
+        </p>
         <div class="assign-work-to-material-modal__search">
           <search-field
             v-model="assignWorkStore.pagination.search"
@@ -67,4 +76,5 @@ import { useAssignWorkToMaterialStore } from '../stores/assign-work'
 import { useCourseStore } from '../stores/course'
 
 const assignWorkStore = useAssignWorkToMaterialStore()
+const courseStore = useCourseStore()
 </script>

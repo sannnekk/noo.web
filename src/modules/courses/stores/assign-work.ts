@@ -36,6 +36,12 @@ export const useAssignWorkToMaterialStore = defineStore(
       courseStore.getMaterialBySlug(materialSlug.value)?.workId
     ])
 
+    watch(materialSlug, () => {
+      selectedWorkId.value = [
+        courseStore.getMaterialBySlug(materialSlug.value)?.workId
+      ]
+    })
+
     /**
      * Check deadline
      */
