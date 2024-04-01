@@ -120,7 +120,12 @@ export const useAssignedWorkStore = defineStore(
 
         const _task = getTaskBySlug(taskSlug.value)
 
-        if (!_task) return
+        if (!_task) {
+          task.value = null
+          taskId.value = null
+
+          return
+        }
 
         taskId.value = _task.id
         task.value = _task
@@ -314,6 +319,10 @@ export const useAssignedWorkStore = defineStore(
       )
 
       if (!comment) {
+        if (task.type !== 'text') {
+          return 'error'
+        }
+
         return null
       }
 
