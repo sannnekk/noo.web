@@ -3,6 +3,7 @@ import type { FilterType, Pagination } from '../data/Pagination'
 import { Constants } from '../constants'
 import { Service } from './Service'
 import { ref, type Ref } from 'vue'
+import type { MediaFile } from '../data/MediaFile'
 
 type ApiRoute = `/${string}`
 
@@ -69,7 +70,7 @@ export class ApiService extends Service {
    * Upload files request
    */
   protected uploadFiles(files: File[], progress: (progress: number) => void) {
-    return new Promise<ApiResponse<string[] | null>>((resolve, reject) => {
+    return new Promise<ApiResponse<MediaFile[] | null>>((resolve, reject) => {
       const formData = new FormData()
 
       for (const file of files) {

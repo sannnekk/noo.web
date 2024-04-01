@@ -34,10 +34,11 @@ import type { User } from '@/core/data/entities/User'
 
 interface Props {
   user: User
-  link?: string
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const link = props.user.username ? `/users/edit/${props.user.username}` : null
 </script>
 
 <style scoped lang="sass">

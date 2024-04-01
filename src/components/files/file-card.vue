@@ -21,7 +21,7 @@
       />
     </div>
     <div class="file-card__label">
-      <span>{{ fileName || src }}</span>
+      <span>{{ name || src }}</span>
     </div>
   </component>
 </template>
@@ -34,7 +34,7 @@ interface Props {
   downloadable?: boolean
   key: string
   id?: string
-  fileName: string
+  name: string
   src: string
   extension: 'png' | 'jpeg' | 'pdf'
   progress: number

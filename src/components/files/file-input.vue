@@ -125,7 +125,7 @@ const files = computed<FileItem[]>({
     return (props.modelValue || []).map((media) => ({
       id: media.id,
       key: uuid(),
-      fileName: media.src.split('/').pop() as string,
+      fileName: media.name || media.src,
       src: media.src,
       extension: media.src.split('.').pop() as FileItem['extension'],
       progress: 100,
@@ -140,6 +140,7 @@ const files = computed<FileItem[]>({
       value.map((file) => ({
         id: file.id,
         src: file.src,
+        name: file.fileName,
         mimeType:
           file.extension === 'pdf'
             ? 'application/pdf'
@@ -226,7 +227,7 @@ async function uploadFiles(_files: File[]) {
     fileName: file.name,
     src: '',
     extension: file.name.split('.').pop() as any,
-    progress: 10,
+    progress: 1,
     isUploaded: false,
     error: '',
     file
@@ -273,7 +274,8 @@ async function sendFiles() {
         continue
       }
 
-      file.src = response.data[0]
+      file.src = response.data[0].link
+      //file.fileName = response.data[0].name
       file.isUploaded = true
       file.progress = 100
       emits(
@@ -281,6 +283,7 @@ async function sendFiles() {
         files.value.map((file) => ({
           id: file.id,
           src: file.src,
+          name: file.fileName,
           mimeType:
             file.extension === 'pdf'
               ? 'application/pdf'

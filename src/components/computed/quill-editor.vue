@@ -75,9 +75,7 @@ function initQuill() {
                   })
                   .then((res) => {
                     Core.Services.UI.setLoading(false)
-                    resolve(
-                      Core.Constants.MEDIA_URL + '/' + (res!.data || [])[0]
-                    )
+                    resolve(Core.Constants.MEDIA_URL + '/' + res!.data![0].link)
                   })
               })
             }
