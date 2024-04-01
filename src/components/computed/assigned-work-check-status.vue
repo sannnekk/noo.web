@@ -7,7 +7,9 @@
       'assigned-work-solve-status--checked-in-deadline':
         props.status === 'checked-in-deadline',
       'assigned-work-solve-status--checked-after-deadline':
-        props.status === 'checked-after-deadline'
+        props.status === 'checked-after-deadline',
+      'assigned-work-solve-status--checked-automatically':
+        props.status === 'checked-automatically'
     }"
   >
     <span class="assigned-work-solve-solve-status__text">
@@ -27,14 +29,16 @@ const props = defineProps<Props>()
 
 const statusText = computed(() => {
   switch (props.status) {
-    case 'not-started':
-      return 'Не начато'
+    case 'not-checked':
+      return 'Не проверено'
     case 'in-progress':
       return 'В процессе'
     case 'checked-in-deadline':
       return 'Проверено в дедлайн'
     case 'checked-after-deadline':
       return 'Проверено после дедлайна'
+    case 'checked-automatically':
+      return 'Проверено автоматически'
     default:
       return 'неизвестно'
   }
@@ -56,4 +60,7 @@ const statusText = computed(() => {
 
   &--checked-after-deadline
     color: var(--danger)
+
+  &--checked-automatically
+    color: var(--success)
 </style>
