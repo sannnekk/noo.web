@@ -88,6 +88,19 @@
               }}
             </common-button>
             <common-button
+              alignment="stretch"
+              @click="assignedWorkStore.remakeModalVisible = true"
+              v-if="
+                assignedWorkStore.mode === 'read' &&
+                (assignedWorkStore.assignedWork?.checkStatus ==
+                  'checked-in-deadline' ||
+                  assignedWorkStore.assignedWork?.checkStatus ==
+                    'checked-after-deadline')
+              "
+            >
+              Переделать работу
+            </common-button>
+            <common-button
               class="work-view__sidebar__save-button"
               alignment="stretch"
               design="inline"
@@ -187,6 +200,20 @@
       <br />
       <br />
       <warning-block> Сдвинуть дедлайн можно только один раз </warning-block>
+    </template>
+  </sure-modal>
+  <sure-modal
+    v-model:visible="assignedWorkStore.remakeModalVisible"
+    @confirm="assignedWorkStore.remakeWork()"
+  >
+    <template #title>
+      Вы уыерены, что хотите заново сделать работу "{{
+        assignedWorkStore.assignedWork?.work?.name
+      }}"?
+    </template>
+    <template #text>
+      Уже решенная работа НЕ будет удалена, будет создана новая работа с теми же
+      заданиями.
     </template>
   </sure-modal>
 </template>

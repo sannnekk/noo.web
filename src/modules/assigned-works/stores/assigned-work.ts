@@ -35,6 +35,11 @@ export const useAssignedWorkStore = defineStore(
     const sureSubmitModalError = ref('')
 
     /**
+     * Modal for remake work
+     */
+    const remakeModalVisible = ref(false)
+
+    /**
      * Modal for shift deadline
      */
     const shiftDeadlineModalVisible = ref(false)
@@ -435,6 +440,33 @@ export const useAssignedWorkStore = defineStore(
       }
     }
 
+    /**
+     * Remake work
+     */
+    async function remakeWork() {
+      if (!assignedWork.value) return
+
+      uiService.setLoading(true)
+
+      try {
+        await assignedWorkService.createAssignedWork({
+          workId: assignedWork.value.workId,
+          studentId: assignedWork.value.studentId
+        } as AssignedWork)
+        uiService.openSuccessModal(
+          'Работа успешно создана и появилась в списке!',
+          'Если работы нет в списке, попробуйте обновить страницу'
+        )
+      } catch (e: any) {
+        uiService.openErrorModal(
+          'Ошибка при создании нового экземпляра работы',
+          e.message
+        )
+      } finally {
+        uiService.setLoading(false)
+      }
+    }
+
     return {
       assignedWorkId,
       assignedWork,
@@ -457,7 +489,9 @@ export const useAssignedWorkStore = defineStore(
       fetchAssignedWork,
       workScoreText,
       workScore,
-      saveProgress
+      saveProgress,
+      remakeWork,
+      remakeModalVisible
     }
   }
 )
