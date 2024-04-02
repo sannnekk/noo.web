@@ -194,7 +194,7 @@
     v-model:visible="assignedWorkStore.shiftDeadlineModalVisible"
     @confirm="assignedWorkStore.shiftDeadline()"
   >
-    <template #title> Сдвинуть дедлайн на 3 дня </template>
+    <template #title> Сдвинуть дедлайн на 1 день </template>
     <template #text>
       Вы уверены, что хотите сдвинуть дедлайн?
       <br />
@@ -207,7 +207,7 @@
     @confirm="assignedWorkStore.remakeWork()"
   >
     <template #title>
-      Вы уыерены, что хотите заново сделать работу "{{
+      Вы уверены, что хотите заново сделать работу "{{
         assignedWorkStore.assignedWork?.work?.name
       }}"?
     </template>

@@ -36,11 +36,28 @@ export const useAssignWorkToMaterialStore = defineStore(
       courseStore.getMaterialBySlug(materialSlug.value)?.workId
     ])
 
-    watch(materialSlug, () => {
-      selectedWorkId.value = [
-        courseStore.getMaterialBySlug(materialSlug.value)?.workId
-      ]
-    })
+    watch(
+      materialSlug,
+      () => {
+        if (Core.Context.User?.role !== 'teacher') {
+          return
+        }
+
+        const material = courseStore.getMaterialBySlug(materialSlug.value)
+
+        if (!material) {
+          return
+        }
+
+        selectedWorkId.value = [material.workId]
+        checkDeadline.value = material.workCheckDeadline
+        solveDeadline.value = material.workSolveDeadline
+
+        deadlinesAvailable.value =
+          !!material.workCheckDeadline || !!material.workSolveDeadline
+      },
+      { immediate: true }
+    )
 
     /**
      * Check deadline

@@ -52,12 +52,12 @@
           v-if="assignWorkStore.deadlinesAvailable"
         >
           <form-input
-            type="datetime-local"
+            type="date"
             v-model="assignWorkStore.solveDeadline"
             label="Дедлайн решения"
           />
           <form-input
-            type="datetime-local"
+            type="date"
             v-model="assignWorkStore.checkDeadline"
             label="Дедлайн проверки"
           />

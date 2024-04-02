@@ -1,22 +1,19 @@
 <template>
-  <div
-    class="user-card"
-    :class="{ 'user-card--clickable': !!link }"
-  >
+  <div class="user-card">
     <div class="user-card__avatar">
       <user-avatar
         :src="user.avatar"
         :name="user.name"
+        @click="isModalOpen = true"
       />
     </div>
-    <component
-      :is="link ? 'router-link' : 'div'"
+    <div
       class="user-card__credentials"
-      :to="link || ''"
+      @click="isModalOpen = true"
     >
       <h3 class="user-card__credentials__name">{{ user.name }}</h3>
       <p class="user-card__credentials__username">{{ user.username }}</p>
-    </component>
+    </div>
     <div
       class="user-card__telegram"
       v-if="user.telegramUsername"
@@ -27,10 +24,15 @@
       />
     </div>
   </div>
+  <user-info-modal
+    v-model:visible="isModalOpen"
+    :user="user"
+  />
 </template>
 
 <script setup lang="ts">
 import type { User } from '@/core/data/entities/User'
+import { ref } from 'vue'
 
 interface Props {
   user: User
@@ -38,7 +40,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const link = props.user.username ? `/users/edit/${props.user.username}` : null
+const isModalOpen = ref(false)
 </script>
 
 <style scoped lang="sass">
@@ -52,13 +54,11 @@ const link = props.user.username ? `/users/edit/${props.user.username}` : null
   border-radius: var(--border-radius)
   padding: 1em
   transition: 0.2s ease all
+  cursor: pointer
 
-  &--clickable
-    &__credentials
-      cursor: pointer
-
-      &:hover
-        color: var(--secondary)
+  &:hover
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)
+    background-color: var(--border-color)
 
   &__avatar
     font-size: 50px

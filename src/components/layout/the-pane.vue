@@ -42,7 +42,8 @@
         <p>
           Нашел ошибку в работе платформы?
           <br />
-          Сообщи через Telegram-бота @noo.support
+          Сообщи через Telegram-бота
+          <a href="https://t.me/noo_support_bot">@noo_support_bot</a>
         </p>
       </div>
     </div>
@@ -170,4 +171,12 @@ watch(
     text-align: center
     font-size: 14px
     color: var(--text-light)
+
+    a
+      color: var(--lila)
+      font-weight: bold
+      text-decoration: none
+
+      &:hover
+        text-decoration: underline
 </style>

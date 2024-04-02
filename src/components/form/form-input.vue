@@ -31,16 +31,16 @@ const emits = defineEmits<Emits>()
 
 const model = computed({
   get: () => {
-    if (props.type === 'datetime-local') {
+    if (props.type === 'date' || props.type === 'datetime-local') {
       const date = new Date(props.modelValue)
       return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
         .toISOString()
-        .slice(0, 16)
+        .slice(0, 10)
     }
     return props.modelValue
   },
   set: (value) => {
-    if (props.type === 'datetime-local') {
+    if (props.type === 'date' || props.type === 'datetime-local') {
       emits('update:modelValue', new Date(value))
     } else {
       emits('update:modelValue', value)

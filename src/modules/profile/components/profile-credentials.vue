@@ -7,32 +7,32 @@
       />
     </div>
     <div class="profile-credentials__name">
-      <inline-input
+      <form-input
+        label="Имя"
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.name"
         class="input"
       />
     </div>
     <div class="profile-credentials__username">
-      <span class="label">Никнейм:</span>
-      <inline-input
-        @update:modelValue="onSomeInputChange()"
+      <form-input
+        label="Никнейм"
+        readonly
         v-model="credentialsModel.username"
         class="input"
       />
     </div>
     <div class="profile-credentials__email">
-      <span class="label">Email:</span>
-      <inline-input
+      <form-input
+        label="Email"
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.email"
         class="input"
       />
     </div>
     <div class="profile-credentials__telegram">
-      <span class="label">Telegram:</span>
-      <span class="sub-label">В виде ника без @</span>
-      <inline-input
+      <form-input
+        label="Telegram (В виде ника без @)"
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.telegramUsername"
         class="input"
@@ -100,6 +100,10 @@ function onSomeInputChange() {
   .input
     width: 100%
 
+    &:deep()
+      input
+        text-align: center
+
   &__avatar
     display: inline-block
     font-size: 180px
@@ -107,10 +111,12 @@ function onSomeInputChange() {
   &__name
     margin-top: 1em
 
-    input
-      font-weight: 500
-      font-size: 1.2em
-      text-align: center
+    &:deep()
+
+      input
+        font-weight: 500
+        font-size: 1.2em
+        text-align: center
 
   &__username
     margin-top: 0.5em
@@ -126,11 +132,14 @@ function onSomeInputChange() {
     margin-bottom: 1em
 
   &__email
+    margin-top: 0.5em
+
     input
       text-align: center
 
   &__telegram
+    margin-top: 0.5em
+
     input
       text-align: center
 </style>
-@/core/data/entities/User
