@@ -115,8 +115,12 @@ export const useAssignedWorkStore = defineStore(
     watch(
       [taskSlug, assignedWorkId],
       () => {
-        if (!assignedWork.value) return
-        if (!taskSlug.value) return
+        if (!assignedWork.value || !taskSlug.value) {
+          task.value = null
+          taskId.value = null
+
+          return
+        }
 
         const _task = getTaskBySlug(taskSlug.value)
 
