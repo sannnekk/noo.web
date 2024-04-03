@@ -22,7 +22,7 @@
     padding: 1rem
     margin: 1rem
     border-radius: var(--border-radius)
-    border: 1px solid var(--border-color)
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
 
     @media screen and (max-width: 768px)
       width: calc(100% - 2rem)
