@@ -7,8 +7,8 @@
 
 <script setup lang="ts">
 import type { Plot } from '@/core/data/Statistics'
+// @ts-ignore
 import Vue3ChartJs from '@j-t-mcc/vue3-chartjs'
-import type { ChartOptions } from 'chart.js'
 import { computed } from 'vue'
 
 interface Props {

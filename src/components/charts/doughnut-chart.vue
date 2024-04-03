@@ -3,6 +3,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore
 import Vue3ChartJs from '@j-t-mcc/vue3-chartjs'
 import { computed } from 'vue'
 

@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { Plot } from '@/core/data/Statistics'
+import { type Plot } from '@/core/data/Statistics'
 
 interface Props {
   plot: Plot
