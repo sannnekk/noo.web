@@ -335,6 +335,14 @@ export const useAssignedWorkStore = defineStore(
         return null
       }
 
+      if (
+        (assignedWork.value?.checkStatus === 'not-checked' ||
+          assignedWork.value?.checkStatus === 'in-progress') &&
+        Core.Context.User?.role !== 'mentor'
+      ) {
+        return null
+      }
+
       if (comment.score === 0) {
         return 'error'
       }
