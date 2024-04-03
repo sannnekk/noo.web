@@ -30,7 +30,7 @@
           class="index-profile-view__mentor"
           v-if="Core.Context.User?.role === 'student'"
         >
-          <h3>Ваш куратор:</h3>
+          <h3>Мой куратор:</h3>
           <user-card
             v-if="profileStore.mentor"
             :user="profileStore.mentor"
@@ -42,36 +42,15 @@
             У вас пока нет куратора
           </p>
         </div>
-        <div class="index-profile-view__charts">
-          <div
-            class="index-profile-view__charts__card index-profile-view__charts__card--wide"
-          >
-            <h3 class="index-profile-view__charts__title">Средний балл</h3>
-            <div class="index-profile-view__charts__chart">
-              <line-chart
-                :data="profileStore.charts.workScoreGraph.data"
-                :labels="profileStore.charts.workScoreGraph.labels"
-              />
-            </div>
-          </div>
-          <div class="index-profile-view__charts__card">
-            <div class="index-profile-view__charts__huge-number">
-              <h1>{{ profileStore.charts.worksMadeCount }}</h1>
-              <p>работ сдано</p>
-            </div>
-          </div>
-          <div class="index-profile-view__charts__card">
-            <div class="index-profile-view__charts__huge-number">
-              <h1>{{ profileStore.charts.madeBeforeDeadlineRate }}%</h1>
-              <p>работ сдано в дедлайн</p>
-            </div>
-          </div>
-          <div class="index-profile-view__charts__card">
-            <div class="index-profile-view__charts__huge-number">
-              <h1>{{ profileStore.charts.firstWorkScore }}</h1>
-              <p>балл первой работы</p>
-            </div>
-          </div>
+        <div
+          class="index-profile-view__charts"
+          v-if="Core.Context.User && Core.Context.User.role !== 'admin'"
+        >
+          <h3 class="index-profile-view__charts__header">Моя статистика</h3>
+          <statistics-view
+            v-once
+            :username="Core.Context.User?.username"
+          />
         </div>
       </template>
     </the-sidebar-layout>
@@ -98,6 +77,8 @@ setPageTitle('Мой профиль')
 
   &__mentor
     margin-bottom: 1em
+    padding: 1rem
+    padding-top: 0
 
     &__no-mentor
       color: var(--text-light)
@@ -138,4 +119,10 @@ setPageTitle('Мой профиль')
     &__title
       text-align: center
       margin-bottom: 0
+
+  &__charts
+    &__header
+      margin: 1rem
+      margin-bottom: 0
+      text-align: center
 </style>

@@ -5,21 +5,21 @@
   >
     <div class="statistics-view__header">
       <div class="row">
-        <div class="col-4">
+        <div class="col-md-4 col-12">
           <form-input
             type="date"
             v-model="statisticsBoundaries.from"
             label="Начало статистики"
           />
         </div>
-        <div class="col-4">
+        <div class="col-md-4 col-12">
           <form-input
             type="date"
             v-model="statisticsBoundaries.to"
             label="Конец статистики"
           />
         </div>
-        <div class="col-4">
+        <div class="col-md-4 col-12">
           <select-input
             label="Тип работы"
             :options="[
@@ -51,7 +51,7 @@
       <div class="statistics-view__content__entries">
         <div class="row">
           <div
-            class="col-6 col-md-3 col-lg-2"
+            class="col-12 col-md-4 col-lg-3"
             v-for="entry in statistics.entries"
             :key="entry.name"
           >
