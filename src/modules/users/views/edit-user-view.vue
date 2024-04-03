@@ -1,5 +1,8 @@
 <template>
-  <tabs-view :titles="['Данные', 'Календарь', 'Статистика']">
+  <tabs-view
+    :titles="['Данные', 'Календарь', 'Статистика']"
+    @tab-change="currentTab = $event"
+  >
     <template #tab-0>
       <div class="edit-user-view">
         <the-sidebar-layout v-if="userStore.user">
@@ -89,12 +92,15 @@
     </template>
     <template #tab-1>
       <calender-view
-        v-if="userStore.user"
+        v-if="userStore.user && currentTab === 1"
         :username="userStore.user.username"
       />
     </template>
     <template #tab-2>
-      <p class="statistics">&nbsp;&nbsp;&nbsp;Пока нет статистики</p>
+      <statistics-view
+        v-if="userStore.user && currentTab === 2"
+        :username="userStore.user.username"
+      />
     </template>
   </tabs-view>
 </template>
@@ -102,7 +108,7 @@
 <script setup lang="ts">
 import userForm from '../components/user-form.vue'
 import { useUserStore } from '../stores/user'
-import { watch } from 'vue'
+import { ref, watch } from 'vue'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { Core } from '@/core/Core'
 
@@ -123,6 +129,8 @@ watch(
   },
   { immediate: true, deep: true }
 )
+
+const currentTab = ref(0)
 </script>
 
 <style scoped lang="sass">

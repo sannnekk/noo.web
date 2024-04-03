@@ -1,34 +1,51 @@
 <template>
-  <vue3-chart-js v-bind="lineChart" />
+  <vue3-chart-js
+    v-if="plot"
+    v-bind="lineChart"
+  />
 </template>
 
 <script setup lang="ts">
+import type { Plot } from '@/core/data/Statistics'
 import Vue3ChartJs from '@j-t-mcc/vue3-chartjs'
+import type { ChartOptions } from 'chart.js'
 import { computed } from 'vue'
 
 interface Props {
-  data: {
-    label: string
-    color: string
-    values: number[]
-  }[]
-  labels: string[]
+  plot: Plot
 }
 
 const props = defineProps<Props>()
 
 const lineChart = computed(() => ({
   type: 'line',
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      }
+    }
+  },
   data: {
-    labels: props.labels,
-    datasets: props.data.map((d) => ({
-      label: d.label,
-      backgroundColor: d.color,
-      borderColor: d.color,
-      data: d.values
-    }))
+    labels: props.plot.data.map((p) => p.key),
+    datasets: [
+      {
+        label: false,
+        backgroundColor: 'black',
+        borderColor: resolveColorVar(props.plot.color),
+        data: props.plot.data.map((d) => d.value),
+        fill: false,
+        cubicInterpolationMode: 'monotone',
+        tension: 0.4
+      }
+    ]
   }
 }))
-</script>
 
-<style scoped></style>
+// function to get the value of a CSS color variable
+function resolveColorVar(color: string): string {
+  return getComputedStyle(document.body).getPropertyValue(`--${color}`)
+}
+</script>
