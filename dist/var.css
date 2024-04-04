@@ -1,0 +1,29 @@
+body {
+  /* Main colors */
+  --primary: #defba1;
+  --secondary: #cdc9ff;
+  --light: #f0effc;
+  --lightest: #fff;
+  --dark: #181818;
+  --lila: #d795f1;
+
+  --danger: #ff4d4d;
+  --warning: #ffad33;
+  --success: #279c27;
+  --info: var(--secondary);
+
+  --telegram: #229ed9;
+
+  /* Background */
+  --light-background-color: var(--light);
+
+  /* Text */
+  --dark-text-color: var(--dark);
+  --text-light: #939393;
+
+  /* other */
+  --border-radius: 8px;
+  --border-radius-button: 18px;
+  --border-color: #cdcdcd;
+  --font-family: 'Montserrat', sans-serif;
+}
