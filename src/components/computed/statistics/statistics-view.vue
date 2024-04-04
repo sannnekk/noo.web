@@ -144,11 +144,9 @@ async function fetchUserStatistics() {
 <style scoped lang="sass">
 .statistics-view
   &__header
-    padding: 1em
-    padding-top: 0.3em
+    margin-bottom: 1em
 
   &__content
-    padding: 1em
 
     &__plots
       margin: 1em 0
@@ -168,5 +166,6 @@ async function fetchUserStatistics() {
     justify-content: center
     align-items: center
     height: 100px
-    padding: 1em
+    max-width: 90%
+    text-align: center
 </style>

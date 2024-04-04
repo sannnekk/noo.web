@@ -78,8 +78,6 @@ setPageTitle('Мой профиль')
 
   &__mentor
     margin-bottom: 1em
-    padding: 1rem
-    padding-top: 0
 
     &__no-mentor
       color: var(--text-light)

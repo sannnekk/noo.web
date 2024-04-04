@@ -48,7 +48,7 @@ const props = defineProps<Props>()
     margin-top: 1em
     width: 100%
     height: 350px
-    padding: 1em
+    padding: 0.2em
     padding-top: 0
 
   &__no-data
