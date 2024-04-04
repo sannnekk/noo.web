@@ -12,6 +12,7 @@
               @save="profileStore.updateCredentials()"
             />
           </div>
+          <br />
           <div class="index-profile-view__password-change">
             <profile-password-form
               v-model="profileStore.passwords"
@@ -30,7 +31,7 @@
           class="index-profile-view__mentor"
           v-if="Core.Context.User?.role === 'student'"
         >
-          <h3>Мой куратор:</h3>
+          <h3>Мой куратор</h3>
           <user-card
             v-if="profileStore.mentor"
             :user="profileStore.mentor"

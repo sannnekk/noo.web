@@ -5,24 +5,24 @@
     </div>
     <div class="profile-password-form__form">
       <div class="profile-password-form__form__field">
-        <text-input
+        <form-input
           type="password"
-          placeholder="Старый пароль"
+          label="Старый пароль"
           v-model="model.oldPassword"
         />
       </div>
       <div class="profile-password-form__form__field">
-        <text-input
+        <form-input
           type="password"
-          placeholder="Новый пароль"
+          label="Новый пароль"
           v-model="model.newPassword"
         />
         <password-criteria :password="model.newPassword" />
       </div>
       <div class="profile-password-form__form__field">
-        <text-input
+        <form-input
           type="password"
-          placeholder="Повторите новый пароль"
+          label="Повторите новый пароль"
           v-model="model.repeatPassword"
         />
       </div>
