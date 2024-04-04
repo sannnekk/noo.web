@@ -14,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore
 import Datepicker from 'vuejs3-datepicker'
 
 /**

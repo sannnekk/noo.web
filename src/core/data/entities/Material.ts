@@ -17,6 +17,6 @@ export interface Material extends Entity {
   files: Media[]
   createdAt: Date
   updatedAt: Date
-  workSolveDeadline: Date
-  workCheckDeadline: Date
+  workSolveDeadline?: Date
+  workCheckDeadline?: Date
 }

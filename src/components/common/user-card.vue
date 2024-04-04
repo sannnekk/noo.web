@@ -14,7 +14,7 @@
       <h3 class="user-card__credentials__name">{{ user.name }}</h3>
       <p class="user-card__credentials__username">{{ user.username }}</p>
     </div>
-    <div
+    <!-- <div
       class="user-card__telegram"
       v-if="user.telegramUsername"
     >
@@ -22,7 +22,7 @@
         v-if="user.telegramUsername"
         :username="user.telegramUsername"
       />
-    </div>
+    </div> -->
   </div>
   <user-info-modal
     v-model:visible="isModalOpen"
