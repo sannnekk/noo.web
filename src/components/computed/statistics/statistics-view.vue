@@ -1,6 +1,7 @@
 <template>
   <div
     class="statistics-view"
+    v-if="Core.Context.User?.role !== 'admin'"
     v-auto-animate
   >
     <div class="statistics-view__header">
@@ -24,7 +25,7 @@
             label="Тип работы"
             :options="[
               { label: 'Все', value: undefined },
-              { label: 'Мини-тест', value: 'mini-test' },
+              { label: 'Мини-зачет', value: 'mini-test' },
               { label: 'Тест', value: 'test' },
               { label: 'Вторая часть', value: 'second-part' },
               { label: 'Фраза', value: 'phrase' },
@@ -77,6 +78,9 @@
         Произошла ошибка при получении статистики пользователя
       </error-block>
     </div>
+  </div>
+  <div class="statistics-view__admin">
+    <p>Нет статистики для администраторов</p>
   </div>
 </template>
 

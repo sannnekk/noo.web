@@ -91,16 +91,20 @@
       </div>
     </template>
     <template #tab-1>
-      <calender-view
-        v-if="userStore.user && currentTab === 1"
-        :username="userStore.user.username"
-      />
+      <div class="edit-user-view__calender">
+        <calender-view
+          v-if="userStore.user && currentTab === 1"
+          :username="userStore.user.username"
+        />
+      </div>
     </template>
     <template #tab-2>
-      <statistics-view
-        v-if="userStore.user && currentTab === 2"
-        :username="userStore.user.username"
-      />
+      <div class="edit-user-view__statistics">
+        <statistics-view
+          v-if="userStore.user && currentTab === 2"
+          :username="userStore.user.username"
+        />
+      </div>
     </template>
   </tabs-view>
 </template>
@@ -141,9 +145,7 @@ const currentTab = ref(0)
 
 .edit-user-view
   &__statistics
-    text-align: center
-    color: var(--text-light)
-    padding: 3em 0
+    padding: 0.5em
 
   &__credentials
     text-align: center

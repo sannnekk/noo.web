@@ -2,7 +2,7 @@
   <div class="student-form">
     <h3>Куратор:</h3>
     <div class="row">
-      <div class="col-8">
+      <div class="col-md-8 col-12">
         <user-card
           v-if="mentor"
           :user="mentor"
@@ -10,10 +10,11 @@
         />
         <p v-else>Пока нет куратора...</p>
       </div>
-      <div class="col-4">
+      <div class="col-md-4 col-12">
         <div class="student-form__actions">
           <common-button
             design="danger"
+            alignment="stretch"
             @click="changeMentorModalVisible = true"
           >
             {{ mentor ? 'Поменять куратора' : 'Присвоить куратора' }}
@@ -93,6 +94,7 @@ function onMentorSelectConfirm() {
 
   &__actions
     margin-top: 1.3em
+    font-size: 0.8em
 
 .change-mentor-modal
   &__list
