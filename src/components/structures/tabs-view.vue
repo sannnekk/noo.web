@@ -64,6 +64,9 @@ function onTabChange(index: number) {
       cursor: pointer
       color: var(--text-light)
 
+      @media (max-width: 768px)
+        text-align: center
+
       &:hover
         color: var(--dark)
 
