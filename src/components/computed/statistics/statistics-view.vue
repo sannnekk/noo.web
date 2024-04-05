@@ -79,7 +79,10 @@
       </error-block>
     </div>
   </div>
-  <div class="statistics-view__admin">
+  <div
+    class="statistics-view__admin"
+    v-else
+  >
     <p>Нет статистики для администраторов</p>
   </div>
 </template>
@@ -103,8 +106,8 @@ const uiService = Core.Services.UI
 const isLoading = ref(true)
 const statistics = ref<Statistics>()
 const statisticsBoundaries = reactive({
-  from: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-  to: new Date(),
+  from: getDateRange().from,
+  to: getDateRange().to,
   type: undefined as Work['type'] | undefined
 })
 
@@ -141,6 +144,26 @@ async function fetchUserStatistics() {
     )
   } finally {
     isLoading.value = false
+  }
+}
+
+function getDateRange() {
+  const today = new Date()
+
+  let toDate = new Date()
+  toDate.setDate(17)
+
+  let fromDate = new Date(new Date().setMonth(new Date().getMonth() - 1))
+  fromDate.setDate(17)
+
+  if (today.getDate() < 17) {
+    toDate.setMonth(toDate.getMonth() - 1)
+    fromDate.setMonth(fromDate.getMonth() - 1)
+  }
+
+  return {
+    from: fromDate,
+    to: toDate
   }
 }
 </script>

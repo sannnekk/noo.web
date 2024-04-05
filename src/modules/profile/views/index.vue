@@ -121,7 +121,6 @@ setPageTitle('Мой профиль')
 
   &__charts
     &__header
-      margin: 1rem
       margin-bottom: 0
       text-align: center
 </style>

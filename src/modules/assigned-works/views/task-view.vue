@@ -47,7 +47,8 @@
         ) && assignedWorkStore.task?.type === 'word'
       "
     >
-      Правильный ответ: <b>{{ assignedWorkStore.task?.rightAnswer }}</b>
+      Правильные ответы:
+      <b>{{ assignedWorkStore.task?.rightAnswer.split('|').join(', ') }}</b>
       <br />
       <br />
     </div>
