@@ -22,6 +22,7 @@ export interface AssignedWork {
     | 'in-progress'
     | 'checked-in-deadline'
     | 'checked-after-deadline'
+    | 'checked-automatically'
   solveDeadlineAt?: Date
   checkDeadlineAt?: Date
   solvedAt?: Date

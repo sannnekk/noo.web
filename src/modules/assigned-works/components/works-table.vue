@@ -95,6 +95,11 @@ function tagFunction(
       type: 'warning',
       text: 'Проверено не в дедлайн'
     }
+  } else if (value === 'checked-automatically') {
+    return {
+      type: 'info',
+      text: 'Проверено автоматически'
+    }
   } else if (value === 'not-made') {
     return {
       type: 'warning',

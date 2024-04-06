@@ -138,7 +138,11 @@ export const useAssignedWorksStore = defineStore(
       useFetchAssignedWorks({
         'filter[checkStatus]': {
           type: 'arr',
-          value: ['checked-in-deadline', 'checked-after-deadline']
+          value: [
+            'checked-in-deadline',
+            'checked-after-deadline',
+            'checked-automatically'
+          ]
         },
         'filter[isArchived]': {
           type: 'boolean',
