@@ -74,6 +74,17 @@
               }}
             </b>
             из <b>{{ assignedWorkStore.assignedWork!.maxScore }}</b>
+            {{
+              assignedWorkStore.assignedWork.score
+                ? '(' +
+                  (
+                    (assignedWorkStore.assignedWork.score /
+                      assignedWorkStore.assignedWork.maxScore) *
+                    100
+                  ).toFixed(2) +
+                  '%)'
+                : ''
+            }}
           </p>
           <div class="work-view__sidebar__submit">
             <common-button
