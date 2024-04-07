@@ -103,10 +103,13 @@
               @click="assignedWorkStore.remakeModalVisible = true"
               v-if="
                 assignedWorkStore.mode === 'read' &&
+                Core.Context.User?.role === 'student' &&
                 (assignedWorkStore.assignedWork?.checkStatus ==
                   'checked-in-deadline' ||
                   assignedWorkStore.assignedWork?.checkStatus ==
-                    'checked-after-deadline')
+                    'checked-after-deadline' ||
+                  assignedWorkStore.assignedWork?.checkStatus ==
+                    'checked-automatically')
               "
             >
               Переделать работу
