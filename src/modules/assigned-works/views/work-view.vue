@@ -103,6 +103,7 @@
               @click="assignedWorkStore.remakeModal.visible = true"
               v-if="
                 assignedWorkStore.mode === 'read' &&
+                assignedWorkStore.assignedWork?.work?.type === 'test' &&
                 Core.Context.User?.role === 'student' &&
                 (assignedWorkStore.assignedWork?.checkStatus ==
                   'checked-in-deadline' ||

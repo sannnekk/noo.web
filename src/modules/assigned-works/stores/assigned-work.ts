@@ -457,6 +457,14 @@ export const useAssignedWorkStore = defineStore(
     async function remakeWork() {
       if (!assignedWork.value) return
 
+      if (assignedWork.value.work?.type !== 'test') {
+        uiService.openErrorModal(
+          'Ошибка при создании нового экземпляра работы',
+          'Можно пересдавать только тестовую работу'
+        )
+        return
+      }
+
       uiService.setLoading(true)
 
       try {
