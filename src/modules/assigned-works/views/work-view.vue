@@ -100,7 +100,7 @@
             </common-button>
             <common-button
               alignment="stretch"
-              @click="assignedWorkStore.remakeModalVisible = true"
+              @click="assignedWorkStore.remakeModal.visible = true"
               v-if="
                 assignedWorkStore.mode === 'read' &&
                 Core.Context.User?.role === 'student' &&
@@ -217,7 +217,7 @@
     </template>
   </sure-modal>
   <sure-modal
-    v-model:visible="assignedWorkStore.remakeModalVisible"
+    v-model:visible="assignedWorkStore.remakeModal.visible"
     @confirm="assignedWorkStore.remakeWork()"
   >
     <template #title>
@@ -226,8 +226,14 @@
       }}"?
     </template>
     <template #text>
-      Уже решенная работа НЕ будет удалена, будет создана новая работа с теми же
-      заданиями.
+      <p>
+        Уже решенная работа НЕ будет удалена, будет создана новая работа с теми
+        же заданиями
+      </p>
+      <form-checkbox
+        v-model="assignedWorkStore.remakeModal.onlyFalse"
+        label="Перерешать только неправильные"
+      />
     </template>
   </sure-modal>
 </template>

@@ -1,6 +1,6 @@
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import { defineStore } from 'pinia'
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import type { Task } from '@/core/data/entities/Task'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
@@ -37,7 +37,10 @@ export const useAssignedWorkStore = defineStore(
     /**
      * Modal for remake work
      */
-    const remakeModalVisible = ref(false)
+    const remakeModal = reactive({
+      visible: false,
+      onlyFalse: false
+    })
 
     /**
      * Modal for shift deadline
@@ -457,10 +460,11 @@ export const useAssignedWorkStore = defineStore(
       uiService.setLoading(true)
 
       try {
-        await assignedWorkService.createAssignedWork({
-          workId: assignedWork.value.workId,
-          studentId: assignedWork.value.studentId
-        } as AssignedWork)
+        await assignedWorkService.remakeAssignedWork(
+          assignedWork.value.id,
+          remakeModal.onlyFalse
+        )
+
         uiService.openSuccessModal(
           'Работа успешно создана и появилась в списке!',
           'Если работы нет в списке, попробуйте обновить страницу'
@@ -499,7 +503,7 @@ export const useAssignedWorkStore = defineStore(
       workScore,
       saveProgress,
       remakeWork,
-      remakeModalVisible
+      remakeModal
     }
   }
 )

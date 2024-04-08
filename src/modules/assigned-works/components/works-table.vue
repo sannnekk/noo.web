@@ -43,7 +43,7 @@ const cols = [
     keys: ['work.name', 'student.name', 'mentors.each.name'],
     join: '<br>',
     type: 'text',
-    style: ['bold', 'secondary', 'secondary']
+    style: ['redo', 'secondary', 'secondary']
   },
   {
     title: 'Дедлайн сдачи/проверки',

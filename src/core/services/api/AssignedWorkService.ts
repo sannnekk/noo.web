@@ -37,6 +37,13 @@ export class AssignedWorkService extends ApiService {
     await this.httpPost(`${this._route}`, data)
   }
 
+  public async remakeAssignedWork(
+    id: AssignedWork['id'],
+    onlyFalse: boolean = false
+  ) {
+    await this.httpPost(`${this._route}/${id}/remake`, { onlyFalse })
+  }
+
   /**
    * Get or create assigned work
    */
