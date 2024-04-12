@@ -1,6 +1,6 @@
 import type { Context } from '@/core/context/Context'
 import { StoreService } from '../StoreService'
-import { installUIStore } from './UIStore'
+import { installUIStore, type ModalAction } from './UIStore'
 import type { StoreDefinition } from 'pinia'
 
 /**
@@ -60,11 +60,16 @@ export class UIService extends StoreService {
   /**
    * Open error modal
    */
-  public openErrorModal(title: string, message?: string) {
+  public openErrorModal(
+    title: string,
+    message?: string,
+    actions: ModalAction[] = []
+  ) {
     this._store.globalModal.type = 'error'
     this._store.globalModal.title = title
     this._store.globalModal.message = message
     this._store.globalModal.isOpen = true
+    this._store.globalModal.actions = actions
   }
 
   public openRetryLoginModal() {
@@ -74,31 +79,46 @@ export class UIService extends StoreService {
   /**
    * Open warning modal
    */
-  public openWarningModal(title: string, message?: string) {
+  public openWarningModal(
+    title: string,
+    message?: string,
+    actions: ModalAction[] = []
+  ) {
     this._store.globalModal.type = 'warning'
     this._store.globalModal.title = title
     this._store.globalModal.message = message
     this._store.globalModal.isOpen = true
+    this._store.globalModal.actions = actions
   }
 
   /**
    * Open info modal
    */
-  public openInfoModal(title: string, message?: string) {
+  public openInfoModal(
+    title: string,
+    message?: string,
+    actions: ModalAction[] = []
+  ) {
     this._store.globalModal.type = 'info'
     this._store.globalModal.title = title
     this._store.globalModal.message = message
     this._store.globalModal.isOpen = true
+    this._store.globalModal.actions = actions
   }
 
   /**
    * Open success modal
    */
-  public openSuccessModal(title: string, message?: string) {
+  public openSuccessModal(
+    title: string,
+    message?: string,
+    actions: ModalAction[] = []
+  ) {
     this._store.globalModal.type = 'success'
     this._store.globalModal.title = title
     this._store.globalModal.message = message
     this._store.globalModal.isOpen = true
+    this._store.globalModal.actions = actions
   }
 
   /**
@@ -108,5 +128,6 @@ export class UIService extends StoreService {
     this._store.globalModal.title = ''
     this._store.globalModal.message = undefined
     this._store.globalModal.isOpen = false
+    this._store.globalModal.actions = []
   }
 }

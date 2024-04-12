@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import type { Course } from '@/core/data/entities/Course'
 import { v4 as uuid } from 'uuid'
 import type { Material } from '@/core/data/entities/Material'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { Core } from '@/core/Core'
 import type { Chapter } from '@/core/data/entities/Chapter'
 
@@ -13,6 +13,7 @@ export const useCreateCourseStore = defineStore(
     const courseService = Core.Services.Course
     const uiService = Core.Services.UI
     const _route = useRoute()
+    const _router = useRouter()
 
     /**
      * Empty course
@@ -235,17 +236,26 @@ export const useCreateCourseStore = defineStore(
 
       course.value.chapters?.forEach((chapter, index) => {
         if (chapter.materials) {
-          course.value.chapters![index].order = index
-          course.value.chapters![index].materials = chapter.materials?.map(
-            (material, i) => ({ ...material, order: i })
-          )
+          chapter.order = index
+          chapter.materials = chapter.materials?.map((material, i) => ({
+            ...material,
+            order: i
+          }))
         }
       })
 
       if (!_route.params.courseSlug) {
         try {
           await courseService.createCourse(course.value)
-          uiService.openSuccessModal('Курс успешно создан')
+          uiService.openSuccessModal('Курс успешно создан', '', [
+            {
+              label: 'Вернуться к списку курсов',
+              design: 'primary',
+              handler: () => {
+                _router.push('/courses')
+              }
+            }
+          ])
         } catch (error: any) {
           uiService.openErrorModal(
             'Произошла ошибка при создании курса',
@@ -257,7 +267,15 @@ export const useCreateCourseStore = defineStore(
       } else {
         try {
           await courseService.updateCourse(course.value.id, course.value)
-          uiService.openSuccessModal('Курс успешно обновлен')
+          uiService.openSuccessModal('Курс успешно обновлен', '', [
+            {
+              label: 'Вернуться к списку курсов',
+              design: 'primary',
+              handler: () => {
+                _router.push('/courses')
+              }
+            }
+          ])
         } catch (error: any) {
           uiService.openErrorModal(
             'Произошла ошибка при обновлении курса',
@@ -282,11 +300,19 @@ export const useCreateCourseStore = defineStore(
 
       try {
         await courseService.deleteCourse(course.value.id)
-        uiService.openSuccessModal('Курс успешно удален')
+        uiService.openSuccessModal('Курс успешно удален', '', [
+          {
+            label: 'Вернуться к списку курсов',
+            design: 'primary',
+            handler: () => {
+              _router.push('/courses')
+            }
+          }
+        ])
       } catch (error: any) {
         uiService.openErrorModal(
           'Произошла ошибка при удалении курса',
-          error.message
+          'Для удаления курса необходимо сначала убрать всех учеников'
         )
       } finally {
         uiService.setLoading(false)

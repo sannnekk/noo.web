@@ -23,6 +23,15 @@
           <slot />
           <div class="base-modal__buttons">
             <common-button
+              v-for="(action, index) in actions"
+              :key="index"
+              alignment="stretch"
+              :design="action.design"
+              @click="onActionClick(action.handler)"
+            >
+              {{ action.label }}
+            </common-button>
+            <common-button
               alignment="stretch"
               @click="onClose"
               design="secondary"
@@ -43,6 +52,11 @@ interface Props {
   message?: string
   type: 'success' | 'error' | 'warning'
   visible?: boolean
+  actions?: Array<{
+    label: string
+    design: 'primary' | 'secondary' | 'danger' | 'warning'
+    handler: () => void | Promise<void>
+  }>
 }
 
 interface Emits {
@@ -54,6 +68,16 @@ const emits = defineEmits<Emits>()
 
 function onClose() {
   emits('update:visible', false)
+}
+
+function onActionClick(handler: () => void | Promise<void>) {
+  const result = handler()
+
+  if (result instanceof Promise) {
+    result.then(onClose)
+  } else {
+    onClose()
+  }
 }
 </script>
 
@@ -121,8 +145,9 @@ function onClose() {
 
   &__buttons
     display: flex
-    flex-direction: row
+    flex-direction: column
     justify-content: space-between
+    gap: 0.5em
 
     &__cancel
       margin-right: 0.5em

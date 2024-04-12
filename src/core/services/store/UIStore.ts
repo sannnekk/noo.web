@@ -1,6 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
+export type ModalAction = {
+  label: string
+  design: 'primary' | 'secondary' | 'danger' | 'warning'
+  handler: () => void | Promise<void>
+}
+
 /**
  * Installs UI store
  */
@@ -65,20 +71,25 @@ export function installUIStore() {
     ])
 
     /**
-     * Global modal visibility state
+     * Global modal state
      */
     const globalModal = ref<{
       type: 'error' | 'warning' | 'info' | 'success'
       isOpen: boolean
       title: string
       message?: string
+      actions: ModalAction[]
     }>({
       type: 'info',
       isOpen: false,
       title: '',
-      message: undefined
+      message: undefined,
+      actions: []
     })
 
+    /**
+     * Retry login modal state
+     */
     const retryLoginModal = ref<{
       isOpen: boolean
       usernameOrEmail: string

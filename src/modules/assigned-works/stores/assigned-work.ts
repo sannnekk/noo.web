@@ -1,7 +1,7 @@
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import { defineStore } from 'pinia'
 import { ref, computed, watch, reactive } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import type { Task } from '@/core/data/entities/Task'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
 import { Core } from '@/core/Core'
@@ -22,6 +22,7 @@ export const useAssignedWorkStore = defineStore(
     const assignedWorkService = Core.Services.AssignedWork
     const uiService = Core.Services.UI
     const _route = useRoute()
+    const _router = useRouter()
 
     /**
      * Mode of the page (read, solve, check)
@@ -388,13 +389,29 @@ export const useAssignedWorkStore = defineStore(
             assignedWork.value.id,
             payload
           )
-          uiService.openSuccessModal('Работа успешно сдана!')
+          uiService.openSuccessModal('Работа успешно сдана!', '', [
+            {
+              label: 'Вернуться к списку работ',
+              design: 'primary',
+              handler: () => {
+                _router.push('/assigned-works')
+              }
+            }
+          ])
         } else if (mode.value === 'check') {
           await assignedWorkService.checkAssignedWork(
             assignedWork.value.id,
             payload
           )
-          uiService.openSuccessModal('Работа успешно проверена!')
+          uiService.openSuccessModal('Работа успешно проверена!', '', [
+            {
+              label: 'Вернуться к списку работ',
+              design: 'primary',
+              handler: () => {
+                _router.push('/assigned-works')
+              }
+            }
+          ])
         }
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при отправке работы', e.message)
@@ -443,7 +460,15 @@ export const useAssignedWorkStore = defineStore(
           assignedWork.value.id,
           payload
         )
-        uiService.openSuccessModal('Прогресс успешно сохранен!')
+        uiService.openSuccessModal('Прогресс успешно сохранен!', '', [
+          {
+            label: 'Вернуться к списку работ',
+            design: 'primary',
+            handler: () => {
+              _router.push('/assigned-works')
+            }
+          }
+        ])
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при сохранении прогресса', e.message)
       } finally {

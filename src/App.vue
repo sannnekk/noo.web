@@ -12,6 +12,7 @@
         :title="Core.Services.UI.Store().globalModal.title"
         :message="Core.Services.UI.Store().globalModal.message"
         :type="Core.Services.UI.Store().globalModal.type"
+        :actions="Core.Services.UI.Store().globalModal.actions"
         v-model:visible="Core.Services.UI.Store().globalModal.isOpen"
       />
       <retry-login-modal
