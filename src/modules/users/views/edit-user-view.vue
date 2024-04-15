@@ -36,6 +36,26 @@
               >
                 <telegram-button :username="userStore.user.telegramUsername" />
               </div>
+              <div
+                class="edit-user-view__credentials__change-password"
+                v-if="
+                  Core.Context.User?.role === 'admin' ||
+                  Core.Context.User?.role === 'teacher'
+                "
+              >
+                <common-button
+                  design="danger"
+                  alignment="center"
+                  @click="showChangePasswordModal = true"
+                >
+                  Сменить пароль
+                </common-button>
+                <change-password-modal
+                  v-model:visible="showChangePasswordModal"
+                  :user="userStore.user"
+                  @confirm="userStore.changePassword($event)"
+                />
+              </div>
             </div>
           </template>
           <template #content>
@@ -110,6 +130,7 @@
 </template>
 
 <script setup lang="ts">
+import changePasswordModal from '../components/change-password-modal.vue'
 import userForm from '../components/user-form.vue'
 import { useUserStore } from '../stores/user'
 import { ref, watch } from 'vue'
@@ -119,6 +140,8 @@ import { Core } from '@/core/Core'
 const userStore = useUserStore()
 
 userStore.fetchUser()
+
+const showChangePasswordModal = ref(false)
 
 watch(
   () => userStore.user,
@@ -166,6 +189,10 @@ const currentTab = ref(0)
     &__role
       margin-top: 1em
       margin-bottom: 1em
+
+    &__change-password
+      margin-top: 1em
+      font-size: 0.8em
 
   &__content
     &__unverified-block

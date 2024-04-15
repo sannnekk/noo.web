@@ -126,12 +126,44 @@ export const useUserStore = defineStore('users-module:user', () => {
     }
   }
 
+  /**
+   * Change user password
+   */
+  async function changePassword(newPassword: string) {
+    if (!user.value) {
+      return
+    }
+
+    if (!['admin', 'teacher'].includes(Core.Context.User!.role)) {
+      uiService.openErrorModal('Недостаточно прав для изменения пароля')
+      return
+    }
+
+    uiService.setLoading(true)
+
+    try {
+      await userService.updateUser(user.value.id, {
+        id: user.value.id,
+        password: newPassword
+      })
+      uiService.openSuccessModal('Пароль успешно изменен')
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при изменении пароля',
+        error.message
+      )
+    } finally {
+      uiService.setLoading(false)
+    }
+  }
+
   return {
     mentorSearch,
     user,
     fetchUser,
     saveUser,
     assignMentor,
-    confirmUser
+    confirmUser,
+    changePassword
   }
 })

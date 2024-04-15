@@ -14,12 +14,30 @@
 
 <script setup lang="ts">
 import { Core } from '@/core/Core'
+import { watch } from 'vue'
 
 interface Props {
   password: string
+  modelValue: boolean
 }
 
-defineProps<Props>()
+interface Emits {
+  (event: 'update:modelValue', value: boolean): void
+}
+
+const props = defineProps<Props>()
+const emits = defineEmits<Emits>()
+
+watch(
+  () => props.password,
+  () => {
+    const isValid = Core.Services.User.passwordCriteria().every((criterium) =>
+      criterium.isValid(props.password)
+    )
+
+    emits('update:modelValue', isValid)
+  }
+)
 </script>
 
 <style scoped lang="sass">
