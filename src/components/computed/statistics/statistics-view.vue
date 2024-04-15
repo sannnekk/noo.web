@@ -52,7 +52,7 @@
       <div class="statistics-view__content__entries">
         <div class="row">
           <div
-            class="col-12 col-md-4 col-lg-3"
+            class="col-6 col-md-4 col-lg-3"
             v-for="entry in statistics.entries"
             :key="entry.name"
           >
