@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import type { Task } from '@/core/data/entities/Task'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
 import { Core } from '@/core/Core'
+import type { ModalAction } from '@/core/services/store/UIStore'
 
 export type ActionType = 'read' | 'solve' | 'check'
 
@@ -122,7 +123,7 @@ export const useAssignedWorkStore = defineStore(
      * Watch for task or assigned work change
      */
     watch(
-      [taskSlug, assignedWorkId],
+      [taskSlug, assignedWorkId, mode],
       () => {
         if (!assignedWork.value || !taskSlug.value) {
           task.value = null
@@ -383,35 +384,58 @@ export const useAssignedWorkStore = defineStore(
 
       const payload = { ...assignedWork.value, work: undefined }
 
+      const onSolvedActions: ModalAction[] = [
+        {
+          label: 'Вернуться к списку работ',
+          design: 'secondary' as const,
+          handler: () => {
+            _router.push('/assigned-works')
+          }
+        }
+      ]
+
+      if (
+        assignedWork.value.work?.tasks.every((task) => task.type !== 'text')
+      ) {
+        onSolvedActions.unshift({
+          label: 'Посмотреть результат',
+          design: 'primary' as const,
+          handler: () => {
+            _router.push(`/assigned-works/${assignedWorkId.value}/read`)
+            window.location.reload()
+          }
+        })
+      }
+
       try {
         if (mode.value === 'solve') {
           await assignedWorkService.solveAssignedWork(
             assignedWork.value.id,
             payload
           )
-          uiService.openSuccessModal('Работа успешно сдана!', '', [
-            {
-              label: 'Вернуться к списку работ',
-              design: 'primary',
-              handler: () => {
-                _router.push('/assigned-works')
-              }
-            }
-          ])
+          uiService.openSuccessModal(
+            'Работа успешно сдана!',
+            '',
+            onSolvedActions
+          )
         } else if (mode.value === 'check') {
           await assignedWorkService.checkAssignedWork(
             assignedWork.value.id,
             payload
           )
-          uiService.openSuccessModal('Работа успешно проверена!', '', [
-            {
-              label: 'Вернуться к списку работ',
-              design: 'primary',
-              handler: () => {
-                _router.push('/assigned-works')
+          uiService.openSuccessModal(
+            'Работа успешно проверена!',
+            'Если работа без открытых вопросов, она будет проверена автоматически и Вы можете просмотреть результат сразу. В случае работ с хотя б одним открытым вопросом требуется проверка куратора',
+            [
+              {
+                label: 'Вернуться к списку работ',
+                design: 'primary',
+                handler: () => {
+                  _router.push('/assigned-works')
+                }
               }
-            }
-          ])
+            ]
+          )
         }
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при отправке работы', e.message)
