@@ -401,8 +401,7 @@ export const useAssignedWorkStore = defineStore(
           label: 'Посмотреть результат',
           design: 'primary' as const,
           handler: () => {
-            _router.push(`/assigned-works/${assignedWorkId.value}/read`)
-            window.location.reload()
+            window.location.href = `/assigned-works/${assignedWorkId.value}/read`
           }
         })
       }
