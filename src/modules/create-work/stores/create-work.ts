@@ -186,7 +186,8 @@ export const useCreateWorkStore = defineStore(
       payload.tasks = payload.tasks.map((task, index) => {
         return {
           ...task,
-          order: index + 1
+          order: index + 1,
+          id: undefined as any
         }
       })
 
