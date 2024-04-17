@@ -508,7 +508,7 @@ export const useAssignedWorkStore = defineStore(
       if (assignedWork.value.work?.type !== 'test') {
         uiService.openErrorModal(
           'Ошибка при создании нового экземпляра работы',
-          'Можно пересдавать только тестовую работу'
+          'Можно пересдавать только тестовую работу. Эта работа содержит открытые вопросы'
         )
         return
       }
@@ -523,7 +523,16 @@ export const useAssignedWorkStore = defineStore(
 
         uiService.openSuccessModal(
           'Работа успешно создана и появилась в списке!',
-          'Если работы нет в списке, попробуйте обновить страницу'
+          'Если работы нет в списке, попробуйте обновить страницу',
+          [
+            {
+              label: 'Вернуться к списку работ',
+              design: 'primary',
+              handler: () => {
+                _router.push('/assigned-works')
+              }
+            }
+          ]
         )
       } catch (e: any) {
         uiService.openErrorModal(

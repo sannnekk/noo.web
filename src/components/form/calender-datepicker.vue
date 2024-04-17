@@ -3,7 +3,6 @@
     <datepicker
       :inline="true"
       :monday-first="true"
-      language="ru"
       :value="modelValue"
       :day-cell-content="getCellContent"
       @changed-month="emits('changed-month', $event)"

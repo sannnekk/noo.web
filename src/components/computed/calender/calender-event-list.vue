@@ -83,7 +83,6 @@ const emits = defineEmits<Emits>()
 const dateFormatter = computed(() => useDate(props.date, { precision: 'day' }))
 
 const eventsOnDate = computed(() => {
-  console.log('eventsOnDate', props.events)
   return props.events.filter((event) => {
     return dateFormatter.value.isOnSameDay(event.date)
   })
