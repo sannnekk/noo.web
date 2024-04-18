@@ -5,7 +5,7 @@
   >
     <div
       class="hotkey-widget__button"
-      @click="hintVisible = !hintVisible"
+      @click="toggleHint()"
       ref="button"
     >
       <inline-icon name="keyboard" />
@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { getRegisteredHotkeys } from '@/core/device/Hotkeys'
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -50,15 +50,10 @@ watch(
   () => {
     setTimeout(() => {
       hotkeys.value = getRegisteredHotkeys()
-      getButtonPosition()
     }, 100)
   },
   { immediate: true }
 )
-
-onMounted(() => {
-  getButtonPosition()
-})
 
 function getButtonPosition() {
   if (button.value) {
@@ -73,6 +68,11 @@ function getKey(key: string) {
   if (key === 'ArrowLeft') return '←'
   if (key === 'ArrowRight') return '→'
   return key
+}
+
+function toggleHint() {
+  getButtonPosition()
+  hintVisible.value = !hintVisible.value
 }
 </script>
 
