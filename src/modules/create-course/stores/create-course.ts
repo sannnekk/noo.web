@@ -154,7 +154,13 @@ export const useCreateCourseStore = defineStore(
     /**
      * Add new material to the chapter
      */
-    function addMaterial(chapter: Chapter) {
+    function addMaterial(chapter?: Chapter) {
+      if (!chapter) {
+        chapter = getChapter(_route.params.chapterSlug as string)
+      }
+
+      if (!chapter) return
+
       chapter.materials!.push(
         emptyMaterial(
           `Новый материал ${chapter.materials?.length || 0}`

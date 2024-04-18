@@ -157,6 +157,9 @@
 <script setup lang="ts">
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useCreateCourseStore } from '../stores/create-course'
+import { registerHotkeys } from '@/core/device/Hotkeys'
+import { HOT_KEYS } from '../utils/hotkeys'
+import { onUnmounted } from 'vue'
 
 const createCourseStore = useCreateCourseStore()
 
@@ -170,6 +173,9 @@ const onChapterNameChange = (slug: string) => {
     createCourseStore.changeChapterName(slug, newName)
   }
 }
+
+const unregister = registerHotkeys(HOT_KEYS)
+onUnmounted(() => unregister())
 </script>
 
 <style lang="sass" scoped>
