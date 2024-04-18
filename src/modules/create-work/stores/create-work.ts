@@ -1,6 +1,6 @@
 import type { Task } from '@/core/data/entities/Task'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { v4 as uuid } from 'uuid'
 import type { Work } from '@/core/data/entities/Work'
@@ -61,6 +61,17 @@ export const useCreateWorkStore = defineStore(
         tasks: Omit<Task, 'id'>[]
       }
     >(emptyWork())
+
+    /**
+     * Base url for this work
+     */
+    const workBaseUrl = computed(() => {
+      if (_route.params.taskSlug) {
+        return _route.path.split('/').slice(0, -1).join('/')
+      }
+
+      return _route.path
+    })
 
     /**
      * Load work if work slug is present in the route
@@ -154,6 +165,52 @@ export const useCreateWorkStore = defineStore(
     }
 
     /**
+     * Navigate to the next task
+     */
+    function toNextTask() {
+      if (!work.value) {
+        return
+      }
+
+      const currentTaskSlug = _route.params.taskSlug
+      const currentTaskIndex = work.value.tasks.findIndex(
+        (task) => task.slug === currentTaskSlug
+      )
+      const nextTaskSlug = work.value.tasks.at(currentTaskIndex + 1)?.slug
+
+      if (!nextTaskSlug) {
+        return
+      }
+
+      const link = `${workBaseUrl}/${nextTaskSlug}`
+
+      _router.push(link)
+    }
+
+    /**
+     * Navigate to the previous task
+     */
+    function toPrevTask() {
+      if (!work.value) {
+        return
+      }
+
+      const currentTaskSlug = _route.params.taskSlug
+      const currentTaskIndex = work.value.tasks.findIndex(
+        (task) => task.slug === currentTaskSlug
+      )
+      const prevTaskSlug = work.value.tasks.at(currentTaskIndex - 1)?.slug
+
+      if (!prevTaskSlug) {
+        return
+      }
+
+      const link = `${workBaseUrl}/${prevTaskSlug}`
+
+      _router.push(link)
+    }
+
+    /**
      * Save work
      */
     async function submitWork() {
@@ -236,7 +293,9 @@ export const useCreateWorkStore = defineStore(
       submitWork,
       fetchWork,
       workTypeOptions,
-      checkingStrategyOptions
+      checkingStrategyOptions,
+      toNextTask,
+      toPrevTask
     }
   }
 )
