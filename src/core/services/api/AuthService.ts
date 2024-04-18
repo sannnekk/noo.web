@@ -102,6 +102,17 @@ export class AuthService extends ApiService {
   }
 
   /**
+   * check username availability
+   */
+  public async checkUsername(username: string): Promise<boolean> {
+    const response = await this.httpGet<boolean>(
+      `${this._route}/check-username/${username}`
+    )
+
+    return response.data!
+  }
+
+  /**
    * Verify
    */
   public async verify(username: string, token: string) {

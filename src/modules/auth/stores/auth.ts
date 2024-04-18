@@ -1,4 +1,5 @@
 import { Core } from '@/core/Core'
+import { debounce } from '@/core/utils/debounce'
 import { defineStore } from 'pinia'
 import { reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -144,6 +145,56 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
   }
 
   /*
+   * check if username is available
+   */
+  const usernameExists = reactive<{
+    exists: boolean | undefined
+    loading: boolean
+  }>({
+    exists: undefined,
+    loading: false
+  })
+
+  const checkUsername = debounce(async () => {
+    if (!registerCredentials.username) {
+      usernameExists.exists = true
+      usernameExists.loading = false
+      return
+    }
+
+    if (registerCredentials.username.length < 3) {
+      usernameExists.exists = true
+      usernameExists.loading = false
+      return
+    }
+
+    if (!registerCredentials.username.match(/^[A-Za-z0-9_-]+$/i)) {
+      usernameExists.exists = true
+      usernameExists.loading = false
+      return
+    }
+
+    try {
+      usernameExists.exists = await Core.Services.Auth.checkUsername(
+        registerCredentials.username
+      )
+    } catch (e: any) {
+      usernameExists.exists = true
+      usernameExists.loading = false
+    } finally {
+      usernameExists.loading = false
+    }
+  }, 500)
+
+  watch(
+    () => registerCredentials.username,
+    async () => {
+      usernameExists.loading = true
+      await checkUsername()
+    }
+  )
+
+  /*
    * check and send forgot password request
    */
   async function forgotPassword() {
@@ -242,6 +293,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     isLoading,
     error,
     mode,
-    verify
+    verify,
+    usernameExists
   }
 })

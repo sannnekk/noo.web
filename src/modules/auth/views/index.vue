@@ -25,6 +25,7 @@
                 v-model:mode="authStore.mode"
                 :error="authStore.error"
                 :is-loading="authStore.isLoading"
+                :username-exists="authStore.usernameExists"
                 @login="authStore.login()"
                 @register="authStore.register()"
                 @forgot-password="authStore.forgotPassword()"

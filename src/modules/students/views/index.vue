@@ -28,6 +28,7 @@
 import type { User } from '@/core/data/entities/User'
 import { useStudentsStore } from '../stores/students'
 import { setPageTitle } from '@/core/utils/setPageTitle'
+import { Core } from '@/core/Core'
 
 const cols = [
   {
@@ -56,6 +57,13 @@ const cols = [
     type: 'link',
     design: 'telegram',
     linkTo: (user: User) => `https://t.me/${user.telegramUsername}`
+  },
+  {
+    title: '',
+    value: Core.Context.User?.role === 'mentor' ? 'Перейти' : 'Редактировать',
+    type: 'link',
+    design: 'secondary',
+    linkTo: (user: User) => `/users/edit/${user.username}`
   }
 ]
 
