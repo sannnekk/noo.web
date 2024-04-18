@@ -182,7 +182,7 @@ export const useCreateWorkStore = defineStore(
         return
       }
 
-      const link = `${workBaseUrl}/${nextTaskSlug}`
+      const link = `${workBaseUrl.value}/${nextTaskSlug}`
 
       _router.push(link)
     }
@@ -205,9 +205,16 @@ export const useCreateWorkStore = defineStore(
         return
       }
 
-      const link = `${workBaseUrl}/${prevTaskSlug}`
+      const link = `${workBaseUrl.value}/${prevTaskSlug}`
 
       _router.push(link)
+    }
+
+    /**
+     * Show general info
+     */
+    function showGeneralInfo() {
+      _router.push(`${workBaseUrl.value}/general-info`)
     }
 
     /**
@@ -295,7 +302,8 @@ export const useCreateWorkStore = defineStore(
       workTypeOptions,
       checkingStrategyOptions,
       toNextTask,
-      toPrevTask
+      toPrevTask,
+      showGeneralInfo
     }
   }
 )
