@@ -7,6 +7,11 @@
       <div class="header__logo">
         <h1>{{ route.name }}</h1>
       </div>
+      <div class="header__help">
+        <div class="header__help__hotkey-wid">
+          <hotkey-widget />
+        </div>
+      </div>
       <div class="header__profile-widget">
         <profile-widget />
       </div>
@@ -57,6 +62,16 @@ const route = useRoute()
       @media screen and (max-width: 768px)
         margin-left: 0.4em
         font-size: 20px
+
+  &__help
+    display: flex
+    justify-content: flex-end
+    align-items: center
+    flex: 1
+    margin: 0 1em
+
+    @media screen and (max-width: 768px)
+      display: none
 
   &__profile-widget
     @media screen and (max-width: 768px)

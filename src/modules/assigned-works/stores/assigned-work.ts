@@ -568,7 +568,8 @@ export const useAssignedWorkStore = defineStore(
       workScore,
       saveProgress,
       remakeWork,
-      remakeModal
+      remakeModal,
+      _router
     }
   }
 )

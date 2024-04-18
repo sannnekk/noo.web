@@ -163,10 +163,7 @@
         </div>
       </template>
       <template #content>
-        <div
-          class="work-view__content"
-          v-auto-animate
-        >
+        <div class="work-view__content">
           <h2 class="task-view__title">
             {{ assignedWorkStore.assignedWork?.work?.name }}
           </h2>
@@ -245,7 +242,9 @@ import { Core } from '@/core/Core'
 import { useAssignedWorkStore } from '../stores/assigned-work'
 import { useDate } from '@/composables/useDate'
 import { setPageTitle } from '@/core/utils/setPageTitle'
-import { watch } from 'vue'
+import { onUnmounted, watch } from 'vue'
+import { HOT_KEYS } from '../utils/hotkeys'
+import { registerHotkeys } from '@/core/device/Hotkeys'
 
 const assignedWorkStore = useAssignedWorkStore()
 
@@ -260,6 +259,11 @@ watch(
   },
   { deep: true, immediate: true }
 )
+
+const unregister = registerHotkeys(HOT_KEYS)
+onUnmounted(() => {
+  unregister()
+})
 </script>
 
 <style scoped lang="sass">
