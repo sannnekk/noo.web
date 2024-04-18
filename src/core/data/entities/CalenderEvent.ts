@@ -12,4 +12,5 @@ export interface CalenderEvent extends Entity {
     | 'work-checked' // green
     | 'work-made' // yellow
     | 'event' // grey
+  username: string
 }

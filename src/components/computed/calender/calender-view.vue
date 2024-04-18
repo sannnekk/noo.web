@@ -61,13 +61,15 @@ const isLoading = ref(false)
 const events = ref<CalenderEvent[]>([])
 const newEvent = ref<CalenderEvent>(emptyEvent())
 
+watch(currentDate, () => (newEvent.value.date = currentDate.value))
+
 watch(currentDate, (oldDate, newDate) => fetchEvents(oldDate, newDate), {
   immediate: true
 })
 
-async function fetchEvents(oldDate: Date, newDate?: Date) {
-  if (!newDate) {
-    newDate = oldDate
+async function fetchEvents(newDate: Date, oldDate?: Date) {
+  if (!oldDate) {
+    oldDate = newDate
   } else if (oldDate.getMonth() === newDate.getMonth()) {
     return
   }
@@ -132,7 +134,9 @@ function emptyEvent() {
     title: '',
     description: '',
     date: currentDate.value,
-    visibility: 'private'
+    visibility: 'private',
+    type: 'event',
+    username: props.username
   } as CalenderEvent
 }
 

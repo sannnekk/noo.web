@@ -7,6 +7,12 @@
       <h3 class="calender-event-item__header__title">
         {{ title }}
       </h3>
+      <p class="calender-event-item__header__visibility">
+        <user-link :username="username">
+          {{ username }}
+        </user-link>
+        - {{ visibilityText }}
+      </p>
     </div>
     <div class="calender-event-item__body">
       <p class="calender-event-item__body__description">
@@ -22,7 +28,9 @@
         <common-button
           @click="$emit('remove')"
           design="secondary"
-          v-else-if="type === 'event'"
+          v-else-if="
+            type === 'event' && Core.Context.User?.username === username
+          "
         >
           Удалить
         </common-button>
@@ -32,14 +40,33 @@
 </template>
 
 <script setup lang="ts">
+import { Core } from '@/core/Core'
 import { type CalenderEvent } from '@/core/data/entities/CalenderEvent'
+import { computed } from 'vue'
 
 interface Emits {
   (e: 'remove'): void
 }
 
-defineProps<CalenderEvent>()
+const props = defineProps<CalenderEvent>()
 defineEmits<Emits>()
+
+const visibilityText = computed(() => {
+  switch (props.visibility) {
+    case 'all':
+      return 'Видно всем'
+    case 'private':
+      return 'Приватное событие'
+    case 'own-mentor':
+      return 'Видно только ученику и его куратору'
+    case 'all-mentors':
+      return 'Видно всем кураторам'
+    case 'own-students':
+      return 'Видно только куратору и его ученикам'
+    default:
+      return 'Неизвестно'
+  }
+})
 </script>
 
 <style scoped lang="sass">
@@ -73,6 +100,12 @@ defineEmits<Emits>()
       padding: 0
       font-weight: 500
 
+    &__visibility
+      margin: 0
+      padding: 0
+      color: var(--text-light)
+      font-size: 0.7em
+
   &__body
     width: 100%
     display: flex
@@ -84,6 +117,7 @@ defineEmits<Emits>()
       padding: 0
       color: var(--text-light)
       flex: 1
+      font-size: 0.9em
 
     &__button
       font-size: 0.8em

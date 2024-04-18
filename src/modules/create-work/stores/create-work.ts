@@ -171,23 +171,11 @@ export const useCreateWorkStore = defineStore(
 
       uiService.setLoading(true)
 
-      // Remove ids from tasks and options
-      payload.tasks.forEach((task, index) => {
-        payload.tasks[index]!.optionsIds = undefined
-        payload.tasks[index]!.options = task.options?.map((option) => {
-          return {
-            ...option,
-            id: undefined as any
-          }
-        })
-      })
-
       // add order to tasks
       payload.tasks = payload.tasks.map((task, index) => {
         return {
           ...task,
-          order: index + 1,
-          id: undefined as any
+          order: index + 1
         }
       })
 
