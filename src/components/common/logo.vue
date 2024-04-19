@@ -17,8 +17,8 @@ defineProps<Props>()
 .thin
   font-weight: 200
 .logo
-  color: var(--dark)
+  color: var(--form-text-color)
 
   &.dark
-    color: var(--light)
+    color: var(--form-text-color)
 </style>

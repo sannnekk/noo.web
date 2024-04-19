@@ -14,8 +14,8 @@ body {
 
   --telegram: #229ed9;
 
-  --form-background: #1e1e1e;
-  --form-text-color: #fff;
+  --form-background: #fff;
+  --form-text-color: var(--dark);
 
   /* Background */
   --light-background-color: var(--light);
