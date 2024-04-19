@@ -4,6 +4,7 @@
     v-if="Core.isInitialized()"
     :data-rerenderer="rerenderTrigger"
   >
+    <beta-tag class="theme-toggle-widget__beta-tag" />
     <button
       @click="toggleTheme"
       class="theme-toggle-widget__button"
@@ -40,6 +41,14 @@ function toggleTheme() {
 
 <style scoped lang="sass">
 .theme-toggle-widget
+  position: relative
+
+  &__beta-tag
+    position: absolute
+    top: -0.2em
+    right: -1.5em
+    font-size: 0.6em
+
   &__button
     padding: 0.2em
     font-size: 1.6rem
