@@ -66,7 +66,7 @@ defineProps<Props>()
       border: 1px solid var(--border-color)
       text-decoration: none
       font-weight: normal
-      color: var(--dark)
+      color: var(--form-text-color)
 
       &.success
         border-width: 2px

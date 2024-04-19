@@ -77,6 +77,8 @@ const isOnHover = ref(false)
       font-size: 16px
       padding: 0.75em 1em 0.75em 3em !important
       padding-left: 4em !important
+      border-color: var(--border-color) !important
+      color: var(--form-text-color)
 
       @media screen and (max-width: 768px)
         font-size: 12px

@@ -98,6 +98,7 @@ defineEmits<Emits>()
     padding: 0.5em 1.5em
     font-size: inherit
     transition: 0.2s ease all
+    color: var(--form-text-color)
 
     &__icon
       display: block
@@ -105,23 +106,19 @@ defineEmits<Emits>()
       margin-right: 0.3em
 
     &.primary
-      color: var(--dark)
       border: 1px solid transparent
       background-color: var(--primary)
 
       &.contrast
         background-color: var(--dark)
-        color: var(--light)
 
         &:not(.loading):hover
           background-color: var(--light)
-          color: var(--dark)
 
       &:not(.loading):hover
         border-color: var(--dark)
 
     &.inline
-      color: var(--dark)
       border: none
       cursor: pointer
       display: inline-block
@@ -130,7 +127,6 @@ defineEmits<Emits>()
         opacity: 0.8
 
     &.telegram
-      color: var(--light)
       border: 1px solid transparent
       background-color: var(--telegram)
 
@@ -138,16 +134,13 @@ defineEmits<Emits>()
         opacity: 0.8
 
     &.secondary
-      color: var(--dark)
       border: 1px solid var(--dark)
       background-color: var(--light)
 
       &:not(.loading):hover
         background-color: var(--dark)
-        color: var(--light-background-color)
 
     &.danger
-      color: var(--light)
       border: 1px solid transparent
       background-color: var(--danger)
 
@@ -155,11 +148,9 @@ defineEmits<Emits>()
         opacity: 0.8
 
     &.warning
-      color: var(--lightest)
       border: 1px solid var(--warning)
       background-color: var(--warning)
 
       &:not(.loading):hover
         background-color: transparent
-        color: var(--dark)
 </style>
