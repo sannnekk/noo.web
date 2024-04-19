@@ -19,7 +19,7 @@
     </div>
     <div
       class="course-card__author"
-      v-if="author && authorLink"
+      v-if="author"
     >
       <div class="course-card__author__avatar">
         <user-avatar :name="author" />
@@ -45,8 +45,6 @@ interface Props {
   title: string
   author?: string
   description: string
-  authorAvatar?: string
-  authorLink?: string
   slug: string
   to: string
 }

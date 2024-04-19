@@ -69,6 +69,18 @@ export class UserService extends ApiService {
   }
 
   /**
+   * get teachers
+   */
+  public async getTeachers(
+    pagination?: Pagination
+  ): Promise<ApiResponse<User[]>> {
+    return await this.httpGet<User[]>(
+      `${this._route}/teacher/search`,
+      pagination
+    )
+  }
+
+  /**
    * create user
    */
   public async createUser(user: User): Promise<void> {

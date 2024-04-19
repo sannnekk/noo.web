@@ -91,35 +91,48 @@
               </common-button>
             </div>
           </div>
-          <div class="index-create-course-view__sidebar__publish">
-            <common-button
-              design="primary"
-              alignment="stretch"
-              @click="createCourseStore.publishCourse()"
-            >
-              {{ $route.params.courseSlug ? 'Обновить' : 'Опубликовать' }}
-            </common-button>
-            <br />
-            <hr />
-            <br />
-            <common-button
-              v-if="$route.params.courseSlug"
-              design="danger"
-              alignment="stretch"
-              @click="createCourseStore.removeCourse()"
-            >
-              Удалить курс
-            </common-button>
+          <div class="index-create-course-view__sidebar__buttons">
+            <div class="index-create-course-view__sidebar__buttons__publish">
+              <common-button
+                design="primary"
+                alignment="stretch"
+                @click="createCourseStore.publishCourse()"
+              >
+                {{ $route.params.courseSlug ? 'Обновить' : 'Опубликовать' }}
+              </common-button>
+            </div>
+            <div class="index-create-course-view__sidebar__buttons__delete">
+              <common-button
+                v-if="$route.params.courseSlug"
+                design="danger"
+                alignment="center"
+                @click="createCourseStore.removeCourse()"
+              >
+                Удалить курс
+              </common-button>
+            </div>
           </div>
         </div>
       </template>
       <template #content>
         <div class="index-create-course-view__course-form">
+          <h3 class="index-create-course-view__course-form__title">
+            Общая информация
+          </h3>
           <div class="form-group">
             <form-input
               v-model="createCourseStore.course.name"
               label="Название курса"
               type="text"
+            />
+          </div>
+          <div class="form-group">
+            <entity-select-input
+              label="Автор курса (по умолчанию - Вы)"
+              :fetch-function="createCourseStore.fetchTeachers"
+              :max-count="1"
+              :label-keys="['name', 'username']"
+              v-model="authorModel"
             />
           </div>
           <div class="form-group">
@@ -159,7 +172,8 @@ import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useCreateCourseStore } from '../stores/create-course'
 import { registerHotkeys } from '@/core/device/Hotkeys'
 import { HOT_KEYS } from '../utils/hotkeys'
-import { onUnmounted } from 'vue'
+import { computed, onUnmounted } from 'vue'
+import type { User } from '@/core/data/entities/User'
 
 const createCourseStore = useCreateCourseStore()
 
@@ -173,6 +187,21 @@ const onChapterNameChange = (slug: string) => {
     createCourseStore.changeChapterName(slug, newName)
   }
 }
+
+const authorModel = computed<User[]>({
+  get: () => {
+    if (createCourseStore.course.author) {
+      return [createCourseStore.course.author]
+    }
+    return []
+  },
+  set: (value) => {
+    if (value.length === 0) {
+      createCourseStore.course.author = undefined
+    }
+    createCourseStore.course.author = value[0]
+  }
+})
 
 const unregister = registerHotkeys(HOT_KEYS)
 onUnmounted(() => unregister())
@@ -190,7 +219,7 @@ onUnmounted(() => unregister())
       padding-left: 1.3em
 
       a
-        color: var(--dark)
+        color: var(--form-text-color)
         text-decoration: none
 
       &__item
@@ -221,7 +250,7 @@ onUnmounted(() => unregister())
 
           a
             &.router-link-active
-              font-weight: bold
+              color: var(--secondary)
 
             &:hover
               text-decoration: underline
@@ -245,13 +274,22 @@ onUnmounted(() => unregister())
       &__button
         font-size: 0.8em
 
-    &__publish
+    &__buttons
       margin-top: 1em
       margin-bottom: 1em
 
+      &__publish
+        margin-bottom: 1em
+
+      &__delete
+        margin-top: 3em
+        font-size: 0.7em
+
   &__course-form
-    padding-bottom: 1em
-    border-bottom: 1px solid var(--border-color)
+    padding: 1em
+    margin-bottom: 2em
+    border-radius: var(--border-radius)
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
 
     .form-group__label
       color: var(--text-light)

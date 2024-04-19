@@ -22,14 +22,20 @@
           <h2 class="index-materials-view__tree__title">
             {{ courseStore.course.name }}
           </h2>
-          <!-- <div class="index-materials-view__tree__author">
+          <div
+            class="index-materials-view__tree__author"
+            v-if="courseStore.course.author"
+          >
             <div class="index-materials-view__tree__author__avatar">
-              <user-avatar :name="materialsStore.course.author.name" />
+              <user-avatar :name="courseStore.course.author.name" />
             </div>
             <div class="index-materials-view__tree__author__name">
-              <span>{{ materialsStore.course.author.name }}</span>
+              <user-link
+                :username="courseStore.course.author.username"
+                :name="courseStore.course.author.name"
+              />
             </div>
-          </div> -->
+          </div>
           <materials-tree :data="courseStore.materialsTree" />
         </div>
       </template>
@@ -104,9 +110,11 @@ watch(
       display: flex
       align-items: center
       margin-bottom: 1em
+      margin-top: 1em
 
       &__avatar
         margin-right: 0.5rem
+        font-size: 2rem
 
       &__name
         font-size: 0.9em

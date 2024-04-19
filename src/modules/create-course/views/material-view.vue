@@ -3,6 +3,9 @@
     class="material-view"
     v-if="currentMaterial"
   >
+    <div class="material-view__title">
+      <h3>{{ currentMaterial.name }}</h3>
+    </div>
     <div class="form-group">
       <form-input
         type="text"

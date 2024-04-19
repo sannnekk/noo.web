@@ -6,11 +6,13 @@ import type { Material } from '@/core/data/entities/Material'
 import { useRoute, useRouter } from 'vue-router'
 import { Core } from '@/core/Core'
 import type { Chapter } from '@/core/data/entities/Chapter'
+import type { Pagination } from '@/core/data/Pagination'
 
 export const useCreateCourseStore = defineStore(
   'create-course-module:create-course',
   () => {
     const courseService = Core.Services.Course
+    const userService = Core.Services.User
     const uiService = Core.Services.UI
     const _route = useRoute()
     const _router = useRouter()
@@ -326,6 +328,17 @@ export const useCreateCourseStore = defineStore(
       }
     }
 
+    /**
+     * Fetch teachers
+     */
+    async function fetchTeachers(pagination: Pagination) {
+      try {
+        return await userService.getTeachers(pagination)
+      } catch (error) {
+        uiService.openErrorModal('Произошла ошибка при загрузке учителей')
+      }
+    }
+
     return {
       course,
       addChapter,
@@ -340,7 +353,8 @@ export const useCreateCourseStore = defineStore(
       removeMaterial,
       addMaterial,
       removeCourseModalVisible,
-      fetchCourse
+      fetchCourse,
+      fetchTeachers
     }
   }
 )
