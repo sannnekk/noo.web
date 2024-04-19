@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { type PasswordChangeForm } from '../types/PasswordChangeForm'
 import { Core } from '@/core/Core'
+import type { User } from '@/core/data/entities/User'
 
 export const useProfileStore = defineStore('profile-module:profile', () => {
   const userService = Core.Services.User
@@ -11,7 +12,7 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
   /*
    * logged in user
    */
-  const user = ref(JSON.parse(JSON.stringify(Core.Context.User)))
+  const user = ref<User | null>()
 
   /*
    * users mentor if its a student
@@ -28,6 +29,37 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
     newPassword: '',
     repeatPassword: ''
   })
+
+  /*
+   * fetch user
+   */
+  async function fetchUser() {
+    if (!Core.Context.User?.username) {
+      return
+    }
+
+    uiService.setLoading(true)
+
+    try {
+      const response = await userService.getUser(Core.Context.User.username)
+
+      user.value = response.data
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при загрузке данных пользователя',
+        'Возможно, Вам поможет перезайти. Ошибка: ' + error.message,
+        [
+          {
+            label: 'Перезайти',
+            design: 'warning',
+            handler: () => authService.logout()
+          }
+        ]
+      )
+    } finally {
+      uiService.setLoading(false)
+    }
+  }
 
   /*
    * change password
@@ -102,12 +134,18 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
       await userService.updateUser(user.value.id, {
         id: user.value.id,
         name: user.value.name,
-        email: user.value.email,
-        telegramUsername: user.value.telegramUsername
+        telegramUsername: user.value.telegramUsername?.replace('@', '')
       })
       uiService.openSuccessModal(
         'Данные успешно обновлены',
-        'Чтобы изменения вступили в силу, перезайдите в аккаунт или обновите страницу'
+        'Чтобы изменения вступили в силу, обновите страницу',
+        [
+          {
+            label: 'Обновить страницу',
+            design: 'primary',
+            handler: () => window.location.reload()
+          }
+        ]
       )
     } catch (error: any) {
       uiService.openErrorModal(
@@ -125,6 +163,7 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
     passwords,
     changePassword,
     deleteAccount,
-    updateCredentials
+    updateCredentials,
+    fetchUser
   }
 })

@@ -5,7 +5,9 @@
   >
     <div class="task-view__question">
       <rich-text-container :content="assignedWorkStore.task.content" />
-      <p>Максимальный балл: {{ assignedWorkStore.task.highestScore }}</p>
+      <p class="task-view__question__max-score">
+        Максимальный балл: {{ assignedWorkStore.task.highestScore }}
+      </p>
     </div>
     <div
       class="task-view__answer"
@@ -47,24 +49,30 @@
         ) && assignedWorkStore.task?.type === 'word'
       "
     >
-      Правильные ответы:
-      <b>{{ assignedWorkStore.task?.rightAnswer.split('|').join(', ') }}</b>
-      <br />
-      <br />
-    </div>
-    <div
-      class="taks-view__score"
-      v-if="
-        ['visible', 'readonly'].includes(
-          assignedWorkStore.fieldVisibility.scoreBox
-        )
-      "
-    >
-      <task-score-container
-        v-model="assignedWorkStore.assignedWork"
-        :task="assignedWorkStore.task"
-        :readonly="assignedWorkStore.fieldVisibility.scoreBox === 'readonly'"
-      />
+      <div class="row">
+        <div class="col-md-6">
+          <form-input
+            readonly
+            :label="
+              assignedWorkStore.task?.rightAnswer.split('|').length > 1
+                ? 'Правильные ответы'
+                : 'Правильный ответ'
+            "
+            :model-value="
+              assignedWorkStore.task?.rightAnswer.split('|').join(', ')
+            "
+          />
+        </div>
+        <div class="col-md-6">
+          <task-score-container
+            v-model="assignedWorkStore.assignedWork"
+            :task="assignedWorkStore.task"
+            :readonly="
+              assignedWorkStore.fieldVisibility.scoreBox === 'readonly'
+            "
+          />
+        </div>
+      </div>
     </div>
     <div
       class="task-view__hint"
@@ -142,9 +150,16 @@ const assignedWorkStore = useAssignedWorkStore()
   &__question
     margin-bottom: 1rem
     padding-bottom: 1em
-    padding-top: 1em
-    border-top: 1px solid var(--border-color)
-    border-bottom: 1px solid var(--border-color)
+    padding: 1em
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5)
+    border-radius: var(--border-radius)
+
+    &__max-score
+      margin-top: 1em
+      padding-top: 1em
+      margin-bottom: 0
+      border-top: 1px solid var(--border-color)
+      font-weight: 500
 
   &__hint
     margin-top: 1rem

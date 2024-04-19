@@ -169,7 +169,7 @@ function onClose() {
       color: var(--text-light)
 
       b
-        color: var(--dark)
+        color: var(--form-text-color)
         font-weight: normal
 
       &__item

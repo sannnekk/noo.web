@@ -64,6 +64,11 @@ function getCellContent({
 
 .calendar:deep()
   .vuejs3-datepicker
+    color: var(--form-text-color)
+
+    &__calendar
+      background-color: var(--light)
+
     &__calendar-topbar
       background: var(--primary)
 
@@ -101,7 +106,7 @@ function getCellContent({
           &.day:hover,
           &.month:hover,
           &.year:hover
-            border: 1px solid var(--dark) !important
+            border: 1px solid var(--border-color) !important
 
         &.selected
           background: var(--primary)

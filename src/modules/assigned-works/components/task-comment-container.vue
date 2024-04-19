@@ -1,5 +1,8 @@
 <template>
-  <div class="task-comment-container">
+  <div
+    class="task-comment-container"
+    v-if="!isDeltaEmptyOrWhitespace(model)"
+  >
     <h4 class="task-comment-container__title">Комментарий:</h4>
     <rich-text-container
       v-if="readonly"
@@ -17,6 +20,7 @@ import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { Task } from '@/core/data/entities/Task'
 import type { Comment } from '@/core/data/entities/Comment'
 import { entityFactory } from '@/core/utils/entityFactory'
+import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
 import { computed } from 'vue'
 
 interface Props {

@@ -31,7 +31,7 @@ withDefaults(defineProps<Props>(), {
   &.background
     padding: 0.3em 1em
     border-radius: var(--border-radius)
-    color: var(--lightest) !important
+    color: var(--form-text-color) !important
     font-weight: 500
 
     &.success

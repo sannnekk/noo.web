@@ -72,7 +72,7 @@ const isModalOpen = ref(false)
     &__name
       margin: 0
       margin-bottom: -0.2em
-      color: var(--dark)
+      color: var(--form-text-color)
       font-size: 1.2em
       cursor: pointer
 

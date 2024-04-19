@@ -12,36 +12,23 @@
               @save="profileStore.updateCredentials()"
             />
           </div>
-          <br />
           <div class="index-profile-view__password-change">
             <profile-password-form
               v-model="profileStore.passwords"
               @save="profileStore.changePassword()"
             />
           </div>
-          <br />
-          <hr />
           <div class="index-profile-view__delete-account">
             <delete-account @delete-account="profileStore.deleteAccount()" />
           </div>
         </div>
       </template>
       <template #content>
-        <div
-          class="index-profile-view__mentor"
-          v-if="Core.Context.User?.role === 'student'"
-        >
-          <h3>Мой куратор</h3>
-          <user-card
+        <div class="index-profile-view__mentor">
+          <user-mentor
             v-if="profileStore.mentor"
-            :user="profileStore.mentor"
+            :mentor="profileStore.mentor"
           />
-          <p
-            v-else
-            class="index-profile-view__mentor__no-mentor"
-          >
-            У вас пока нет куратора
-          </p>
         </div>
         <div
           class="index-profile-view__charts"
@@ -59,16 +46,19 @@
 </template>
 
 <script lang="ts" setup>
-import { useProfileStore } from '../stores/profile'
 import ProfileCredentials from '../components/profile-credentials.vue'
 import ProfilePasswordForm from '../components/profile-password-form.vue'
 import deleteAccount from '../components/delete-account.vue'
+import userMentor from '../components/user-mentor.vue'
 import { Core } from '@/core/Core'
 import { setPageTitle } from '@/core/utils/setPageTitle'
+import { useProfileStore } from '../stores/profile'
 
 const profileStore = useProfileStore()
 
 setPageTitle('Мой профиль')
+
+profileStore.fetchUser()
 </script>
 
 <style lang="sass" scoped>
@@ -76,51 +66,16 @@ setPageTitle('Мой профиль')
   &__credentials
     margin-bottom: 1em
 
+  &__password-change
+    margin-top: 3em
+    padding-top: 1em
+    border-top: 1px solid var(--border-color)
+
+  &__delete-account
+    margin-top: 3em
+    padding-top: 1em
+    border-top: 1px solid var(--border-color)
+
   &__mentor
-    margin-bottom: 1em
-
-    &__no-mentor
-      color: var(--text-light)
-
-  &__charts
-    flex: 1
-    display: flex
-    flex-wrap: wrap
-    gap: 1em
-
-    @media screen and (max-width: 768px)
-      flex-direction: column
-      align-items: center
-
-    &__huge-number
-      h1
-        font-size: 50px
-        margin-bottom: 0
-        margin-top: 0
-
-      p
-        margin-top: 0
-        font-size: 15px
-        font-weight: normal
-
-    &__card
-      margin-bottom: 2em
-      width: 30%
-      text-align: center
-
-      &--wide
-        width: 95%
-
-        canvas
-          margin-top: 1em
-          width: 100%
-
-    &__title
-      text-align: center
-      margin-bottom: 0
-
-  &__charts
-    &__header
-      margin-bottom: 0
-      text-align: center
+    margin-bottom: 2em
 </style>

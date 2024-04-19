@@ -108,6 +108,7 @@ defineEmits<Emits>()
     &.primary
       border: 1px solid transparent
       background-color: var(--primary)
+      color: var(--dark)
 
       &.contrast
         background-color: var(--dark)
