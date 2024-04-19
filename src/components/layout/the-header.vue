@@ -82,7 +82,7 @@ const route = useRoute()
       margin: 0
       padding-left: 0.5em
 
-    &___hotkey-widget
+    &__hotkey-widget
       @media screen and (max-width: 768px)
         display: none
 
