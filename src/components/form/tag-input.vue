@@ -130,4 +130,6 @@ label
     padding: 0
     outline: none
     flex: 1
+    color: var(--form-text-color)
+    background-color: transparent
 </style>

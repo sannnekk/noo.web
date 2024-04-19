@@ -55,7 +55,8 @@ const props = defineProps<Props>()
     display: flex
     justify-content: center
     align-items: center
-    height: 300px
-    font-size: 20px
+    height: 200px
+    font-size: 15px
     color: var(--text-light)
+    text-align: center
 </style>

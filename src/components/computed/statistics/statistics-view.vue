@@ -195,4 +195,5 @@ function getDateRange() {
     height: 100px
     max-width: 90%
     text-align: center
+    text-align: center
 </style>

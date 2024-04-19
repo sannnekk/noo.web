@@ -61,7 +61,9 @@ const model = computed({
     padding: 0.4em 0.8em
     font-family: inherit
     width: 100%
+    background: var(--form-background)
+    color: var(--form-text-color)
 
     &:focus
-      box-shadow: 0px 0px 15px 5px var(--secondary)
+      border-color: var(--primary)
 </style>

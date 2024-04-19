@@ -9,7 +9,8 @@ export class Storage {
    */
   private static _aliases = {
     user: 'noo.context.user',
-    apiToken: 'noo.context.apiToken'
+    apiToken: 'noo.context.apiToken',
+    theme: 'noo.context.theme'
   }
 
   /**
@@ -53,6 +54,20 @@ export class Storage {
    */
   public static set ApiToken(value: any) {
     this.set(this._aliases.apiToken, value)
+  }
+
+  /**
+   * Gets theme from storage
+   */
+  public static get Theme() {
+    return this.get(this._aliases.theme) as 'light' | 'dark'
+  }
+
+  /**
+   * Sets theme to storage
+   */
+  public static set Theme(value: 'light' | 'dark') {
+    this.set(this._aliases.theme, value)
   }
 
   /**

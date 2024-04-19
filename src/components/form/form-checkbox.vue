@@ -69,7 +69,7 @@ const model = computed({
   &__label
     display: flex
     align-items: center
-    color: var(--text-light)
+    color: var(--form-text-color)
     font-size: 0.9em
     cursor: pointer
 

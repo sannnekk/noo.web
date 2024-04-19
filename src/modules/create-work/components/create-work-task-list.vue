@@ -88,7 +88,7 @@ const model = computed({
       height: 35px
       border-radius: var(--border-radius)
       border: 1px solid var(--border-color)
-      color: var(--dark)
+      color: var(--form-text-color)
       text-decoration: none
       font-weight: normal
 

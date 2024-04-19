@@ -140,7 +140,7 @@ defineEmits<Emits>()
     &.secondary
       color: var(--dark)
       border: 1px solid var(--dark)
-      background-color: var(--light-background-color)
+      background-color: var(--light)
 
       &:not(.loading):hover
         background-color: var(--dark)

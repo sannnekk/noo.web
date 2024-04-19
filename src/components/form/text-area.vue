@@ -55,9 +55,10 @@ const model = computed({
     resize: vertical
     font-family: inherit
     min-height: 5em
+    color: var(--form-text-color)
+    background: var(--form-background)
 
     &:focus
       outline: none
-      border-color: var(--secondary)
-      box-shadow: 0px 0px 5px var(--secondary)
+      border-color: var(--primary)
 </style>

@@ -45,5 +45,3 @@ const userType = computed(() => {
   }
 })
 </script>
-
-<style scoped></style>

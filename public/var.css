@@ -14,6 +14,9 @@ body {
 
   --telegram: #229ed9;
 
+  --form-background: #1e1e1e;
+  --form-text-color: #fff;
+
   /* Background */
   --light-background-color: var(--light);
 
@@ -26,4 +29,29 @@ body {
   --border-radius-button: 18px;
   --border-color: #cdcdcd;
   --font-family: 'Montserrat', sans-serif;
+}
+
+body.theme--dark {
+  --primary: #defba1;
+  --secondary: #9d96ff;
+  --light: #444;
+  --lightest: #222;
+  --dark: #000;
+  --lila: #d795f1;
+
+  --danger: #ff4d4d;
+  --warning: #ffad33;
+  --success: #279c27;
+  --info: var(--secondary);
+
+  --telegram: #229ed9;
+  --light-background-color: #111;
+
+  --form-background: #1e1e1e;
+  --form-text-color: #fff;
+
+  --dark-text-color: #fff;
+  --text-light: #939393;
+
+  --border-color: #616161;
 }

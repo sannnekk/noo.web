@@ -28,7 +28,7 @@
       v-auto-animate
     >
       <div
-        class="col-md-4"
+        class="col-md-6 col-lg-4"
         v-for="course in coursesStore.results"
         :key="course.id"
       >

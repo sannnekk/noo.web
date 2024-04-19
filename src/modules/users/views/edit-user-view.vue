@@ -150,7 +150,7 @@ watch(
       setPageTitle(userStore.user.name)
       // TODO: удалить нахуй этот страшный костыль и реализовать нормально
       document.querySelector(
-        '.pane-layout__header .header__logo h1'
+        '.pane-layout__header .header__page-title h1'
       )!.innerHTML = userStore.user.name
     }
   },

@@ -59,6 +59,9 @@ import { Core } from '@/core/Core'
     &__name
       margin: 0
       padding: 0
+      white-space: nowrap
+      text-overflow: ellipsis
+      overflow: hidden
 
     &__actions
       display: flex

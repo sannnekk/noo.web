@@ -43,6 +43,14 @@ export class Context {
     return Storage.ApiToken
   }
 
+  public get Theme() {
+    return Storage.Theme
+  }
+
+  public set Theme(theme: 'light' | 'dark') {
+    Storage.Theme = theme
+  }
+
   /**
    * check if context is initialized
    */
