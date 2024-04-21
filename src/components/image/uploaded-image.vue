@@ -13,7 +13,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const link = computed(() => {
-  if (!props.src) return '/img/placeholder.webp'
+  if (!props.src) return '/img/placeholder.svg'
 
   if (typeof props.src === 'string' && props.src.startsWith('http'))
     return props.src
@@ -26,6 +26,6 @@ const link = computed(() => {
 
   if (props.src instanceof File) return URL.createObjectURL(props.src)
 
-  return '/img/placeholder.webp'
+  return '/img/placeholder.svg'
 })
 </script>

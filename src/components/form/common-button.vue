@@ -112,9 +112,11 @@ defineEmits<Emits>()
 
       &.contrast
         background-color: var(--dark)
+        color: var(--lightest)
 
         &:not(.loading):hover
           background-color: var(--light)
+          color: var(--form-text-color)
 
       &:not(.loading):hover
         border-color: var(--dark)

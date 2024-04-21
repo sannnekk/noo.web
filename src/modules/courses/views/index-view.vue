@@ -34,9 +34,7 @@
       >
         <course-card
           :to="`/courses/${course.slug}`"
-          :image="
-            course.images[0]?.src || 'https://via.placeholder.com/300x200'
-          "
+          :image="course.images[0]?.src"
           :title="course.name"
           :description="course.description"
           :author="course?.author?.name"
@@ -50,12 +48,14 @@
     >
       <loader-icon contrast />
     </div>
-    <div v-else>
-      <br />
-      <br />
-      <p style="text-align: center; color: var(--text-light)">
-        Курсы не найдены
-      </p>
+    <div
+      class="index-view__nothing-found"
+      v-else
+    >
+      <div class="index-view__nothing-found__image">
+        <nothing-found-image class="index-view__nothing-found__image__img" />
+      </div>
+      <p class="index-view__nothing-found__text">Курсы не найдены</p>
     </div>
     <div
       class="index-view__pagination"
@@ -91,6 +91,23 @@ const coursesStore = useCoursesStore()
     justify-content: center
     margin-top: 2em
     font-size: 50px
+
+  &__nothing-found
+    margin-top: 4em
+    text-align: center
+
+    &__image
+      display: inline-block
+      width: min(90%, 500px)
+
+      &__img
+        width: 100%
+        height: auto
+
+    &__text
+      font-size: 20px
+      text-align: center
+      color: var(--text-light)
 
   &__header
     display: flex

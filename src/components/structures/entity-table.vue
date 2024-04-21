@@ -117,12 +117,13 @@
         <loader-icon contrast />
       </div>
     </div>
-    <p
+    <div
       v-else-if="!data || !data.length"
       class="entity-table__empty-text"
     >
-      Нет данных
-    </p>
+      <nothing-found-image class="entity-table__empty-text__img" />
+      Контент не найден
+    </div>
   </div>
 </template>
 
@@ -295,7 +296,16 @@ watch(
   &__empty-text
     text-align: center
     color: var(--text-light)
-    margin: 8em 0
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 1em
+    margin: 1em 0
+
+    &__img
+      width: min(90%, 500px)
+      height: auto
+      margin-bottom: 1em
 
   thead
     tr
