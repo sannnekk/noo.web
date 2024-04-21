@@ -55,7 +55,6 @@ function initQuill() {
             [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
             [{ header: [1, 2, false] }],
 
-            [{ color: [] }, { background: [] }], // dropdown with defaults from theme
             [{ align: [] }],
 
             ['clean']
@@ -89,3 +88,10 @@ function initQuill() {
   })
 }
 </script>
+
+<style lang="sass" scoped>
+:deep()
+  span, p, b, i
+    background-color: var(--lightest) !important
+    color: var(--form-text-color) !important
+</style>
