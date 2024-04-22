@@ -92,6 +92,6 @@ function initQuill() {
 <style lang="sass" scoped>
 :deep()
   span, p, b, i
-    background-color: var(--lightest) !important
+    background-color: transparent !important
     color: var(--form-text-color) !important
 </style>

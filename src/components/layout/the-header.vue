@@ -9,10 +9,10 @@
       </div>
       <div class="header__help">
         <div class="header__help__hotkey-widget">
-          <theme-toggle-widget />
-        </div>
-        <div class="header__help__hotkey-widget">
           <hotkey-widget />
+        </div>
+        <div class="header__help__theme-toggle-widget">
+          <theme-toggle-widget />
         </div>
       </div>
       <div class="header__profile-widget">
