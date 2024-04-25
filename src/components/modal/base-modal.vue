@@ -12,16 +12,33 @@
       >
         <div class="base-modal__container">
           <div
+            class="base-modal__error-img"
+            v-if="type === 'error'"
+          >
+            <img
+              src="/img/error.svg"
+              alt="Ошибка"
+            />
+          </div>
+          <div
             class="base-modal__title"
             :class="`base-modal__title--${type}`"
           >
             <span v-if="title">{{ title }}</span>
           </div>
-          <div class="base-modal__text">
+          <div
+            class="base-modal__text"
+            :class="`base-modal__text--${type}`"
+          >
             {{ message || '' }}
           </div>
           <slot />
-          <div class="base-modal__buttons">
+          <div
+            class="base-modal__buttons"
+            :class="{
+              'base-modal__buttons--horizontal': type === 'error'
+            }"
+          >
             <common-button
               v-for="(action, index) in actions"
               :key="index"
@@ -32,7 +49,7 @@
               {{ action.label }}
             </common-button>
             <common-button
-              alignment="stretch"
+              :alignment="type === 'error' ? 'right' : 'stretch'"
               @click="onClose"
               design="secondary"
               class="base-modal__buttons__cancel"
@@ -110,8 +127,7 @@ function onActionClick(handler: () => void | Promise<void>) {
     background-color: var(--lightest)
     border-radius: var(--border-radius)
     padding: 1em
-    width: 90%
-    max-width: 500px
+    width: min(95%, 700px)
     max-height: 90%
     overflow-y: auto
 
@@ -125,6 +141,13 @@ function onActionClick(handler: () => void | Promise<void>) {
       background-color: var(--border-color)
       border-radius: var(--border-radius)
 
+  &__error-img
+    img
+      width: 89%
+      height: auto
+      margin-left: 5%
+      margin-top: 1em
+
   &__title
     font-size: 1.2em
     font-weight: 500
@@ -135,6 +158,7 @@ function onActionClick(handler: () => void | Promise<void>) {
 
     &--error
       color: var(--danger)
+      text-align: center
 
     &--warning
       color: var(--warning)
@@ -143,11 +167,17 @@ function onActionClick(handler: () => void | Promise<void>) {
     margin-bottom: 1em
     color: var(--text-light)
 
+    &--error
+      text-align: center
+
   &__buttons
     display: flex
     flex-direction: column
     justify-content: space-between
     gap: 0.5em
+
+    &--horizontal
+      flex-direction: row
 
     &__cancel
       margin-right: 0.5em
