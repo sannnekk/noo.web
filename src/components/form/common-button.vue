@@ -132,9 +132,11 @@ defineEmits<Emits>()
     &.telegram
       border: 1px solid transparent
       background-color: var(--telegram)
+      color: var(--white)
 
       &:not(.loading):hover
         opacity: 0.8
+        color: var(--white)
 
     &.secondary
       border: 1px solid var(--dark)
@@ -142,10 +144,12 @@ defineEmits<Emits>()
 
       &:not(.loading):hover
         background-color: var(--dark)
+        color: var(--white) !important
 
     &.danger
       border: 1px solid transparent
       background-color: var(--danger)
+      color: var(--white)
 
       &:not(.loading):hover
         opacity: 0.8

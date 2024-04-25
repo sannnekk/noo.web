@@ -94,4 +94,8 @@ function initQuill() {
   span, p, b, i
     background-color: transparent !important
     color: var(--form-text-color) !important
+
+  img
+    border-radius: var(--border-radius)
+    margin: 0.5em 0
 </style>

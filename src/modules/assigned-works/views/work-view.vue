@@ -50,11 +50,33 @@
                 :status="assignedWorkStore.assignedWork.solveStatus"
               />
             </p>
+            <p
+              class="work-view__sidebar__info__solve-status"
+              v-if="assignedWorkStore.assignedWork.solvedAt"
+            >
+              Работа сдана:
+              {{
+                useDate(assignedWorkStore.assignedWork.solvedAt, {
+                  precision: 'day'
+                }).toBeautiful()
+              }}
+            </p>
             <p class="work-view__sidebar__info__check-status">
               Статус проверки:
               <assigned-work-check-status
                 :status="assignedWorkStore.assignedWork.checkStatus"
               />
+            </p>
+            <p
+              class="work-view__sidebar__info__solve-status"
+              v-if="assignedWorkStore.assignedWork.checkedAt"
+            >
+              Работа проверена:
+              {{
+                useDate(assignedWorkStore.assignedWork.checkedAt, {
+                  precision: 'day'
+                }).toBeautiful()
+              }}
             </p>
           </div>
           <task-list

@@ -42,9 +42,11 @@ withDefaults(defineProps<Props>(), {
 
     &.danger
       background: var(--danger)
+      color: var(--white) !important
 
     &.info
       background: var(--dark)
+      color: var(--white) !important
 
   &.success
     color: var(--success)
