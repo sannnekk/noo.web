@@ -1,7 +1,7 @@
 <template>
   <div
     class="task-comment-container"
-    v-if="!isDeltaEmptyOrWhitespace(model)"
+    v-if="mode === 'check' || !isDeltaEmptyOrWhitespace(model)"
   >
     <h4 class="task-comment-container__title">Комментарий:</h4>
     <rich-text-container
@@ -27,6 +27,7 @@ interface Props {
   modelValue: AssignedWork
   task: Task
   readonly?: boolean
+  mode: 'solve' | 'check' | 'read'
 }
 
 interface Emits {

@@ -125,6 +125,8 @@ defineEmits<Emits>()
       border: none
       cursor: pointer
       display: inline-block
+      color: var(--form-text-color)
+      background-color: var(--light)
 
       &:not(.loading):hover
         opacity: 0.8

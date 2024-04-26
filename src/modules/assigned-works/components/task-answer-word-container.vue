@@ -2,14 +2,10 @@
   <div class="task-answer-container">
     <h4 class="task-answer-container__title">Ответ:</h4>
     <form-input
+      label="Пробелы и регистр не учитываются в процессе проверки"
       :readonly="readonly"
       v-model="model"
     />
-    <br />
-    <br />
-    <info-block>
-      Пробелы и регистр не учитываются в процессе оценки
-    </info-block>
   </div>
 </template>
 
@@ -68,6 +64,5 @@ const model = computed<Answer['word']>({
 .task-answer-container
   &__title
     font-weight: 500
+    margin-bottom: 0.5em
 </style>
-@/core/data/entities/AssignedWork@/core/data/entities/Answer@/core/data/entities/Task
-@/core/utils/entityFactory

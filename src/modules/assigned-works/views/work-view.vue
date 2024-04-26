@@ -33,17 +33,6 @@
                 }).toBeautiful()
               }}
             </p>
-            <p
-              class="work-view__sidebar__info__solve-deadline"
-              v-if="assignedWorkStore.assignedWork.checkDeadlineAt"
-            >
-              Дедлайн проверки:
-              {{
-                useDate(assignedWorkStore.assignedWork.checkDeadlineAt, {
-                  precision: 'day'
-                }).toBeautiful()
-              }}
-            </p>
             <p class="work-view__sidebar__info__solve-status">
               Статус работы:
               <assigned-work-solve-status
@@ -309,15 +298,17 @@ onUnmounted(() => {
         margin: 0
 
     &__save-button
-      margin-top: 0.5em
+      margin-top: 1em
       transform: scale(0.8)
+      font-size: 0.9em
 
     &__shift-button
-      margin-top: 0.5em
       transform: scale(0.8)
+      font-size: 0.9em
 
     &__back-button
-      font-size: 0.8em
+      transform: scale(0.8)
+      font-size: 0.9em
 
     &__people
       margin-top: 1em

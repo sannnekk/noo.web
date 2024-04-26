@@ -103,6 +103,7 @@
         v-model="assignedWorkStore.assignedWork"
         :task="assignedWorkStore.task"
         :readonly="assignedWorkStore.fieldVisibility.checkBox === 'readonly'"
+        :mode="assignedWorkStore.mode"
       />
     </div>
     <div
