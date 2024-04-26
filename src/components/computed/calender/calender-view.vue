@@ -116,11 +116,16 @@ async function onEventSubmit() {
   uiService.setLoading(true)
 
   try {
-    await calenderService.createEvent({
+    const response = await calenderService.createEvent({
       ...newEvent.value,
       id: undefined
     } as any)
-    events.value.push({ ...newEvent.value, id: uuid() })
+
+    if (!response.data) {
+      throw new Error('Не удалось создать событие')
+    }
+
+    events.value.push(response.data)
     newEvent.value = emptyEvent()
   } catch (error: any) {
     uiService.openErrorModal('Ошибка при создании события', error.message)

@@ -28,8 +28,10 @@ export class CalenderService extends ApiService {
   /**
    * Create event
    */
-  public async createEvent(event: CalenderEvent): Promise<void> {
-    await this.httpPost(this._route, event)
+  public async createEvent(
+    event: CalenderEvent
+  ): Promise<ApiResponse<CalenderEvent | null>> {
+    return await this.httpPost(this._route, event)
   }
 
   /**
