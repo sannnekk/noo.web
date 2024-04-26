@@ -42,7 +42,6 @@ import calenderEventForm from './calender-event-form.vue'
 import type { CalenderEvent } from '@/core/data/entities/CalenderEvent'
 import { Core } from '@/core/Core'
 import { useDate } from '@/composables/useDate'
-import { v4 as uuid } from 'uuid'
 import { ref, watch } from 'vue'
 import type { User } from '@/core/data/entities/User'
 

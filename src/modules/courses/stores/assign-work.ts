@@ -50,8 +50,8 @@ export const useAssignWorkToMaterialStore = defineStore(
         }
 
         selectedWorkId.value = [material.workId]
-        checkDeadline.value = material.workCheckDeadline
-        solveDeadline.value = material.workSolveDeadline
+        checkDeadline.value = material.workCheckDeadline || dateInThreeDays
+        solveDeadline.value = material.workSolveDeadline || new Date()
 
         deadlinesAvailable.value =
           !!material.workCheckDeadline || !!material.workSolveDeadline
@@ -62,7 +62,9 @@ export const useAssignWorkToMaterialStore = defineStore(
     /**
      * Check deadline
      */
-    const checkDeadline = ref<Date | undefined>(new Date())
+    const dateInThreeDays = new Date()
+    dateInThreeDays.setDate(dateInThreeDays.getDate() + 3)
+    const checkDeadline = ref<Date | undefined>(dateInThreeDays)
 
     /**
      * Solve deadline

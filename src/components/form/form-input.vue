@@ -31,12 +31,9 @@ const emits = defineEmits<Emits>()
 
 const model = computed({
   get: () => {
-    if (props.type === 'date') {
-      const date = new Date(props.modelValue)
-      return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-        .toISOString()
-        .slice(0, 10)
-    } else if (props.type === 'datetime-local') {
+    if (props.type && props.type === 'date') {
+      return new Date(props.modelValue).toISOString().slice(0, 10)
+    } else if (props.type && props.type === 'datetime-local') {
       const date = new Date(props.modelValue)
       return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
         .toISOString()
