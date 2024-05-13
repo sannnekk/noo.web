@@ -26,7 +26,7 @@ interface Props {
   label: string
   options: {
     label: string
-    value: string
+    value: string | number
   }[]
   modelValue: string
   readonly?: boolean

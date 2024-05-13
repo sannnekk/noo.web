@@ -25,7 +25,14 @@ export function useSearch<EntityType>(
     immediate: true
   }
 ) {
-  const pagination = ref<Pagination>(options.initialPagination || {})
+  const pagination = ref<Pagination>(
+    {
+      ...options.initialPagination,
+      search: options.initialPagination?.search || '',
+      page: options.initialPagination?.page || 1,
+      limit: options.initialPagination?.limit || 25
+    } || {}
+  )
 
   const results = ref<EntityType[]>([]) as Ref<EntityType[]>
 

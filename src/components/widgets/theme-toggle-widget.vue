@@ -23,20 +23,32 @@
 
 <script setup lang="ts">
 import { Core } from '@/core/Core'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const rerenderTrigger = ref(false)
 
 function toggleTheme() {
   if (Core.Context.Theme === 'dark') {
     Core.Context.Theme = 'light'
-    document.body.classList.remove('theme--dark')
+    setTheme('light')
   } else {
     Core.Context.Theme = 'dark'
-    document.body.classList.add('theme--dark')
+    setTheme('dark')
   }
   rerenderTrigger.value = !rerenderTrigger.value
 }
+
+function setTheme(theme: 'dark' | 'light') {
+  if (theme === 'dark') {
+    document.body.classList.add('theme--dark')
+  } else {
+    document.body.classList.remove('theme--dark')
+  }
+}
+
+onMounted(() => {
+  setTheme(Core.Context.Theme)
+})
 </script>
 
 <style scoped lang="sass">

@@ -16,6 +16,8 @@
 
 <style lang="sass" scoped>
 .pane-layout
+  padding-bottom: 2em
+
   &__slot
     background-color: var(--lightest)
     border-radius: var(--border-radius)

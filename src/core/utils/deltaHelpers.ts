@@ -17,3 +17,7 @@ export function isDeltaEmptyOrWhitespace(delta: DeltaContentType | undefined) {
   }
   return true
 }
+
+export function emptyDelta(): DeltaContentType {
+  return { ops: [{ insert: '\n' }] }
+}

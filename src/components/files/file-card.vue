@@ -61,7 +61,7 @@ const downloadLink = computed(() =>
   height: 100%
   padding: 10px
   border-radius: 5px
-  background-color: #fff
+  background-color: var(--light)
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
   border: 3px dashed transparent
   cursor: pointer
@@ -95,7 +95,7 @@ const downloadLink = computed(() =>
     justify-content: center
     width: 100%
     font-size: 12px
-    color: #000
+    color: var(--form-text-color)
     text-align: center
     word-break: break-all
 </style>

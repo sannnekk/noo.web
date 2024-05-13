@@ -42,14 +42,14 @@ const scoreOptions = computed(() => {
   return options
 })
 
-const model = computed<Comment['score']>({
+const model = computed<string>({
   get() {
     const existingComment = props.modelValue.comments.find(
       (comment) => comment.taskId === props.task.id
     )
 
     if (existingComment) {
-      return existingComment.score
+      return existingComment.score?.toString() || '0'
     }
 
     const comment = entityFactory<Comment>('comment')
@@ -61,9 +61,9 @@ const model = computed<Comment['score']>({
 
     emits('update:modelValue', work)
 
-    return comment.score
+    return comment.score?.toString() || '0'
   },
-  set(value: Comment['score']) {
+  set(value: string) {
     const work = { ...props.modelValue }
     work.comments.find((comment) => comment.taskId === props.task.id)!.score =
       Number(value)

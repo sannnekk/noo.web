@@ -1,7 +1,7 @@
 <template>
   <div class="delete-account">
     <div class="delete-account__header">
-      <h3 class="delete-account__header__title">Удаление акканта</h3>
+      <h3 class="delete-account__header__title">Удаление аккаунта</h3>
     </div>
     <div class="delete-account__body">
       <div class="delete-account__body__warning">

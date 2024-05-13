@@ -17,7 +17,7 @@
     <div class="course-card__description">
       {{ description }}
     </div>
-    <div
+    <!-- <div
       class="course-card__author"
       v-if="author"
     >
@@ -27,7 +27,7 @@
       <div class="course-card__author__name">
         <span>{{ author }}</span>
       </div>
-    </div>
+    </div> -->
     <div
       class="course-card__edit"
       v-if="Core.Context.User?.role === 'teacher'"
@@ -41,7 +41,7 @@
 import { Core } from '@/core/Core'
 
 interface Props {
-  image: string
+  image?: string | undefined
   title: string
   author?: string
   description: string

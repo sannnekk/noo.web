@@ -1,9 +1,14 @@
 <template>
-  <div class="task-answer-container">
+  <div
+    class="task-answer-container"
+    v-auto-animate
+  >
     <h4 class="task-answer-container__title">Ответ:</h4>
     <rich-text-container
       v-if="readonly"
       :content="model"
+      :commentable="commentable"
+      @commented="onComment($event)"
     />
     <rich-text-area
       v-else
@@ -23,6 +28,7 @@ interface Props {
   modelValue: AssignedWork
   task: Task
   readonly?: boolean
+  commentable?: boolean
 }
 
 interface Emits {
@@ -60,12 +66,17 @@ const model = computed<Answer['content']>({
     emits('update:modelValue', work)
   }
 })
+
+function onComment(value: Answer['content']) {
+  model.value = value
+}
 </script>
 
 <style scoped lang="sass">
 .task-answer-container
   &__title
-    font-weight: 500
+    font-weight: 700
+    font-size: 1.5em
+    margin-bottom: 0.5em
+    margin-left: 0.3em
 </style>
-@/core/data/entities/AssignedWork@/core/data/entities/Answer@/core/data/entities/Task
-@/core/utils/entityFactory

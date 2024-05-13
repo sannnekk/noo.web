@@ -78,3 +78,10 @@ import { useCourseStore } from '../stores/course'
 const assignWorkStore = useAssignWorkToMaterialStore()
 const courseStore = useCourseStore()
 </script>
+
+<style lang="sass" scoped>
+.assign-work-to-material-modal
+  &__current-work-link
+    color: var(--lila)
+    text-decoration: underline
+</style>

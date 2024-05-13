@@ -4,7 +4,8 @@
     class="overlay-hint"
     :style="{
       top: position.y + 'px',
-      left: position.x - 20 + 'px'
+      left: position.x - 20 + 'px',
+      position: absolute ? 'absolute' : 'fixed'
     }"
   >
     <div class="overlay-hint__content">
@@ -23,6 +24,7 @@
 interface Props {
   position: { x: number; y: number }
   visible: boolean
+  absolute?: boolean
 }
 
 interface Emits {
@@ -39,7 +41,6 @@ function hideHint() {
 
 <style scoped lang="sass">
 .overlay-hint
-  position: fixed
   z-index: 1000
   max-width: min(500px, 100%)
   padding: 10px

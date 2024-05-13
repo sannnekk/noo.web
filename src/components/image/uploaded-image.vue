@@ -7,14 +7,12 @@ import { Core } from '@/core/Core'
 import { computed } from 'vue'
 
 interface Props {
-  src?: string | File
+  src?: string | File | undefined
 }
 
 const props = defineProps<Props>()
 
 const link = computed(() => {
-  if (!props.src) return '/img/placeholder.svg'
-
   if (typeof props.src === 'string' && props.src.startsWith('http'))
     return props.src
 

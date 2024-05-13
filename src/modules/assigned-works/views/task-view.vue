@@ -22,6 +22,7 @@
         v-model="assignedWorkStore.assignedWork"
         :task="assignedWorkStore.task"
         :readonly="assignedWorkStore.fieldVisibility.solveBox === 'readonly'"
+        :commentable="assignedWorkStore.fieldVisibility.checkBox === 'visible'"
       />
       <task-answer-word-container
         v-if="assignedWorkStore.task.type === 'word'"
@@ -41,17 +42,15 @@
       />
     </div>
     <br />
-    <div
-      class="taks-view__right-answer"
-      v-if="
-        ['visible', 'readonly'].includes(
-          assignedWorkStore.fieldVisibility.scoreBox
-        ) && assignedWorkStore.task?.type === 'word'
-      "
-    >
+    <div class="taks-view__right-answer">
       <div class="row">
         <div class="col-md-6">
           <form-input
+            v-if="
+              ['visible', 'readonly'].includes(
+                assignedWorkStore.fieldVisibility.scoreBox
+              ) && assignedWorkStore.task?.type === 'word'
+            "
             readonly
             :label="
               assignedWorkStore.task?.rightAnswer.split('|').length > 1
@@ -59,12 +58,18 @@
                 : 'Правильный ответ'
             "
             :model-value="
-              assignedWorkStore.task?.rightAnswer.split('|').join(', ')
+              assignedWorkStore.task?.rightAnswer.split('|').join(', ') || ''
             "
+            type="text"
           />
         </div>
         <div class="col-md-6">
           <task-score-container
+            v-if="
+              ['visible', 'readonly'].includes(
+                assignedWorkStore.fieldVisibility.scoreBox
+              )
+            "
             v-model="assignedWorkStore.assignedWork"
             :task="assignedWorkStore.task"
             :readonly="

@@ -5,6 +5,7 @@
       label="Пробелы и регистр не учитываются в процессе проверки"
       :readonly="readonly"
       v-model="model"
+      type="text"
     />
   </div>
 </template>
@@ -36,7 +37,7 @@ const model = computed<Answer['word']>({
     )
 
     if (existingAnswer) {
-      return existingAnswer.word!
+      return existingAnswer.word || ''
     }
 
     const answer = entityFactory<Answer>('answer')
@@ -48,7 +49,7 @@ const model = computed<Answer['word']>({
 
     emits('update:modelValue', props.modelValue)
 
-    return answer.word!
+    return answer.word || ''
   },
   set(value: Answer['word']) {
     const work = { ...props.modelValue }
@@ -63,6 +64,8 @@ const model = computed<Answer['word']>({
 <style scoped lang="sass">
 .task-answer-container
   &__title
-    font-weight: 500
+    font-weight: 700
+    font-size: 1.5em
     margin-bottom: 0.5em
+    margin-left: 0.3em
 </style>

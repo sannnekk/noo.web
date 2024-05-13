@@ -1,39 +1,44 @@
 <template>
   <label>{{ label }}</label>
-  <div 
-    class="entity-select-input" 
+  <div
+    class="entity-select-input"
     v-auto-animate
-    @focusin="flyoutVisible = true"
-    @focusout="flyoutVisible = false"
+    @focusin="focus.input = true"
+    @focusout="focus.input = false"
   >
-    <div class="entity-select-input__selected">
+    <div class="entity-select-input__selected" v-if="model.length">
       <span
         class="entity-select-input__selected__item"
         v-for="(entity, index) in model"
         :key="index"
       >
         <span>
-          {{ labelKeys.map(key => entity[key]).join(' / ') }}
+          {{ labelKeys.map((key) => entity[key]).join(' / ') }}
         </span>
         <b
           class="entity-select-input__selected__item__remove"
           @click="removeItem(index)"
-          >
-          +
-          </b
         >
+          +
+        </b>
       </span>
     </div>
     <div class="entity-select-input__input">
       <input
-      type="text"
-      v-model="pagination.search"
-      @keydown.enter.prevent="addItem()"
-      @keydown.backspace="removeLastItem()"
-      @keydown.down.prevent="onArrowDown()"
-      @keydown.up.prevent="onArrowUp()"
-    />
-    <div class="entity-select-input__flyout" v-if="flyoutVisible">
+        type="text"
+        v-model="pagination.search"
+        @keydown.enter.prevent="addItem()"
+        @keydown.backspace="removeLastItem()"
+        @keydown.down.prevent="onArrowDown()"
+        @keydown.up.prevent="onArrowUp()"
+      />
+    </div>
+    <div 
+      class="entity-select-input__flyout" 
+      v-if="flyoutVisible" 
+      @focusin="focus.flyout = true" 
+      @focusout="focus.flyout = false"
+    >
       <ul v-if="!isListLoading" class="entity-select-input__flyout__results">
         <li
           class="entity-select-input__flyout__results__item"
@@ -55,13 +60,12 @@
         </span>
       </div>
     </div>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useSearch } from '@/composables/useSearch'
-import { computed, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 
 interface Props {
   label: string
@@ -83,26 +87,44 @@ const model = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
+const focus = reactive({
+  input: false,
+  flyout: false
+})
+
 const flyoutVisible = ref(false)
 const hoveredItemId = ref(null)
 
 const { pagination, results, isListLoading } = useSearch(props.fetchFunction)
 
-watch(results, () => {
-  if (results.value.length === 0) {
-    hoveredItemId.value = null
-  }
+watch(
+  results,
+  () => {
+    if (results.value.length === 0 || isListLoading.value) {
+      hoveredItemId.value = null
+    }
 
-  hoveredItemId.value = (<any>results.value[0]).id
-}, { deep: true })
+    hoveredItemId.value = (<any>results.value[0])?.id || null
+  },
+  { deep: true }
+)
+
+watch(focus, () => {
+  setTimeout(() => {
+    flyoutVisible.value = (focus.input || focus.flyout) && pagination.value.search !== ''
+  }, 25)
+}, {
+  deep: true
+})
 
 function addItem() {
   if (model.value.length >= props.maxCount) {
     return
   }
 
-  const item = results.value
-    .find((result: any) => result.id === hoveredItemId.value)
+  const item = results.value.find(
+    (result: any) => result.id === hoveredItemId.value
+  )
 
   if (!item) {
     return
@@ -123,7 +145,9 @@ function removeLastItem() {
 }
 
 function onArrowDown() {
-  const index = results.value.findIndex((result: any) => result.id === hoveredItemId.value)
+  const index = results.value.findIndex(
+    (result: any) => result.id === hoveredItemId.value
+  )
 
   if (index === -1 || index === results.value.length - 1) {
     return
@@ -133,7 +157,9 @@ function onArrowDown() {
 }
 
 function onArrowUp() {
-  const index = results.value.findIndex((result: any) => result.id === hoveredItemId.value)
+  const index = results.value.findIndex(
+    (result: any) => result.id === hoveredItemId.value
+  )
 
   if (index === -1 || index === 0) {
     return
@@ -154,7 +180,10 @@ label
   gap: 0.5rem
   border: 1px solid var(--border-color)
   border-radius: var(--border-radius)
-  padding: 0.5rem 0.8rem
+  padding: 0.5em
+
+  &--focus
+    border-color: var(--primary)
 
   &__selected
     display: flex
@@ -200,12 +229,16 @@ label
       color: var(--form-text-color)
       background-color: transparent
 
+      &:focus
+        outline: none
+        border: none
+
   &__flyout
     position: absolute
     z-index: 99
-    top: 100%
-    left: 0
-    right: 0
+    top: calc(100% - 0.3em)
+    width: calc(100% + 2px)
+    left: -1px
     background-color: var(--lightest)
     border: 1px solid var(--border-color)
     border-top: none
@@ -215,6 +248,7 @@ label
     &__results
       list-style: none
       padding: 0
+      padding-top: 0.4em
       margin: 0
 
       &__item

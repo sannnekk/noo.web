@@ -11,6 +11,8 @@
     <rich-text-area
       v-else
       v-model="model"
+      :additional-modules="additionalModules"
+      :additional-module-options="additionalModuleOptions"
     />
   </div>
 </template>
@@ -21,6 +23,7 @@ import type { Task } from '@/core/data/entities/Task'
 import type { Comment } from '@/core/data/entities/Comment'
 import { entityFactory } from '@/core/utils/entityFactory'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
+import { QuillSelectionModule } from '@/core/utils/quill/QuillSelectionModule'
 import { computed } from 'vue'
 
 interface Props {
@@ -65,10 +68,21 @@ const model = computed<Comment['content']>({
     emits('update:modelValue', work)
   }
 })
+
+const additionalModules = {
+  quoteSelection: QuillSelectionModule
+}
+
+const additionalModuleOptions = {
+  quoteSelection: {}
+}
 </script>
 
 <style scoped lang="sass">
 .task-comment-container
   &__title
-    font-weight: 500
+    font-weight: 700
+    font-size: 1.5em
+    margin-bottom: 0.5em
+    margin-left: 0.3em
 </style>

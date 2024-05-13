@@ -3,6 +3,8 @@
     <quill-editor
       :model-value="content"
       :readonly="true"
+      :commentable="commentable"
+      @commented="emits('commented', $event)"
     />
   </div>
 </template>
@@ -12,21 +14,13 @@ import type { DeltaContentType } from '@/types/composed/DeltaContentType'
 
 interface Props {
   content: DeltaContentType
+  commentable?: boolean
 }
 
-defineProps<Props>()
+interface Emits {
+  (e: 'commented', value: DeltaContentType): void
+}
+
+const props = defineProps<Props>()
+const emits = defineEmits<Emits>()
 </script>
-
-<style scoped lang="sass">
-.rich-text-container
-  &:deep()
-    .ql-toolbar.ql-snow
-      display: none
-    .ql-container.ql-snow
-      border: none
-
-      .ql-editor
-        font-size: 1rem
-        padding: 0
-        font-family: var(--font-family)
-</style>
