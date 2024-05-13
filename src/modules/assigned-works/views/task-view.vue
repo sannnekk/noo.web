@@ -171,7 +171,10 @@ const assignedWorkStore = useAssignedWorkStore()
     margin-top: 1rem
 
     &__title
-      font-weight: 500
+      font-weight: 700
+      font-size: 1.5em
+      margin-bottom: 0.5em
+      margin-left: 0.3em
 
   &__action-buttons
     margin-top: 2rem
