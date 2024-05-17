@@ -4,6 +4,8 @@ import { CommentBlot, type Comment } from './CommentBlot'
 import { Delta } from 'quill/core'
 import { type Ref } from 'vue'
 import { Range } from 'quill/core/selection'
+import { ImageCommentBlot, type ImageComment } from './ImageCommentBlot'
+import { ImageOverrideBlot } from './ImageOverrideBlot'
 
 export type FormatType =
   | 'bold'
@@ -68,6 +70,8 @@ export class CustomQuill extends Quill {
 
   private registerBlots() {
     Quill.register(CommentBlot)
+    Quill.register(ImageCommentBlot)
+    Quill.register(ImageOverrideBlot)
   }
 
   private initHandlers() {
@@ -76,28 +80,13 @@ export class CustomQuill extends Quill {
     this.container.addEventListener('paste', this.onPaste.bind(this))
   }
 
-  public onCommentClick(handler: (comment: Comment) => void) {
-    this.container.querySelectorAll('.ql-comment').forEach((comment) => {
-      const text = (comment as HTMLElement).dataset.comment!
-      const type = (comment as HTMLElement).dataset.type! as Comment['type']
-
-      comment.addEventListener(
-        'click',
-        handler.bind(this, {
-          content: text,
-          type
-        })
-      )
-    })
-  }
-
   public rerenderToolbar() {
     if (!this.toolbar) return
 
     for (const group of this.toolbar) {
       for (const item of group) {
         if (item.value === undefined) continue
-        item.active = this.getFormat()[item.type] === item.value || false
+        item.active = this.getFormat()[item.type] === item.value
       }
     }
   }
@@ -151,30 +140,94 @@ export class CustomQuill extends Quill {
     this.rerenderToolbar()
   }
 
-  public comment(
-    range: Range,
-    comment: Comment,
-    handler: (comment: Comment) => void
-  ) {
+  public comment(range: Range, comment: Comment) {
     this.focus()
     this.setSelection(range.index, range.length)
     this.format('comment', comment)
     this.setSelection(0, 0, 'silent')
-
-    this.onCommentClick(handler)
   }
 
-  public removeComment(comment: Comment & { selection: Range | null }) {
-    if (!comment.selection) return
+  public commentImage(comment: ImageComment) {
+    const contents = this.getContents()
+
+    // find the image index
+    const currentOpIndex = contents.ops.findIndex((op) => {
+      return (
+        op.insert &&
+        (op.insert as any).image &&
+        (op.insert as any).image === comment.imageSrc
+      )
+    })
+
+    const index =
+      contents.ops.reduce((acc, op, i) => {
+        if (i > currentOpIndex) return acc
+        if (op.insert && typeof op.insert === 'string') {
+          return acc + op.insert.length
+        }
+        return acc + 1
+      }, 0) - 1
+
+    if ('originPosition' in comment) {
+      comment.x = (comment.originPosition as any).x
+      comment.y = (comment.originPosition as any).y
+    }
+
+    // add the comment
+    if (index !== -1) {
+      this.focus()
+      this.setSelection(index, 0, 'silent')
+      this.insertText(index, '*', 'silent')
+      this.setSelection(index, 1, 'silent')
+      this.format('image-comment', comment, 'silent')
+      this.setSelection(0, 0, 'silent')
+    }
+  }
+
+  public removeComment(comment: Comment & { range: Range | null }) {
+    if (!comment.range) return
 
     this.focus()
-    this.setSelection(
-      comment.selection.index,
-      comment.selection.length,
-      'silent'
-    )
+    this.setSelection(comment.range.index, comment.range.length, 'silent')
     this.format('comment', false, 'silent')
     this.setSelection(0, 0, 'silent')
+  }
+
+  public removeImageComment(comment: ImageComment) {
+    const contents = this.getContents()
+
+    // find the image index
+    const currentOpIndex = contents.ops.findIndex((op) => {
+      return (
+        typeof op.insert === 'string' &&
+        op.attributes &&
+        (op.attributes['image-comment'] as any)?.content === comment.content &&
+        (op.attributes['image-comment'] as any)?.type === comment.type &&
+        (op.attributes['image-comment'] as any)?.x === comment.x &&
+        (op.attributes['image-comment'] as any)?.y === comment.y
+      )
+    })
+
+    let index = contents.ops.reduce((acc, op, i) => {
+      if (i > currentOpIndex) return acc
+      if (op.insert && typeof op.insert === 'string') {
+        return acc + op.insert.length
+      }
+      return acc + 1
+    }, 0)
+
+    if (currentOpIndex !== -1) {
+      this.focus()
+
+      if (this.getContents(index, 1).ops[0].insert !== '*') {
+        index = index - 1
+      }
+
+      this.setSelection(index, 1, 'silent')
+      this.format('image-comment', false, 'silent')
+      this.deleteText(index, 1, 'silent')
+      this.setSelection(0, 0, 'silent')
+    }
   }
 
   public async promptFile(): Promise<File | null> {

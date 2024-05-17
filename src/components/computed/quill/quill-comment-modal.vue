@@ -44,12 +44,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Comment } from './CommentBlot'
+import type { ImageComment } from './ImageCommentBlot'
 
 interface Props {
   visible?: boolean
-  comment: Comment
+  comment: Comment & ImageComment
   editable?: boolean
-  position: { x: number; y: number }
+  positionX: number
+  positionY: number
 }
 
 interface Emits {
@@ -66,13 +68,9 @@ const visibilityModel = computed({
 })
 
 const positionModel = computed(() => ({
-  x: window.innerWidth > 400 ? props.position.x : 10,
-  y: props.position.y + 15
+  x: window.innerWidth > 400 ? props.positionX : 10,
+  y: props.positionY + (props.comment.imageSrc ? 0 : 10)
 }))
-
-function onClose() {
-  emits('update:visible', false)
-}
 
 function onDelete() {
   emits('delete')

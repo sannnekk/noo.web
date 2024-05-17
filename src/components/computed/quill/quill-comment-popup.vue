@@ -2,10 +2,10 @@
   <div
     class="comment-popup"
     :style="{
-      top: `${model.y + 15}px`,
-      left: `${model.x}px`
+      top: `${model.popupPosition ? model.popupPosition.y : model.y + 15}px`,
+      left: `${model.popupPosition ? model.popupPosition.x : model.x}px`
     }"
-    v-if="model?.visible"
+    v-if="model?.visible.popup"
   >
     <div
       class="comment-popup__inner"
@@ -18,6 +18,7 @@
         <textarea
           type="text"
           v-model="model.content"
+          @keypress.prevent.enter="onSubmit()"
         />
       </div>
       <div class="comment-popup__toggle">
@@ -35,7 +36,7 @@
         </button>
         <button
           class="comment-popup__actions__cancel"
-          @click="model.visible = false"
+          @click="model.visible.popup = false"
         >
           Отмена
         </button>
@@ -47,12 +48,20 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Comment } from './CommentBlot'
+import type { ImageComment } from './ImageCommentBlot'
 
 interface Props {
-  modelValue: Comment & {
+  modelValue: (Comment & ImageComment) & {
     x: number
     y: number
-    visible: boolean
+    visible: {
+      modal?: boolean
+      popup?: boolean
+    }
+    popupPosition?: {
+      x: number
+      y: number
+    }
   }
 }
 
@@ -84,7 +93,7 @@ const model = computed({
 })
 
 function onSubmit() {
-  model.value.visible = false
+  model.value.visible.popup = false
   emits('submit')
 }
 </script>
@@ -98,6 +107,7 @@ function onSubmit() {
   border: 1px solid var(--border-color)
   border-radius: var(--border-radius)
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5)
+  transition: top ease 0.3s, left ease 0.3s
 
   &__inner
     padding: 0.5em
