@@ -270,7 +270,7 @@ export class CustomQuill extends Quill {
         throw new Error('Не удалось загрузить файл')
       }
 
-      return Core.Constants.MEDIA_URL + '/' + mediaFiles[0].link
+      return Core.Constants.MEDIA_URL + '/' + mediaFiles[0].src
     } catch (e: any) {
       Core.Services.UI.openErrorModal('Ошибка загрузки файла', e.message)
     } finally {

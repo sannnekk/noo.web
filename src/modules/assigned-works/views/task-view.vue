@@ -81,7 +81,10 @@
     </div>
     <div
       class="task-view__hint"
-      v-if="assignedWorkStore.task.solveHint"
+      v-if="
+        assignedWorkStore.task.solveHint &&
+        !isDeltaEmptyOrWhitespace(assignedWorkStore.task.solveHint)
+      "
     >
       <h4 class="task-view__hint__title">Подсказка:</h4>
       <rich-text-container :content="assignedWorkStore.task.solveHint" />
@@ -90,7 +93,8 @@
       class="task-view__hint"
       v-if="
         assignedWorkStore.task.checkHint &&
-        ['check', 'read'].includes(assignedWorkStore.mode)
+        ['check', 'read'].includes(assignedWorkStore.mode) &&
+        !isDeltaEmptyOrWhitespace(assignedWorkStore.task.solveHint)
       "
     >
       <h4 class="task-view__hint__title">Пояснение:</h4>
@@ -147,6 +151,7 @@ import taskAnswerWordContainer from '../components/task-answer-word-container.vu
 import taskAnswerOptionsContainer from '../components/task-answer-options-container.vue'
 import taskCommentContainer from '../components/task-comment-container.vue'
 import taskScoreContainer from '../components/task-score-container.vue'
+import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
 
 const assignedWorkStore = useAssignedWorkStore()
 </script>

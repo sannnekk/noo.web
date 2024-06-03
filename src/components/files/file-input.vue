@@ -11,6 +11,7 @@
     />
     <label class="file-input__label">{{ label }}</label>
     <div
+      v-if="!readonly"
       class="file-input__area"
       :class="{ 'file-input__area--drag': drag }"
       @click=";($refs.fileInput as HTMLInputElement).click()"
@@ -31,7 +32,11 @@
         v-for="file in files"
         :key="file.id"
       >
-        <div class="file-input__files__file__preview">
+        <a
+          :href="`${Core.Constants.MEDIA_URL}/${file.src}`"
+          target="_blank"
+          class="file-input__files__file__preview"
+        >
           <inline-icon
             v-if="file.src && file.extension === 'pdf'"
             name="pdf-file"
@@ -40,7 +45,7 @@
             v-else
             :src="file.src"
           />
-        </div>
+        </a>
         <div class="file-input__files__file__data">
           <p class="file-input__files__file__data__name">
             {{ file.fileName }}
@@ -58,7 +63,10 @@
             <progress-bar :value="file.progress" />
           </div>
         </div>
-        <div class="file-input__files__file__actions">
+        <div
+          class="file-input__files__file__actions"
+          v-if="!readonly"
+        >
           <div class="file-input__files__file__actions__delete">
             <inline-icon
               name="delete"
@@ -78,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, readonly, ref } from 'vue'
 import { v4 as uuid } from 'uuid'
 import type { Media } from '@/core/data/entities/Media'
 import { Core } from '@/core/Core'
@@ -98,11 +106,12 @@ interface FileItem {
 interface Props {
   label: string
   modelValue: (Omit<Media, 'id' | 'createdAt'> & {
-    id: Media['id'] | undefined
+    id?: Media['id']
   })[]
   allowedMimeTypes: ('image/png' | 'image/jpeg' | 'application/pdf')[]
   maxFileSize?: number
   maxCount?: number
+  readonly?: boolean
 }
 
 interface Emits {
@@ -274,10 +283,12 @@ async function sendFiles() {
         continue
       }
 
-      file.src = response.data[0].link
-      //file.fileName = response.data[0].name
+      file.src = response.data[0].src
+      file.fileName = response.data[0].name
+      file.extension = response.data[0].mimeType.split('/').pop() as any
       file.isUploaded = true
       file.progress = 100
+
       emits(
         'update:modelValue',
         files.value.map((file) => ({
@@ -301,6 +312,8 @@ async function sendFiles() {
 }
 
 function removeFile(file: FileItem) {
+  if (props.readonly) return
+
   files.value = files.value.filter((_file) => _file.key !== file.key)
 }
 
@@ -366,11 +379,16 @@ function filesCancel() {
         font-size: 45px
         overflow: hidden
         display: flex
+        text-decoration: none
+        color: currentColor
         align-items: center
         justify-content: center
         border: 1px solid var(--border-color)
         border-radius: var(--border-radius)
         background-color: var(--border-color)
+
+        &:hover
+          border-color: var(--primary)
 
         img
           max-height: 100%

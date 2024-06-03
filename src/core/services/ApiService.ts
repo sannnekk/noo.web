@@ -4,6 +4,7 @@ import { Constants } from '../constants'
 import { Service } from './Service'
 import { ref, type Ref } from 'vue'
 import type { MediaFile } from '../data/MediaFile'
+import type { Media } from '../data/entities/Media'
 
 type ApiRoute = `/${string}`
 
@@ -70,7 +71,7 @@ export class ApiService extends Service {
    * Upload files request
    */
   protected uploadFiles(files: File[], progress: (progress: number) => void) {
-    return new Promise<ApiResponse<MediaFile[] | null>>((resolve, reject) => {
+    return new Promise<ApiResponse<Media[]>>((resolve, reject) => {
       const formData = new FormData()
 
       for (const file of files) {
@@ -219,9 +220,22 @@ export class ApiService extends Service {
         return acc
       }, {} as Pagination)
 
-    const filters = Object.keys(params).filter((param) =>
+    let filters = Object.keys(params).filter((param) =>
       param.startsWith('filter[')
     )
+
+    filters = filters.filter((filter) => {
+      if (params[filter as any] === undefined) {
+        return false
+      }
+
+      if (Array.isArray(params[filter as any].value)) {
+        // @ts-ignore
+        return params[filter].value.length > 0
+      }
+
+      return true
+    })
 
     let query = new URLSearchParams(
       nonFilterParams as unknown as Record<string, string>
@@ -247,6 +261,8 @@ export class ApiService extends Service {
         )}|${this._stringifyType(filter.value[1])})`
       case 'arr':
         return `arr(${filter.value.map(this._stringifyType).join('|')})`
+      case 'tags':
+        return `tags(${filter.value.map(this._stringifyType).join('|')})`
       case 'string':
       case 'number':
       case 'boolean':

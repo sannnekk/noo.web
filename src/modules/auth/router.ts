@@ -1,5 +1,4 @@
 import module from './module.vue'
-import index from './views/index.vue'
 
 export default {
   path: '/auth',
@@ -13,7 +12,7 @@ export default {
     {
       path: '',
       name: 'auth.index',
-      component: index
+      component: () => import('./views/index.vue')
     }
   ]
 }

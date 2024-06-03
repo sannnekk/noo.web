@@ -27,6 +27,12 @@ export function installUIStore() {
      */
     const navEntries = ref([
       {
+        title: 'Блог/Новости',
+        icon: 'home',
+        route: '/blog',
+        for: ['admin', 'teacher', 'mentor', 'student']
+      },
+      {
         title: 'Курсы',
         icon: 'uni-cap',
         route: '/courses',

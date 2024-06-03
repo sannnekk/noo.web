@@ -12,18 +12,18 @@ export const HOT_KEYS: HotKeyDefinition[] = [
     }
   },
   {
-    keys: ['Ctrl', 'n'],
+    keys: ['Ctrl', 'l'],
     description: 'Добавить главу',
-    shortcut: ['Ctrl', 'n'],
+    shortcut: ['Ctrl', 'l'],
     handler: () => {
       const assignedWorkStore = useCreateCourseStore()
       assignedWorkStore.addChapter()
     }
   },
   {
-    keys: ['Ctrl', 'g'],
+    keys: ['Ctrl', 'k'],
     description: 'Добавить материал',
-    shortcut: ['Ctrl', 'm'],
+    shortcut: ['Ctrl', 'k'],
     handler: () => {
       const assignedWorkStore = useCreateCourseStore()
       assignedWorkStore.addMaterial()

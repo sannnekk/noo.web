@@ -1,5 +1,4 @@
 import module from './module.vue'
-import index from './views/index.vue'
 
 export default {
   path: '/calender',
@@ -10,7 +9,7 @@ export default {
     {
       path: '',
       name: 'Календарь',
-      component: index
+      component: () => import('./views/index.vue')
     }
   ]
 }

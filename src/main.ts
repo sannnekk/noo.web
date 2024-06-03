@@ -18,18 +18,6 @@ Object.values(modules).forEach((module) =>
   registerModule(module as ApplicationModule)
 )
 
-// adding global components
-const components = import.meta.glob('@/components/**/**.vue', {
-  import: 'default',
-  eager: true
-})
-
-Object.entries(components).forEach(([path, component]) => {
-  const name = path.split('/').pop()?.split('.')[0]
-
-  if (name) app.component(name, component as any)
-})
-
 // adding plugins
 app.use(router)
 app.use(createPinia())

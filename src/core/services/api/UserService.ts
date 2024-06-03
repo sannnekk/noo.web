@@ -81,13 +81,6 @@ export class UserService extends ApiService {
   }
 
   /**
-   * create user
-   */
-  public async createUser(user: User): Promise<void> {
-    await this.httpPost<User>(`${this._route}/register`, user)
-  }
-
-  /**
    * assign mentor to student
    */
   public async assignMentor(

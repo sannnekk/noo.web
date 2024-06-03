@@ -33,6 +33,39 @@ const monthNames = [
 ]
 
 export function useDate(date: Date, options?: UseDateOptions) {
+  function today() {
+    if (options?.precision === 'day') {
+      const d = new Date()
+      d.setHours(23, 59, 59, 999)
+      return d
+    }
+
+    if (options?.precision === 'month') {
+      const d = new Date()
+      d.setDate(1)
+      d.setHours(23, 59, 59, 999)
+      return d
+    }
+
+    if (options?.precision === 'year') {
+      const d = new Date()
+      d.setMonth(0, 1)
+      d.setHours(23, 59, 59, 999)
+      return d
+    }
+
+    return new Date()
+  }
+
+  function yesterday() {
+    const now = today()
+
+    now.setDate(now.getDate() - 1)
+    now.setHours(0, 0, 1)
+
+    return now
+  }
+
   function isOnSameDay(d2: Date) {
     return (
       date.getDate() === d2.getDate() &&
@@ -138,6 +171,8 @@ export function useDate(date: Date, options?: UseDateOptions) {
     isInThisYear,
     toBeautiful,
     daysDifference,
-    isOnThisWeek
+    isOnThisWeek,
+    today,
+    yesterday
   }
 }

@@ -1,6 +1,4 @@
 import module from './module.vue'
-import index from './views/index.vue'
-import editUserView from './views/edit-user-view.vue'
 
 export default {
   path: '/users',
@@ -11,12 +9,12 @@ export default {
     {
       path: '',
       name: 'Пользователи',
-      component: index
+      component: () => import('./views/index.vue')
     },
     {
       path: 'edit/:username',
       name: 'Редактировать пользователя',
-      component: editUserView
+      component: () => import('./views/edit-user-view.vue')
     }
   ]
 }

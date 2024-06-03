@@ -1,10 +1,12 @@
 import type { Context } from '../context/Context'
 import { AssignedWorkService } from './api/AssignedWorkService'
 import { AuthService } from './api/AuthService'
+import { BlogService } from './api/BlogService'
 import { CalenderService } from './api/CalenderService'
 import { CourseService } from './api/CourseService'
 import { MediaService } from './api/MediaService'
 import { NotificationService } from './api/NotificationService'
+import { PollService } from './api/PollService'
 import { StatisticsService } from './api/StatisticsService'
 import { UserService } from './api/UserService'
 import { WorkService } from './api/WorkService'
@@ -21,6 +23,8 @@ export type ServiceName =
   | 'Notification'
   | 'UI'
   | 'Calender'
+  | 'Blog'
+  | 'Poll'
 
 export type Services = {
   Auth: AuthService
@@ -33,6 +37,8 @@ export type Services = {
   Notification: NotificationService
   UI: UIService
   Calender: CalenderService
+  Blog: BlogService
+  Poll: PollService
 }
 
 /**
@@ -53,6 +59,8 @@ export class ServiceFactory {
     Statistics: StatisticsService,
     Notification: NotificationService,
     Calender: CalenderService,
+    Blog: BlogService,
+    Poll: PollService,
     // storage
     UI: UIService
   }

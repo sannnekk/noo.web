@@ -1,12 +1,14 @@
 <template>
   <component
-    :is="`${name}-icon`"
+    :is="icon"
     class="icon"
     :class="{ animation }"
   />
 </template>
 
 <script setup lang="ts">
+import { shallowRef } from 'vue'
+
 interface Props {
   name:
     | 'bars'
@@ -17,7 +19,7 @@ interface Props {
     | 'user'
     | 'check-green'
     | 'check-red'
-    | 'cros-red'
+    | 'cross-red'
     | 'question-yellow'
     | 'attention-yellow'
     | 'minus-yellow'
@@ -31,7 +33,17 @@ interface Props {
   animation?: boolean
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+let icon = shallowRef('div')
+
+import(`./icons/${props.name}-icon.vue`)
+  .then((module) => {
+    icon.value = module.default
+  })
+  .catch(() => {
+    icon.value = 'div'
+  })
 </script>
 
 <style lang="sass" scoped>

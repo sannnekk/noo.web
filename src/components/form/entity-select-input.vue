@@ -95,7 +95,9 @@ const focus = reactive({
 const flyoutVisible = ref(false)
 const hoveredItemId = ref(null)
 
-const { pagination, results, isListLoading } = useSearch(props.fetchFunction)
+const { pagination, results, isListLoading } = useSearch(props.fetchFunction, {
+  immediate: false
+})
 
 watch(
   results,
@@ -105,14 +107,16 @@ watch(
     }
 
     hoveredItemId.value = (<any>results.value[0])?.id || null
+    flyoutVisible.value = (focus.input || focus.flyout) && pagination.value.search !== ''
   },
   { deep: true }
 )
 
 watch(focus, () => {
   setTimeout(() => {
+    console.log(pagination.value)
     flyoutVisible.value = (focus.input || focus.flyout) && pagination.value.search !== ''
-  }, 25)
+  }, 100)
 }, {
   deep: true
 })
@@ -187,6 +191,7 @@ label
 
   &__selected
     display: flex
+    flex-wrap: wrap
     gap: 0.5rem
 
     &--empty

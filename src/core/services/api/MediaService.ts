@@ -1,5 +1,6 @@
 import type { Context } from '@/core/context/Context'
 import type { MediaFile } from '@/core/data/MediaFile'
+import type { Media } from '@/core/data/entities/Media'
 import { ApiService, type ApiResponse } from '@/core/services/ApiService'
 
 /**
@@ -19,7 +20,7 @@ export class MediaService extends ApiService {
   public async upload(
     files: File[],
     progress: (progress: number) => void = () => {}
-  ): Promise<ApiResponse<MediaFile[] | null>> {
+  ): Promise<ApiResponse<Media[] | null>> {
     return this.uploadFiles(files, progress)
   }
 }

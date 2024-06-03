@@ -1,13 +1,25 @@
 <template>
-  <component :is="`${name}-icon`" />
+  <component :is="icon" />
 </template>
 
 <script setup lang="ts">
+import { shallowRef } from 'vue'
+
 interface Props {
   name: string
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const icon = shallowRef('div')
+
+import(`./icons/text-format-icons/${props.name}-icon.vue`)
+  .then((module) => {
+    icon.value = module.default
+  })
+  .catch(() => {
+    icon.value = 'div'
+  })
 </script>
 
 <style lang="sass" scoped>

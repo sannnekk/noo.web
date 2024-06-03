@@ -1,8 +1,4 @@
 import module from './module.vue'
-import indexView from './views/index-view.vue'
-import successViewVue from './views/success-view.vue'
-import taskFormView from './views/task-form-view.vue'
-import generalInfoView from './views/general-info-view.vue'
 
 export default {
   path: '/create-work:workSlug?',
@@ -13,24 +9,24 @@ export default {
     {
       path: '',
       name: 'Список заданий',
-      component: indexView,
+      component: () => import('./views/index-view.vue'),
       children: [
         {
           path: 'general-info',
           name: 'Общая информация',
-          component: generalInfoView
+          component: () => import('./views/general-info-view.vue')
         },
         {
           path: ':taskSlug',
           name: 'Список заданий',
-          component: taskFormView
+          component: () => import('./views/task-form-view.vue')
         }
       ]
     },
     {
       path: 'success',
       name: 'Работа создана',
-      component: successViewVue
+      component: () => import('./views/success-view.vue')
     }
   ]
 }

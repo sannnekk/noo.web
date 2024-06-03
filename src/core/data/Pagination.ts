@@ -17,6 +17,10 @@ export type FilterType =
       value: string[]
     }
   | {
+      type: 'tags'
+      value: string[]
+    }
+  | {
       type: 'string'
       value: string
     }

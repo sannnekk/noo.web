@@ -7,6 +7,9 @@
       v-model="model"
       :placholder="placeholder"
       :disabled="readonly"
+      :min="min"
+      :max="max"
+      :step="step"
     />
   </label>
 </template>
@@ -20,6 +23,9 @@ interface Props {
   placeholder?: string
   modelValue: string | number | Date
   readonly?: boolean
+  min?: number
+  max?: number
+  step?: number
 }
 
 interface Emits {
@@ -55,7 +61,7 @@ const model = computed({
 <style scoped lang="sass">
 .form-input
   &__label
-    font-size: 0.8em
+    font-size: 0.8rem
     color: var(--text-light)
 
   &__input
@@ -67,6 +73,7 @@ const model = computed({
     width: 100%
     background: var(--form-background)
     color: var(--form-text-color)
+    font-size: 1em
 
     &:focus
       border-color: var(--primary)

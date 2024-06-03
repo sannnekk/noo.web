@@ -382,8 +382,6 @@ export const useAssignedWorkStore = defineStore(
 
       uiService.setLoading(true)
 
-      const payload = { ...assignedWork.value, work: undefined }
-
       const onSolvedActions: ModalAction[] = [
         {
           label: 'Вернуться к списку работ',
@@ -408,20 +406,20 @@ export const useAssignedWorkStore = defineStore(
 
       try {
         if (mode.value === 'solve') {
-          await assignedWorkService.solveAssignedWork(
-            assignedWork.value.id,
-            payload
-          )
+          await assignedWorkService.solveAssignedWork(assignedWork.value.id, {
+            answers: assignedWork.value.answers
+          })
           uiService.openSuccessModal(
             'Работа успешно сдана!',
             '',
             onSolvedActions
           )
         } else if (mode.value === 'check') {
-          await assignedWorkService.checkAssignedWork(
-            assignedWork.value.id,
-            payload
-          )
+          await assignedWorkService.checkAssignedWork(assignedWork.value.id, {
+            // send answers even though its only check - text&image comments are stored in answers
+            answers: assignedWork.value.answers,
+            comments: assignedWork.value.comments
+          })
           uiService.openSuccessModal(
             'Работа успешно проверена!',
             'Если работа без открытых вопросов, она будет проверена автоматически и Вы можете просмотреть результат сразу. В случае работ с хотя б одним открытым вопросом требуется проверка куратора',

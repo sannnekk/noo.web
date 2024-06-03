@@ -2,9 +2,9 @@ import type { Answer } from './Answer'
 import type { User } from './User'
 import type { Work } from './Work'
 import type { Comment } from './Comment'
+import type { Entity } from '../Entity'
 
-export interface AssignedWork {
-  id: string
+export interface AssignedWork extends Entity {
   slug: string
   mentorIds: User['id'][]
   mentors?: User[]

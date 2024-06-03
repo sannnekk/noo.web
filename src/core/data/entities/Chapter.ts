@@ -1,8 +1,8 @@
 import type { Material } from './Material'
 import type { Course } from './Course'
+import type { Entity } from '../Entity'
 
-export interface Chapter {
-  id: string
+export interface Chapter extends Entity {
   name: string
   slug: string
   courseId: string

@@ -28,14 +28,17 @@ export function registerHotkeys(hotKeys: HotKeyDefinition[]) {
 
   const onKeyUp = debounce((event: KeyboardEvent) => {
     const keys = []
+
     if (event.ctrlKey) keys.push('Ctrl')
     if (event.altKey) keys.push('Alt')
     if (event.shiftKey) keys.push('Shift')
     if (event.metaKey) keys.push('Meta')
+
     keys.push(event.key)
 
     const key = keys.join('+')
     const hotKey = hotKeyMap.get(key)
+
     if (hotKey) {
       event.preventDefault()
       hotKey.handler()
@@ -57,11 +60,12 @@ export function registerHotkeys(hotKeys: HotKeyDefinition[]) {
 
 function disableDefaultBehavior(registeredKeyCombinations: string[]) {
   return (event: KeyboardEvent) => {
-    const keys = []
+    const keys: string[] = []
+
     if (event.ctrlKey) keys.push('Ctrl')
-    if (event.altKey) keys.push('Alt')
-    if (event.shiftKey) keys.push('Shift')
-    if (event.metaKey) keys.push('Meta')
+    else if (event.altKey) keys.push('Alt')
+    else if (event.shiftKey) keys.push('Shift')
+    else if (event.metaKey) keys.push('Meta')
 
     keys.push(event.key)
 
@@ -69,6 +73,7 @@ function disableDefaultBehavior(registeredKeyCombinations: string[]) {
 
     if (registeredKeyCombinations.includes(key)) {
       event.preventDefault()
+      console.log('INTERCEPTED', key)
     }
   }
 }

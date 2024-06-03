@@ -23,6 +23,8 @@ The structure is as follows:
 └── router.ts
 ```
 
+Every store must have id in the following format: `[your-module-name]:[store-name]`
+
 Every module consists of `index.ts` file. Its the main module's file and exports all the module parts to register them in your app automatically, no need to import it anywhere. It has the following structure:
 
 ```ts
@@ -50,7 +52,7 @@ export default {
   children: [
     {
       path: '',
-      name: '[your-module-name].index',
+      name: '...',
       component: IndexView
     }
   ]
