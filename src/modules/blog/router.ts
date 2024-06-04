@@ -1,4 +1,7 @@
 import module from './module.vue'
+import index from './views/index-view.vue'
+import createBlockpostView from './views/create-blogpost-view.vue'
+import blogpostView from './views/blogpost-view.vue'
 
 export default {
   path: '/blog',
@@ -9,17 +12,17 @@ export default {
     {
       path: '',
       name: 'Блог/Новости',
-      component: () => import('./views/index-view.vue')
+      component: () => index
     },
     {
       path: 'post/create:id?',
       name: 'Редактирование поста',
-      component: () => import('./views/create-blogpost-view.vue')
+      component: () => createBlockpostView
     },
     {
       path: 'post/:id',
       name: 'Просмотр поста',
-      component: () => import('./views/blogpost-view.vue')
+      component: () => blogpostView
     }
   ]
 }

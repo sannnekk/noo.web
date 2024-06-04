@@ -1,4 +1,5 @@
 import module from './module.vue'
+import Index from './views/index.vue'
 
 export default {
   path: '/students',
@@ -9,7 +10,7 @@ export default {
     {
       path: '',
       name: 'Мои ученики',
-      component: () => import('./views/index.vue')
+      component: () => Index
     }
   ]
 }

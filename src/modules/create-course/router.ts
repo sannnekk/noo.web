@@ -1,4 +1,6 @@
 import module from './module.vue'
+import indexView from './views/index-view.vue'
+import materialView from './views/material-view.vue'
 
 export default {
   path: '/create-course:courseSlug?',
@@ -9,12 +11,12 @@ export default {
     {
       path: '',
       name: 'Создать курс',
-      component: () => import('./views/index-view.vue'),
+      component: () => indexView,
       children: [
         {
           name: 'Создать материал',
           path: ':chapterSlug--:materialSlug',
-          component: () => import('./views/material-view.vue')
+          component: () => materialView
         }
       ]
     }

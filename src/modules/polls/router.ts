@@ -1,4 +1,7 @@
 import module from './module.vue'
+import index from './views/index-view.vue'
+import ResultsView from './views/results-view.vue'
+import UserResultView from './views/user-result-view.vue'
 
 export default {
   path: '/poll/:pollId',
@@ -9,17 +12,17 @@ export default {
     {
       path: '',
       name: 'Опрос',
-      component: () => import('./views/index-view.vue')
+      component: () => index
     },
     {
       path: 'results',
       name: 'Результаты опроса',
-      component: () => import('./views/results-view.vue')
+      component: () => ResultsView
     },
     {
       path: 'results/:username',
       name: 'Результаты пользователя',
-      component: () => import('./views/user-result-view.vue')
+      component: () => UserResultView
     }
   ]
 }

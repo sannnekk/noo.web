@@ -1,5 +1,8 @@
 import module from './module.vue'
 import paneLayout from '@/layouts/pane-layout.vue'
+import index from './views/index-view.vue'
+import WorkView from './views/work-view.vue'
+import TaskView from './views/task-view.vue'
 
 export default {
   path: '/assigned-works',
@@ -13,18 +16,18 @@ export default {
     {
       path: '',
       name: 'Работы',
-      component: () => import('./views/index-view.vue')
+      component: () => index
     },
     {
       path: ':workId',
       name: 'Работа',
-      component: () => import('./views/work-view.vue'),
+      component: WorkView,
       redirect: 'read',
       children: [
         {
           path: ':mode/:taskSlug?',
           name: 'Работа',
-          component: () => import('./views/task-view.vue')
+          component: () => TaskView
         }
       ]
     }
