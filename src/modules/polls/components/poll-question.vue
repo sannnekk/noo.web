@@ -18,7 +18,7 @@
       <h3>
         <span
           class="poll-question__title__index"
-          v-if="index"
+          v-if="index !== undefined"
         >
           {{ index + 1 }}.
         </span>
