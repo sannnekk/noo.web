@@ -11,7 +11,7 @@
     />
     <label class="file-input__label">{{ label }}</label>
     <div
-      v-if="!readonly"
+      v-if="!props.readonly"
       class="file-input__area"
       :class="{ 'file-input__area--drag': drag }"
       @click=";($refs.fileInput as HTMLInputElement).click()"
@@ -65,7 +65,7 @@
         </div>
         <div
           class="file-input__files__file__actions"
-          v-if="!readonly"
+          v-if="!props.readonly"
         >
           <div class="file-input__files__file__actions__delete">
             <inline-icon
@@ -124,7 +124,8 @@ interface Emits {
 const props = withDefaults(defineProps<Props>(), {
   allowedMimeTypes: () => ['image/png', 'image/jpeg'],
   maxFileSize: 3 * 1024 * 1024,
-  maxCount: 5
+  maxCount: 5,
+  readonly: false
 })
 
 const emits = defineEmits<Emits>()

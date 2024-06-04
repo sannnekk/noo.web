@@ -23,6 +23,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+input,
+textarea {
+  font-family: 'Montserrat', sans-serif;
+}
+
 * {
   box-sizing: border-box;
 }

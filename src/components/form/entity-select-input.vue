@@ -114,14 +114,14 @@ watch(
 
 watch(focus, () => {
   setTimeout(() => {
-    console.log(pagination.value)
     flyoutVisible.value = (focus.input || focus.flyout) && pagination.value.search !== ''
-  }, 100)
+  }, 250)
 }, {
   deep: true
 })
 
 function addItem() {
+  console.log('CLIKCKCKK')
   if (model.value.length >= props.maxCount) {
     return
   }
