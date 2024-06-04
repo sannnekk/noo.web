@@ -152,7 +152,10 @@ function canVote() {
     return false
   }
 
-  return props.post.poll.canVote.includes(role)
+  return (
+    props.post.poll.canVote.includes(role) ||
+    props.post.poll.canVote.includes('everyone')
+  )
 }
 
 function canSeeResults() {
@@ -162,7 +165,10 @@ function canSeeResults() {
     return false
   }
 
-  return props.post.poll.canSeeResults.includes(role)
+  return (
+    props.post.poll.canSeeResults.includes(role) ||
+    props.post.poll.canSeeResults.includes('everyone')
+  )
 }
 </script>
 

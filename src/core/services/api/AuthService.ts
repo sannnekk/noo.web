@@ -105,11 +105,11 @@ export class AuthService extends ApiService {
    * check username availability
    */
   public async checkUsername(username: string): Promise<boolean> {
-    const response = await this.httpGet<boolean>(
+    const response = await this.httpGet<{ exists: boolean }>(
       `${this._route}/check-username/${username}`
     )
 
-    return response.data!
+    return response.data!.exists
   }
 
   /**

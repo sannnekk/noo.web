@@ -175,9 +175,10 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     }
 
     try {
-      usernameExists.exists = await Core.Services.Auth.checkUsername(
+      const response = await Core.Services.Auth.checkUsername(
         registerCredentials.username
       )
+      usernameExists.exists = response
     } catch (e: any) {
       usernameExists.exists = true
       usernameExists.loading = false
