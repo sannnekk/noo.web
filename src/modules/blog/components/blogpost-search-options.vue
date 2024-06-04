@@ -18,6 +18,7 @@
         label="Дата от"
         v-model="(model['filter[createdAt]'].value as any)[0]"
       />
+      <br />
       <form-input
         type="date"
         label="Дата до"
