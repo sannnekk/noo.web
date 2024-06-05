@@ -110,7 +110,7 @@ export const useCourseStore = defineStore('courses-module:course', () => {
 
       const link = response.data.link
 
-      window.location.replace(link)
+      window.location.href = link
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при запросе доступа к работам',
