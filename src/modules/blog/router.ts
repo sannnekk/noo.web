@@ -12,17 +12,17 @@ export default {
     {
       path: '',
       name: 'Блог/Новости',
-      component: () => index
+      component: index
     },
     {
       path: 'post/create:id?',
       name: 'Редактирование поста',
-      component: () => createBlockpostView
+      component: createBlockpostView
     },
     {
       path: 'post/:id',
       name: 'Просмотр поста',
-      component: () => blogpostView
+      component: blogpostView
     }
   ]
 }

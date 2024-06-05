@@ -10,7 +10,7 @@ export default {
     {
       path: '',
       name: 'Профиль',
-      component: () => Index
+      component: Index
     }
   ]
 }

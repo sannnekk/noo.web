@@ -10,7 +10,7 @@ export default {
     {
       path: '',
       name: 'Календарь',
-      component: () => index
+      component: index
     }
   ]
 }

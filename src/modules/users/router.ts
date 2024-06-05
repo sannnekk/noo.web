@@ -11,12 +11,12 @@ export default {
     {
       path: '',
       name: 'Пользователи',
-      component: () => Index
+      component: Index
     },
     {
       path: 'edit/:username',
       name: 'Редактировать пользователя',
-      component: () => EditUserView
+      component: EditUserView
     }
   ]
 }

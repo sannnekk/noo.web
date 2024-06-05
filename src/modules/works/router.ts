@@ -14,7 +14,7 @@ export default {
     {
       path: '',
       name: 'Все работы',
-      component: () => index
+      component: index
     }
   ]
 }

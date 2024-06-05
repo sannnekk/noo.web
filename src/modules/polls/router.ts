@@ -12,17 +12,17 @@ export default {
     {
       path: '',
       name: 'Опрос',
-      component: () => index
+      component: index
     },
     {
       path: 'results',
       name: 'Результаты опроса',
-      component: () => ResultsView
+      component: ResultsView
     },
     {
       path: 'results/:username',
       name: 'Результаты пользователя',
-      component: () => UserResultView
+      component: UserResultView
     }
   ]
 }

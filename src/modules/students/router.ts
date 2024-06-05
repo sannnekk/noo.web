@@ -10,7 +10,7 @@ export default {
     {
       path: '',
       name: 'Мои ученики',
-      component: () => Index
+      component: Index
     }
   ]
 }

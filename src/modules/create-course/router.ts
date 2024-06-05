@@ -11,12 +11,12 @@ export default {
     {
       path: '',
       name: 'Создать курс',
-      component: () => indexView,
+      component: indexView,
       children: [
         {
           name: 'Создать материал',
           path: ':chapterSlug--:materialSlug',
-          component: () => materialView
+          component: materialView
         }
       ]
     }
