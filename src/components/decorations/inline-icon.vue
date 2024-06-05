@@ -30,6 +30,8 @@ interface Props {
     | 'telegram'
     | 'info'
     | 'delete'
+    | 'moon'
+    | 'sun'
   animation?: boolean
 }
 
