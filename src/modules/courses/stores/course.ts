@@ -108,7 +108,7 @@ export const useCourseStore = defineStore('courses-module:course', () => {
         throw new Error('Не удалось получить информацию о работе')
       }
 
-      const link = response.data
+      const link = response.data.link
 
       _router.push(link)
     } catch (error: any) {
