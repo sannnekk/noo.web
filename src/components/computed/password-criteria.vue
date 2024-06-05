@@ -6,6 +6,7 @@
     >
       <inline-icon
         :name="criterium.isValid(password) ? 'check-green' : 'cross-red'"
+        :key="criterium.isValid(password) ? 'check-green' : 'cross-red'"
       />
       {{ criterium.label }}
     </span>
@@ -31,6 +32,7 @@ const emits = defineEmits<Emits>()
 watch(
   () => props.password,
   () => {
+    console.log(455)
     const isValid = Core.Services.User.passwordCriteria().every((criterium) =>
       criterium.isValid(props.password)
     )
