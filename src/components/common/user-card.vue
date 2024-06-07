@@ -2,7 +2,6 @@
   <div class="user-card">
     <div class="user-card__avatar">
       <user-avatar
-        :src="user.avatar"
         :name="user.name"
         @click="isModalOpen = true"
       />
@@ -71,10 +70,11 @@ const isModalOpen = ref(false)
 
     &__name
       margin: 0
-      margin-bottom: -0.2em
       color: var(--form-text-color)
       font-size: 1.2em
       cursor: pointer
+      line-height: 1
+      margin-bottom: 0.1em
 
     &__username
       margin: 0

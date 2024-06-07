@@ -16,7 +16,7 @@
             @click="pollStore.saveAnswers()"
             alignment="stretch"
           >
-            Сохранить ответы
+            Завершить опрос
           </common-button>
         </div>
       </template>

@@ -44,4 +44,8 @@ function answer(questionId: PollQuestion['id']): PollAnswer {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="sass">
+.answer-list
+  &__head
+    margin-left: 0.6em
+</style>

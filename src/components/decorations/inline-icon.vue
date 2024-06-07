@@ -32,6 +32,7 @@ interface Props {
     | 'delete'
     | 'moon'
     | 'sun'
+    | 'search'
   animation?: boolean
 }
 

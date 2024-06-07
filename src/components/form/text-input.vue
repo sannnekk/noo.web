@@ -53,5 +53,4 @@ const model = computed({
 
     &:focus
       outline: none
-      border-color: var(--lila) !important
 </style>
