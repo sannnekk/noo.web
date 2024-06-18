@@ -46,6 +46,13 @@
           Результаты опроса
         </common-button>
         <common-button
+          v-if="canSeeResults() && post.pollId"
+          @click="copyPollLink(post.pollId)"
+          design="inline"
+        >
+          {{ copyButtonText }}
+        </common-button>
+        <common-button
           v-if="
             Core.Context.User?.role === 'teacher' ||
             Core.Context.User?.role === 'admin'
@@ -105,6 +112,7 @@ import blogpostReactions from './blogpost-reactions.vue'
 import { useDate } from '@/composables/useDate'
 import type { BlogPost, Reaction } from '@/core/data/entities/BlogPost'
 import type { DeltaContentType } from '@/types/composed/DeltaContentType'
+import { ref } from 'vue'
 
 interface Props {
   post: BlogPost
@@ -169,6 +177,17 @@ function canSeeResults() {
     props.post.poll.canSeeResults.includes(role) ||
     props.post.poll.canSeeResults.includes('everyone')
   )
+}
+
+const copyButtonText = ref('Скопировать ссылку на опрос')
+
+function copyPollLink(pollId: string) {
+  const url = `https://poll.noo-school.ru/${pollId}`
+  navigator.clipboard.writeText(url)
+  copyButtonText.value = 'Скопировано!'
+  setTimeout(() => {
+    copyButtonText.value = 'Скопировать ссылку на опрос'
+  }, 2000)
 }
 </script>
 
