@@ -88,7 +88,8 @@ export const useCreateBlogpostStore = defineStore(
         updatedAt: undefined as unknown as Date,
         questions: [],
         canSeeResults: ['everyone'],
-        canVote: ['everyone']
+        canVote: ['everyone'],
+        votedUserIds: []
       }
     }
 
@@ -182,6 +183,9 @@ export const useCreateBlogpostStore = defineStore(
               throw new Error(
                 'Вопрос с выбором должен содержать хотя бы один вариант ответа'
               )
+            }
+            if (question.choices.some((choice) => choice.includes('|'))) {
+              throw new Error('Варианты ответа не могут содержать символ "|"')
             }
             break
           case 'rating':
