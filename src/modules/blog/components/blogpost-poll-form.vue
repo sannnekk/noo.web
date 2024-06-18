@@ -114,7 +114,7 @@ const model = computed({
 })
 
 const visibilityOptions = [
-  { label: 'Преподаватели', role: 'admin' },
+  { label: 'Преподаватели', role: 'teacher' },
   { label: 'Ученики', role: 'student' },
   { label: 'Кураторы', role: 'mentor' },
   { label: 'Все', role: 'everyone' }
