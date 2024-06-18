@@ -105,15 +105,15 @@ export const useCreateBlogpostStore = defineStore(
 
           validatePost(blogpost.value)
 
-          if (blogpost.value.poll) {
-            validatePoll(blogpost.value.poll)
+          const payload = blogpost.value
 
-            blogpost.value.poll.questions = sortQuestions(
-              blogpost.value.poll.questions
-            )
+          if (payload.poll) {
+            validatePoll(payload.poll)
+
+            payload.poll.questions = sortQuestions(payload.poll.questions)
           }
 
-          await blogService.createPost(blogpost.value)
+          await blogService.createPost(payload)
         } else {
           await blogService.updatePost(blogpost.value.id, blogpost.value)
         }
