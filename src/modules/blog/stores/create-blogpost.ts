@@ -107,6 +107,10 @@ export const useCreateBlogpostStore = defineStore(
 
           if (blogpost.value.poll) {
             validatePoll(blogpost.value.poll)
+
+            blogpost.value.poll.questions = sortQuestions(
+              blogpost.value.poll.questions
+            )
           }
 
           await blogService.createPost(blogpost.value)
@@ -130,6 +134,16 @@ export const useCreateBlogpostStore = defineStore(
       } finally {
         uiService.setLoading(false)
       }
+    }
+
+    /**
+     * Sort questions by adding order field
+     */
+    function sortQuestions(questions: Poll['questions']) {
+      return questions.map((question, index) => ({
+        ...question,
+        order: index
+      }))
     }
 
     /**
