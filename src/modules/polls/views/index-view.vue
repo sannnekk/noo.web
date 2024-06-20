@@ -54,4 +54,5 @@ pollStore.fetchPoll()
   &__description
     margin-bottom: 3em
     color: var(--text-light)
+    white-space: pre-wrap
 </style>

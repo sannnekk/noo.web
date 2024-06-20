@@ -163,7 +163,9 @@ watchEffect(() => {
 
   &__description
     margin-bottom: 0.5em
-    color: var(--text-light)
+    color: var(--form-text-color)
+    font-size: 0.8em
+    white-space: pre-wrap
 
   &__form
     margin-bottom: 0.5em

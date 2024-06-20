@@ -21,6 +21,15 @@
           label="Теги"
         />
       </div>
+      <div class="create-blogpost-view__form__files">
+        <file-input
+          label="Прикрепленные файлы"
+          v-model="createBlogpostStore.blogpost.files"
+          :allowed-mime-types="['image/png', 'image/jpeg', 'application/pdf']"
+          :max-file-size="50 * 1024 * 1024"
+          :max-count="5"
+        />
+      </div>
       <div
         v-if="createBlogpostStore.mode === 'create'"
         class="create-blogpost-view__form__poll"

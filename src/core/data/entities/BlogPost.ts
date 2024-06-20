@@ -2,6 +2,7 @@ import type { DeltaContentType } from '@/types/composed/DeltaContentType'
 import type { User } from './User'
 import type { Entity } from '../Entity'
 import type { Poll } from './Poll'
+import type { Media } from './Media'
 
 export type Reaction = 'like' | 'dislike' | 'sad' | 'happy' | 'mindblowing'
 
@@ -15,6 +16,7 @@ export interface BlogPost extends Entity {
   myReaction?: Reaction
   poll?: Poll
   pollId?: Poll['id']
+  files: Media[]
   createdAt: Date
   updatedAt: Date
 }

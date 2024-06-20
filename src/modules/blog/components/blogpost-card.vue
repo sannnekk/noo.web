@@ -25,10 +25,7 @@
         <rich-text-container :content="sliceTop(post.content)" />
       </div>
       <div class="blogpost-card__content__actions">
-        <common-button
-          v-if="post.content.ops.length > 3"
-          :to="`/blog/post/${post.id}`"
-        >
+        <common-button :to="`/blog/post/${post.id}`">
           Читать далее
         </common-button>
         <common-button

@@ -41,6 +41,15 @@
         :key="postStore.post.id"
       />
     </div>
+    <div
+      class="blogpost-view__files"
+      v-if="postStore.post.files.length"
+    >
+      <file-list
+        label="Прикрепленные файлы"
+        :files="postStore.post.files"
+      />
+    </div>
   </div>
 </template>
 
@@ -49,10 +58,7 @@ import blogpostReactions from '../components/blogpost-reactions.vue'
 import { useDate } from '@/composables/useDate'
 import { usePostStore } from '../stores/post'
 import { useBlogStore } from '../stores/blog'
-import { useRoute } from 'vue-router'
 import { setPageTitle } from '@/core/utils/setPageTitle'
-
-const route = useRoute()
 
 const postStore = usePostStore()
 const blogStore = useBlogStore()
@@ -82,4 +88,9 @@ postStore
 
   &__reactions
     margin-bottom: 1em
+
+  &__files
+    margin: 2em 0.5em
+    padding-top: 1em
+    border-top: 1px solid var(--border-color)
 </style>
