@@ -16,4 +16,5 @@ export interface Poll extends Entity {
   updatedAt: Date
   questions: PollQuestion[]
   votedUserIds: User['id'][]
+  votedCount: number
 }

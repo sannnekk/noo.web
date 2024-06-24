@@ -74,9 +74,7 @@
         class="blogpost-card__content__poll-count"
         v-if="post.poll"
       >
-        <p>
-          {{ post.poll.votedUserIds.length }} человек приняли участие в опросе
-        </p>
+        <p>{{ post.poll.votedCount || 0 }} человек приняли участие в опросе</p>
       </div>
     </div>
     <div class="blogpost-card__footer">
