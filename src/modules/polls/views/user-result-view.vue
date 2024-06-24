@@ -1,7 +1,11 @@
 <template>
   <div
     class="user-result-view"
-    v-if="resultStore.user && resultStore.answers.length && resultStore.poll"
+    v-if="
+      resultStore.answers.length &&
+      resultStore.poll &&
+      (resultStore.user || resultStore.telegramUsername)
+    "
   >
     <the-sidebar-layout>
       <template #sidebar>
