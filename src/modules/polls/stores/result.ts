@@ -52,22 +52,28 @@ export const useUserResultStore = defineStore(
     const user = ref<User>()
 
     /**
+     * Telegram username
+     */
+    const telegramUsername = ref('')
+
+    /**
      * Load user poll answers
      */
     async function fetchAnswers() {
       uiService.setLoading(true)
 
       try {
-        await fetchUser()
-        await fetchPoll()
-
-        if (!user.value) {
-          throw new Error('Пользователь не найден')
+        if (typeof route.query['unregistered'] !== 'undefined') {
+          await fetchUnregisteredUser()
+        } else {
+          await fetchUser()
         }
+
+        await fetchPoll()
 
         const response = await pollService.getAnswers(
           pollId.value,
-          user.value.id
+          user.value?.id || telegramUsername.value
         )
 
         answers.value = response.data
@@ -90,6 +96,24 @@ export const useUserResultStore = defineStore(
       try {
         const response = await userService.getUser(username.value)
         user.value = response.data!
+      } catch (error: any) {
+        uiService.openErrorModal(
+          'Не удалось загрузить пользователя',
+          error.message
+        )
+      } finally {
+        uiService.setLoading(false)
+      }
+    }
+
+    /**
+     * Load unregistered user
+     */
+    async function fetchUnregisteredUser() {
+      uiService.setLoading(true)
+
+      try {
+        telegramUsername.value = username.value
       } catch (error: any) {
         uiService.openErrorModal(
           'Не удалось загрузить пользователя',
@@ -139,6 +163,7 @@ export const useUserResultStore = defineStore(
 
     return {
       user,
+      telegramUsername,
       poll,
       answers,
       fetchAnswers,

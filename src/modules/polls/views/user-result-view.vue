@@ -23,7 +23,14 @@
             }}
           </p>
           <h3>Пользователь:</h3>
-          <user-card :user="resultStore.user" />
+          <user-card
+            v-if="resultStore.user"
+            :user="resultStore.user"
+          />
+          <telegram-button
+            v-else
+            :username="resultStore.telegramUsername"
+          />
         </div>
       </template>
       <template #content>

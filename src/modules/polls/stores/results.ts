@@ -27,6 +27,11 @@ export const usePollResultsStore = defineStore('polls-module:results', () => {
   const resultsSearch = useSearch(fetchAnswers)
 
   /**
+   * Search who voted (unregistered users)
+   */
+  const unregisteredResultsSearch = useSearch(fetchUnregisteredAnswers)
+
+  /**
    * Fetch answers
    */
   async function fetchAnswers(pagination?: Pagination) {
@@ -36,6 +41,27 @@ export const usePollResultsStore = defineStore('polls-module:results', () => {
 
     try {
       return await pollService.searchWhoVoted(pollId.value, pagination)
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при получении ответов',
+        error.message
+      )
+    }
+  }
+
+  /**
+   * Fetch answers (unregistered users)
+   */
+  async function fetchUnregisteredAnswers(pagination?: Pagination) {
+    if (!pollId.value) {
+      return [] as any
+    }
+
+    try {
+      return await pollService.searchWhoVotedUnregistered(
+        pollId.value,
+        pagination
+      )
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при получении ответов',
@@ -74,6 +100,7 @@ export const usePollResultsStore = defineStore('polls-module:results', () => {
   return {
     poll,
     resultsSearch,
+    unregisteredResultsSearch,
     fetchPoll
   }
 })

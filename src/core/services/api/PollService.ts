@@ -54,6 +54,19 @@ export class PollService extends ApiService {
   }
 
   /**
+   * Search who voted (unregistered users)
+   */
+  public async searchWhoVotedUnregistered(
+    pollId: Poll['id'],
+    pagination?: Pagination
+  ): Promise<ApiResponse<PollAnswer[]>> {
+    return await this.httpGet(
+      `${this._route}/${pollId}/unregistered`,
+      pagination
+    )
+  }
+
+  /**
    * Get answers
    */
   public async getAnswers(
