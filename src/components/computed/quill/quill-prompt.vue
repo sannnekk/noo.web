@@ -5,7 +5,7 @@
   >
     <div
       class="quill-prompt__inner"
-      v-if="visible"
+      v-if="visibilityModel"
     >
       <div class="quill-prompt__label">
         <label>{{ label }}</label>
@@ -36,22 +36,27 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 interface Props {
   action: (value: any) => void | Promise<void>
   label: string
+  visible?: boolean
 }
 
 interface Emits {
   (e: 'update:modelValue', value: string): void
+  (e: 'update:visible', value: boolean): void
 }
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 const input = ref('')
-const visible = ref(false)
+const visibilityModel = computed({
+  get: () => props.visible,
+  set: (value) => emits('update:visible', value)
+})
 
 async function onOk() {
   const result = props.action(input.value)
@@ -60,12 +65,12 @@ async function onOk() {
     await result
   }
 
-  visible.value = false
+  visibilityModel.value = false
   input.value = ''
 }
 
 function onCancel() {
-  visible.value = false
+  visibilityModel.value = false
   input.value = ''
 }
 </script>
