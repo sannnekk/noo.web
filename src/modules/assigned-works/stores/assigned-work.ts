@@ -167,7 +167,8 @@ export const useAssignedWorkStore = defineStore(
 
       if (
         assignedWork.value.checkStatus === 'checked-in-deadline' ||
-        assignedWork.value.checkStatus === 'checked-after-deadline'
+        assignedWork.value.checkStatus === 'checked-after-deadline' ||
+        assignedWork.value.checkStatus === 'checked-automatically'
       ) {
         return assignedWork.value.score || 0
       }
