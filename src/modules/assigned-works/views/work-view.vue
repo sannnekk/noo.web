@@ -161,7 +161,13 @@
                 <label>Ученик: </label>
                 <user-card :user="assignedWorkStore.assignedWork.student" />
               </div>
-              <div class="work-view__sidebar__people__mentor">
+              <div
+                class="work-view__sidebar__people__mentor"
+                v-if="
+                  assignedWorkStore.assignedWork.checkStatus !==
+                  'checked-automatically'
+                "
+              >
                 <label>Проверяющие кураторы: </label>
                 <user-card
                   v-for="mentor in assignedWorkStore.assignedWork.mentors"

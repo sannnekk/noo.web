@@ -162,7 +162,7 @@ const assignedWorkStore = useAssignedWorkStore()
     margin-bottom: 1rem
     padding-bottom: 1em
     padding: 1em
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5)
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
     border-radius: var(--border-radius)
 
     &__max-score
@@ -171,6 +171,13 @@ const assignedWorkStore = useAssignedWorkStore()
       margin-bottom: 0
       border-top: 1px solid var(--border-color)
       font-weight: 500
+
+  &__answer
+    margin-top: 1em
+    padding: 1em
+    padding-top: 0.2em
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
+    border-radius: var(--border-radius)
 
   &__hint
     margin-top: 1rem
