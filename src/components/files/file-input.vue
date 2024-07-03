@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, readonly, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { v4 as uuid } from 'uuid'
 import type { Media } from '@/core/data/entities/Media'
 import { Core } from '@/core/Core'
@@ -101,6 +101,7 @@ interface FileItem {
   isUploaded: boolean
   error: string
   file: File | null
+  order: number
 }
 
 interface Props {
@@ -132,7 +133,7 @@ const emits = defineEmits<Emits>()
 
 const files = computed<FileItem[]>({
   get() {
-    return (props.modelValue || []).map((media) => ({
+    return (props.modelValue || []).map((media, index) => ({
       id: media.id,
       key: uuid(),
       fileName: media.name || media.src,
@@ -141,7 +142,8 @@ const files = computed<FileItem[]>({
       progress: 100,
       isUploaded: true,
       error: '',
-      file: null
+      file: null,
+      order: index
     }))
   },
   set(value) {
@@ -151,6 +153,7 @@ const files = computed<FileItem[]>({
         id: file.id,
         src: file.src,
         name: file.fileName,
+        order: file.order,
         mimeType:
           file.extension === 'pdf'
             ? 'application/pdf'
@@ -232,7 +235,7 @@ function onFilesDropped(event: DragEvent) {
 }
 
 async function uploadFiles(_files: File[]) {
-  const fileItems: FileItem[] = Array.from(_files).map((file) => ({
+  const fileItems: FileItem[] = Array.from(_files).map((file, index) => ({
     key: uuid(),
     fileName: file.name,
     src: '',
@@ -240,6 +243,7 @@ async function uploadFiles(_files: File[]) {
     progress: 1,
     isUploaded: false,
     error: '',
+    order: files.value.length + index,
     file
   }))
 
@@ -268,6 +272,7 @@ async function uploadFiles(_files: File[]) {
 
 async function sendFiles() {
   cropModalVisible.value = false
+
   for (const file of filesForUpload.value) {
     try {
       files.value.push(file)
@@ -301,7 +306,8 @@ async function sendFiles() {
               ? 'application/pdf'
               : file.extension === 'png'
               ? 'image/png'
-              : 'image/jpeg'
+              : 'image/jpeg',
+          order: file.order
         }))
       )
     } catch (error: any) {

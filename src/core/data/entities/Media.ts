@@ -5,4 +5,5 @@ export interface Media extends Entity {
   name: string
   mimeType: 'image/jpeg' | 'image/png' | 'application/pdf'
   createdAt: Date
+  order: number
 }

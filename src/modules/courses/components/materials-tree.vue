@@ -98,16 +98,16 @@ watch(
         font-weight: 500
 
   &__opener
-    margin-right: 0.2rem
+    margin-right: 0.3rem
     cursor: pointer
-    display: inline-block
+    float: left
     transform: rotate(-90deg)
     transition: all 0.2s ease-in-out
     color: var(--secondary)
 
   &__item
     cursor: pointer
-    margin-bottom: 0.2rem
+    margin-bottom: 0.3rem
     transition: all 0.2s ease-in-out
     overflow: hidden
     padding-bottom: 0.2em
@@ -116,7 +116,6 @@ watch(
       text-decoration: none
       color: inherit
       line-height: 1.1
-      display: inline-block
 
       &.router-link-active
         font-weight: bold
