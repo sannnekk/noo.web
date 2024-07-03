@@ -97,6 +97,7 @@
                 </div>
                 <div class="edit-user-view__content__actions__save">
                   <common-button
+                    v-if="Core.Context.User?.role !== 'mentor'"
                     @click="userStore.saveUser()"
                     alignment="right"
                     design="primary"
