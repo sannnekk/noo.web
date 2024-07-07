@@ -5,6 +5,9 @@
       <select
         :disabled="readonly"
         class="select-input__select"
+        :class="{
+          'select-input__select--readonly': readonly
+        }"
         v-model="model"
       >
         <option
@@ -58,7 +61,8 @@ const model = computed({
     border: 1px solid var(--border-color)
     border-radius: var(--border-radius)
     outline: none
-    padding: 0.4em 0.8em
+    padding: 0.6em 0.8em
+    font-size: 1em
     font-family: inherit
     width: 100%
     background: var(--form-background)
@@ -66,4 +70,8 @@ const model = computed({
 
     &:focus
       border-color: var(--primary)
+
+    &--readonly
+      background: var(--light)
+      opacity: 0.7
 </style>

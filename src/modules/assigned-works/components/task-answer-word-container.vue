@@ -6,6 +6,9 @@
       :readonly="readonly"
       v-model="model"
       type="text"
+      :validators="[
+        (value) => (value as string).length < 100 || 'Ответ не должен превышать 100 символов'
+      ]"
     />
   </div>
 </template>

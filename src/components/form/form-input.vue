@@ -1,8 +1,15 @@
 <template>
-  <label сlass="form-input">
+  <label
+    сlass="form-input"
+    v-auto-animate
+  >
     <span class="form-input__label">{{ label }}</span>
     <input
       class="form-input__input"
+      :class="{
+        'form-input__input--error': errors.length,
+        'form-input__input--readonly': readonly
+      }"
       :type="type"
       v-model="model"
       :placholder="placeholder"
@@ -11,11 +18,19 @@
       :max="max"
       :step="step"
     />
+    <span
+      class="form-input__error"
+      v-if="errors.length"
+    >
+      {{ errors[0] }}
+    </span>
   </label>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+
+type InputValidator = (value: string | number | Date) => true | string
 
 interface Props {
   label: string
@@ -26,6 +41,7 @@ interface Props {
   min?: number
   max?: number
   step?: number
+  validators?: InputValidator[]
 }
 
 interface Emits {
@@ -34,6 +50,8 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
+
+const errors = ref<string[]>([])
 
 const model = computed({
   get: () => {
@@ -49,8 +67,16 @@ const model = computed({
     return props.modelValue
   },
   set: (value) => {
+    if (props.validators) {
+      errors.value = props.validators
+        .map((validator) => validator(value))
+        .filter((error) => error !== true) as string[]
+    }
+
     if (props.type === 'date' || props.type === 'datetime-local') {
       emits('update:modelValue', new Date(value))
+    } else if (props.type === 'number') {
+      emits('update:modelValue', Number(value))
     } else {
       emits('update:modelValue', value)
     }
@@ -77,4 +103,16 @@ const model = computed({
 
     &:focus
       border-color: var(--primary)
+
+    &--error
+      border-color: var(--danger) !important
+
+    &--readonly
+      background: var(--light)
+      opacity: 0.7
+
+  &__error
+    font-size: 0.8rem
+    color: var(--danger)
+    margin-top: 0.2em
 </style>

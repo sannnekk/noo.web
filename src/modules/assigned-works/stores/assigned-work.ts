@@ -398,7 +398,7 @@ export const useAssignedWorkStore = defineStore(
       ) {
         onSolvedActions.unshift({
           label: 'Посмотреть результат',
-          design: 'primary' as const,
+          design: 'primary',
           handler: () => {
             window.location.href = `/assigned-works/${assignedWorkId.value}/read`
           }
