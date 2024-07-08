@@ -46,7 +46,7 @@ const authDataModel = computed({
 
 function onAuthenticated(data: any) {
   authDataModel.value = {
-    telegramId: data.id,
+    telegramId: String(data.id),
     telegramUsername: data.username,
     telegramAvatarUrl: data.photo_url
   }
