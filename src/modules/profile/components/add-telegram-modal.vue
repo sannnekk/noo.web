@@ -50,8 +50,6 @@ function onAuthenticated(data: any) {
     telegramUsername: data.username,
     telegramAvatarUrl: data.photo_url
   }
-
-  visibilityModel.value = false
 }
 </script>
 
