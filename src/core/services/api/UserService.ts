@@ -5,6 +5,12 @@ import { ApiService, type ApiResponse } from '@/core/services/ApiService'
 
 export type UserRelations = 'students' | 'mentor' | 'courses'
 
+export interface TelegramUpdatePayload {
+  telegramId: string | null
+  telegramUsername: string | null
+  telegramAvatarUrl: string | null
+}
+
 /**
  * User service
  */
@@ -100,6 +106,13 @@ export class UserService extends ApiService {
     user: Partial<User> & { id: User['id'] }
   ): Promise<void> {
     await this.httpPatch(`${this._route}/${userId}`, user)
+  }
+
+  public async updateTelegram(
+    userId: User['id'],
+    telegram: TelegramUpdatePayload
+  ): Promise<void> {
+    await this.httpPatch(`${this._route}/${userId}/telegram`, { telegram })
   }
 
   /**

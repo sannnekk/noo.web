@@ -5,7 +5,7 @@
   >
     <div class="profile-widget__avatar">
       <user-avatar
-        :src="Core.Context.User?.avatar?.src"
+        :src="Core.Context.User?.telegramAvatarUrl"
         :name="Core.Context.User?.name"
       />
     </div>

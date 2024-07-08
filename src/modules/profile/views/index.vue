@@ -10,6 +10,8 @@
             <profile-credentials
               v-model="profileStore.user"
               @save="profileStore.updateCredentials()"
+              @add-telegram="telegramModal.visible = true"
+              @remove-telegram="profileStore.removeTelegram()"
             />
           </div>
           <div class="index-profile-view__password-change">
@@ -43,9 +45,15 @@
       </template>
     </the-sidebar-layout>
   </div>
+  <add-telegram-modal
+    v-model:visible="telegramModal.visible"
+    v-model:auth-data="telegramModal.authData"
+    @confirm="profileStore.updateTelegram(telegramModal.authData)"
+  />
 </template>
 
 <script lang="ts" setup>
+import addTelegramModal from '../components/add-telegram-modal.vue'
 import ProfileCredentials from '../components/profile-credentials.vue'
 import ProfilePasswordForm from '../components/profile-password-form.vue'
 import deleteAccount from '../components/delete-account.vue'
@@ -53,12 +61,18 @@ import userMentor from '../components/user-mentor.vue'
 import { Core } from '@/core/Core'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useProfileStore } from '../stores/profile'
+import { ref } from 'vue'
 
 const profileStore = useProfileStore()
 
 setPageTitle('Мой профиль')
 
 profileStore.fetchUser()
+
+const telegramModal = ref({
+  visible: false,
+  authData: null
+})
 </script>
 
 <style lang="sass" scoped>

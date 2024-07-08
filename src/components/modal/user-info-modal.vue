@@ -17,7 +17,10 @@
           <div class="user-info-modal__content">
             <div class="user-info-modal__content__image">
               <div class="user-info-modal__content__image__avatar">
-                <user-avatar :name="user.name" />
+                <user-avatar
+                  :name="user.name"
+                  :src="user.telegramAvatarUrl"
+                />
               </div>
               <div
                 class="user-info-modal__content__image__telegram"

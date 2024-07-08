@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { type PasswordChangeForm } from '../types/PasswordChangeForm'
 import { Core } from '@/core/Core'
 import type { User } from '@/core/data/entities/User'
+import type { TelegramUpdatePayload } from '@/core/services/api/UserService'
 
 export const useProfileStore = defineStore('profile-module:profile', () => {
   const userService = Core.Services.User
@@ -157,6 +158,40 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
     }
   }
 
+  /*
+   * update telegram
+   */
+  async function updateTelegram(data: TelegramUpdatePayload | null) {
+    if (!user.value || !data) return
+
+    uiService.setLoading(true)
+
+    try {
+      await userService.updateTelegram(user.value.id, data)
+
+      user.value.telegramUsername = data.telegramUsername || undefined
+      user.value.telegramId = data.telegramId || undefined
+      user.value.telegramAvatarUrl = data.telegramAvatarUrl || undefined
+
+      uiService.openSuccessModal('Telegram успешно привязан')
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при привязке Telegram',
+        error.message
+      )
+    } finally {
+      uiService.setLoading(false)
+    }
+  }
+
+  async function removeTelegram() {
+    await updateTelegram({
+      telegramId: null,
+      telegramUsername: null,
+      telegramAvatarUrl: null
+    })
+  }
+
   return {
     user,
     mentor,
@@ -164,6 +199,8 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
     changePassword,
     deleteAccount,
     updateCredentials,
+    updateTelegram,
+    removeTelegram,
     fetchUser
   }
 })

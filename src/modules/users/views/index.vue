@@ -35,7 +35,7 @@ import { Core } from '@/core/Core'
 const cols = [
   {
     title: '',
-    keys: ['avatar.url', 'name'],
+    keys: ['telegramAvatarUrl', 'name'],
     type: 'avatar'
   },
   {

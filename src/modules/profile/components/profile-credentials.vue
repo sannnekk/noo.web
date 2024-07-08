@@ -2,12 +2,13 @@
   <div class="profile-credentials">
     <div class="profile-credentials__avatar">
       <user-avatar
-        :src="credentialsModel.avatar"
+        :src="credentialsModel.telegramAvatarUrl"
         :name="credentialsModel.name"
       />
     </div>
     <div class="profile-credentials__name">
       <form-input
+        type="text"
         label="Имя"
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.name"
@@ -17,6 +18,7 @@
     <div class="profile-credentials__username">
       <form-input
         label="Никнейм"
+        type="text"
         readonly
         v-model="credentialsModel.username"
         class="input"
@@ -25,16 +27,10 @@
     <div class="profile-credentials__email">
       <form-input
         label="Email"
+        type="text"
+        readonly
         @update:modelValue="onSomeInputChange()"
         v-model="credentialsModel.email"
-        class="input"
-      />
-    </div>
-    <div class="profile-credentials__telegram">
-      <form-input
-        label="Telegram (В виде ника без @)"
-        @update:modelValue="onSomeInputChange()"
-        v-model="credentialsModel.telegramUsername"
         class="input"
       />
     </div>
@@ -53,6 +49,28 @@
         Сохранить
       </common-button>
     </div>
+    <div class="profile-credentials__telegram">
+      <p v-if="credentialsModel.telegramId">
+        К этому аккаунту привязан Telegram:
+        {{ credentialsModel.telegramUsername }}
+      </p>
+      <common-button
+        design="telegram"
+        alignment="stretch"
+        v-if="credentialsModel.telegramId === null"
+        @click="$emit('add-telegram')"
+      >
+        Привязать Telegram
+      </common-button>
+      <common-button
+        design="telegram"
+        alignment="stretch"
+        v-else
+        @click="$emit('remove-telegram')"
+      >
+        Отвязвать Telegram
+      </common-button>
+    </div>
   </div>
 </template>
 
@@ -67,6 +85,8 @@ interface Props {
 interface Emits {
   (e: 'update:modelValue', value: User): void
   (e: 'save'): void
+  (e: 'add-telegram'): void
+  (e: 'remove-telegram'): void
 }
 
 const props = defineProps<Props>()

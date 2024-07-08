@@ -10,7 +10,7 @@
             <div class="edit-user-view__credentials">
               <div class="edit-user-view__credentials__avatar">
                 <user-avatar
-                  :src="userStore.user.avatar"
+                  :src="userStore.user.telegramAvatarUrl"
                   :name="userStore.user.name"
                 />
               </div>

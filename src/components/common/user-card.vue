@@ -3,6 +3,7 @@
     <div class="user-card__avatar">
       <user-avatar
         :name="user.name"
+        :src="user.telegramAvatarUrl"
         @click="isModalOpen = true"
       />
     </div>

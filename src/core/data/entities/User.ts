@@ -14,6 +14,7 @@ export interface User extends Entity {
   students?: User[]
   telegramUsername?: string
   telegramId?: string
+  telegramAvatarUrl?: string
   password?: string
   isBlocked: boolean
   forbidden?: number
