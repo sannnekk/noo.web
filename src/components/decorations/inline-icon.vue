@@ -33,8 +33,13 @@ interface Props {
     | 'moon'
     | 'sun'
     | 'search'
+    | 'more'
+    | 'edit'
+    | 'copy'
   animation?: boolean
 }
+
+export type IconName = Props['name']
 
 const props = defineProps<Props>()
 

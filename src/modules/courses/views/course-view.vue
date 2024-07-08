@@ -27,7 +27,10 @@
             v-if="courseStore.course.author"
           >
             <div class="index-materials-view__tree__author__avatar">
-              <user-avatar :name="courseStore.course.author.name" />
+              <user-avatar
+                :name="courseStore.course.author.name"
+                :src="courseStore.course.author.telegramAvatarUrl"
+              />
             </div>
             <div class="index-materials-view__tree__author__name">
               <user-link

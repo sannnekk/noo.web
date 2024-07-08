@@ -50,6 +50,10 @@ function onAuthenticated(data: any) {
     telegramUsername: data.username,
     telegramAvatarUrl: data.photo_url
   }
+
+  setTimeout(() => {
+    emits('confirm')
+  }, 100)
 }
 </script>
 

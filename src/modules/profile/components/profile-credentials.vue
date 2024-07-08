@@ -68,7 +68,7 @@
         v-else
         @click="$emit('remove-telegram')"
       >
-        Отвязвать Telegram
+        Отвязать Telegram
       </common-button>
     </div>
   </div>
@@ -160,6 +160,6 @@ function onSomeInputChange() {
   &__telegram
     margin-top: 0.5em
 
-    input
-      text-align: center
+    p
+      font-size: 0.8em
 </style>

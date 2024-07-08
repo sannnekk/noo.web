@@ -3,12 +3,26 @@
     class="blogpost-view"
     v-if="postStore.post"
   >
-    <div class="blogpost-view__back">
+    <div class="blogpost-view__actions">
       <common-button
         to="/blog"
         design="inline"
       >
         Назад к ленте
+      </common-button>
+      <common-button
+        v-if="canVote()"
+        :to="`/poll/${postStore.post.pollId}`"
+        design="warning"
+      >
+        Пройти опрос
+      </common-button>
+      <common-button
+        v-if="canSeeResults()"
+        :to="`/poll/${postStore.post.pollId}/results`"
+        design="inline"
+      >
+        Результаты опроса
       </common-button>
     </div>
     <div class="blogpost-view__header">
@@ -59,6 +73,7 @@ import { useDate } from '@/composables/useDate'
 import { usePostStore } from '../stores/post'
 import { useBlogStore } from '../stores/blog'
 import { setPageTitle } from '@/core/utils/setPageTitle'
+import { Core } from '@/core/Core'
 
 const postStore = usePostStore()
 const blogStore = useBlogStore()
@@ -66,6 +81,32 @@ const blogStore = useBlogStore()
 postStore
   .fetchPost()
   .then(() => setPageTitle(postStore.post?.title || 'Пост не найден'))
+
+function canVote() {
+  const role = Core.Context.User?.role
+
+  if (!postStore.post?.poll || !role) {
+    return false
+  }
+
+  return (
+    postStore.post.poll.canVote.includes(role) ||
+    postStore.post.poll.canVote.includes('everyone')
+  )
+}
+
+function canSeeResults() {
+  const role = Core.Context.User?.role
+
+  if (!postStore.post?.poll || !role) {
+    return false
+  }
+
+  return (
+    postStore.post.poll.canSeeResults.includes(role) ||
+    postStore.post.poll.canSeeResults.includes('everyone')
+  )
+}
 </script>
 
 <style lang="sass" scoped>

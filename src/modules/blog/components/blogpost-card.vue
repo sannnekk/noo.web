@@ -7,6 +7,44 @@
       <div class="blogpost-card__header__date">
         {{ useDate(post.createdAt, { precision: 'day' }).toBeautiful() }}
       </div>
+      <div class="blogpost-card__header__actions">
+        <more-widget
+          :items="[
+          {
+            title: 'Редактировать',
+            icon: 'edit',
+            if: Core.Context.User?.role === 'teacher' || Core.Context.User?.role === 'admin',
+            action: () => {
+              $router.push(`/blog/post/create${post.id}`)
+            }
+          },
+          {
+            title: 'Результаты опроса',
+            icon: 'info',
+            if: canSeeResults(),
+            action: () => {
+              $router.push(`/poll/${post.pollId}/results`)
+            }
+          },
+          {
+            title: 'Скопировать ссылку на опрос',
+            icon: 'copy',
+            if: !!(canSeeResults() && post.pollId),
+            action: () => {
+              copyPollLink(post.pollId!)
+            }
+          },
+          {
+            title: 'Удалить пост',
+            icon: 'delete',
+            if: Core.Context.User?.role === 'teacher' || Core.Context.User?.role === 'admin',
+            action: () => {
+              onPostDelete()
+            }
+          }
+        ]"
+        />
+      </div>
     </div>
     <div class="blogpost-card__info">
       <div class="blogpost-card__info__tags">
@@ -35,40 +73,6 @@
         >
           Пройти опрос
         </common-button>
-        <common-button
-          v-if="canSeeResults()"
-          :to="`/poll/${post.pollId}/results`"
-          design="inline"
-        >
-          Результаты опроса
-        </common-button>
-        <common-button
-          v-if="canSeeResults() && post.pollId"
-          @click="copyPollLink(post.pollId)"
-          design="inline"
-        >
-          {{ copyButtonText }}
-        </common-button>
-        <common-button
-          v-if="
-            Core.Context.User?.role === 'teacher' ||
-            Core.Context.User?.role === 'admin'
-          "
-          design="inline"
-          :to="`/blog/post/create${post.id}`"
-        >
-          Редактировать
-        </common-button>
-        <common-button
-          v-if="
-            Core.Context.User?.role === 'teacher' ||
-            Core.Context.User?.role === 'admin'
-          "
-          design="danger"
-          @click="onPostDelete()"
-        >
-          Удалить
-        </common-button>
       </div>
       <div
         class="blogpost-card__content__poll-count"
@@ -80,7 +84,10 @@
     <div class="blogpost-card__footer">
       <div class="blogpost-card__footer__author">
         <div class="blogpost-card__footer__author__avatar">
-          <user-avatar :name="post.author.name" />
+          <user-avatar
+            :name="post.author.name"
+            :src="post.author.telegramAvatarUrl"
+          />
         </div>
         <div class="blogpost-card__footer__author__name">
           <user-link

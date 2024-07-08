@@ -9,6 +9,9 @@
         <div class="pane-layout__slot">
           <slot />
         </div>
+        <div class="pane-layout__footer">
+          <the-footer />
+        </div>
       </div>
     </div>
   </div>
@@ -16,7 +19,7 @@
 
 <style lang="sass" scoped>
 .pane-layout
-  padding-bottom: 2em
+  padding-bottom: 1em
 
   &__slot
     background-color: var(--lightest)
