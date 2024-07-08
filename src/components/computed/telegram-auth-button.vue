@@ -38,7 +38,6 @@ const emits = defineEmits<Emits>()
 
 // @ts-ignore
 window.onAuthenticated = (user: TelegramAuthResponse) => {
-  console.log('Authenticated with Telegram', user)
   emits('authenticated', user)
 }
 </script>

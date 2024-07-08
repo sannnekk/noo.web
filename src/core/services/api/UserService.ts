@@ -112,7 +112,7 @@ export class UserService extends ApiService {
     userId: User['id'],
     telegram: TelegramUpdatePayload
   ): Promise<void> {
-    await this.httpPatch(`${this._route}/${userId}/telegram`, { telegram })
+    await this.httpPatch(`${this._route}/${userId}/telegram`, telegram)
   }
 
   /**
