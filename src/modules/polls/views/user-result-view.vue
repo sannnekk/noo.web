@@ -21,7 +21,7 @@
           <h3>Дата голосования:</h3>
           <p>
             {{
-              useDate(resultStore.answers.at(0)!.createdAt!, {
+              useDate(resultStore.answers.at(0)?.createdAt!, {
                 precision: 'day'
               }).toBeautiful()
             }}

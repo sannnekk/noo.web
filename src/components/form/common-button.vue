@@ -99,6 +99,7 @@ defineEmits<Emits>()
     font-size: inherit
     transition: 0.2s ease all
     color: var(--form-text-color)
+    border: 1px solid var(--primary)
 
     &__icon
       display: block
@@ -106,7 +107,7 @@ defineEmits<Emits>()
       margin-right: 0.3em
 
     &.primary
-      border: 1px solid transparent
+      border-color: var(--primary)
       background-color: var(--primary)
       color: var(--dark)
 
@@ -122,9 +123,7 @@ defineEmits<Emits>()
         border-color: var(--dark)
 
     &.inline
-      border: none
-      cursor: pointer
-      display: inline-block
+      border-color: var(--light)
       color: var(--form-text-color)
       background-color: var(--light)
 
@@ -132,7 +131,7 @@ defineEmits<Emits>()
         opacity: 0.8
 
     &.telegram
-      border: 1px solid transparent
+      border-color: transparent
       background-color: var(--telegram)
       color: var(--white)
 
@@ -141,7 +140,7 @@ defineEmits<Emits>()
         color: var(--white)
 
     &.secondary
-      border: 1px solid var(--dark)
+      border-color: var(--dark)
       background-color: var(--light)
 
       &:not(.loading):hover
@@ -149,7 +148,7 @@ defineEmits<Emits>()
         color: var(--white) !important
 
     &.danger
-      border: 1px solid transparent
+      border-color: var(--danger)
       background-color: var(--danger)
       color: var(--white)
 
@@ -157,7 +156,7 @@ defineEmits<Emits>()
         opacity: 0.8
 
     &.warning
-      border: 1px solid var(--warning)
+      border-color: var(--warning)
       background-color: var(--warning)
 
       &:not(.loading):hover

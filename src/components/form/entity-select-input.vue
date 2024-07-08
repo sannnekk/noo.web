@@ -121,7 +121,6 @@ watch(focus, () => {
 })
 
 function addItem() {
-  console.log('CLIKCKCKK')
   if (model.value.length >= props.maxCount) {
     return
   }

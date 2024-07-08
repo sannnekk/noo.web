@@ -48,6 +48,15 @@
           </div>
           <div class="user-info-modal__buttons">
             <common-button
+              v-if="Core.Context.User?.role !== 'student'"
+              alignment="stretch"
+              :to="`/users/edit/${user.username}`"
+              design="primary"
+              class="user-info-modal__buttons__profile"
+            >
+              Перейти к профилю
+            </common-button>
+            <common-button
               alignment="stretch"
               @click="onClose()"
               design="secondary"
@@ -63,6 +72,7 @@
 </template>
 
 <script setup lang="ts">
+import { Core } from '@/core/Core'
 import type { User } from '@/core/data/entities/User'
 
 interface Props {
@@ -74,7 +84,7 @@ interface Emits {
   (e: 'update:visible', value: boolean): void
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 function onClose() {
@@ -187,6 +197,7 @@ function onClose() {
     display: flex
     flex-direction: row
     justify-content: space-between
+    gap: 1em
 
     &__cancel
       margin-right: 0.5em

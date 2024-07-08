@@ -100,6 +100,8 @@ const model = computed({
     background: var(--form-background)
     color: var(--form-text-color)
     font-size: 1em
+    display: block
+    font-size: 1em
 
     &:focus
       border-color: var(--primary)
