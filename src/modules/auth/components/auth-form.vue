@@ -89,6 +89,13 @@
             Никнейм занят
           </span>
           <span
+            class="username-availability__not-available"
+            v-else-if="usernameExists.error"
+          >
+            Никнейм должен быть хотя б 3 символа в длину и содержать только
+            латинские буквы, цифры и символы _ и -
+          </span>
+          <span
             class="username-availability__available"
             v-else
           >
@@ -233,6 +240,7 @@ interface Props {
   usernameExists: {
     loading: boolean
     exists?: boolean
+    error?: boolean
   }
 }
 

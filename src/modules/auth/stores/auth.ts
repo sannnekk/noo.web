@@ -150,29 +150,36 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
   const usernameExists = reactive<{
     exists: boolean | undefined
     loading: boolean
+    error?: boolean
   }>({
     exists: undefined,
-    loading: false
+    loading: false,
+    error: false
   })
 
   const checkUsername = debounce(async () => {
     if (!registerCredentials.username) {
-      usernameExists.exists = true
+      usernameExists.exists = false
+      usernameExists.error = true
       usernameExists.loading = false
       return
     }
 
     if (registerCredentials.username.length < 3) {
-      usernameExists.exists = true
+      usernameExists.exists = false
+      usernameExists.error = true
       usernameExists.loading = false
       return
     }
 
     if (!registerCredentials.username.match(/^[A-Za-z0-9_-]+$/i)) {
-      usernameExists.exists = true
+      usernameExists.error = true
+      usernameExists.exists = false
       usernameExists.loading = false
       return
     }
+
+    usernameExists.error = false
 
     try {
       const response = await Core.Services.Auth.checkUsername(
