@@ -162,9 +162,15 @@ function onClose() {
 
     @media screen and (max-width: 768px)
       flex-direction: column
+      align-items: stretch
 
     &__image
       flex: 0 0 170px
+
+      @media screen and (max-width: 768px)
+        display: flex
+        flex-direction: column
+        align-items: center
 
       &__avatar
         font-size: 170px

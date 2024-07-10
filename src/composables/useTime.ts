@@ -2,7 +2,7 @@ import { isRef, computed, type ComputedRef, type Ref } from 'vue'
 
 export function useTime(date: Date | Ref<Date>): ComputedRef<string> {
   function doTime() {
-    let time = isRef(date) ? date.value : date
+    const time = isRef(date) ? date.value : date
 
     if (!time) {
       return ''

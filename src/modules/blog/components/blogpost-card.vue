@@ -8,42 +8,7 @@
         {{ useDate(post.createdAt, { precision: 'day' }).toBeautiful() }}
       </div>
       <div class="blogpost-card__header__actions">
-        <more-widget
-          :items="[
-          {
-            title: 'Редактировать',
-            icon: 'edit',
-            if: Core.Context.User?.role === 'teacher' || Core.Context.User?.role === 'admin',
-            action: () => {
-              $router.push(`/blog/post/create${post.id}`)
-            }
-          },
-          {
-            title: 'Результаты опроса',
-            icon: 'info',
-            if: canSeeResults(),
-            action: () => {
-              $router.push(`/poll/${post.pollId}/results`)
-            }
-          },
-          {
-            title: 'Скопировать ссылку на опрос',
-            icon: 'copy',
-            if: !!(canSeeResults() && post.pollId),
-            action: () => {
-              copyPollLink(post.pollId!)
-            }
-          },
-          {
-            title: 'Удалить пост',
-            icon: 'delete',
-            if: Core.Context.User?.role === 'teacher' || Core.Context.User?.role === 'admin',
-            action: () => {
-              onPostDelete()
-            }
-          }
-        ]"
-        />
+        <more-widget :items="actions" />
       </div>
     </div>
     <div class="blogpost-card__info">
@@ -114,7 +79,9 @@ import blogpostReactions from './blogpost-reactions.vue'
 import { useDate } from '@/composables/useDate'
 import type { BlogPost, Reaction } from '@/core/data/entities/BlogPost'
 import type { DeltaContentType } from '@/types/composed/DeltaContentType'
-import { ref } from 'vue'
+import { reactive } from 'vue'
+import { copyText } from '@/core/device/Clipboard'
+import { useRouter } from 'vue-router'
 
 interface Props {
   post: BlogPost
@@ -129,6 +96,48 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
+
+const router = useRouter()
+
+const actions = reactive([
+  {
+    title: 'Редактировать',
+    icon: 'edit',
+    if:
+      Core.Context.User?.role === 'teacher' ||
+      Core.Context.User?.role === 'admin',
+    action: () => {
+      router.push(`/blog/post/create${props.post.id}`)
+    }
+  },
+  {
+    title: 'Результаты опроса',
+    icon: 'info',
+    if: canSeeResults(),
+    action: () => {
+      router.push(`/poll/${props.post.pollId}/results`)
+    }
+  },
+  {
+    title: 'Скопировать ссылку на опрос',
+    icon: 'copy',
+    if: !!(canSeeResults() && props.post.pollId),
+    stayOpened: true,
+    action: function (selfRef: any) {
+      copyPollLink(selfRef, props.post.pollId!)
+    }
+  },
+  {
+    title: 'Удалить пост',
+    icon: 'delete',
+    if:
+      Core.Context.User?.role === 'teacher' ||
+      Core.Context.User?.role === 'admin',
+    action: () => {
+      onPostDelete()
+    }
+  }
+])
 
 function sliceTop(content: DeltaContentType, length = 5) {
   if (content.ops.length <= length) {
@@ -181,14 +190,15 @@ function canSeeResults() {
   )
 }
 
-const copyButtonText = ref('Скопировать ссылку на опрос')
+function copyPollLink(thisRef: any, pollId: string) {
+  copyText(Core.Constants.POLL_URL + pollId)
 
-function copyPollLink(pollId: string) {
-  const url = `https://poll.noo-school.ru/${pollId}`
-  navigator.clipboard.writeText(url)
-  copyButtonText.value = 'Скопировано!'
+  thisRef.title = 'Скопировано!'
+  thisRef.icon = 'check-green'
+
   setTimeout(() => {
-    copyButtonText.value = 'Скопировать ссылку на опрос'
+    thisRef.title = 'Скопировать ссылку на опрос'
+    thisRef.icon = 'copy'
   }, 2000)
 }
 </script>
@@ -232,12 +242,22 @@ function copyPollLink(pollId: string) {
       display: flex
       flex-wrap: wrap
       gap: 1em
+      padding: 0 0.5em
       justify-content: flex-start
       font-size: 0.8em
 
       > *
         display: block
         width: unset !important
+
+    &__poll-count
+      color: var(--text-light)
+      padding: 0 0.5em
+      font-size: 0.8em
+      margin-top: 0.5em
+
+      p
+        margin: 0
 
   &__footer
     padding: 0.5em

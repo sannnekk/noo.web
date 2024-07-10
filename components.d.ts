@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddIcon: typeof import('./src/components/decorations/icons/add-icon.vue')['default']
     AlignCenterIcon: typeof import('./src/components/decorations/icons/text-format-icons/align-center-icon.vue')['default']
     AlignJustifyIcon: typeof import('./src/components/decorations/icons/text-format-icons/align-justify-icon.vue')['default']
     AlignLeftIcon: typeof import('./src/components/decorations/icons/text-format-icons/align-left-icon.vue')['default']

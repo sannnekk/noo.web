@@ -10,6 +10,9 @@
           alt="Card title"
         />
       </router-link>
+      <div class="course-card__img__more-widget">
+        <more-widget :items="actions" />
+      </div>
     </div>
     <div class="course-card__title">
       <router-link :to="to">{{ title }}</router-link>
@@ -17,9 +20,9 @@
     <div class="course-card__description">
       {{ description }}
     </div>
-    <!-- <div
+    <div
       class="course-card__author"
-      v-if="author"
+      v-if="author && showAuthor"
     >
       <div class="course-card__author__avatar">
         <user-avatar :name="author" />
@@ -27,29 +30,64 @@
       <div class="course-card__author__name">
         <span>{{ author }}</span>
       </div>
-    </div> -->
-    <div
-      class="course-card__edit"
-      v-if="Core.Context.User?.role === 'teacher'"
-    >
-      <router-link :to="`/create-course${slug}`"> Редактировать </router-link>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { copyText } from '@/core/device/Clipboard'
 import { Core } from '@/core/Core'
+import { useRouter } from 'vue-router'
+import { reactive } from 'vue'
 
 interface Props {
   image?: string | undefined
   title: string
   author?: string
+  showAuthor?: boolean
   description: string
   slug: string
   to: string
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const actions = reactive([
+  {
+    title: 'Добавить материал (Coming soon)',
+    icon: 'add',
+    if: Core.Context.User?.role === 'teacher',
+    action: () => void 0
+  },
+  {
+    title: 'Редактировать',
+    icon: 'edit',
+    if: Core.Context.User?.role === 'teacher',
+    action: () => router.push(`/create-course${props.slug}`)
+  },
+  {
+    title: 'Скопировать ссылку',
+    icon: 'copy',
+    stayOpened: true,
+    action: function (selfRef: any) {
+      copyAction(selfRef, props.slug)
+    }
+  }
+])
+
+const router = useRouter()
+
+function copyAction(thisRef: any, slug: string) {
+  copyText(`${Core.Constants.APP_URL}/courses/${slug}`)
+
+  thisRef.icon = 'check-green'
+  thisRef.title = 'Скопировано'
+
+  setTimeout(() => {
+    thisRef.icon = 'copy'
+    thisRef.title = 'Скопировать ссылку'
+  }, 1000)
+}
 </script>
 
 <style scoped lang="sass">
@@ -83,6 +121,12 @@ defineProps<Props>()
         height: 100%
         object-fit: cover
         object-position: center
+
+    &__more-widget
+      position: absolute
+      top: 23px
+      right: 40px
+      z-index: 1
 
   &__title
     font-size: 1.2rem

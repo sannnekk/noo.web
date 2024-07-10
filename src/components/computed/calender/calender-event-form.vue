@@ -92,7 +92,15 @@ const currentDate = computed(() =>
         flex-direction: row
         align-items: center
 
+        @media screen and (max-width: 768px)
+          flex-direction: column
+          gap: 0
+
         .form-group
+
+          @media screen and (max-width: 768px)
+            width: 100%
+
           &--input
             flex: 1
 
@@ -111,4 +119,5 @@ const currentDate = computed(() =>
                 font-size: 14px
                 width: 100%
                 padding: 0.6em 2em
+                justify-content: center
 </style>

@@ -1,13 +1,54 @@
 <template>
   <div class="sidebar-layout">
-    <div class="sidebar-layout__sidebar">
-      <slot name="sidebar"></slot>
+    <div
+      class="sidebar-layout__sidebar"
+      v-auto-animate
+    >
+      <div class="sidebar-layout__sidebar__hide">
+        <span
+          v-if="sidebarOpened"
+          @click="sidebarOpened = false"
+        >
+          Скрыть
+        </span>
+        <span
+          v-else
+          @click="sidebarOpened = true"
+        >
+          Открыть
+        </span>
+      </div>
+      <slot
+        name="sidebar"
+        v-if="sidebarOpened"
+      ></slot>
     </div>
     <div class="sidebar-layout__content">
       <slot name="content"></slot>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { onMounted, onUnmounted, ref } from 'vue'
+
+const sidebarOpened = ref(true)
+
+function handleResize() {
+  if (window.innerWidth > 768) {
+    sidebarOpened.value = true
+  }
+}
+
+onMounted(() => {
+  handleResize()
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
+</script>
 
 <style scoped lang="sass">
 .sidebar-layout
@@ -26,6 +67,20 @@
 
     @media screen and (max-width: 768px)
       width: calc(100% - 2rem)
+
+    &__hide
+      display: none
+      padding: 0
+      text-align: right
+      cursor: pointer
+      color: var(--text-light)
+      font-size: 0.8em
+
+      &:hover
+        color: var(--info)
+
+      @media screen and (max-width: 768px)
+        display: block
 
   &__content
     flex: 1

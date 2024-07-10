@@ -11,20 +11,23 @@
   <overlay-hint
     v-model:visible="hintVisible"
     :position="currentPosition"
+    hide-on-outside-click
+    hide-on-scroll
   >
     <div class="menu">
       <ul class="menu__list">
         <li
           class="menu__list__item"
-          v-for="item in items"
-          :key="item.title"
-          @click="onAction(item)"
-          v-show="item.if"
+          v-for="(item, index) in items"
+          :key="index"
+          @click="onAction(items[index])"
+          v-show="typeof item.if === 'undefined' || item.if"
         >
           <span class="menu__list__item__icon">
             <inline-icon
               v-if="item.icon"
               :name="item.icon"
+              :key="item.icon"
             />
           </span>
           <span class="menu__list__item__title">
@@ -42,8 +45,9 @@ import type { IconName } from '../decorations/inline-icon.vue'
 
 interface MenuItem {
   title: string
+  action: (selfRef: MenuItem) => void
+  stayOpened?: boolean
   icon?: IconName
-  action: () => void
   if?: boolean
 }
 
@@ -70,8 +74,11 @@ function toggleMenu() {
 }
 
 function onAction(item: MenuItem) {
-  item.action()
-  hintVisible.value = false
+  item.action(item)
+
+  if (!item.stayOpened) {
+    hintVisible.value = false
+  }
 }
 </script>
 
@@ -83,8 +90,8 @@ function onAction(item: MenuItem) {
     cursor: pointer
     padding: 0.3em
     border-radius: 50%
-    height: 2.1em
-    width: 2.1em
+    height: 2.2em
+    width: 2.2em
 
     &:hover
       background-color: rgba(0, 0, 0, 0.1)
@@ -113,11 +120,18 @@ function onAction(item: MenuItem) {
     .menu__list__item__icon
       margin-right: 0.5em
       margin-left: 0.3em
-      margin-top: 0.2em
-      font-size: 1.1em
+      margin-top: 0.1em
+      font-size: 0.8em
+      height: 1.4em
+      width: 1.4em
+
+      > *
+        height: 100%
+        width: 100%
 
     .menu__list__item__title
       flex: 1
       font-size: 0.8em
       padding-right: 0.4em
+      padding-top: 0.2em
 </style>

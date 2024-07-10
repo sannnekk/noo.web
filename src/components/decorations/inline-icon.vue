@@ -36,6 +36,7 @@ interface Props {
     | 'more'
     | 'edit'
     | 'copy'
+    | 'add'
   animation?: boolean
 }
 

@@ -35,7 +35,7 @@ export const useCourseStore = defineStore('courses-module:course', () => {
    * The materials tree
    */
   const materialsTree = computed(() => {
-    if (!course || !course.value?.chapters) return []
+    if (!course.value || !course.value?.chapters) return []
 
     return course.value.chapters.map((chapter) => {
       return {
@@ -68,7 +68,7 @@ export const useCourseStore = defineStore('courses-module:course', () => {
    * Get the material by its slug
    */
   function getMaterialBySlug(slug: string): Material | undefined {
-    if (!course || !course.value?.chapters) return undefined
+    if (!course.value || !course.value?.chapters) return undefined
 
     const materials = course.value.chapters.flatMap(
       (chapter) => chapter!.materials
