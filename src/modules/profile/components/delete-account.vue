@@ -46,7 +46,7 @@ interface Emits {
   (e: 'delete-account'): void
 }
 
-const emits = defineEmits<Emits>()
+defineEmits<Emits>()
 
 const modalVisible = ref(false)
 

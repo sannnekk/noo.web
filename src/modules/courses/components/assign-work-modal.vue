@@ -35,6 +35,10 @@
             item-key="id"
           />
           <list-pagination
+            v-if="
+              assignWorkStore.pagination.page &&
+              assignWorkStore.pagination.limit
+            "
             v-model:page="assignWorkStore.pagination.page"
             :limit="assignWorkStore.pagination.limit"
             :total="assignWorkStore.resultsMeta.total"

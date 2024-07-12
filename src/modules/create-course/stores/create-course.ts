@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import type { Course } from '@/core/data/entities/Course'
 import { v4 as uuid } from 'uuid'
 import type { Material } from '@/core/data/entities/Material'

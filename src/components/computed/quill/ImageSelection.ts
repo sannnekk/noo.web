@@ -69,6 +69,7 @@ export function onMouseMove(e: MouseEvent): void {
   updateSelection()
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function onMouseUp(e: MouseEvent): ImageComment | null {
   if (!currentSelection.started) {
     return null

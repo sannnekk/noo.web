@@ -39,6 +39,7 @@ import { copyText } from '@/core/device/Clipboard'
 import { Core } from '@/core/Core'
 import { useRouter } from 'vue-router'
 import { reactive } from 'vue'
+import type { MenuItem } from '../widgets/more-widget.vue'
 
 interface Props {
   image?: string | undefined
@@ -52,18 +53,20 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const actions = reactive([
+const actions = reactive<MenuItem[]>([
   {
     title: 'Добавить материал (Coming soon)',
     icon: 'add',
     if: Core.Context.User?.role === 'teacher',
-    action: () => void 0
+    action: () => {}
   },
   {
     title: 'Редактировать',
     icon: 'edit',
     if: Core.Context.User?.role === 'teacher',
-    action: () => router.push(`/create-course${props.slug}`)
+    action: () => {
+      router.push(`/create-course${props.slug}`)
+    }
   },
   {
     title: 'Скопировать ссылку',

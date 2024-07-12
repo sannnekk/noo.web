@@ -15,7 +15,7 @@ interface Props {
   students: Partial<User>[] | undefined
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 
 const columns = [
   {

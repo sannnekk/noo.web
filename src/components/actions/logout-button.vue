@@ -1,9 +1,5 @@
 <template>
   <button class="logout-button">
-    <inline-icon
-      name="logout"
-      class="logout-button__icon"
-    />
     <span
       class="logout-button__text"
       @click.prevent="Core.Services.Auth.logout()"

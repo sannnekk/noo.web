@@ -5,7 +5,7 @@
   >
     <h4 class="task-answer-container__title">Ответ:</h4>
     <rich-text-container
-      v-if="readonly"
+      v-if="readonly && model"
       :content="model"
       :commentable="commentable"
       @commented="onComment($event)"

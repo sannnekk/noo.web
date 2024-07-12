@@ -17,7 +17,7 @@
       />
       <uploaded-image
         v-else
-        :src="src || file"
+        :src="src || file || undefined"
       />
     </div>
     <div class="file-card__label">
@@ -32,14 +32,9 @@ import { computed } from 'vue'
 interface Props {
   selected?: boolean
   downloadable?: boolean
-  key: string
-  id?: string
   name: string
   src: string
   extension: 'png' | 'jpeg' | 'pdf'
-  progress: number
-  isUploaded: boolean
-  error: string
   file: File | null
 }
 

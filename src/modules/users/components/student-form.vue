@@ -47,6 +47,10 @@
             v-model="selectedMentorId"
           />
           <list-pagination
+            v-if="
+              userStore.mentorSearch.pagination.page &&
+              userStore.mentorSearch.pagination.limit
+            "
             v-model:page="userStore.mentorSearch.pagination.page"
             :total="userStore.mentorSearch.resultsMeta.total"
             :limit="userStore.mentorSearch.pagination.limit"
@@ -72,7 +76,7 @@ interface Emits {
 }
 
 const props = defineProps<Props>()
-const emits = defineEmits<Emits>()
+defineEmits<Emits>()
 
 const userStore = useUserStore()
 

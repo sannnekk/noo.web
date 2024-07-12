@@ -17,7 +17,10 @@
           label="Новый пароль"
           v-model="model.newPassword"
         />
-        <password-criteria :password="model.newPassword" />
+        <password-criteria
+          :password="model.newPassword"
+          v-model="model.passwordIsCorrect"
+        />
       </div>
       <div class="profile-password-form__form__field">
         <form-input

@@ -73,10 +73,16 @@ interface Emits {
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
-const types: {
-  value: Comment['type']
-  label: string
-}[] = [
+const types: [
+  {
+    value: Comment['type']
+    label: string
+  },
+  {
+    value: Comment['type']
+    label: string
+  }
+] = [
   {
     value: 'logic-error',
     label: 'Логическая ошибка'

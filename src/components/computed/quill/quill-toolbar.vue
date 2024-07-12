@@ -45,8 +45,8 @@ interface Emits {
   ): void
 }
 
-const props = defineProps<Props>()
-const emits = defineEmits<Emits>()
+defineProps<Props>()
+defineEmits<Emits>()
 </script>
 
 <style scoped lang="sass">

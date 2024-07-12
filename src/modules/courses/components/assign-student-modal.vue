@@ -27,6 +27,10 @@
             item-key="id"
           />
           <list-pagination
+            v-if="
+              assignStudentsStore.pagination.page &&
+              assignStudentsStore.pagination.limit
+            "
             v-model:page="assignStudentsStore.pagination.page"
             :limit="assignStudentsStore.pagination.limit"
             :total="assignStudentsStore.resultsMeta.total"

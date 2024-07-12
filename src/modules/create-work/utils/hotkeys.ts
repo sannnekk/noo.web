@@ -35,7 +35,7 @@ export const HOT_KEYS: HotKeyDefinition[] = [
     shortcut: ['Ctrl', 'ArrowLeft'],
     handler: () => {
       const assignedWorkStore = useCreateWorkStore()
-      const router = assignedWorkStore.toPrevTask()
+      assignedWorkStore.toPrevTask()
     }
   },
   {
@@ -44,7 +44,7 @@ export const HOT_KEYS: HotKeyDefinition[] = [
     shortcut: ['Ctrl', 'ArrowRight'],
     handler: () => {
       const assignedWorkStore = useCreateWorkStore()
-      const router = assignedWorkStore.toNextTask()
+      assignedWorkStore.toNextTask()
     }
   }
 ]

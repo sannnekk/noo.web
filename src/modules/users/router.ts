@@ -1,6 +1,6 @@
 import module from './module.vue'
 import EditUserView from './views/edit-user-view.vue'
-import Index from './views/index.vue'
+import Index from './views/index-view.vue'
 
 export default {
   path: '/users',

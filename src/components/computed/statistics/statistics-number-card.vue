@@ -11,7 +11,7 @@ interface Props {
   value: number
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>
 
 <style scoped lang="sass">

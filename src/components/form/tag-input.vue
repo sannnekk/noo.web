@@ -11,8 +11,9 @@
         <b
           class="tag-input__tag__remove"
           @click="removeTag(index)"
-          >+</b
         >
+          +
+        </b>
       </span>
     </div>
     <input
@@ -47,7 +48,7 @@ const model = computed<string[]>({
         return []
       }
 
-      return (<string>props.modelValue).split(props.separator)
+      return (props.modelValue as string).split(props.separator)
     }
 
     return props.modelValue as string[]

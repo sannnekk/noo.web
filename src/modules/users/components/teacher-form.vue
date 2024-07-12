@@ -15,7 +15,7 @@ interface Props {
   courses: Partial<Course>[] | undefined
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 
 const columns = [
   {

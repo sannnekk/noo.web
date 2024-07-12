@@ -47,7 +47,7 @@
       v-if="courseStore.material.files.length"
     >
       <file-list
-        :files="courseStore.material.files"
+        :files="courseStore.material.files as any as FileItem[]"
         label="Файлы курса"
         :actions="['download']"
       />
@@ -67,6 +67,7 @@ import AssignWorkModal from '../components/assign-work-modal.vue'
 import { Core } from '@/core/Core'
 import { useCourseStore } from '../stores/course'
 import { useAssignWorkToMaterialStore } from '../stores/assign-work'
+import type { FileItem } from '@/types/composed/FileItem'
 
 const courseStore = useCourseStore()
 const assignWorkStore = useAssignWorkToMaterialStore()

@@ -2,7 +2,7 @@ interface UseDateOptions {
   precision: 'year' | 'month' | 'day'
 }
 
-const months = [
+/* const months = [
   'Января',
   'Февраля',
   'Марта',
@@ -15,7 +15,7 @@ const months = [
   'Октября',
   'Ноября',
   'Декабря'
-]
+] */
 
 const monthNames = [
   'Январь',

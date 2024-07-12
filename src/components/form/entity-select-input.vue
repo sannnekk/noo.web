@@ -6,7 +6,10 @@
     @focusin="focus.input = true"
     @focusout="focus.input = false"
   >
-    <div class="entity-select-input__selected" v-if="model.length">
+    <div
+      class="entity-select-input__selected"
+      v-if="model.length"
+    >
       <span
         class="entity-select-input__selected__item"
         v-for="(entity, index) in model"
@@ -33,31 +36,35 @@
         @keydown.up.prevent="onArrowUp()"
       />
     </div>
-    <div 
-      class="entity-select-input__flyout" 
-      v-if="flyoutVisible" 
-      @focusin="focus.flyout = true" 
+    <div
+      class="entity-select-input__flyout"
+      v-if="flyoutVisible"
+      @focusin="focus.flyout = true"
       @focusout="focus.flyout = false"
     >
-      <ul v-if="!isListLoading" class="entity-select-input__flyout__results">
+      <ul
+        v-if="!isListLoading"
+        class="entity-select-input__flyout__results"
+      >
         <li
           class="entity-select-input__flyout__results__item"
           :class="{
-            'entity-select-input__flyout__results__item--hovered': hoveredItemId === (<any>item).id,
+            'entity-select-input__flyout__results__item--hovered': hoveredItemId === (item as any).id,
           }"
           v-for="item in results.slice(0, 5)"
-          :key="(<any>item).id"
+          :key="(item as any).id"
           @click="addItem()"
-          @mouseenter="hoveredItemId = (<any>item).id"
+          @mouseenter="hoveredItemId = (item as any).id"
         >
-          {{ labelKeys.map(key => (<any>item)[key]).join(' / ') }}
+          {{ labelKeys.map((key) => (item as any)[key]).join(' / ') }}
         </li>
       </ul>
-      <div class="entity-select-input__flyout__loading" v-else>
+      <div
+        class="entity-select-input__flyout__loading"
+        v-else
+      >
         <loader-icon contrast />
-        <span>
-          Загрузка...
-        </span>
+        <span> Загрузка... </span>
       </div>
     </div>
   </div>
@@ -106,19 +113,25 @@ watch(
       hoveredItemId.value = null
     }
 
-    hoveredItemId.value = (<any>results.value[0])?.id || null
-    flyoutVisible.value = (focus.input || focus.flyout) && pagination.value.search !== ''
+    hoveredItemId.value = (results.value[0] as any)?.id || null
+    flyoutVisible.value =
+      (focus.input || focus.flyout) && pagination.value.search !== ''
   },
   { deep: true }
 )
 
-watch(focus, () => {
-  setTimeout(() => {
-    flyoutVisible.value = (focus.input || focus.flyout) && pagination.value.search !== ''
-  }, 250)
-}, {
-  deep: true
-})
+watch(
+  focus,
+  () => {
+    setTimeout(() => {
+      flyoutVisible.value =
+        (focus.input || focus.flyout) && pagination.value.search !== ''
+    }, 250)
+  },
+  {
+    deep: true
+  }
+)
 
 function addItem() {
   if (model.value.length >= props.maxCount) {
@@ -156,7 +169,7 @@ function onArrowDown() {
     return
   }
 
-  hoveredItemId.value = (<any>results.value[index + 1]).id
+  hoveredItemId.value = (results.value[index + 1] as any).id
 }
 
 function onArrowUp() {
@@ -168,7 +181,7 @@ function onArrowUp() {
     return
   }
 
-  hoveredItemId.value = (<any>results.value[index - 1]).id
+  hoveredItemId.value = (results.value[index - 1] as any).id
 }
 </script>
 

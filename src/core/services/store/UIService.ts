@@ -1,7 +1,6 @@
 import type { Context } from '@/core/context/Context'
 import { StoreService } from '../StoreService'
 import { installUIStore, type ModalAction } from './UIStore'
-import type { StoreDefinition } from 'pinia'
 
 /**
  * UI service
@@ -52,7 +51,11 @@ export class UIService extends StoreService {
    * Get nav entries for current user
    */
   public getNavEntries() {
-    const role = this._context.User?.role || '$'
+    const role = this._context.User?.role
+
+    if (!role) {
+      return []
+    }
 
     return this._store.navEntries.filter((entry) => entry.for.includes(role))
   }

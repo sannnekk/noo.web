@@ -12,7 +12,7 @@ export default {
     {
       path: '',
       name: 'auth.index',
-      component: () => import('./views/index.vue')
+      component: () => import('./views/index-view.vue')
     }
   ]
 }

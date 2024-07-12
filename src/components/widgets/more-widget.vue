@@ -43,9 +43,9 @@
 import { ref } from 'vue'
 import type { IconName } from '../decorations/inline-icon.vue'
 
-interface MenuItem {
+export interface MenuItem {
   title: string
-  action: (selfRef: MenuItem) => void
+  action: (selfRef?: MenuItem) => void
   stayOpened?: boolean
   icon?: IconName
   if?: boolean

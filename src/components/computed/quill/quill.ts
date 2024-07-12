@@ -108,15 +108,13 @@ export class CustomQuill extends Quill {
         this.format(type, !currentFormat[type])
         break
       case 'script':
-        const script = currentFormat[type]
-        this.format('script', script === value ? false : value)
+        this.format('script', currentFormat[type] === value ? false : value)
         break
       case 'align':
         this.format('align', value)
         break
       case 'list':
-        const list = currentFormat[type]
-        this.format('list', list === value ? false : value)
+        this.format('list', currentFormat[type] === value ? false : value)
         break
       case 'header':
         this.format('header', value)
@@ -130,15 +128,18 @@ export class CustomQuill extends Quill {
         await action?.call(this, index)
         break
       case 'image':
-        const file = await this.promptFile()
-        if (!file) return
-
-        const url = await this.uploadFile(file)
-        this.insertImg(index, url)
+        this.insertImg(index, await this.promptAndUploadFile())
         break
     }
 
     this.rerenderToolbar()
+  }
+
+  private async promptAndUploadFile() {
+    const file = await this.promptFile()
+    if (!file) return
+
+    return await this.uploadFile(file)
   }
 
   public comment(range: Range, comment: Comment) {

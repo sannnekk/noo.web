@@ -16,6 +16,7 @@ export class ImageOverrideBlot extends Embed {
     return node
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static formats(domNode: HTMLElement) {
     return {}
   }

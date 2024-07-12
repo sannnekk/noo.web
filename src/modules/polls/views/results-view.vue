@@ -21,12 +21,19 @@
         </div>
         <div class="results-view__results">
           <results-table
-            :results="resultsStore.resultsSearch.results"
+            :results="resultsStore.resultsSearch.results as any[]"
             :is-loading="resultsStore.resultsSearch.isListLoading"
             :poll-id="resultsStore.poll.id"
           />
         </div>
-        <div class="results-view__pagination">
+        <div
+          class="results-view__pagination"
+          v-if="
+            resultsStore.resultsSearch.pagination.page &&
+            resultsStore.resultsSearch.pagination.limit &&
+            resultsStore.resultsSearch.resultsMeta.total
+          "
+        >
           <list-pagination
             v-model:page="resultsStore.resultsSearch.pagination.page"
             :limit="resultsStore.resultsSearch.pagination.limit"
@@ -47,7 +54,14 @@
             :poll-id="resultsStore.poll.id"
           />
         </div>
-        <div class="results-view__pagination">
+        <div
+          class="results-view__pagination"
+          v-if="
+            resultsStore.unregisteredResultsSearch.pagination.page &&
+            resultsStore.unregisteredResultsSearch.pagination.limit &&
+            resultsStore.unregisteredResultsSearch.resultsMeta.total
+          "
+        >
           <list-pagination
             v-model:page="
               resultsStore.unregisteredResultsSearch.pagination.page

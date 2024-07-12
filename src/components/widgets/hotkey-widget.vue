@@ -20,10 +20,16 @@
       <ul class="hint__list">
         <li
           class="hint__list__item"
-          v-for="hotkey in hotkeys"
+          v-for="(hotkey, index) in hotkeys"
+          :key="index"
         >
           <span class="hint__list__item__keys">
-            <kbd v-for="key in hotkey.keys">{{ getKey(key) }}</kbd>
+            <kbd
+              v-for="(key, index) in hotkey.keys"
+              :key="index"
+            >
+              {{ getKey(key) }}
+            </kbd>
           </span>
           <span class="hint__list__item__description">{{
             hotkey.description

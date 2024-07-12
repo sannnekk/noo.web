@@ -110,7 +110,10 @@
           @enter-press="onRegister()"
           password
         />
-        <password-criteria :password="registerModel.password" />
+        <password-criteria
+          :password="registerModel.password"
+          v-model="registerModel.passwordIsCorrect"
+        />
       </div>
       <div class="auth-form__group">
         <text-input
@@ -227,6 +230,7 @@ interface Props {
     email: string
     password: string
     repeatPassword: string
+    passwordIsCorrect: boolean
   }
   forgotPasswordCredentials: {
     email: string

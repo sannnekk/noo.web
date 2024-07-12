@@ -21,6 +21,6 @@ interface Emits {
   (e: 'commented', value: DeltaContentType): void
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emits = defineEmits<Emits>()
 </script>

@@ -9,38 +9,42 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue'
 
+export type IconName =
+  | 'bars'
+  | 'home'
+  | 'uni-cap'
+  | 'list'
+  | 'calender'
+  | 'user'
+  | 'users'
+  | 'student'
+  | 'logout'
+  | 'check-green'
+  | 'check-red'
+  | 'cross-red'
+  | 'question-yellow'
+  | 'attention-yellow'
+  | 'minus-yellow'
+  | 'check-red'
+  | 'jpg-file'
+  | 'png-file'
+  | 'pdf-file'
+  | 'telegram'
+  | 'info'
+  | 'delete'
+  | 'moon'
+  | 'sun'
+  | 'search'
+  | 'more'
+  | 'edit'
+  | 'copy'
+  | 'add'
+  | 'keyboard'
+
 interface Props {
-  name:
-    | 'bars'
-    | 'home'
-    | 'uni-cap'
-    | 'list'
-    | 'calender'
-    | 'user'
-    | 'check-green'
-    | 'check-red'
-    | 'cross-red'
-    | 'question-yellow'
-    | 'attention-yellow'
-    | 'minus-yellow'
-    | 'check-red'
-    | 'jpg-file'
-    | 'png-file'
-    | 'pdf-file'
-    | 'telegram'
-    | 'info'
-    | 'delete'
-    | 'moon'
-    | 'sun'
-    | 'search'
-    | 'more'
-    | 'edit'
-    | 'copy'
-    | 'add'
+  name: IconName
   animation?: boolean
 }
-
-export type IconName = Props['name']
 
 const props = defineProps<Props>()
 

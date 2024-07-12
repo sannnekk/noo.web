@@ -68,6 +68,7 @@ export const useCreateBlogpostStore = defineStore(
         reactionCounts: undefined as unknown as BlogPost['reactionCounts'],
         author: undefined as unknown as User,
         tags: [],
+        files: [],
         createdAt: undefined as unknown as Date,
         updatedAt: undefined as unknown as Date
       }
@@ -89,7 +90,8 @@ export const useCreateBlogpostStore = defineStore(
         questions: [],
         canSeeResults: ['everyone'],
         canVote: ['everyone'],
-        votedUserIds: []
+        votedUserIds: [],
+        votedCount: 0
       }
     }
 

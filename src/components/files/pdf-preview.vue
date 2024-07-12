@@ -14,5 +14,5 @@ interface Props {
   src: string
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>

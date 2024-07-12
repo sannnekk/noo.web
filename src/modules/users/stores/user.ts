@@ -3,12 +3,11 @@ import { Core } from '@/core/Core'
 import type { Pagination } from '@/core/data/Pagination'
 import type { User } from '@/core/data/entities/User'
 import { defineStore } from 'pinia'
-import { reactive, ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 export const useUserStore = defineStore('users-module:user', () => {
   const userService = Core.Services.User
-  const statisticsService = Core.Services.Statistics
   const uiService = Core.Services.UI
   const route = useRoute()
 

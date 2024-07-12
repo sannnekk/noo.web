@@ -1,3 +1,4 @@
+import type { IconName } from '@/components/decorations/inline-icon.vue'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -5,6 +6,13 @@ export type ModalAction = {
   label: string
   design: 'primary' | 'secondary' | 'danger' | 'warning'
   handler: () => void | Promise<void>
+}
+
+export type NavEntry = {
+  title: string
+  icon: IconName
+  route: string
+  for: ('admin' | 'teacher' | 'mentor' | 'student')[]
 }
 
 /**
@@ -25,7 +33,7 @@ export function installUIStore() {
     /**
      * All the navigation entries
      */
-    const navEntries = ref([
+    const navEntries = ref<NavEntry[]>([
       {
         title: 'Блог/Новости',
         icon: 'home',

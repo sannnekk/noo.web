@@ -36,7 +36,7 @@
       v-model:visible="comment.visible.modal"
       :position-x="comment.x"
       :position-y="comment.y"
-      :comment="comment"
+      :comment="comment as unknown as Comment & ImageComment"
       :editable="mode === 'commentable'"
       @delete="onCommentRemove()"
     />
@@ -366,6 +366,7 @@ const toolbar = reactive<Toolbar>([
       title: 'Ссылка',
       icon: 'link',
       active: false,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       action: (index) => {
         prompt.value.label = 'Введите URL ссылки'
         prompt.value.visible = true
@@ -597,6 +598,7 @@ function syncImageSelections() {
     :deep()
       .ql-editor
         outline: none
+        white-space: pre-wrap
 
       span, p, b, i, strong, em, u, strike, sub, sup, blockquote, ul, ol, li, h1, h2, h3, h4, h5, h6
         background-color: transparent !important

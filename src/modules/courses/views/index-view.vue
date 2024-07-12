@@ -59,7 +59,11 @@
     </div>
     <div
       class="index-view__pagination"
-      v-if="coursesStore.resultsMeta.total > 0"
+      v-if="
+        coursesStore.resultsMeta.total > 0 &&
+        coursesStore.pagination.page &&
+        coursesStore.pagination.limit
+      "
     >
       <list-pagination
         v-model:page="coursesStore.pagination.page"

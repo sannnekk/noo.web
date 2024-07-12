@@ -8,7 +8,6 @@ import { ref } from 'vue'
 export const useBlogStore = defineStore('blog-module:blog', () => {
   const blogService = Core.Services.Blog
   const uiService = Core.Services.UI
-  const userService = Core.Services.User
 
   /**
    * Search for posts

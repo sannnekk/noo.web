@@ -8,12 +8,15 @@
     <div class="file-list__body">
       <div class="file-list__body__list">
         <file-card
-          v-for="file in filesModel"
-          v-bind="file"
+          v-for="(file, index) in filesModel"
+          :key="index"
+          :src="file.src"
+          :extension="file.extension"
+          :file="file.file"
+          :name="file.fileName"
           :actions="actions"
-          :selected="selectable && file.key && file.key === selectedKey"
+          :selected="!!(selectable && file.key && file.key === selectedKey)"
           :downloadable="actions && actions.includes('download')"
-          @action="onAction($event, file.key)"
           @click="onFileSelect(file.key)"
         />
       </div>
@@ -67,19 +70,6 @@ const selectedKeyModel = computed({
 function onFileSelect(key: string) {
   selectedKeyModel.value = key
 }
-
-function onAction(action: Action, fileKey: string) {
-  switch (action) {
-    case 'delete':
-      removeFile(fileKey)
-    case 'download':
-      downloadFile(fileKey)
-  }
-}
-
-function removeFile(key: string) {}
-
-function downloadFile(key: string) {}
 </script>
 
 <style scoped lang="sass">

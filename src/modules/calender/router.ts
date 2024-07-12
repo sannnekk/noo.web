@@ -1,5 +1,5 @@
 import module from './module.vue'
-import index from './views/index.vue'
+import index from './views/index-view.vue'
 
 export default {
   path: '/calender',

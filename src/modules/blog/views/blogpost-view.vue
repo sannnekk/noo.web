@@ -61,7 +61,7 @@
     >
       <file-list
         label="Прикрепленные файлы"
-        :files="postStore.post.files"
+        :files="postStore.post.files as any as FileItem[]"
       />
     </div>
   </div>
@@ -74,6 +74,7 @@ import { usePostStore } from '../stores/post'
 import { useBlogStore } from '../stores/blog'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { Core } from '@/core/Core'
+import type { FileItem } from '@/types/composed/FileItem'
 
 const postStore = usePostStore()
 const blogStore = useBlogStore()

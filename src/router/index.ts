@@ -1,4 +1,3 @@
-import { Core } from '@/core/Core'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({

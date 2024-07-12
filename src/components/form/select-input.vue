@@ -29,7 +29,7 @@ interface Props {
   label: string
   options: {
     label: string
-    value: string | number
+    value: string | number | undefined
   }[]
   modelValue: string
   readonly?: boolean

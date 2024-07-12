@@ -27,6 +27,7 @@
     <div class="task-options__add">
       <div class="taks-options__add__input">
         <form-input
+          type="text"
           v-model="newTaskOption.name"
           label="Новый вариант ответа"
         />
@@ -87,10 +88,6 @@ const newTaskOption = ref<TaskOption>(emptyTaskOption())
 function onAddTaskOption() {
   model.value = [...model.value, newTaskOption.value]
   newTaskOption.value = emptyTaskOption()
-}
-
-function onRemoveTaskOption(taskOption: TaskOption) {
-  model.value = model.value.filter((item) => item.id !== taskOption.id)
 }
 </script>
 

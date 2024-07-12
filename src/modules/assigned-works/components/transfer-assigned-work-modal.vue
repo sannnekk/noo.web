@@ -25,7 +25,13 @@
             item-key="id"
           />
         </div>
-        <div class="transfer-assigned-work-modal__select__pagination">
+        <div
+          class="transfer-assigned-work-modal__select__pagination"
+          v-if="
+            transferWorkStore.pagination.page &&
+            transferWorkStore.pagination.limit
+          "
+        >
           <list-pagination
             v-model:page="transferWorkStore.pagination.page"
             :total="transferWorkStore.resultsMeta.total"

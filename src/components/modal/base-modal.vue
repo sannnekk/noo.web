@@ -67,7 +67,7 @@
 interface Props {
   title?: string
   message?: string
-  type: 'success' | 'error' | 'warning'
+  type: 'success' | 'error' | 'warning' | 'info'
   visible?: boolean
   actions?: Array<{
     label: string
@@ -80,7 +80,7 @@ interface Emits {
   (e: 'update:visible', value: boolean): void
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 function onClose() {

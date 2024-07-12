@@ -82,6 +82,7 @@ import type { DeltaContentType } from '@/types/composed/DeltaContentType'
 import { reactive } from 'vue'
 import { copyText } from '@/core/device/Clipboard'
 import { useRouter } from 'vue-router'
+import type { MenuItem } from '@/components/widgets/more-widget.vue'
 
 interface Props {
   post: BlogPost
@@ -99,7 +100,7 @@ const emits = defineEmits<Emits>()
 
 const router = useRouter()
 
-const actions = reactive([
+const actions = reactive<MenuItem[]>([
   {
     title: 'Редактировать',
     icon: 'edit',
@@ -191,7 +192,7 @@ function canSeeResults() {
 }
 
 function copyPollLink(thisRef: any, pollId: string) {
-  copyText(Core.Constants.POLL_URL + pollId)
+  copyText(`${Core.Constants.POLL_URL}/${pollId}`)
 
   thisRef.title = 'Скопировано!'
   thisRef.icon = 'check-green'

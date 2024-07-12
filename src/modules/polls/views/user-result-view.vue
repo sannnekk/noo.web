@@ -47,7 +47,7 @@
     </the-sidebar-layout>
   </div>
   <edit-answer-modal
-    v-if="resultStore.currentQuestion"
+    v-if="resultStore.currentQuestion && resultStore.answerToEdit"
     v-model:answer="resultStore.answerToEdit"
     v-model:visible="editAnswerModalVisible"
     :question="resultStore.currentQuestion"

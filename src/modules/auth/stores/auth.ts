@@ -31,7 +31,8 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     password: '',
     repeatPassword: '',
     email: '',
-    name: ''
+    name: '',
+    passwordIsCorrect: false
   })
 
   const forgotPasswordCredentials = reactive({

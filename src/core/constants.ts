@@ -9,10 +9,10 @@ export const Constants = {
       : 'file://C:\\Users\\nukle\\OneDrive\\projects\\noo\\web-2.0\\uploads',
   APP_URL:
     import.meta.env.MODE === 'production'
-      ? 'https://noo-school.ru/'
-      : 'http://localhost:5173/',
+      ? 'https://noo-school.ru'
+      : 'http://localhost:5173',
   POLL_URL:
     import.meta.env.MODE === 'production'
-      ? 'https://poll.noo-school.ru/'
-      : 'http://localhost:3001/'
+      ? 'https://poll.noo-school.ru'
+      : 'http://localhost:3001'
 } as const

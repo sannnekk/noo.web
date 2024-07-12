@@ -30,7 +30,6 @@
 
 <script setup lang="ts">
 import { useDate } from '@/composables/useDate'
-import type { useSearch } from '@/composables/useSearch'
 import type { Pagination } from '@/core/data/Pagination'
 import { reactive, watch } from 'vue'
 

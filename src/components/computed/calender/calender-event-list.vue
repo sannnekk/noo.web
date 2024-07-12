@@ -78,7 +78,7 @@ interface Emits {
 }
 
 const props = defineProps<Props>()
-const emits = defineEmits<Emits>()
+defineEmits<Emits>()
 
 const dateFormatter = computed(() => useDate(props.date, { precision: 'day' }))
 

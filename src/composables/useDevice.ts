@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 
 export function useDevice() {
   const isMobile = ref(window.innerWidth <= 960)

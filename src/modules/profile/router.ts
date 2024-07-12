@@ -1,5 +1,5 @@
 import module from './module.vue'
-import Index from './views/index.vue'
+import Index from './views/index-view.vue'
 
 export default {
   path: '/profile',

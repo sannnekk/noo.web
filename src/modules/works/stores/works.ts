@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { ref, reactive, watch } from 'vue'
 import type { Work } from '@/core/data/entities/Work'
 import { Core } from '@/core/Core'
 import { useSearch } from '@/composables/useSearch'

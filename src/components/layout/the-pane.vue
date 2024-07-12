@@ -6,7 +6,7 @@
   >
     <div class="pane__inner">
       <div class="pane__logo">
-        <logo />
+        <main-logo />
       </div>
       <div class="pane__nav">
         <nav>
@@ -59,7 +59,6 @@
 </template>
 
 <script setup lang="ts">
-import logo from '../common/logo.vue'
 import { ref, watch } from 'vue'
 import { Core } from '@/core/Core'
 

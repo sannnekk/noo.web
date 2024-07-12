@@ -1,7 +1,8 @@
 <template>
   <div class="password-criteria">
     <span
-      v-for="criterium in Core.Services.User.passwordCriteria()"
+      v-for="(criterium, index) in Core.Services.User.passwordCriteria()"
+      :key="index"
       class="password-criteria__item"
     >
       <inline-icon
