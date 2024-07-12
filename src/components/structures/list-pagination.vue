@@ -77,7 +77,9 @@ const pages = computed(() => {
     display: flex
     align-items: center
     justify-content: center
-    width: 1.5em
+    max-width: 3.5em
+    min-width: 1.5em
+    padding: 0 0.5em
     height: 1.5em
     border-radius: var(--border-radius)
     cursor: pointer

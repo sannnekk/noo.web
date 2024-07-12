@@ -30,6 +30,7 @@ export type IconName =
   | 'png-file'
   | 'pdf-file'
   | 'telegram'
+  | 'telegram-blue'
   | 'info'
   | 'delete'
   | 'moon'

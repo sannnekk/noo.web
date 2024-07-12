@@ -18,7 +18,7 @@ export const useUsersStore = defineStore('users-module:users', () => {
    */
   async function fetchUsers(pagination: Pagination) {
     try {
-      return await userService.getUsers(pagination)
+      return await userService.getUsersWithMentors(pagination)
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при получении списка пользователей',

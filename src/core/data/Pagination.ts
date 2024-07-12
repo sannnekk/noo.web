@@ -4,6 +4,7 @@ export interface Pagination {
   order?: 'ASC' | 'DESC'
   sort?: string
   search?: string
+  relations?: string[]
   [key: `filter[${string}]`]: FilterType
 }
 

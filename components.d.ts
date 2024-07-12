@@ -116,6 +116,7 @@ declare module 'vue' {
     TabsView: typeof import('./src/components/structures/tabs-view.vue')['default']
     TagInput: typeof import('./src/components/form/tag-input.vue')['default']
     TelegramAuthButton: typeof import('./src/components/computed/telegram-auth-button.vue')['default']
+    TelegramBlueIcon: typeof import('./src/components/decorations/icons/telegram-blue-icon.vue')['default']
     TelegramButton: typeof import('./src/components/computed/telegram-button.vue')['default']
     TelegramIcon: typeof import('./src/components/decorations/icons/telegram-icon.vue')['default']
     TextArea: typeof import('./src/components/form/text-area.vue')['default']

@@ -39,6 +39,19 @@ export class UserService extends ApiService {
   }
 
   /**
+   * get users with mentor if student
+   */
+  public async getUsersWithMentors(
+    pagination?: Pagination
+  ): Promise<ApiResponse<User[]>> {
+    const _pagination = { ...pagination }
+
+    _pagination.relations = ['mentor', 'students']
+
+    return await this.httpGet<User[]>(this._route, _pagination)
+  }
+
+  /**
    * get students
    */
   public async getStudents(

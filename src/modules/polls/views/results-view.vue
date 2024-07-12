@@ -79,10 +79,19 @@
 import unregisteredResultsTable from '../components/unregistered-results-table.vue'
 import resultsTable from '../components/results-table.vue'
 import { usePollResultsStore } from '../stores/results'
+import { watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 const resultsStore = usePollResultsStore()
+const route = useRoute()
 
-resultsStore.fetchPoll()
+watch(
+  () => route.params.pollId,
+  () => {
+    resultsStore.fetchPoll()
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped lang="sass">

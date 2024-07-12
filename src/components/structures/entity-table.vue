@@ -12,9 +12,11 @@
           </th>
         </tr>
       </thead>
-      <tbody v-auto-animate>
+      <tbody
+        v-auto-animate
+        v-if="!isLoading"
+      >
         <tr
-          v-if="!isLoading"
           v-for="(object, index) in data"
           :key="object.id"
         >
@@ -93,18 +95,25 @@
                 />
                 <inline-icon
                   v-else
-                  :name="object[key]"
+                  :name="object[key] as IconName"
                   v-for="key in col.keys"
+                  :key="key"
                 />
               </span>
               <span v-else-if="col.type === 'avatar'">
                 <user-avatar
-                  :src="object[col.keys[0]]"
-                  :name="object[col.keys[1]]"
+                  :src="object[col.keys![0]] as string"
+                  :name="object[col.keys![1]] as string"
                 />
               </span>
               <span v-else>-</span>
             </span>
+          </td>
+          <td
+            class="entity-table__actions"
+            v-if="actions"
+          >
+            <more-widget :items="actions(object)" />
           </td>
         </tr>
       </tbody>
@@ -130,38 +139,37 @@
 <script setup lang="ts">
 import { useDate } from '@/composables/useDate'
 import { ref, watch } from 'vue'
+import type { IconName } from '../decorations/inline-icon.vue'
+import type { MenuItem } from '../widgets/more-widget.vue'
+
+export interface ColType {
+  title: string
+  type: 'text' | 'tag' | 'link' | 'icon' | 'date' | 'avatar' | 'iterator'
+  keys?: string[]
+  value?: string | ((row: any) => string)
+  join?: string
+  width?: string
+  style?: ('bold' | 'italic' | 'centered' | 'secondary')[]
+  linkTo?: string | Function
+  action?: (row: any) => void
+  if?: (row: any) => boolean
+  design?: 'primary' | 'secondary' | 'warning' | 'danger' | 'telegram'
+  tagFunction?: (
+    key: string,
+    value: string | number | Date
+  ) => {
+    text: string
+    type: 'success' | 'warning' | 'danger' | 'info'
+  }
+}
 
 interface Props {
-  cols: {
-    title: string
-    value?: string | ((row: any) => string)
-    keys: string[]
-    join?: string
-    width?: string
-    style?: ('bold' | 'italic' | 'centered' | 'secondary')[]
-    type: 'text' | 'tag' | 'link' | 'icon' | 'date' | 'avatar' | 'iterator'
-    linkTo?: string | Function
-    action?: (row: any) => void
-    design?:
-      | 'primary'
-      | 'secondary'
-      | 'success'
-      | 'warning'
-      | 'danger'
-      | 'telegram'
-    tagFunction?: (
-      key: string,
-      value: string | number | Date
-    ) => {
-      text: string
-      type: 'success' | 'warning' | 'danger' | 'info'
-    }
-    if?: (row: any) => boolean
-  }[]
+  cols: ColType[]
   data: ({ id: string } & Record<string, string | number | Date>)[]
   dateConfig?: Parameters<typeof useDate>[1]
   editable?: boolean
   isLoading?: boolean
+  actions?: (row: any) => MenuItem[]
 }
 
 interface Emits {
@@ -170,21 +178,14 @@ interface Emits {
   (e: 'select', ids: string[]): void
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 const emits = defineEmits<Emits>()
 
-function ifFunctionThenNotNullable(
-  value: Props['cols'][0]['value'],
-  row: any
-): boolean {
+function ifFunctionThenNotNullable(value: ColType['value'], row: any): boolean {
   return value instanceof Function ? !!value.call(undefined, row) : true
 }
 
-function unfunction(
-  col: Props['cols'][0],
-  row: any,
-  key: keyof Props['cols'][0] = 'value'
-): Props['cols'][0][keyof Props['cols'][0]] {
+function unfunction(col: ColType, row: any, key: keyof ColType = 'value'): any {
   if (getValueByKey(col, key) instanceof Function) {
     return (getValueByKey(col, key) as Function).call(undefined, row)
   }
@@ -211,13 +212,13 @@ function getValueByKey(object: Record<string, any>, key: string): any {
   return typeof value === 'undefined' || value === null ? '-' : value
 }
 
-function getTextCol(object: Record<string, any>, col: Props['cols'][0]) {
+function getTextCol(object: Record<string, any>, col: ColType) {
   if (col.value instanceof Function) return unfunction(col, object)
 
   const keys = col.keys
   const join = col.join || '<br>'
 
-  return keys
+  return keys!
     .map((key) => getValueByKey(object, key))
     .map(
       (value, index) =>
@@ -234,7 +235,7 @@ function getDateCol(object: Record<string, any>, col: Props['cols'][0]) {
   const keys = col.keys
   const join = col.join || '<br>'
 
-  return keys
+  return keys!
     .map((key) =>
       getValueByKey(object, key) !== '-'
         ? useDate(getValueByKey(object, key), {
@@ -271,6 +272,12 @@ watch(
   &__style-secondary
     color: var(--text-light)
     font-size: 0.8em
+
+  td
+    small
+      color: var(--text-light)
+      font-size: 0.8em
+      white-space: nowrap
 </style>
 
 <style scoped lang="sass">

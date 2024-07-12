@@ -1,5 +1,8 @@
 <template>
-  <div class="more-widget">
+  <div
+    class="more-widget"
+    v-if="visibleItems.length > 0"
+  >
     <div
       class="more-widget__button"
       @click="toggleMenu()"
@@ -22,6 +25,7 @@
           :key="index"
           @click="onAction(items[index])"
           v-show="typeof item.if === 'undefined' || item.if"
+          :data-if="item.if"
         >
           <span class="menu__list__item__icon">
             <inline-icon
@@ -40,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import type { IconName } from '../decorations/inline-icon.vue'
 
 export interface MenuItem {
@@ -55,11 +59,15 @@ interface Props {
   items: MenuItem[]
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const hintVisible = ref(false)
 const button = ref<HTMLSpanElement | null>(null)
 const currentPosition = ref({ x: 0, y: 0 })
+
+const visibleItems = computed(() =>
+  props.items.filter((item) => typeof item.if === 'undefined' || item.if)
+)
 
 function getButtonPosition() {
   if (button.value) {

@@ -1,9 +1,6 @@
-import { Context } from './../context/Context'
 import type { FilterType, Pagination } from '../data/Pagination'
 import { Constants } from '../constants'
 import { Service } from './Service'
-import { ref, type Ref } from 'vue'
-import type { MediaFile } from '../data/MediaFile'
 import type { Media } from '../data/entities/Media'
 
 type ApiRoute = `/${string}`
@@ -213,8 +210,10 @@ export class ApiService extends Service {
    * Get url params
    */
   private _getParams(params: Pagination) {
+    const relations = params.relations || []
+
     const nonFilterParams = Object.keys(params)
-      .filter((param) => !param.startsWith('filter['))
+      .filter((param) => !param.startsWith('filter[') && param !== 'relations')
       .reduce((acc, key) => {
         acc[key as any] = params[key as any]
         return acc
@@ -246,6 +245,12 @@ export class ApiService extends Service {
         params[filter as any] as FilterType
       )}`
     }
+
+    for (const relation of relations) {
+      query += `&relations[]=${relation}`
+    }
+
+    console.log(params, query)
 
     return query
   }
