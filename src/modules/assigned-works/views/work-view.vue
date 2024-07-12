@@ -159,7 +159,7 @@
             <div class="work-view__sidebar__people">
               <div class="work-view__sidebar__people__student">
                 <label>Ученик: </label>
-                <user-card :user="assignedWorkStore.assignedWork.student" />
+                <user-card :user="assignedWorkStore.assignedWork.student!" />
               </div>
               <div
                 class="work-view__sidebar__people__mentor"
@@ -223,7 +223,7 @@
     v-model:visible="assignedWorkStore.shiftDeadlineModalVisible"
     @confirm="assignedWorkStore.shiftDeadline()"
   >
-    <template #title> Сдвинуть дедлайн на 1 день </template>
+    <template #title> Сдвинуть дедлайн на 3 дня </template>
     <template #text>
       Вы уверены, что хотите сдвинуть дедлайн?
       <br />

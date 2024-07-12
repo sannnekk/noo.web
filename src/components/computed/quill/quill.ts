@@ -20,6 +20,7 @@ export type FormatType =
   | 'header'
   | 'list'
   | 'table'
+  | 'color'
 
 export type Toolbar = {
   type: FormatType
@@ -129,6 +130,9 @@ export class CustomQuill extends Quill {
         break
       case 'image':
         this.insertImg(index, await this.promptAndUploadFile())
+        break
+      case 'color':
+        this.format('color', currentFormat[type] === value ? false : value)
         break
     }
 

@@ -159,7 +159,7 @@ export interface ColType {
     value: string | number | Date
   ) => {
     text: string
-    type: 'success' | 'warning' | 'danger' | 'info'
+    type: 'success' | 'warning' | 'danger' | 'info' | 'primary'
   }
 }
 

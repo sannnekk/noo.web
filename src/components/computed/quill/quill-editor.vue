@@ -467,6 +467,43 @@ const toolbar = reactive<Toolbar>([
       icon: 'list-bullet',
       active: false
     }
+  ],
+  [
+    {
+      type: 'color',
+      value: 'var(--danger)',
+      title: 'Цвет текста',
+      icon: 'color',
+      active: false
+    },
+    {
+      type: 'color',
+      value: 'var(--warning)',
+      title: 'Цвет текста',
+      icon: 'color',
+      active: false
+    },
+    {
+      type: 'color',
+      value: 'var(--success)',
+      title: 'Цвет текста',
+      icon: 'color',
+      active: false
+    },
+    {
+      type: 'color',
+      value: 'var(--lila)',
+      title: 'Цвет текста',
+      icon: 'color',
+      active: false
+    },
+    {
+      type: 'color',
+      value: 'var(--primary)',
+      title: 'Цвет текста',
+      icon: 'color',
+      active: false
+    }
   ]
 ])
 
@@ -600,7 +637,7 @@ function syncImageSelections() {
         outline: none
         white-space: pre-wrap
 
-      span, p, b, i, strong, em, u, strike, sub, sup, blockquote, ul, ol, li, h1, h2, h3, h4, h5, h6
+      p, b, i, strong, em, u, strike, sub, sup, blockquote, ul, ol, li, h1, h2, h3, h4, h5, h6
         background-color: transparent !important
         color: var(--form-text-color) !important
 

@@ -19,7 +19,16 @@
         @click="() => $emit('format', item)"
         :title="item.title"
       >
-        <text-format-icon :name="item.icon" />
+        <text-format-icon
+          v-if="item.type !== 'color'"
+          :name="item.icon"
+        />
+        <span
+          class="quill-toolbar__button__color-dot"
+          :style="{ 'background-color': item.value }"
+          v-else
+        >
+        </span>
       </button>
     </div>
   </div>
@@ -57,7 +66,10 @@ defineEmits<Emits>()
   border-bottom: 1px solid var(--border-color)
   border-top-left-radius: var(--border-radius)
   border-top-right-radius: var(--border-radius)
-  overflow: hidden
+  overflow-y: hidden
+  overflow-x: auto
+  // remove scrollbar
+  scrollbar-width: none
 
   &__group
     display: flex
@@ -71,7 +83,7 @@ defineEmits<Emits>()
     color: var(--form-text-color)
     cursor: pointer
     font-size: 0.7em
-    width: 2rem
+    width: 1.8rem
     height: 2rem
 
     &--active
@@ -80,4 +92,12 @@ defineEmits<Emits>()
 
     &:hover
       background-color: var(--lila)
+
+    &__color-dot
+      width: 0.8rem
+      height: 0.8rem
+      border-radius: 50%
+      display: inline-block
+      margin: 0 0.1rem
+      border: 1px solid var(--border-color)
 </style>
