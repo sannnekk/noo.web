@@ -23,7 +23,7 @@
               @click="onCancel"
               design="secondary"
               class="sure-modal__buttons__cancel"
-              :disabled="!actionsDisabled"
+              :disabled="actionsDisabled"
             >
               Отмена
             </common-button>
@@ -32,7 +32,7 @@
               @click="onConfirm"
               design="primary"
               class="sure-modal__buttons__confirm"
-              :disabled="!actionsDisabled"
+              :disabled="actionsDisabled"
             >
               Подтвердить
             </common-button>
