@@ -637,7 +637,7 @@ function syncImageSelections() {
         outline: none
         white-space: pre-wrap
 
-      p, b, i, strong, em, u, strike, sub, sup, blockquote, ul, ol, li, h1, h2, h3, h4, h5, h6
+      span, p, b, i, strong, em, u, strike, sub, sup, blockquote, ul, ol, li, h1, h2, h3, h4, h5, h6
         background-color: transparent !important
         color: var(--form-text-color) !important
 

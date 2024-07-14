@@ -250,8 +250,6 @@ export class ApiService extends Service {
       query += `&relations[]=${relation}`
     }
 
-    console.log(params, query)
-
     return query
   }
 

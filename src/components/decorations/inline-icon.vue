@@ -41,6 +41,8 @@ export type IconName =
   | 'copy'
   | 'add'
   | 'keyboard'
+  | 'change-user'
+  | 'eye'
 
 interface Props {
   name: IconName

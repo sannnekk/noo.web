@@ -1,6 +1,6 @@
 <template>
   <tabs-view
-    :titles="['Данные', 'Календарь', 'Статистика']"
+    :titles="['Данные', 'Календарь', 'Статистика', 'Работы']"
     @tab-change="currentTab = $event"
   >
     <template #tab-0>
@@ -127,10 +127,32 @@
         />
       </div>
     </template>
+    <template #tab-3>
+      <div
+        class="edit-user-view__assigned-works"
+        v-if="['student', 'mentor'].includes(userStore.user?.role as any) && ['admin', 'teacher'].includes(Core.Context.User?.role || '$$anonymous$$')"
+      >
+        <assigned-works-view
+          v-if="userStore.user && currentTab === 3"
+          :user="userStore.user"
+        />
+      </div>
+      <div
+        class="edit-user-view__no-assigned-works"
+        v-else
+      >
+        <p>
+          Работы есть только у студентов и кураторов, просматривать их может
+          только админ или преподаватель. Кураторы и ученики могут видеть только
+          свои работы
+        </p>
+      </div>
+    </template>
   </tabs-view>
 </template>
 
 <script setup lang="ts">
+import assignedWorksView from '../components/assigned-works-view.vue'
 import changePasswordModal from '../components/change-password-modal.vue'
 import userForm from '../components/user-form.vue'
 import { useUserStore } from '../stores/user'
@@ -215,4 +237,8 @@ const currentTab = ref(0)
       display: flex
       justify-content: flex-end
       gap: 1em
+
+  &__no-assigned-works
+    text-align: center
+    padding: 1em
 </style>

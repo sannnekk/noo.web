@@ -1,5 +1,5 @@
 import type { Context } from '@/core/context/Context'
-import { ApiService, type ApiResponse } from '@/core/services/ApiService'
+import { ApiService } from '@/core/services/ApiService'
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { Pagination } from '@/core/data/Pagination'
 
@@ -28,6 +28,16 @@ export class AssignedWorkService extends ApiService {
    */
   public async getAssignedWorks(pagination: Pagination) {
     return await this.httpGet<AssignedWork[]>(`${this._route}`, pagination)
+  }
+
+  public async getAssignedWorksFromUser(
+    userId: string,
+    pagination?: Pagination
+  ) {
+    return await this.httpGet<AssignedWork[]>(
+      `${this._route}/from-user/${userId}`,
+      pagination
+    )
   }
 
   /**
@@ -96,6 +106,18 @@ export class AssignedWorkService extends ApiService {
   ) {
     await this.httpPatch(
       `${this._route}/${assignedWorkId}/transfer/${mentorId}`
+    )
+  }
+
+  /**
+   * Change the mentor of the assigned work
+   */
+  public async changeMentor(
+    assignedWorkId: AssignedWork['id'],
+    mentorId: string
+  ) {
+    await this.httpPatch(
+      `${this._route}/${assignedWorkId}/replace-mentor/${mentorId}`
     )
   }
 

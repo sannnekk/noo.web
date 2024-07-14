@@ -149,7 +149,7 @@ export interface ColType {
   value?: string | ((row: any) => string)
   join?: string
   width?: string
-  style?: ('bold' | 'italic' | 'centered' | 'secondary')[]
+  style?: (undefined | 'bold' | 'italic' | 'centered' | 'secondary')[]
   linkTo?: string | Function
   action?: (row: any) => void
   if?: (row: any) => boolean
