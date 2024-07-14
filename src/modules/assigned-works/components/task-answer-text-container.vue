@@ -53,7 +53,6 @@ const model = computed<Answer['content']>({
 
     const work = { ...props.modelValue }
     work.answers.push(answer)
-    work.answerIds.push(answer.id)
     emits('update:modelValue', props.modelValue)
 
     return answer.content

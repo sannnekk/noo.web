@@ -48,7 +48,6 @@ const model = computed<Answer['word']>({
 
     const work = { ...props.modelValue }
     work.answers.push(answer)
-    work.answerIds.push(answer.id)
 
     emits('update:modelValue', props.modelValue)
 

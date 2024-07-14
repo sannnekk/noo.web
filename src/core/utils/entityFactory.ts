@@ -16,12 +16,9 @@ export function entityFactory<T extends Entity>(name: EntityName): T {
   }
 }
 
-function answerConstructor(): Answer {
-  const id = uuid()
-
+function answerConstructor(): Omit<Answer, 'id'> {
   return {
-    id,
-    slug: id,
+    slug: uuid(),
     content: {
       ops: [{ insert: '\n' }]
     },
@@ -31,12 +28,9 @@ function answerConstructor(): Answer {
   }
 }
 
-function commentConstructor(): Comment {
-  const id = uuid()
-
+function commentConstructor(): Omit<Comment, 'id'> {
   return {
-    id,
-    slug: id,
+    slug: uuid(),
     content: {
       ops: [{ insert: '\n' }]
     },

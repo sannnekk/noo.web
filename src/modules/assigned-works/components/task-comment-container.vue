@@ -55,7 +55,6 @@ const model = computed<Comment['content']>({
 
     const work = { ...props.modelValue }
     work.comments.push(comment)
-    work.commentIds.push(comment.id)
     emits('update:modelValue', props.modelValue)
 
     return comment.content
