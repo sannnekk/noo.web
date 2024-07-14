@@ -23,6 +23,7 @@
               @click="onCancel"
               design="secondary"
               class="sure-modal__buttons__cancel"
+              :disabled="!actionsDisabled"
             >
               Отмена
             </common-button>
@@ -31,6 +32,7 @@
               @click="onConfirm"
               design="primary"
               class="sure-modal__buttons__confirm"
+              :disabled="!actionsDisabled"
             >
               Подтвердить
             </common-button>
@@ -44,6 +46,8 @@
 <script setup lang="ts">
 interface Props {
   visible?: boolean
+  actionsDisabled?: boolean
+  stayOpen?: boolean
 }
 
 interface Emits {
@@ -52,7 +56,7 @@ interface Emits {
   (e: 'cancel'): void
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 const onCancel = () => {
@@ -62,7 +66,9 @@ const onCancel = () => {
 
 const onConfirm = () => {
   emits('confirm')
-  emits('update:visible', false)
+  if (!props.stayOpen) {
+    emits('update:visible', false)
+  }
 }
 </script>
 

@@ -1,7 +1,26 @@
 <template>
-  <div class="assigned-works-view">
+  <div
+    class="assigned-works-view"
+    v-auto-animate
+  >
     <div class="assigned-works-view__search">
       <search-field v-model="search.pagination.value.search" />
+    </div>
+    <div
+      class="assigned-works-view__selection"
+      v-if="selectedWorks.length"
+    >
+      <p class="assigned-works-view__selection__title">
+        Выбрано работ: {{ selectedWorks.length }}
+      </p>
+      <div class="assigned-works-view__selection__actions">
+        <common-button
+          design="secondary"
+          @click="openChangeMentorModal(selectedWorks)"
+        >
+          Поменять куратора
+        </common-button>
+      </div>
     </div>
     <div class="assigned-works-view__results">
       <entity-table
@@ -9,6 +28,8 @@
         :cols="cols"
         :actions="actions"
         :is-loading="search.isListLoading.value"
+        editable
+        @select="onSelect($event)"
       />
     </div>
     <div
@@ -29,8 +50,8 @@
   <change-mentor-modal
     v-model:opened="changeMentorModal.opened"
     v-model:mentorId="changeMentorModal.mentorId"
-    :assigned-work="changeMentorModal.assignedWork!"
-    @confirm="search.trigger()"
+    :assigned-works="changeMentorModal.assignedWorks"
+    @confirm="onMentorChanged()"
   />
 </template>
 
@@ -61,11 +82,11 @@ const search = useSearch(fetchAssignedWorks, {
 const changeMentorModal = ref<{
   opened: boolean
   mentorId: string | null
-  assignedWork: AssignedWork | null
+  assignedWorks: AssignedWork[]
 }>({
   opened: false,
   mentorId: null,
-  assignedWork: null
+  assignedWorks: []
 })
 
 async function fetchAssignedWorks(pagination?: Pagination) {
@@ -130,10 +151,7 @@ function actions(assignedWork: AssignedWork): MenuItem[] {
       if:
         assignedWork.checkStatus === 'not-checked' ||
         assignedWork.checkStatus === 'in-progress',
-      action() {
-        changeMentorModal.value.assignedWork = assignedWork
-        changeMentorModal.value.opened = true
-      }
+      action: () => openChangeMentorModal([assignedWork])
     }
   ]
 }
@@ -187,12 +205,49 @@ function tagFunction(
     text: '-'
   }
 }
+
+const selectedWorks = ref<AssignedWork[]>([])
+
+function onSelect(assignedWorkIds: AssignedWork['id'][]) {
+  selectedWorks.value = search.results.value.filter((work) =>
+    assignedWorkIds.includes(work.id)
+  )
+}
+
+function openChangeMentorModal(assignedWorks: AssignedWork[]) {
+  changeMentorModal.value = {
+    opened: true,
+    mentorId: null,
+    assignedWorks
+  }
+}
+
+function onMentorChanged() {
+  selectedWorks.value = []
+  search.trigger()
+}
+
+function onSelectAll() {
+  selectedWorks.value = search.results.value
+}
 </script>
 
 <style scoped lang="sass">
 .assigned-works-view
   &__search
     padding: 1em
+
+  &__selection
+    padding: 1em
+    display: flex
+    justify-content: space-between
+
+    &__text
+      flex: 1px
+
+    &__actions
+      display: flex
+      gap: 1em
 
   &__results
     margin-bottom: 1em

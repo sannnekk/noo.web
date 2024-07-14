@@ -2,15 +2,20 @@
   <sure-modal
     v-model:visible="openedModel"
     @confirm="onConfirm()"
+    :actions-disabled="progress === 0"
+    stay-open
   >
     <template #title>
-      <h3>Изменить куратора у работы "{{ assignedWork.work?.name }}"</h3>
+      <h3 v-if="assignedWorks.length === 1">
+        Изменить куратора у работы "{{ assignedWorks[0].work?.name }}"
+      </h3>
+      <h3 v-else>Изменить куратора у {{ assignedWorks.length }} работ</h3>
     </template>
     <template #text>
       <div class="change-mentor-modal__search">
         <search-field
           v-model="mentorSearch.pagination.value.search"
-          :is-loading="mentorSearch.isListLoading.value"
+          :is-loading="mentorSearch.isListLoading.value || progress !== 0"
         />
       </div>
       <div class="change-mentor-modal__list">
@@ -19,6 +24,7 @@
           item-label-key="name"
           item-key="id"
           v-model="mentorIdModel"
+          :readonly="progress !== 0"
         />
         <list-pagination
           v-if="
@@ -30,6 +36,13 @@
           :limit="mentorSearch.pagination.value.limit"
         />
       </div>
+      <div
+        class="change-mentor-modal__progress"
+        v-if="progress != 0"
+      >
+        <p>Пожалуйста, не закрывайте это окно</p>
+        <progress-bar :value="progress" />
+      </div>
     </template>
   </sure-modal>
 </template>
@@ -39,10 +52,10 @@ import { useSearch } from '@/composables/useSearch'
 import { Core } from '@/core/Core'
 import type { Pagination } from '@/core/data/Pagination'
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 interface Props {
-  assignedWork: AssignedWork
+  assignedWorks: AssignedWork[]
   opened?: boolean
   mentorId: string | null
 }
@@ -81,25 +94,31 @@ async function fetchMentors(pagination?: Pagination) {
   }
 }
 
+const progress = ref(0)
+
 async function onConfirm() {
   if (!mentorIdModel.value.at(0)) {
     return Core.Services.UI.openWarningModal('Куратор не выбран')
   }
 
-  Core.Services.UI.setLoading(true)
+  progress.value = 0.01
 
   try {
-    await Core.Services.AssignedWork.changeMentor(
-      props.assignedWork.id,
-      mentorIdModel.value.at(0)!
-    )
+    for (const assignedWork of props.assignedWorks) {
+      await Core.Services.AssignedWork.changeMentor(
+        assignedWork.id,
+        mentorIdModel.value.at(0)!
+      )
+      progress.value += 100 / props.assignedWorks.length
+    }
   } catch (error: any) {
     Core.Services.UI.openErrorModal(
       'Произошла ошибка при изменении куратора',
       error.message
     )
   } finally {
-    Core.Services.UI.setLoading(false)
+    openedModel.value = false
+    progress.value = 0
   }
 
   emits('confirm')
