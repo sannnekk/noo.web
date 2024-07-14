@@ -13,7 +13,7 @@
           :src="file.src"
           :extension="file.extension"
           :file="file.file"
-          :name="file.fileName"
+          :name="(file as any).name || file.fileName"
           :actions="actions"
           :selected="!!(selectable && file.key && file.key === selectedKey)"
           :downloadable="actions && actions.includes('download')"
