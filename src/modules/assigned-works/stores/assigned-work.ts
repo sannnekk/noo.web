@@ -324,7 +324,10 @@ export const useAssignedWorkStore = defineStore(
       if (
         mode.value === 'solve' ||
         assignedWork.value?.solveStatus === 'not-started' ||
-        assignedWork.value?.solveStatus === 'in-progress'
+        assignedWork.value?.solveStatus === 'in-progress' ||
+        (Core.Context.User?.role !== 'mentor' &&
+          (assignedWork.value?.checkStatus === 'not-checked' ||
+            assignedWork.value?.checkStatus === 'in-progress'))
       ) {
         return null
       }

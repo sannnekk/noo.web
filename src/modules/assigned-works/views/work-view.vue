@@ -140,13 +140,24 @@
               alignment="stretch"
               design="inline"
               @click="assignedWorkStore.shiftDeadline()"
-              v-if="['check', 'solve'].includes(assignedWorkStore.mode)"
+              v-if="
+                assignedWorkStore.mode === 'check' &&
+                assignedWorkStore.assignedWork.checkDeadlineAt
+              "
             >
-              {{
-                assignedWorkStore.mode === 'check'
-                  ? 'Сдвинуть дедлайн проверки'
-                  : 'Сдвинуть дедлайн сдачи'
-              }}
+              Сдвинуть дедлайн проверки
+            </common-button>
+            <common-button
+              class="work-view__sidebar__shift-button"
+              alignment="stretch"
+              design="inline"
+              @click="assignedWorkStore.shiftDeadline()"
+              v-if="
+                assignedWorkStore.mode === 'solve' &&
+                assignedWorkStore.assignedWork.solveDeadlineAt
+              "
+            >
+              Сдвинуть дедлайн проверки
             </common-button>
             <common-button
               :to="['admin', 'teacher'].includes(Core.Context.User?.role!) ? '/works' : '/assigned-works'"
