@@ -1,8 +1,7 @@
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import { defineStore } from 'pinia'
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { Core } from '@/core/Core'
-import { debounce } from '@/core/utils/debounce'
 import { useSearch } from '@/composables/useSearch'
 import type { Pagination } from '@/core/data/Pagination'
 
@@ -51,12 +50,17 @@ export const useAssignedWorksStore = defineStore(
      * Search for all works
      */
     const allSearch = useSearch<AssignedWork>(
-      useFetchAssignedWorks({
-        'filter[isArchived]': {
-          type: 'boolean',
-          value: false
-        }
-      }),
+      useFetchAssignedWorks(
+        Core.Context.User!.role === 'mentor'
+          ? {
+              'filter[isArchived]': { type: 'boolean', value: false },
+              'filter[solveStatus]': {
+                type: 'arr',
+                value: ['made-in-deadline', 'made-after-deadline']
+              }
+            }
+          : {}
+      ),
       {
         immediate: true
       }
@@ -77,16 +81,25 @@ export const useAssignedWorksStore = defineStore(
      * Search for not solved works
      */
     const notSolvedSearch = useSearch<AssignedWork>(
-      useFetchAssignedWorks({
-        'filter[solveStatus]': {
-          type: 'arr',
-          value: ['not-started', 'in-progress']
-        },
-        'filter[isArchived]': {
-          type: 'boolean',
-          value: false
-        }
-      }),
+      useFetchAssignedWorks(
+        Core.Context.User!.role === 'mentor'
+          ? {
+              'filter[solveStatus]': {
+                type: 'arr',
+                value: ['not-started', 'in-progress']
+              },
+              'filter[isArchived]': {
+                type: 'boolean',
+                value: false
+              }
+            }
+          : {
+              'filter[solveStatus]': {
+                type: 'arr',
+                value: ['not-started', 'in-progress']
+              }
+            }
+      ),
       { immediate: false }
     )
 
@@ -105,16 +118,29 @@ export const useAssignedWorksStore = defineStore(
      * Search for not checked works
      */
     const notCheckedSearch = useSearch<AssignedWork>(
-      useFetchAssignedWorks({
-        'filter[checkStatus]': {
-          type: 'arr',
-          value: ['not-checked', 'in-progress']
-        },
-        'filter[isArchived]': {
-          type: 'boolean',
-          value: false
-        }
-      }),
+      useFetchAssignedWorks(
+        Core.Context.User!.role === 'mentor'
+          ? {
+              'filter[checkStatus]': {
+                type: 'arr',
+                value: ['not-checked', 'in-progress']
+              },
+              'filter[solveStatus]': {
+                type: 'arr',
+                value: ['made-in-deadline', 'made-after-deadline']
+              },
+              'filter[isArchived]': {
+                type: 'boolean',
+                value: false
+              }
+            }
+          : {
+              'filter[checkStatus]': {
+                type: 'arr',
+                value: ['not-checked', 'in-progress']
+              }
+            }
+      ),
       { immediate: false }
     )
 
@@ -135,20 +161,33 @@ export const useAssignedWorksStore = defineStore(
      * Search for checked works
      */
     const checkedSearch = useSearch<AssignedWork>(
-      useFetchAssignedWorks({
-        'filter[checkStatus]': {
-          type: 'arr',
-          value: [
-            'checked-in-deadline',
-            'checked-after-deadline',
-            'checked-automatically'
-          ]
-        },
-        'filter[isArchived]': {
-          type: 'boolean',
-          value: false
-        }
-      }),
+      useFetchAssignedWorks(
+        Core.Context.User!.role === 'mentor'
+          ? {
+              'filter[checkStatus]': {
+                type: 'arr',
+                value: [
+                  'checked-in-deadline',
+                  'checked-after-deadline',
+                  'checked-automatically'
+                ]
+              },
+              'filter[isArchived]': {
+                type: 'boolean',
+                value: false
+              }
+            }
+          : {
+              'filter[checkStatus]': {
+                type: 'arr',
+                value: [
+                  'checked-in-deadline',
+                  'checked-after-deadline',
+                  'checked-automatically'
+                ]
+              }
+            }
+      ),
       { immediate: false }
     )
 

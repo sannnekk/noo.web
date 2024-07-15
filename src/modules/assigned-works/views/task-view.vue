@@ -94,7 +94,7 @@
       v-if="
         assignedWorkStore.task.checkHint &&
         ['check', 'read'].includes(assignedWorkStore.mode) &&
-        !isDeltaEmptyOrWhitespace(assignedWorkStore.task.solveHint)
+        !isDeltaEmptyOrWhitespace(assignedWorkStore.task.checkHint)
       "
     >
       <h4 class="task-view__hint__title">Пояснение:</h4>
