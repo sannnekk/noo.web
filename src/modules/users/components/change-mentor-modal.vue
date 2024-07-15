@@ -2,7 +2,7 @@
   <sure-modal
     v-model:visible="openedModel"
     @confirm="onConfirm()"
-    :actions-disabled="progress === 0"
+    :actions-disabled="progress !== 0"
     stay-open
   >
     <template #title>
