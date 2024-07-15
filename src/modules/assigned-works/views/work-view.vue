@@ -157,7 +157,7 @@
                 assignedWorkStore.assignedWork.solveDeadlineAt
               "
             >
-              Сдвинуть дедлайн проверки
+              Сдвинуть дедлайн
             </common-button>
             <common-button
               :to="['admin', 'teacher'].includes(Core.Context.User?.role!) ? '/works' : '/assigned-works'"
