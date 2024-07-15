@@ -232,11 +232,14 @@ export const useAssignedWorksStore = defineStore(
     function getUserAction(assignedWork: AssignedWork): UserAction {
       const role = Core.Context.User!.role
 
-      if (role === 'admin' || role === 'teacher' || assignedWork.isArchived) {
+      if (role === 'admin' || role === 'teacher') {
         return {
           action: 'Просмотреть',
           link: (id: string) => `/assigned-works/${id}/read`,
-          icon: 'delete'
+          icon:
+            assignedWork.checkStatus === 'not-checked'
+              ? 'attention-yellow'
+              : 'check-green'
         }
       }
 
