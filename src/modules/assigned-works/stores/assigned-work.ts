@@ -391,7 +391,7 @@ export const useAssignedWorkStore = defineStore(
           label: 'Вернуться к списку работ',
           design: 'secondary' as const,
           handler: () => {
-            _router.push('/assigned-works')
+            window.location.href = '/assigned-works'
           }
         }
       ]
@@ -432,7 +432,7 @@ export const useAssignedWorkStore = defineStore(
                 label: 'Вернуться к списку работ',
                 design: 'primary',
                 handler: () => {
-                  _router.push('/assigned-works')
+                  window.location.href = '/assigned-works'
                 }
               }
             ]
@@ -490,7 +490,7 @@ export const useAssignedWorkStore = defineStore(
             label: 'Вернуться к списку работ',
             design: 'primary',
             handler: () => {
-              _router.push('/assigned-works')
+              window.location
             }
           }
         ])
@@ -531,7 +531,7 @@ export const useAssignedWorkStore = defineStore(
               label: 'Вернуться к списку работ',
               design: 'primary',
               handler: () => {
-                _router.push('/assigned-works')
+                window.location.href = '/assigned-works'
               }
             }
           ]

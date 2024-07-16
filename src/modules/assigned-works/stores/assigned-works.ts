@@ -343,6 +343,25 @@ export const useAssignedWorksStore = defineStore(
       }
     }
 
+    /**
+     * Unrchive works
+     */
+    async function unarchiveWorks(works: AssignedWork[]) {
+      uiService.setLoading(true)
+      try {
+        await Promise.all(
+          works.map((work) =>
+            assignedWorkService.unarchiveAssignedWork(work.id)
+          )
+        )
+        uiService.openSuccessModal('Работы успешно архивированы!')
+      } catch (e: any) {
+        uiService.openErrorModal('Ошибка при архивировании работ', e.message)
+      } finally {
+        uiService.setLoading(false)
+      }
+    }
+
     function changeTab(tab: number) {
       switch (tab) {
         case 0:
@@ -381,6 +400,7 @@ export const useAssignedWorksStore = defineStore(
       checkedSearchSelectedWorks,
       getUserAction,
       archiveWorks,
+      unarchiveWorks,
       changeTab
     }
   }

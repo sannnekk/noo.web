@@ -127,11 +127,20 @@
             />
           </div>
         </div>
+        <div class="index-works-view__selected-actions">
+          <actions-with-archived-selected
+            :selected-assigned-works="
+              assignedWorksStore.archivedSearchSelectedWorks
+            "
+          />
+        </div>
         <div class="index-works-view__table">
           <works-table
             :works="assignedWorksStore.archivedSearch.results"
             :loading="assignedWorksStore.archivedSearch.isListLoading"
             :get-user-action-function="assignedWorksStore.getUserAction"
+            @select="assignedWorksStore.archivedSearchChecklist = $event"
+            editable
           />
         </div>
         <div class="index-works-view__pagination">
@@ -151,6 +160,7 @@ import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useAssignedWorksStore } from '../stores/assigned-works'
 import worksTable from '../components/works-table.vue'
 import actionsWithSelected from '../components/actions-with-selected.vue'
+import actionsWithArchivedSelected from '../components/actions-with-archived-selected.vue'
 
 const assignedWorksStore = useAssignedWorksStore()
 
