@@ -381,6 +381,7 @@ function filesCancel() {
       &__preview
         width: 50px
         height: 50px
+        min-width: 50px
         margin-right: 0.2em
         margin-left: 0.3em
         font-size: 45px
@@ -403,13 +404,16 @@ function filesCancel() {
 
 
       &__data
-        flex-grow: 1
+        width: calc(100% - 90px)
+        overflow: hidden
 
         &__name
           margin: 0
           font-size: 0.9em
           font-weight: 500
           color: var(--text-light)
+          text-overflow: ellipsis
+          overflow: hidden
 
         &__error
           p
