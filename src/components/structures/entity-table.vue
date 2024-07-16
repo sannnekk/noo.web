@@ -7,6 +7,7 @@
             :class="`col-type-${col.type}`"
             v-for="(col, index) in cols"
             :key="index"
+            :style="{ width: col.width }"
           >
             {{ col.title }}
           </th>
@@ -48,8 +49,13 @@
                     col.linkTo ? unfunction(col, object, 'linkTo') : undefined
                   "
                   @click="unfunction(col, object, 'action')"
-                  :design="col.design || 'primary'"
-                  alignment="center"
+                  :design="
+                    typeof col.design === 'function'
+                      ? col.design(object) || 'primary'
+                      : col.design || 'primary'
+                  "
+                  :loading="col.isLoading ? col.isLoading(object) : false"
+                  :alignment="col.alignment || 'center'"
                 >
                   {{ unfunction(col, object) }}
                 </common-button>
@@ -59,8 +65,12 @@
                     col.keys.length &&
                     col.keys.some((key) => object[key])
                   "
-                  alignment="center"
-                  :design="col.design || 'primary'"
+                  :alignment="col.alignment || 'center'"
+                  :design="
+                    typeof col.design === 'function'
+                      ? col.design(object) || 'primary'
+                      : col.design || 'primary'
+                  "
                   :to="unfunction(col, object, 'linkTo')"
                   v-for="key in col.keys"
                   :key="key"
@@ -75,7 +85,7 @@
               >
                 <status-tag
                   class="status-tag"
-                  :type="col.tagFunction!(key, object[key]).type"
+                  :type="col.tagFunction!(key, object[key]).type as any"
                 >
                   {{ col.tagFunction!(key, object[key]).text }}
                 </status-tag>
@@ -142,6 +152,8 @@ import { ref, watch } from 'vue'
 import type { IconName } from '../decorations/inline-icon.vue'
 import type { MenuItem } from '../widgets/more-widget.vue'
 
+type ButtonType = 'primary' | 'secondary' | 'warning' | 'danger' | 'telegram'
+
 export interface ColType {
   title: string
   type: 'text' | 'tag' | 'link' | 'icon' | 'date' | 'avatar' | 'iterator'
@@ -153,7 +165,9 @@ export interface ColType {
   linkTo?: string | Function
   action?: (row: any) => void
   if?: (row: any) => boolean
-  design?: 'primary' | 'secondary' | 'warning' | 'danger' | 'telegram'
+  design?: ButtonType | ((row: any) => ButtonType)
+  isLoading?: (row: any) => boolean
+  alignment?: 'left' | 'center' | 'right' | 'stretch'
   tagFunction?: (
     key: string,
     value: string | number | Date

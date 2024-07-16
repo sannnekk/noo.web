@@ -69,6 +69,16 @@ const actions = reactive<MenuItem[]>([
     }
   },
   {
+    title: 'Добавить/Убрать учеников',
+    icon: 'user',
+    if:
+      Core.Context.User?.role === 'teacher' ||
+      Core.Context.User?.role === 'admin',
+    action: () => {
+      router.push(`/course-students/${props.slug}`)
+    }
+  },
+  {
     title: 'Скопировать ссылку',
     icon: 'copy',
     stayOpened: true,
