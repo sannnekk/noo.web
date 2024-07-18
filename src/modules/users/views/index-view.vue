@@ -29,18 +29,32 @@
       />
     </div>
   </div>
+  <assign-mentor-modal
+    v-model:visible="assignMentorModalData.visible"
+    :current-mentor="assignMentorModalData.mentor || null"
+    :user-id="assignMentorModalData.user?.id"
+    @confirmed="onMentorSelectConfirm($event)"
+  />
 </template>
 
 <script lang="ts" setup>
+import AssignMentorModal from '../components/assign-mentor-modal.vue'
 import type { User } from '@/core/data/entities/User'
 import { useUsersStore } from '../stores/users'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import type { ColType } from '@/components/structures/entity-table.vue'
 import type { MenuItem } from '@/components/widgets/more-widget.vue'
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
 const usersStore = useUsersStore()
 const router = useRouter()
+
+const assignMentorModalData = ref({
+  visible: false,
+  mentor: null as User | null,
+  user: null as User | null
+})
 
 setPageTitle('Пользователи')
 
@@ -107,6 +121,18 @@ function actions(row: User): MenuItem[] {
       }
     },
     {
+      title: 'Присвоить/изменить куратора',
+      icon: 'user',
+      if: row.role === 'student',
+      action: () => {
+        assignMentorModalData.value = {
+          visible: true,
+          mentor: row.mentor || null,
+          user: row
+        }
+      }
+    },
+    {
       title: 'Телеграм',
       icon: 'telegram-blue',
       if: !!row.telegramUsername,
@@ -115,6 +141,14 @@ function actions(row: User): MenuItem[] {
       }
     }
   ]
+}
+
+function onMentorSelectConfirm(newMentor: User | null) {
+  for (const user of usersStore.results) {
+    if (user.id === assignMentorModalData.value.user!.id) {
+      user.mentor = newMentor!
+    }
+  }
 }
 </script>
 

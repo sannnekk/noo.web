@@ -27,10 +27,30 @@ export const useUsersStore = defineStore('users-module:users', () => {
     }
   }
 
+  /**
+   * Assign mentor to user
+   */
+  async function assignMentor(userId: string, mentorId: string) {
+    uiService.setLoading(true)
+
+    try {
+      await userService.assignMentor(userId, mentorId)
+      uiService.openSuccessModal('Куратор успешно назначен')
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при назначении куратора',
+        error.message
+      )
+    } finally {
+      uiService.setLoading(false)
+    }
+  }
+
   return {
     pagination,
     isListLoading,
     results,
-    resultsMeta
+    resultsMeta,
+    assignMentor
   }
 })

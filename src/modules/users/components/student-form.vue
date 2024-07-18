@@ -6,7 +6,6 @@
         <user-card
           v-if="mentor"
           :user="mentor"
-          :link="`/users/edit/${mentor.username}`"
         />
         <p v-else>Пока нет куратора...</p>
       </div>
@@ -15,7 +14,7 @@
           <common-button
             design="danger"
             alignment="stretch"
-            @click="changeMentorModalVisible = true"
+            @click="assignMentorModalVisible = true"
           >
             {{ mentor ? 'Поменять куратора' : 'Присвоить куратора' }}
           </common-button>
@@ -23,48 +22,18 @@
       </div>
     </div>
   </div>
-  <Teleport to="body">
-    <sure-modal
-      class="change-mentor-modal"
-      v-model:visible="changeMentorModalVisible"
-      @confirm="onMentorSelectConfirm"
-    >
-      <template #title>
-        <h3>Выберите куратора</h3>
-      </template>
-      <template #text>
-        <div class="change-mentor-modal__search">
-          <search-field
-            v-model="userStore.mentorSearch.pagination.search"
-            :is-loading="userStore.mentorSearch.isListLoading"
-          />
-        </div>
-        <div class="change-mentor-modal__list">
-          <check-list
-            :items="userStore.mentorSearch.results"
-            item-label-key="name"
-            item-key="id"
-            v-model="selectedMentorId"
-          />
-          <list-pagination
-            v-if="
-              userStore.mentorSearch.pagination.page &&
-              userStore.mentorSearch.pagination.limit
-            "
-            v-model:page="userStore.mentorSearch.pagination.page"
-            :total="userStore.mentorSearch.resultsMeta.total"
-            :limit="userStore.mentorSearch.pagination.limit"
-          />
-        </div>
-      </template>
-    </sure-modal>
-  </Teleport>
+  <assign-mentor-modal
+    v-model:visible="assignMentorModalVisible"
+    :current-mentor="mentor || null"
+    :user-id="userStore.user!.id"
+    @confirmed="onMentorSelectConfirm($event)"
+  />
 </template>
 
 <script setup lang="ts">
+import assignMentorModal from './assign-mentor-modal.vue'
 import type { User } from '@/core/data/entities/User'
 import { ref } from 'vue'
-import { Core } from '@/core/Core'
 import { useUserStore } from '../stores/user'
 
 interface Props {
@@ -75,21 +44,15 @@ interface Emits {
   (e: 'assignMentor', mentorId: User['id']): void
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 defineEmits<Emits>()
 
 const userStore = useUserStore()
 
-const changeMentorModalVisible = ref(false)
+const assignMentorModalVisible = ref(false)
 
-const selectedMentorId = ref<string[]>(props.mentor ? [props.mentor.id] : [])
-
-function onMentorSelectConfirm() {
-  if (!selectedMentorId.value.length) {
-    return Core.Services.UI.openWarningModal('Куратор не выбран')
-  }
-
-  userStore.assignMentor(selectedMentorId.value[0])
+function onMentorSelectConfirm(newMentor: User | null) {
+  userStore.user!.mentor = newMentor!
 }
 </script>
 

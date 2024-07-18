@@ -635,9 +635,9 @@ function syncImageSelections() {
         outline: none
         white-space: pre-wrap
 
-      span, p, b, i, strong, em, u, strike, sub, sup, blockquote, ul, ol, li, h1, h2, h3, h4, h5, h6
-        background-color: transparent !important
-        color: var(--form-text-color) !important
+        p, b, i, strong, em, u, strike, sub, sup, blockquote, ul, ol, li, h1, h2, h3, h4, h5, h6
+          background-color: transparent !important
+          color: var(--form-text-color) !important
 
       p
         margin: 0
@@ -666,7 +666,8 @@ function syncImageSelections() {
 
       .ql-comment
         border-radius: var(--border-radius)
-        color: var(--white)
+        background-color: transparent !important
+        color: var(--form-text-color) !important
         padding: 0.1em 0.5em
         display: inline-block
         cursor: pointer

@@ -1,6 +1,4 @@
-import { useSearch } from '@/composables/useSearch'
 import { Core } from '@/core/Core'
-import type { Pagination } from '@/core/data/Pagination'
 import type { User } from '@/core/data/entities/User'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -15,25 +13,6 @@ export const useUserStore = defineStore('users-module:user', () => {
    * Current user
    */
   const user = ref<User | null>(null)
-
-  /**
-   * Mentors search
-   */
-  const mentorSearch = useSearch(fetchMentors)
-
-  /**
-   * Fetch mentors
-   */
-  async function fetchMentors(pagination: Pagination) {
-    try {
-      return await userService.getMentors(pagination)
-    } catch (error: any) {
-      uiService.openErrorModal(
-        'Произошла ошибка при получении списка кураторов',
-        error.message
-      )
-    }
-  }
 
   /**
    * Fetch user by username
@@ -72,29 +51,6 @@ export const useUserStore = defineStore('users-module:user', () => {
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при сохранении данных пользователя',
-        error.message
-      )
-    } finally {
-      uiService.setLoading(false)
-    }
-  }
-
-  /**
-   * Assign mentor to user
-   */
-  async function assignMentor(mentorId: string) {
-    if (!user.value) {
-      return
-    }
-
-    uiService.setLoading(true)
-
-    try {
-      await userService.assignMentor(user.value.id, mentorId)
-      uiService.openSuccessModal('Куратор успешно назначен')
-    } catch (error: any) {
-      uiService.openErrorModal(
-        'Произошла ошибка при назначении куратора',
         error.message
       )
     } finally {
@@ -157,11 +113,9 @@ export const useUserStore = defineStore('users-module:user', () => {
   }
 
   return {
-    mentorSearch,
     user,
     fetchUser,
     saveUser,
-    assignMentor,
     confirmUser,
     changePassword
   }
