@@ -5,59 +5,73 @@
         <div class="index-create-course-view__sidebar">
           <h3 class="index-create-course-view__sidebar__title">Главы</h3>
           <ol class="index-create-course-view__sidebar__chapters">
-            <li
-              class="index-create-course-view__sidebar__chapters__item"
-              v-for="chapter in createCourseStore.course.chapters"
-              :key="chapter.id"
+            <draggable-list
+              v-model="createCourseStore.course!.chapters"
+              item-key="name"
             >
-              <div
-                class="index-create-course-view__sidebar__chapters__item__item-title"
-              >
-                <span @dblclick="onChapterNameChange(chapter.slug)">
-                  {{ chapter.name }}
-                </span>
-                <span class="icon">
-                  <inline-icon
-                    name="delete"
-                    @click="createCourseStore.removeChapter(chapter.slug)"
-                  />
-                </span>
-              </div>
-              <ul
-                class="index-create-course-view__sidebar__chapters__item__materials"
-              >
-                <li
-                  class="index-create-course-view__sidebar__chapters__item__materials__item"
-                  v-for="item in chapter.materials"
-                  :key="item.id"
-                >
+              <template v-slot="chapter">
+                <li class="index-create-course-view__sidebar__chapters__item">
                   <div
                     class="index-create-course-view__sidebar__chapters__item__item-title"
                   >
-                    <router-link
-                      :to="`/create-course${$route.params.courseSlug}/${chapter.slug}--${item.slug}`"
-                    >
-                      {{ item.name }}
-                    </router-link>
+                    <span @dblclick="onChapterNameChange(chapter.item.slug)">
+                      {{ chapter.item.name }}
+                    </span>
                     <span class="icon">
                       <inline-icon
                         name="delete"
-                        @click="createCourseStore.removeMaterial(item.slug)"
+                        @click="
+                          createCourseStore.removeChapter(chapter.item.slug)
+                        "
                       />
                     </span>
                   </div>
-                </li>
-                <li>
-                  <span @click="createCourseStore.addMaterial(chapter)">
-                    <span
-                      class="index-create-course-view__sidebar__chapters__item__materials__add"
+                  <ul
+                    class="index-create-course-view__sidebar__chapters__item__materials"
+                  >
+                    <draggable-list
+                      v-model="chapter.item.materials"
+                      item-key="name"
                     >
-                      Добавить материал
-                    </span>
-                  </span>
+                      <template v-slot="{ item }">
+                        <li
+                          class="index-create-course-view__sidebar__chapters__item__materials__item"
+                        >
+                          <div
+                            class="index-create-course-view__sidebar__chapters__item__item-title"
+                          >
+                            <router-link
+                              :to="`/create-course${$route.params.courseSlug}/${chapter.item.slug}--${item.slug}`"
+                            >
+                              {{ item.name }}
+                            </router-link>
+                            <span class="icon">
+                              <inline-icon
+                                name="delete"
+                                @click="
+                                  createCourseStore.removeMaterial(item.slug)
+                                "
+                              />
+                            </span>
+                          </div>
+                        </li>
+                      </template>
+                    </draggable-list>
+                    <li>
+                      <span
+                        @click="createCourseStore.addMaterial(chapter.item)"
+                      >
+                        <span
+                          class="index-create-course-view__sidebar__chapters__item__materials__add"
+                        >
+                          Добавить материал
+                        </span>
+                      </span>
+                    </li>
+                  </ul>
                 </li>
-              </ul>
-            </li>
+              </template>
+            </draggable-list>
           </ol>
           <div class="index-create-course-view__sidebar__add-chapter">
             <div class="index-create-course-view__sidebar__add-chapter__input">

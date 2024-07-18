@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import { Core } from '@/core/Core'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 interface Props {
   modelValue: {
@@ -106,6 +106,21 @@ async function onLogin() {
     Core.Services.UI.setLoading(false)
   }
 }
+
+watch(
+  () => props.modelValue.isOpen,
+  (isOpen) => {
+    if (isOpen) {
+      console.log('retry-login-modal: opened')
+      console.log(
+        'retry-login-modal: usernameOrEmail',
+        Core.Context.User!.username
+      )
+      model.value.usernameOrEmail = Core.Context.User!.username
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped lang="sass">

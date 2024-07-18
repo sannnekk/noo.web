@@ -77,6 +77,7 @@ const bgColor = computed(() => {
     width: 1em
     object-position: center
     object-fit: cover
+    background-color: var(--border-color)
 
   &__initials
     color: var(--lightest)

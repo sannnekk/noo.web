@@ -1,7 +1,7 @@
 <template>
   <entity-table
-    :cols="cols"
-    :data="results"
+    :cols="(cols as any)"
+    :data="(results as any)"
     :is-loading="isLoading"
   />
 </template>

@@ -125,7 +125,6 @@ export class CustomQuill extends Quill {
         break
       case 'link':
       case 'video':
-        console.log('Link or video', action, index)
         await action?.call(this, index)
         break
       case 'image':

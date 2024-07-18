@@ -73,7 +73,6 @@ function disableDefaultBehavior(registeredKeyCombinations: string[]) {
 
     if (registeredKeyCombinations.includes(key)) {
       event.preventDefault()
-      console.log('INTERCEPTED', key)
     }
   }
 }

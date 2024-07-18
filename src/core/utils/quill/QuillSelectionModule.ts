@@ -67,7 +67,5 @@ export class QuillSelectionModule extends QuillModule {
 
     // insert delta without removing the current quill content
     const result = this.quill.updateContents(delta)
-
-    console.log('RESULT', result)
   }
 }

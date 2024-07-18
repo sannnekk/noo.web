@@ -1,4 +1,5 @@
 import type { IconName } from '@/components/decorations/inline-icon.vue'
+import { Core } from '@/core/Core'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 

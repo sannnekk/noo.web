@@ -7,6 +7,8 @@
 </template>
 
 <script setup lang="ts">
+import type { ColType } from '@/components/structures/entity-table.vue'
+
 interface Props {
   results: any[]
   isLoading: boolean
@@ -15,7 +17,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const cols = [
+const cols: ColType[] = [
   {
     title: '',
     keys: ['avatarUrl', 'name'],
@@ -38,8 +40,8 @@ const cols = [
     value: 'Посмотреть',
     type: 'link',
     design: 'secondary',
-    linkTo: ({ username }: { username: string }) =>
-      `/poll/${props.pollId}/results/${username}?unregistered`
+    linkTo: ({ identifier }: { identifier: string }) =>
+      `/poll/${props.pollId}/results/${identifier}?unregistered`
   }
 ]
 </script>

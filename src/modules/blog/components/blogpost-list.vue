@@ -62,14 +62,6 @@ const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 const reactionsModel = ref<Record<BlogPost['id'], Reaction>>({})
-
-watch(
-  reactionsModel,
-  (oldValue, newValue) => {
-    console.log('reactionsModel changed', oldValue, newValue)
-  },
-  { deep: true }
-)
 </script>
 
 <style lang="sass" scoped>

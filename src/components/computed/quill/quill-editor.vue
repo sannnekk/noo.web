@@ -179,7 +179,6 @@ function onCommentRemove() {
  * On comment click (any mode!!!)
  */
 function onCommentClick(_comment: Comment) {
-  console.log('comment clicked', _comment)
   const clickedSelection = quill?.getSelection()
 
   // change selection to cover the whole comment blot
@@ -568,7 +567,6 @@ function handleEditorClick(event: MouseEvent) {
       }
     }
     onImageCommentClick(positionedComment)
-    console.log('image comment clicked', data)
     return
   }
 }

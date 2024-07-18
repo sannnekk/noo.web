@@ -32,9 +32,16 @@
             :user="resultStore.user"
           />
           <telegram-button
-            v-else
+            v-else-if="!resultStore.telegramUsername.includes('_telegram_id_')"
             :username="resultStore.telegramUsername"
           />
+          <p
+            v-else
+            class=""
+          >
+            Настройки конфиденциальности Telegram не позволяют показать
+            информацию о пользователе
+          </p>
         </div>
       </template>
       <template #content>
