@@ -21,7 +21,7 @@ const props = defineProps<Props>()
 const cols = [
   {
     title: '',
-    keys: ['avatar.url', 'name'],
+    keys: ['telegramAvatarUrl', 'name'],
     type: 'avatar'
   },
   {
