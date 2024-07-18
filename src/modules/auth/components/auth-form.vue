@@ -69,39 +69,10 @@
           placeholder="Никнейм"
           @enter-press="onRegister()"
         />
-        <p
-          class="auth-form__group username-availability"
-          v-if="
-            usernameExists.exists !== undefined && registerCredentials.username
-          "
-        >
-          <span
-            class="username-availability__loading"
-            v-if="usernameExists.loading"
-          >
-            <loader-icon contrast />
-            Проверка...
-          </span>
-          <span
-            class="username-availability__not-available"
-            v-else-if="usernameExists.exists"
-          >
-            Никнейм занят
-          </span>
-          <span
-            class="username-availability__not-available"
-            v-else-if="usernameExists.error"
-          >
-            Никнейм должен быть хотя б 3 символа в длину и содержать только
-            латинские буквы, цифры и символы _ и -
-          </span>
-          <span
-            class="username-availability__available"
-            v-else
-          >
-            Никнейм свободен
-          </span>
-        </p>
+        <username-validation
+          :username="registerModel.username"
+          v-model:valid="registerModel.usernameIsValid"
+        />
       </div>
       <div class="auth-form__group">
         <text-input
@@ -231,6 +202,7 @@ interface Props {
     password: string
     repeatPassword: string
     passwordIsCorrect: boolean
+    usernameIsValid: boolean
   }
   forgotPasswordCredentials: {
     email: string
@@ -241,11 +213,6 @@ interface Props {
   mode: 'login' | 'register' | 'forgot-password' | 'resend-verification'
   isLoading?: boolean
   error?: string
-  usernameExists: {
-    loading: boolean
-    exists?: boolean
-    error?: boolean
-  }
 }
 
 interface Emits {
@@ -344,20 +311,4 @@ function onResendVerification() {
       span
         &:hover
           text-decoration: underline
-
-.username-availability
-  font-size: 12px
-  background-color: var(--lightest)
-  padding: 0.5em 1.8em
-  border-radius: var(--border-radius)
-
-  &__loading
-    color: var(--dark)
-    font-weight: bold
-
-  &__not-available
-    color: var(--danger)
-
-  &__available
-    color: var(--success)
 </style>

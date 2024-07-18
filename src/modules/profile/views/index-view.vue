@@ -12,6 +12,7 @@
               @save="profileStore.updateCredentials()"
               @add-telegram="telegramModal.visible = true"
               @remove-telegram="profileStore.removeTelegram()"
+              @change-email="changeEmailModalVisible = true"
             />
           </div>
           <div class="index-profile-view__password-change">
@@ -50,9 +51,14 @@
     v-model:auth-data="telegramModal.authData"
     @confirm="profileStore.updateTelegram(telegramModal.authData)"
   />
+  <change-email-modal
+    v-model:visible="changeEmailModalVisible"
+    @confirm="profileStore.requestChangeEmail($event)"
+  />
 </template>
 
 <script lang="ts" setup>
+import changeEmailModal from '../components/change-email-modal.vue'
 import addTelegramModal from '../components/add-telegram-modal.vue'
 import ProfileCredentials from '../components/profile-credentials.vue'
 import ProfilePasswordForm from '../components/profile-password-form.vue'
@@ -73,6 +79,8 @@ const telegramModal = ref({
   visible: false,
   authData: null
 })
+
+const changeEmailModalVisible = ref(false)
 </script>
 
 <style lang="sass" scoped>

@@ -28,7 +28,8 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
   const passwords = ref<PasswordChangeForm>({
     oldPassword: '',
     newPassword: '',
-    repeatPassword: ''
+    repeatPassword: '',
+    passwordIsCorrect: false
   })
 
   /*
@@ -95,7 +96,8 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
       passwords.value = {
         oldPassword: '',
         newPassword: '',
-        repeatPassword: ''
+        repeatPassword: '',
+        passwordIsCorrect: false
       }
       uiService.setLoading(false)
     }
@@ -184,12 +186,39 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
     }
   }
 
+  /**
+   * remove telegram
+   */
   async function removeTelegram() {
     await updateTelegram({
       telegramId: null,
       telegramUsername: null,
       telegramAvatarUrl: null
     })
+  }
+
+  /**
+   * request change email
+   */
+  async function requestChangeEmail(newEmail: string) {
+    if (!user.value) return
+
+    uiService.setLoading(true)
+
+    try {
+      await userService.requestChangeEmail(user.value.id, newEmail)
+      uiService.openWarningModal(
+        'Запрос на изменение почты отправлен',
+        'Проверьте почту для подтверждения'
+      )
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при запросе на изменение почты',
+        error.message
+      )
+    } finally {
+      uiService.setLoading(false)
+    }
   }
 
   return {
@@ -201,6 +230,7 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
     updateCredentials,
     updateTelegram,
     removeTelegram,
-    fetchUser
+    fetchUser,
+    requestChangeEmail
   }
 })

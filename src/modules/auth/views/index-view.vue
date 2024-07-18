@@ -52,6 +52,7 @@ import { useAuthStore } from '../stores/auth'
 const authStore = useAuthStore()
 
 authStore.verify()
+authStore.verifyEmailChange()
 </script>
 
 <style lang="sass" scoped>

@@ -123,6 +123,16 @@ export class AuthService extends ApiService {
   }
 
   /**
+   * Change email
+   */
+  public async verifyEmailChange(username: string, token: string) {
+    await this.httpPatch(`${this._route}/verify-email-change`, {
+      username,
+      token
+    })
+  }
+
+  /**
    * Resend verification email
    */
   public async resendVerification(email: string) {

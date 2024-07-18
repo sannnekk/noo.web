@@ -121,11 +121,23 @@ export class UserService extends ApiService {
     await this.httpPatch(`${this._route}/${userId}`, user)
   }
 
+  /**
+   * Update telegram
+   */
   public async updateTelegram(
     userId: User['id'],
     telegram: TelegramUpdatePayload
   ): Promise<void> {
     await this.httpPatch(`${this._route}/${userId}/telegram`, telegram)
+  }
+
+  public async requestChangeEmail(
+    userId: User['id'],
+    newEmail: string
+  ): Promise<void> {
+    await this.httpPatch(`${this._route}/${userId}/email`, {
+      email: newEmail
+    })
   }
 
   /**

@@ -19,9 +19,9 @@
       <form-input
         label="Никнейм"
         type="text"
-        readonly
         v-model="credentialsModel.username"
         class="input"
+        readonly
       />
     </div>
     <div class="profile-credentials__email">
@@ -33,6 +33,27 @@
         v-model="credentialsModel.email"
         class="input"
       />
+      <span
+        class="profile-credentials__email__change"
+        v-if="!credentialsModel.newEmail"
+      >
+        <inline-icon
+          name="edit"
+          @click="$emit('change-email')"
+        />
+      </span>
+      <div
+        v-else
+        class="profile-credentials__email__change-requested"
+      >
+        <warning-block>
+          <p>
+            На почту <b>{{ credentialsModel.newEmail }}</b> отправлено письмо с
+            подтверждением смены почты. Пожалуйста, проверьте почту и
+            подтвердите новый адрес.
+          </p>
+        </warning-block>
+      </div>
     </div>
     <div class="profile-credentials__role">
       <role-tag :role="credentialsModel.role" />
@@ -87,6 +108,7 @@ interface Emits {
   (e: 'save'): void
   (e: 'add-telegram'): void
   (e: 'remove-telegram'): void
+  (e: 'change-email'): void
 }
 
 const props = defineProps<Props>()
@@ -153,9 +175,27 @@ function onSomeInputChange() {
 
   &__email
     margin-top: 0.5em
+    position: relative
 
     input
       text-align: center
+
+    &__change
+      display: block
+      position: absolute
+      bottom: 0.25em
+      right: 0.4em
+      cursor: pointer
+
+      &:hover
+        --form-text-color: var(--warning) !important
+
+    &__change-requested
+      font-size: 0.7em
+      padding-top: 0.4em
+
+      > *
+        padding: 0.2em 0.6em
 
   &__telegram
     margin-top: 0.5em

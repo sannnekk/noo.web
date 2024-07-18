@@ -114,7 +114,7 @@ async function assignMentor() {
   uiService.setLoading(true)
 
   try {
-    await userService.assignMentor(props.userId, selectedMentorId.value)
+    await userService.assignMentor(props.userId, selectedMentorId.value as any)
     uiService.openSuccessModal('Куратор успешно назначен')
 
     emits('confirmed', selectedMentor.value || null)

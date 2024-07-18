@@ -140,6 +140,7 @@ declare module 'vue' {
     UserIcon: typeof import('./src/components/decorations/icons/user-icon.vue')['default']
     UserInfoModal: typeof import('./src/components/modal/user-info-modal.vue')['default']
     UserLink: typeof import('./src/components/common/user-link.vue')['default']
+    UsernameValidation: typeof import('./src/components/actions/username-validation.vue')['default']
     UsersIcon: typeof import('./src/components/decorations/icons/users-icon.vue')['default']
     VideoIcon: typeof import('./src/components/decorations/icons/text-format-icons/video-icon.vue')['default']
     WarningBlock: typeof import('./src/components/common/warning-block.vue')['default']

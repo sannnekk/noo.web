@@ -1,5 +1,4 @@
 import { Core } from '@/core/Core'
-import { debounce } from '@/core/utils/debounce'
 import { defineStore } from 'pinia'
 import { reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -32,7 +31,8 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     repeatPassword: '',
     email: '',
     name: '',
-    passwordIsCorrect: false
+    passwordIsCorrect: false,
+    usernameIsValid: false
   })
 
   const forgotPasswordCredentials = reactive({
@@ -146,64 +146,6 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
   }
 
   /*
-   * check if username is available
-   */
-  const usernameExists = reactive<{
-    exists: boolean | undefined
-    loading: boolean
-    error?: boolean
-  }>({
-    exists: undefined,
-    loading: false,
-    error: false
-  })
-
-  const checkUsername = debounce(async () => {
-    if (!registerCredentials.username) {
-      usernameExists.exists = false
-      usernameExists.error = true
-      usernameExists.loading = false
-      return
-    }
-
-    if (registerCredentials.username.length < 3) {
-      usernameExists.exists = false
-      usernameExists.error = true
-      usernameExists.loading = false
-      return
-    }
-
-    if (!registerCredentials.username.match(/^[A-Za-z0-9_-]+$/i)) {
-      usernameExists.error = true
-      usernameExists.exists = false
-      usernameExists.loading = false
-      return
-    }
-
-    usernameExists.error = false
-
-    try {
-      const response = await Core.Services.Auth.checkUsername(
-        registerCredentials.username
-      )
-      usernameExists.exists = response
-    } catch (e: any) {
-      usernameExists.exists = true
-      usernameExists.loading = false
-    } finally {
-      usernameExists.loading = false
-    }
-  }, 500)
-
-  watch(
-    () => registerCredentials.username,
-    async () => {
-      usernameExists.loading = true
-      await checkUsername()
-    }
-  )
-
-  /*
    * check and send forgot password request
    */
   async function forgotPassword() {
@@ -235,7 +177,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
    * Verify account
    */
   async function verify() {
-    if (!route.query.token || !route.query.username) {
+    if (!route.query.token || !route.query.username || !route.query['verify']) {
       return
     }
 
@@ -253,6 +195,36 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     } catch (error: any) {
       Core.Services.UI.openErrorModal(
         'Не удалось подтвердить аккаунт',
+        error.message
+      )
+    } finally {
+      Core.Services.UI.setLoading(false)
+    }
+  }
+
+  async function verifyEmailChange() {
+    if (
+      !route.query.token ||
+      !route.query.username ||
+      !route.query['verify-email-change']
+    ) {
+      return
+    }
+
+    Core.Services.UI.setLoading(true)
+
+    try {
+      await Core.Services.Auth.verifyEmailChange(
+        route.query.username as string,
+        route.query.token as string
+      )
+      Core.Services.UI.openSuccessModal(
+        'Email успешно изменен',
+        'Теперь вы можете войти в свой аккаунт'
+      )
+    } catch (error: any) {
+      Core.Services.UI.openErrorModal(
+        'Не удалось изменить email',
         error.message
       )
     } finally {
@@ -303,6 +275,6 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     error,
     mode,
     verify,
-    usernameExists
+    verifyEmailChange
   }
 })
