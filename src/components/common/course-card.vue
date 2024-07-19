@@ -54,12 +54,14 @@ interface Props {
 const props = defineProps<Props>()
 
 const actions = reactive<MenuItem[]>([
-  {
-    title: 'Добавить материал (Coming soon)',
+  /* {
+    title: 'Добавить главу',
     icon: 'add',
     if: Core.Context.User?.role === 'teacher',
-    action: () => {}
-  },
+    action: () => {
+      router.push(`/create-chapter/${props.slug}`)
+    }
+  }, */
   {
     title: 'Редактировать',
     icon: 'edit',

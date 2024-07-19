@@ -9,6 +9,7 @@ export interface Chapter extends Entity {
   course?: Course
   materials?: Material[]
   order: number
+  isActive: boolean
   createdAt: Date
   updatedAt: Date
 }

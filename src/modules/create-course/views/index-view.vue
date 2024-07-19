@@ -4,92 +4,14 @@
       <template #sidebar>
         <div class="index-create-course-view__sidebar">
           <h3 class="index-create-course-view__sidebar__title">Главы</h3>
-          <ol class="index-create-course-view__sidebar__chapters">
-            <draggable-list
-              v-model="createCourseStore.course!.chapters"
-              item-key="name"
-            >
-              <template v-slot="chapter">
-                <li class="index-create-course-view__sidebar__chapters__item">
-                  <div
-                    class="index-create-course-view__sidebar__chapters__item__item-title"
-                  >
-                    <span @dblclick="onChapterNameChange(chapter.item.slug)">
-                      {{ chapter.item.name }}
-                    </span>
-                    <span class="icon">
-                      <inline-icon
-                        name="delete"
-                        @click="
-                          createCourseStore.removeChapter(chapter.item.slug)
-                        "
-                      />
-                    </span>
-                  </div>
-                  <ul
-                    class="index-create-course-view__sidebar__chapters__item__materials"
-                  >
-                    <draggable-list
-                      v-model="chapter.item.materials"
-                      item-key="name"
-                    >
-                      <template v-slot="{ item }">
-                        <li
-                          class="index-create-course-view__sidebar__chapters__item__materials__item"
-                        >
-                          <div
-                            class="index-create-course-view__sidebar__chapters__item__item-title"
-                          >
-                            <router-link
-                              :to="`/create-course${$route.params.courseSlug}/${chapter.item.slug}--${item.slug}`"
-                            >
-                              {{ item.name }}
-                            </router-link>
-                            <span class="icon">
-                              <inline-icon
-                                name="delete"
-                                @click="
-                                  createCourseStore.removeMaterial(item.slug)
-                                "
-                              />
-                            </span>
-                          </div>
-                        </li>
-                      </template>
-                    </draggable-list>
-                    <li>
-                      <span
-                        @click="createCourseStore.addMaterial(chapter.item)"
-                      >
-                        <span
-                          class="index-create-course-view__sidebar__chapters__item__materials__add"
-                        >
-                          Добавить материал
-                        </span>
-                      </span>
-                    </li>
-                  </ul>
-                </li>
-              </template>
-            </draggable-list>
-          </ol>
-          <div class="index-create-course-view__sidebar__add-chapter">
-            <div class="index-create-course-view__sidebar__add-chapter__input">
-              <form-input
-                v-model="createCourseStore.newChapterName"
-                label="Название главы"
-                type="text"
-              />
-            </div>
-            <div class="index-create-course-view__sidebar__add-chapter__button">
-              <common-button
-                design="secondary"
-                alignment="stretch"
-                @click="createCourseStore.addChapter"
-              >
-                Добавить главу
-              </common-button>
-            </div>
+          <div
+            class="index-create-course-view__sidebar__chapters"
+            v-if="createCourseStore.course.chapters"
+          >
+            <chapter-tree
+              v-model:chapters="createCourseStore.course.chapters"
+              :course-slug="$route.params.courseSlug as string"
+            />
           </div>
           <div class="index-create-course-view__sidebar__buttons">
             <div class="index-create-course-view__sidebar__buttons__publish">
@@ -115,9 +37,12 @@
         </div>
       </template>
       <template #content>
+        <div class="index-create-course-view__content">
+          <router-view :key="$route.fullPath" />
+        </div>
         <div class="index-create-course-view__course-form">
           <h3 class="index-create-course-view__course-form__title">
-            Общая информация
+            Общая информация о курсе
           </h3>
           <div class="form-group">
             <form-input
@@ -148,9 +73,6 @@
             <text-area v-model="createCourseStore.course.description" />
           </div>
         </div>
-        <div class="index-create-course-view__content">
-          <router-view :key="$route.fullPath" />
-        </div>
       </template>
     </the-sidebar-layout>
   </div>
@@ -168,6 +90,7 @@
 </template>
 
 <script setup lang="ts">
+import chapterTree from '../components/chapter-tree.vue'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useCreateCourseStore } from '../stores/create-course'
 import { registerHotkeys } from '@/core/device/Hotkeys'
@@ -180,13 +103,6 @@ const createCourseStore = useCreateCourseStore()
 createCourseStore.fetchCourse()
 
 setPageTitle('Создание/редактирование курса')
-
-const onChapterNameChange = (slug: string) => {
-  const newName = prompt('Введите новое название главы')
-  if (newName) {
-    createCourseStore.changeChapterName(slug, newName)
-  }
-}
 
 const authorModel = computed<User[]>({
   get: () => {
@@ -212,67 +128,9 @@ onUnmounted(() => unregister())
   &__sidebar
     &__title
       margin: 0
-      padding-bottom: 1em
-      border-bottom: 1px solid var(--border-color)
 
     &__chapters
-      padding-left: 1.3em
-
-      a
-        color: var(--form-text-color)
-        text-decoration: none
-
-      &__item
-        margin-bottom: 0.5em
-
-        &__item-title
-          display: flex
-          justify-content: space-between
-          align-items: center
-          margin: 0.5em 0
-          font-size: 1.1em
-
-          .icon
-            cursor: pointer
-            display: block
-            transition: transform 0.1s ease-in-out
-
-            &:hover
-              transform: scale(1.1)
-
-        &__materials
-          padding-left: 1.3em
-          list-style: square
-          font-size: 0.8em
-
-          &__item
-            margin-bottom: 0.5em
-
-          a
-            &.router-link-active
-              color: var(--secondary)
-
-            &:hover
-              text-decoration: underline
-
-          &__add
-            color: var(--text-light)
-            cursor: pointer
-
-            &:hover
-              text-decoration: underline
-
-    &__add-chapter
-      border-top: 1px solid var(--border-color)
-      border-bottom: 1px solid var(--border-color)
-      padding: 1em 0
-      margin-top: 1em
-
-      &__input
-        margin-bottom: 1em
-
-      &__button
-        font-size: 0.8em
+      margin: 1em 0 2em 0
 
     &__buttons
       margin-top: 1em
