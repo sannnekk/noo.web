@@ -7,6 +7,7 @@ import { CourseService } from './api/CourseService'
 import { MediaService } from './api/MediaService'
 import { NotificationService } from './api/NotificationService'
 import { PollService } from './api/PollService'
+import { SessionService } from './api/SessionService'
 import { StatisticsService } from './api/StatisticsService'
 import { UserService } from './api/UserService'
 import { WorkService } from './api/WorkService'
@@ -25,6 +26,7 @@ export type ServiceName =
   | 'Calender'
   | 'Blog'
   | 'Poll'
+  | 'Session'
 
 export type Services = {
   Auth: AuthService
@@ -39,6 +41,7 @@ export type Services = {
   Calender: CalenderService
   Blog: BlogService
   Poll: PollService
+  Session: SessionService
 }
 
 /**
@@ -61,6 +64,7 @@ export class ServiceFactory {
     Calender: CalenderService,
     Blog: BlogService,
     Poll: PollService,
+    Session: SessionService,
     // storage
     UI: UIService
   }

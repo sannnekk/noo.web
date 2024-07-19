@@ -1,5 +1,5 @@
 interface UseDateOptions {
-  precision: 'year' | 'month' | 'day'
+  precision: 'year' | 'month' | 'day' | 'minute'
 }
 
 /* const months = [
@@ -34,6 +34,12 @@ const monthNames = [
 
 export function useDate(date: Date, options?: UseDateOptions) {
   function today() {
+    if (options?.precision === 'minute') {
+      const d = new Date()
+      d.setSeconds(59, 999)
+      return d
+    }
+
     if (options?.precision === 'day') {
       const d = new Date()
       d.setHours(23, 59, 59, 999)
@@ -132,18 +138,53 @@ export function useDate(date: Date, options?: UseDateOptions) {
   function toBeautiful() {
     const _date = useDate(date)
 
-    if (_date.isToday()) return 'cегодня'
+    if (options?.precision === 'minute') {
+      if (_date.isToday()) {
+        const diff = Math.abs(date.getTime() - new Date().getTime())
+        const diffMinutes = Math.ceil(diff / (1000 * 60))
 
-    if (_date.isYesterday()) return 'вчера'
+        if (diffMinutes < 60) {
+          switch (String(diffMinutes).padStart(2).charAt(1)) {
+            case '0':
+              return 'только что'
+            case '1':
+              return 'минуту назад'
+            case '2':
+            case '3':
+            case '4':
+              return `${diffMinutes} минуты назад`
+            default:
+              return `${diffMinutes} минут назад`
+          }
+        }
 
-    if (_date.isTomorrow()) return 'завтра'
+        return 'сегодня'
+      }
 
-    if (options?.precision === 'day' && _date.isInThisYear())
+      if (_date.isYesterday()) return 'вчера'
+
+      if (_date.isTomorrow()) return 'завтра'
+
       return `${date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`}.${
         date.getMonth() + 1 >= 10
           ? date.getMonth() + 1
           : `0${date.getMonth() + 1}`
       }`
+    }
+
+    if (options?.precision === 'day' && _date.isInThisYear()) {
+      if (_date.isToday()) return 'cегодня'
+
+      if (_date.isYesterday()) return 'вчера'
+
+      if (_date.isTomorrow()) return 'завтра'
+
+      return `${date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`}.${
+        date.getMonth() + 1 >= 10
+          ? date.getMonth() + 1
+          : `0${date.getMonth() + 1}`
+      }`
+    }
 
     if (options?.precision === 'day' && !_date.isInThisYear())
       return `${date.getDate() >= 10 ? date.getDate() : `0${date.getDate()}`}.${

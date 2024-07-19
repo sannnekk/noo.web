@@ -43,6 +43,13 @@
             :username="Core.Context.User?.username"
           />
         </div>
+        <div
+          class="index-profile-view__charts"
+          v-if="Core.Context.User && Core.Context.User.role !== 'admin'"
+        >
+          <h3 class="index-profile-view__charts__header">Активные сеансы</h3>
+          <session-view />
+        </div>
       </template>
     </the-sidebar-layout>
   </div>
@@ -68,6 +75,7 @@ import { Core } from '@/core/Core'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useProfileStore } from '../stores/profile'
 import { ref } from 'vue'
+import SessionView from '../components/session-view.vue'
 
 const profileStore = useProfileStore()
 
