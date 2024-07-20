@@ -177,7 +177,12 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
    * Verify account
    */
   async function verify() {
-    if (!route.query.token || !route.query.username || !route.query['verify']) {
+    if (
+      !route.query.token ||
+      !route.query.username ||
+      route.query.verify === undefined
+    ) {
+      console.log('return')
       return
     }
 
@@ -206,7 +211,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     if (
       !route.query.token ||
       !route.query.username ||
-      !route.query['verify-email-change']
+      route.query['verify-email-change'] === undefined
     ) {
       return
     }
