@@ -28,4 +28,11 @@ export class SessionService extends ApiService {
   public async deleteSession(id: Session['id']): Promise<void> {
     await this.httpDelete(`${this._route}/${id}`)
   }
+
+  /**
+   * Delete current session
+   */
+  public async deleteCurrentSession(): Promise<void> {
+    await this.httpDelete(`${this._route}`)
+  }
 }

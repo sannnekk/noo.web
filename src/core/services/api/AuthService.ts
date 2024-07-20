@@ -1,6 +1,7 @@
 import type { Context } from '@/core/context/Context'
-import { ApiService, type ApiResponse } from '@/core/services/ApiService'
+import { ApiService } from '@/core/services/ApiService'
 import type { User } from '@/core/data/entities/User'
+import { SessionService } from './SessionService'
 
 type LoginPayload = {
   usernameOrEmail: string
@@ -25,11 +26,15 @@ type LoginResponse = {
 export class AuthService extends ApiService {
   private _route = '/user/auth' as const
 
+  private readonly sessionService: SessionService
+
   /**
    * constructor
    */
   public constructor(context: Context) {
     super(context)
+
+    this.sessionService = new SessionService(context)
   }
 
   /**
@@ -90,6 +95,7 @@ export class AuthService extends ApiService {
    * Logout
    */
   public async logout() {
+    await this.sessionService.deleteCurrentSession()
     this._context.clear()
     this._context.Events.emit('global:logout', this._context)
   }
