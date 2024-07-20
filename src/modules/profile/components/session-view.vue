@@ -8,10 +8,12 @@
       v-if="!isLoading && sessions.length > 0"
       v-auto-animate
     >
-      <div class="col-md-6 col-12">
+      <div
+        class="col-md-6 col-12"
+        v-for="session in sessions"
+        :key="session.id"
+      >
         <session-card
-          v-for="session in sessions"
-          :key="session.id"
           v-bind="session"
           @delete-session="deleteSession(session.id)"
         />
