@@ -12,13 +12,13 @@
           >
             &#8249; Ко всем курсам
           </router-link>
-          <span
+          <router-link
             class="index-materials-view__tree__students"
             v-if="Core.Context.User?.role === 'teacher'"
-            @click="assignStudentsStore.modalVisible = true"
+            :to="`/course-students/${courseStore.course.slug}`"
           >
-            Ученики курса ({{ assignStudentsStore.studentsCount }})
-          </span>
+            Ученики курса ({{ courseStore.course.studentIds?.length || 0 }})
+          </router-link>
           <h2 class="index-materials-view__tree__title">
             {{ courseStore.course.name }}
           </h2>
@@ -54,15 +54,12 @@
 
 <script lang="ts" setup>
 import MaterialsTree from '../components/materials-tree.vue'
-import AssignStudentModal from '../components/assign-student-modal.vue'
 import { useCourseStore } from '../stores/course'
-import { useAssignStudentsStore } from '../stores/assign-student'
 import { Core } from '@/core/Core'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { watch } from 'vue'
 
 const courseStore = useCourseStore()
-const assignStudentsStore = useAssignStudentsStore()
 
 courseStore.fetchCourse()
 
