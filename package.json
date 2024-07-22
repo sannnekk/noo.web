@@ -30,7 +30,8 @@
     "vue-advanced-cropper": "^2.8.8",
     "vue-router": "^4.2.5",
     "vuedraggable": "^4.1.0",
-    "vuejs3-datepicker": "^1.0.19"
+    "vuejs3-datepicker": "^1.0.19",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.5.1",

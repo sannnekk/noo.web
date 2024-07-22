@@ -1,4 +1,9 @@
 import { Core } from '@/core/Core'
+import {
+  validateEmail,
+  validateName,
+  validateUsername
+} from '@/core/validators/string'
 import { defineStore } from 'pinia'
 import { reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -102,25 +107,21 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
       return
     }
 
-    if (!registerCredentials.username.match(/^[A-Za-z0-9_-]+$/i)) {
+    if (!validateUsername(registerCredentials.username)) {
       error.value =
         'Никнейм может содержать только латинские буквы и цифры, а также символы _ и -'
       isLoading.value = false
       return
     }
 
-    if (
-      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(
-        registerCredentials.email
-      ) === false
-    ) {
+    if (!validateEmail(registerCredentials.email)) {
       error.value = 'Несуществующий имейл'
       isLoading.value = false
       return
     }
 
-    if (!registerCredentials.name) {
-      error.value = 'Имя не может быть пустым'
+    if (!validateName(registerCredentials.name)) {
+      error.value = 'Имя не может быть пустым и содержать цифры/спецсимволы'
       isLoading.value = false
       return
     }
@@ -149,11 +150,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
    * check and send forgot password request
    */
   async function forgotPassword() {
-    if (
-      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(
-        forgotPasswordCredentials.email
-      ) === false
-    ) {
+    if (!validateEmail(forgotPasswordCredentials.email)) {
       error.value = 'Несуществующий имейл'
       return
     }
@@ -207,6 +204,9 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     }
   }
 
+  /**
+   * Verify email change
+   */
   async function verifyEmailChange() {
     if (
       !route.query.token ||
@@ -241,11 +241,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
    * check and send resend verification request
    */
   async function resendVerification() {
-    if (
-      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(
-        resendVerificationCredentials.email
-      ) === false
-    ) {
+    if (!validateEmail(resendVerificationCredentials.email)) {
       error.value = 'Несуществующий имейл'
       return
     }
