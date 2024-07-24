@@ -1,6 +1,6 @@
 import type { Pagination } from '@/core/data/Pagination'
 import type { Context } from '@/core/context/Context'
-import type { User } from '@/core/data/entities/User'
+import type { User, UserWithOnlineStatus } from '@/core/data/entities/User'
 import { ApiService, type ApiResponse } from '@/core/services/ApiService'
 
 export type UserRelations = 'students' | 'mentor' | 'courses'
@@ -27,8 +27,12 @@ export class UserService extends ApiService {
   /**
    * get user by slug
    */
-  public async getUser(username: string): Promise<ApiResponse<User | null>> {
-    return await this.httpGet<User>(`${this._route}/${username}`)
+  public async getUser(
+    username: string
+  ): Promise<ApiResponse<UserWithOnlineStatus | null>> {
+    return await this.httpGet<UserWithOnlineStatus>(
+      `${this._route}/${username}`
+    )
   }
 
   /**

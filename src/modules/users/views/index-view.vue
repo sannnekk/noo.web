@@ -61,7 +61,7 @@ setPageTitle('Пользователи')
 const cols: ColType[] = [
   {
     title: '',
-    keys: ['telegramAvatarUrl', 'name'],
+    keys: ['telegramAvatarUrl', 'name', 'isOnline'],
     type: 'avatar'
   },
   {
@@ -85,7 +85,7 @@ const cols: ColType[] = [
     title: 'Роль',
     keys: ['role'],
     type: 'tag',
-    tagFunction: (key: string, value: string | number | Date) => {
+    tagFunction: (key: string, value: string | number | Date | boolean) => {
       switch (value) {
         case 'admin':
           return { text: 'Администратор', type: 'danger' }

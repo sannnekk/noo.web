@@ -23,3 +23,9 @@ export interface User extends Entity {
   updatedAt: Date
   verificationToken?: string
 }
+
+export interface UserWithOnlineStatus extends User {
+  isOnline: boolean
+  lastRequestAt: Date
+  isLastRequestMobile: boolean
+}

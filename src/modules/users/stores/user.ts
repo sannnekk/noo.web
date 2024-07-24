@@ -1,5 +1,5 @@
 import { Core } from '@/core/Core'
-import type { User } from '@/core/data/entities/User'
+import type { UserWithOnlineStatus } from '@/core/data/entities/User'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -12,7 +12,7 @@ export const useUserStore = defineStore('users-module:user', () => {
   /**
    * Current user
    */
-  const user = ref<User | null>(null)
+  const user = ref<UserWithOnlineStatus | null>(null)
 
   /**
    * Fetch user by username

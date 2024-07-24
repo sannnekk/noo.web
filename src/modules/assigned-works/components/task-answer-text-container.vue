@@ -1,11 +1,12 @@
 <template>
   <div
     class="task-answer-container"
+    v-if="model"
     v-auto-animate
   >
     <h4 class="task-answer-container__title">Ответ:</h4>
     <rich-text-container
-      v-if="readonly && model"
+      v-if="readonly"
       :content="model"
       :commentable="commentable"
       @commented="onComment($event)"

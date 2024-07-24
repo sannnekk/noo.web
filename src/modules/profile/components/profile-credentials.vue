@@ -6,6 +6,13 @@
         :name="credentialsModel.name"
       />
     </div>
+    <div class="profile-credentials__online-status">
+      <online-status
+        :is-online="credentialsModel.isOnline"
+        :last-seen="credentialsModel.lastRequestAt"
+        :is-mobile="credentialsModel.isLastRequestMobile"
+      />
+    </div>
     <div class="profile-credentials__name">
       <form-input
         type="text"
@@ -96,11 +103,11 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from '@/core/data/entities/User'
+import type { User, UserWithOnlineStatus } from '@/core/data/entities/User'
 import { ref, computed } from 'vue'
 
 interface Props {
-  modelValue: User
+  modelValue: UserWithOnlineStatus
 }
 
 interface Emits {
@@ -149,6 +156,13 @@ function onSomeInputChange() {
   &__avatar
     display: inline-block
     font-size: 180px
+
+  &__online-status
+    margin-top: 0.6em
+    margin-bottom: 1em
+
+    > div
+      justify-content: center
 
   &__name
     margin-top: 1em

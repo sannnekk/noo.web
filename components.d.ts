@@ -81,6 +81,7 @@ declare module 'vue' {
     MoreIcon: typeof import('./src/components/decorations/icons/more-icon.vue')['default']
     MoreWidget: typeof import('./src/components/widgets/more-widget.vue')['default']
     NothingFoundImage: typeof import('./src/components/decorations/nothing-found-image.vue')['default']
+    OnlineStatus: typeof import('./src/components/computed/online-status.vue')['default']
     OverlayHint: typeof import('./src/components/common/overlay-hint.vue')['default']
     PasswordCriteria: typeof import('./src/components/computed/password-criteria.vue')['default']
     PdfFileIcon: typeof import('./src/components/decorations/icons/pdf-file-icon.vue')['default']

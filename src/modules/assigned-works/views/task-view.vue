@@ -25,20 +25,10 @@
         :commentable="assignedWorkStore.fieldVisibility.checkBox === 'visible'"
       />
       <task-answer-word-container
-        v-if="assignedWorkStore.task.type === 'word'"
+        v-else-if="assignedWorkStore.task.type === 'word'"
         v-model="assignedWorkStore.assignedWork"
         :task="assignedWorkStore.task"
         :readonly="assignedWorkStore.fieldVisibility.solveBox === 'readonly'"
-      />
-      <task-answer-options-container
-        v-else-if="
-          assignedWorkStore.task.type === 'multiple_choice' ||
-          assignedWorkStore.task.type === 'one_choice'
-        "
-        v-model="assignedWorkStore.assignedWork"
-        :task="assignedWorkStore.task"
-        :readonly="assignedWorkStore.fieldVisibility.solveBox === 'readonly'"
-        :multiple="assignedWorkStore.task.type === 'multiple_choice'"
       />
     </div>
     <br />
@@ -148,7 +138,6 @@
 import { useAssignedWorkStore } from '../stores/assigned-work'
 import taskAnswerTextContainer from '../components/task-answer-text-container.vue'
 import taskAnswerWordContainer from '../components/task-answer-word-container.vue'
-import taskAnswerOptionsContainer from '../components/task-answer-options-container.vue'
 import taskCommentContainer from '../components/task-comment-container.vue'
 import taskScoreContainer from '../components/task-score-container.vue'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'

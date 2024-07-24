@@ -17,15 +17,28 @@
               <div class="edit-user-view__credentials__name">
                 <h2>{{ userStore.user.name }}</h2>
               </div>
+              <div class="edit-user-view__credentials__online-status">
+                <online-status
+                  :is-online="userStore.user.isOnline"
+                  :last-seen="userStore.user.lastRequestAt"
+                  :is-mobile="userStore.user.isLastRequestMobile"
+                />
+              </div>
               <div class="edit-user-view__credentials__username">
-                <p>
-                  Никнейм: <b>{{ userStore.user.username }}</b>
-                </p>
+                <form-input
+                  v-model="userStore.user.username"
+                  type="text"
+                  label="Никнейм"
+                  readonly
+                />
               </div>
               <div class="edit-user-view__credentials__email">
-                <p>
-                  Email: <b>{{ userStore.user.email }}</b>
-                </p>
+                <form-input
+                  v-model="userStore.user.email"
+                  type="email"
+                  label="E-mail"
+                  readonly
+                />
               </div>
               <div class="edit-user-view__credentials__role">
                 <role-tag :role="userStore.user.role" />
@@ -196,12 +209,26 @@ const currentTab = ref(0)
   &__credentials
     text-align: center
 
+    &__name
+      h2
+        margin: 0
+
+    &__online-status
+      margin-top: 0.6em
+      margin-bottom: 1em
+
+      > div
+        justify-content: center
+
     &__avatar
       display: inline-block
       font-size: 180px
 
     &__username,
     &__email
+      &:deep() input
+        text-align: center
+
       p
         margin: 0
         color: var(--text-light)

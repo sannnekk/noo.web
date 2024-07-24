@@ -158,7 +158,13 @@ export function useDate(date: Date, options?: UseDateOptions) {
           }
         }
 
-        return 'сегодня'
+        return (
+          'сегодня в ' +
+          date.toLocaleTimeString('ru-RU', {
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        )
       }
 
       if (_date.isYesterday()) return 'вчера'

@@ -114,6 +114,7 @@
                 <user-avatar
                   :src="object[col.keys![0]] as string"
                   :name="object[col.keys![1]] as string"
+                  :is-online="object[col.keys![2]] as boolean"
                 />
               </span>
               <span v-else>-</span>
@@ -170,7 +171,7 @@ export interface ColType {
   alignment?: 'left' | 'center' | 'right' | 'stretch'
   tagFunction?: (
     key: string,
-    value: string | number | Date
+    value: string | number | Date | boolean
   ) => {
     text: string
     type: 'success' | 'warning' | 'danger' | 'info' | 'primary'
@@ -179,7 +180,7 @@ export interface ColType {
 
 interface Props {
   cols: ColType[]
-  data: ({ id: string } & Record<string, string | number | Date>)[]
+  data: ({ id: string } & Record<string, string | number | Date | boolean>)[]
   dateConfig?: Parameters<typeof useDate>[1]
   editable?: boolean
   isLoading?: boolean

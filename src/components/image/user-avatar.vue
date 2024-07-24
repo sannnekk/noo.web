@@ -14,6 +14,10 @@
     >
       {{ initials }}
     </span>
+    <div
+      class="user-avatar__is-online"
+      v-if="isOnline"
+    ></div>
   </div>
 </template>
 
@@ -23,6 +27,7 @@ import { computed } from 'vue'
 interface Props {
   src?: string
   name?: string
+  isOnline?: boolean
 }
 
 const props = defineProps<Props>()
@@ -70,7 +75,7 @@ const bgColor = computed(() => {
   height: 1em
   aspect-ratio: 1 / 1
   border-radius: 50%
-  overflow: hidden
+  position: relative
 
   &__image
     display: block
@@ -78,6 +83,9 @@ const bgColor = computed(() => {
     object-position: center
     object-fit: cover
     background-color: var(--border-color)
+    overflow: hidden
+    aspect-ratio: 1 / 1
+    border-radius: 50%
 
   &__initials
     color: var(--lightest)
@@ -88,4 +96,17 @@ const bgColor = computed(() => {
     align-items: center
     width: 100%
     height: 100%
+    overflow: hidden
+    aspect-ratio: 1 / 1
+    border-radius: 50%
+
+  &__is-online
+    position: absolute
+    bottom: 0px
+    right: 0px
+    width: 15px
+    height: 15px
+    border-radius: 50%
+    background-color: var(--success)
+    border: 1px solid var(--lightest)
 </style>

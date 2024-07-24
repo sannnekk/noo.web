@@ -22,6 +22,13 @@
                   :src="user.telegramAvatarUrl"
                 />
               </div>
+              <div class="user-info-modal__content__image__online-status">
+                <online-status
+                  :isOnline="user.isOnline"
+                  :lastSeen="user.lastRequestAt"
+                  :isMobile="user.isLastRequestMobile"
+                />
+              </div>
               <div
                 class="user-info-modal__content__image__telegram"
                 v-if="user.telegramUsername"
@@ -76,10 +83,10 @@
 
 <script setup lang="ts">
 import { Core } from '@/core/Core'
-import type { User } from '@/core/data/entities/User'
+import type { UserWithOnlineStatus } from '@/core/data/entities/User'
 
 interface Props {
-  user: User
+  user: UserWithOnlineStatus
   visible: boolean
 }
 
@@ -174,6 +181,11 @@ function onClose() {
 
       &__avatar
         font-size: 170px
+
+      &__online-status
+        margin-top: 1em
+        > div
+          justify-content: center
 
       &__telegram
         margin-top: 1em
