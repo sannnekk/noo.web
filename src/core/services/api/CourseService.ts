@@ -146,12 +146,12 @@ export class CourseService extends ApiService {
    */
   public async addStudentsViaEmail(
     courseSlug: string,
-    studentEmails: string[],
+    emails: string[],
     options: ServiceOptions = {}
   ) {
     await this.httpPatch(
       `${this._route}/${courseSlug}/add-students-via-emails`,
-      studentEmails,
+      { emails },
       undefined,
       options
     )

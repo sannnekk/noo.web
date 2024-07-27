@@ -90,12 +90,35 @@ export const useCourseStudentsStore = defineStore(
       }
     }
 
+    async function syncStudentsViaEmail(emails: string[]): Promise<void> {
+      try {
+        if (!course.value) {
+          throw new Error('Курс не найден')
+        }
+
+        await courseService.addStudentsViaEmail(courseSlug.value, emails, {
+          showLoader: true
+        })
+
+        await fetchCourse()
+        await studentSearch.trigger()
+
+        uiService.openSuccessModal('Ученики успешно добавлены через имейлы')
+      } catch (error: any) {
+        uiService.openErrorModal(
+          'Произошла ошибка при синзронизации учеников через имейлы',
+          error.message
+        )
+      }
+    }
+
     return {
       studentSearch,
       course,
       fetchCourse,
       addStudent,
-      removeStudent
+      removeStudent,
+      syncStudentsViaEmail
     }
   }
 )
