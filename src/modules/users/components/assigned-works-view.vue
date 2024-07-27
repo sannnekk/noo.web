@@ -105,34 +105,55 @@ async function fetchAssignedWorks(pagination?: Pagination) {
 
 const cols: ColType[] = [
   {
+    title: '',
+    value: (a: AssignedWork) => getUserAction(a).icon,
+    type: 'icon'
+  },
+  {
     title: 'Название работы / Ученик / Куратор(ы)',
-    keys: ['work.name', 'student.name', 'mentors.each.name'],
-    join: '<br>',
     type: 'text',
-    style: [undefined, 'secondary', 'secondary']
+    joinType: 'br',
+    value: (a: AssignedWork) => {
+      return [
+        a.work?.name || '-',
+        `<small>${a.student?.name || '-'}</small>`,
+        `<small>Кураторы: ${
+          a.mentors?.map((m) => m.name).join(', ') || '-'
+        }</small>`
+      ]
+    }
   },
   {
     title: 'Дедлайн сдачи/сдано',
-    keys: ['solveDeadlineAt', 'solvedAt'],
-    type: 'date'
+    type: 'date',
+    joinType: 'br',
+    value: (a: AssignedWork) => {
+      return [a.solveDeadlineAt, a.solvedAt]
+    }
   },
   {
-    title: 'Дата проверки/проверено',
-    keys: ['checkDeadlineAt', 'checkedAt'],
-    type: 'date'
+    title: 'Дедлайн проверки/проверено',
+    type: 'date',
+    joinType: 'br',
+    value: (a: AssignedWork) => {
+      return [a.checkDeadlineAt, a.checkedAt]
+    }
   },
   {
     title: 'Статус работы',
-    keys: ['solveStatus', 'checkStatus'],
-    type: 'tag',
-    tagFunction
+    type: 'text',
+    joinType: 'br',
+    value: (a: AssignedWork) => {
+      return [solveStatus(a), checkStatus(a)]
+    }
   },
   {
     title: 'Результат',
-    keys: ['score', 'maxScore'],
-    join: '/',
-    style: ['centered'],
-    type: 'text'
+    type: 'text',
+    joinType: '/',
+    value: (a: AssignedWork) => {
+      return [a.score === null ? '-' : a.score, a.maxScore]
+    }
   }
 ]
 
@@ -156,53 +177,142 @@ function actions(assignedWork: AssignedWork): MenuItem[] {
   ]
 }
 
-function tagFunction(
-  key: string,
-  value: string | number | Date
-): {
-  type: 'success' | 'danger' | 'info' | 'warning' | 'primary'
-  text: string
-} {
-  if (value === 'made-in-deadline') {
+function checkStatus(a: AssignedWork): string {
+  switch (a.checkStatus) {
+    case 'checked-in-deadline':
+      return `<span style="color: var(--text-light)">Проверено в дедлайн</span>`
+    case 'checked-after-deadline':
+      return `<span style="color: var(--warning)">Проверено после дедлайна</span>`
+    case 'checked-automatically':
+      return `<span style="color: var(--success)">Проверено автоматически</span>`
+    case 'not-checked':
+      return `<span style="color: var(--text-light)">Не проверено</span>`
+    case 'in-progress':
+      return `<span style="color: var(--text-light)">В процессе</span>`
+    default:
+      return `<span style="color: var(--info)">-</span>`
+  }
+}
+
+function solveStatus(a: AssignedWork): string {
+  switch (a.solveStatus) {
+    case 'made-in-deadline':
+      return `<span style="color:var(--success)">Сдано в дедлайн</span>`
+    case 'made-after-deadline':
+      return `<span style="color:var(--danger)">Сдано после дедлайна</span>`
+    case 'in-progress':
+      return `<span style="color:var(--warning)">В процессе</span>`
+    case 'not-started':
+    default:
+      return `<span style="color:var(--text-light)">-</span>`
+  }
+}
+
+export type ActionType = 'read' | 'solve' | 'check'
+
+type UserAction = {
+  action: string
+  link: `/assigned-works/${AssignedWork['id']}/${ActionType}`
+  icon: string
+}
+
+/**
+ * Get user action for assigned work based on its role
+ */
+function getUserAction(assignedWork: AssignedWork): UserAction {
+  const role = Core.Context.User!.role
+
+  if (role === 'admin' || role === 'teacher') {
     return {
-      type: 'success',
-      text: 'Сдано в дедлайн'
+      action: 'Просмотреть',
+      link: `/assigned-works/${assignedWork.id}/read`,
+      icon:
+        assignedWork.checkStatus === 'not-checked'
+          ? 'attention-yellow'
+          : 'check-green'
     }
-  } else if (value === 'made-after-deadline') {
-    return {
-      type: 'danger',
-      text: 'Сдано не в дедлайн'
+  }
+
+  if (role === 'mentor') {
+    if (
+      assignedWork.solveStatus === 'not-started' ||
+      assignedWork.solveStatus === 'in-progress'
+    ) {
+      return {
+        action: 'Просмотреть',
+        link: `/assigned-works/${assignedWork.id}/read`,
+        icon: 'cross-red'
+      }
     }
-  } else if (value === 'checked-in-deadline') {
-    return {
-      type: 'info',
-      text: 'Проверено в дедлайн'
+
+    if (
+      assignedWork.checkStatus === 'not-checked' &&
+      (assignedWork.solveStatus === 'made-in-deadline' ||
+        assignedWork.solveStatus === 'made-after-deadline')
+    ) {
+      return {
+        action: 'Ожидает проверки',
+        link: `/assigned-works/${assignedWork.id}/check`,
+        icon: 'attention-yellow'
+      }
     }
-  } else if (value === 'checked-after-deadline') {
-    return {
-      type: 'warning',
-      text: 'Проверено не в дедлайн'
+
+    if (assignedWork.checkStatus === 'not-checked') {
+      return {
+        action: 'Проверить',
+        link: `/assigned-works/${assignedWork.id}/check`,
+        icon: 'attention-yellow'
+      }
     }
-  } else if (value === 'checked-automatically') {
-    return {
-      type: 'info',
-      text: 'Проверено автоматически'
+
+    if (assignedWork.checkStatus === 'in-progress') {
+      return {
+        action: 'Продолжить проверку',
+        link: `/assigned-works/${assignedWork.id}/check`,
+        icon: 'attention-yellow'
+      }
     }
-  } else if (value === 'not-made') {
+
     return {
-      type: 'warning',
-      text: 'Не сдано'
+      action: 'Просмотреть',
+      link: `/assigned-works/${assignedWork.id}/read`,
+      icon: 'check-green'
     }
-  } else if (value === 'not-checked') {
+  }
+
+  // role is student
+  if (assignedWork.solveStatus === 'not-started') {
     return {
-      type: 'info',
-      text: 'Не проверено'
+      action: 'Начать выполнение',
+      link: `/assigned-works/${assignedWork.id}/solve`,
+      icon: 'cross-red'
+    }
+  }
+
+  if (assignedWork.solveStatus === 'in-progress') {
+    return {
+      action: 'Продолжить выполнение',
+      link: `/assigned-works/${assignedWork.id}/solve`,
+      icon: 'cross-red'
+    }
+  }
+
+  if (
+    assignedWork.checkStatus === 'not-checked' &&
+    (assignedWork.solveStatus === 'made-in-deadline' ||
+      assignedWork.solveStatus === 'made-after-deadline')
+  ) {
+    return {
+      action: 'Ожидает проверки',
+      link: `/assigned-works/${assignedWork.id}/read`,
+      icon: 'attention-yellow'
     }
   }
 
   return {
-    type: 'info',
-    text: '-'
+    action: 'Просмотреть',
+    link: `/assigned-works/${assignedWork.id}/read`,
+    icon: 'check-green'
   }
 }
 
@@ -225,10 +335,6 @@ function openChangeMentorModal(assignedWorks: AssignedWork[]) {
 function onMentorChanged() {
   selectedWorks.value = []
   search.trigger()
-}
-
-function onSelectAll() {
-  selectedWorks.value = search.results.value
 }
 </script>
 

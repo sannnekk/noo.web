@@ -24,9 +24,9 @@
               </div>
               <div class="user-info-modal__content__image__online-status">
                 <online-status
-                  :isOnline="user.isOnline"
-                  :lastSeen="user.lastRequestAt"
-                  :isMobile="user.isLastRequestMobile"
+                  :is-online="user.isOnline"
+                  :last-seen="user.lastRequestAt"
+                  :is-mobile="user.isLastRequestMobile"
                 />
               </div>
               <div
