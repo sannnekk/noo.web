@@ -27,6 +27,12 @@
             :class="[`col-type-${col.type}`, { 'is-link': col.linkTo }]"
             @click="onClick(col, object)"
           >
+            <b
+              class="edit-checkbox"
+              :class="{ 'edit-checkbox--checked': checkList[object.id] }"
+              v-if="editable && colIndex === 0"
+              @click="checkList[object.id] = !checkList[object.id]"
+            ></b>
             <span
               class="table-cell"
               v-for="(value, cellIndex) in getValue(col, object, rowIndex)"
