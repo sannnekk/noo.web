@@ -232,11 +232,16 @@ export class ApiService extends Service {
           this.onProgress(100)
 
           try {
+            if (xhr.responseText === '') {
+              resolve(null)
+              return
+            }
+
             resolve(JSON.parse(xhr.responseText, this.dateParser))
           } catch (error) {
             reject({
               status: xhr.status,
-              message: 'Неизвестная ошибка'
+              message: 'Неизвестная ошибка 1'
             })
           }
         } else {
@@ -245,12 +250,12 @@ export class ApiService extends Service {
               status: xhr.status,
               message:
                 JSON.parse(xhr.responseText, this.dateParser)?.error ||
-                'Неизвестная ошибка'
+                'Неизвестная ошибка 2'
             })
           } catch (error) {
             reject({
               status: xhr.status,
-              message: 'Неизвестная ошибка'
+              message: 'Неизвестная ошибка 3'
             })
           }
         }
@@ -259,7 +264,7 @@ export class ApiService extends Service {
       xhr.onerror = () => {
         reject({
           status: 400,
-          message: 'Неизвестная ошибка'
+          message: 'Неизвестная ошибка 4'
         })
       }
 

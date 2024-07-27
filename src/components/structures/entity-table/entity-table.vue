@@ -29,15 +29,20 @@
           >
             <span
               class="table-cell"
-              v-for="(value, valueIndex) in getValue(col, object, rowIndex)"
-              :key="valueIndex"
+              v-for="(value, cellIndex) in getValue(col, object, rowIndex)"
+              :key="keys[cellIndex]"
             >
               <component
                 :is="getCellComponent(col.type)"
                 :value="value.value"
                 :alignment="col.alignment"
-                :action="col.action"
-                :design="col.design"
+                :design="
+                  typeof col.design === 'function'
+                    ? col.design(object)
+                    : col.design
+                "
+                :is-loading="col.isLoading?.(object)"
+                @action="onAction(col, object, colIndex)"
               />
               <br v-if="value.joinType === 'br'" />
               <span v-else-if="value.joinType === '/'">/</span>
@@ -73,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import type { MenuItem } from '../../widgets/more-widget.vue'
 
 import entityTableAvatarCell from './entity-table-avatar-cell.vue'
@@ -115,10 +120,12 @@ interface Emits {
   (e: 'select', ids: string[]): void
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 const router = useRouter()
+
+const keys = reactive<string[]>(props.cols.map(() => Math.random().toString()))
 
 function getValue(col: ColType, row: any, index: number): any[] {
   let result = null
@@ -191,6 +198,13 @@ function onClick(col: ColType, row: any) {
     } else {
       router.push(col.linkTo)
     }
+  }
+}
+
+async function onAction(col: ColType, row: any, index: number) {
+  if (col.action) {
+    await col.action(row)
+    keys[index] = Math.random().toString()
   }
 }
 </script>

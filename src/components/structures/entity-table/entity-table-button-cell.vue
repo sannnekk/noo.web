@@ -2,7 +2,8 @@
   <common-button
     :alignment="alignment"
     :design="design"
-    @click="action"
+    :is-loading="isLoading"
+    @click="$emit('action')"
   >
     {{ value }}
   </common-button>
@@ -13,10 +14,15 @@ interface Props {
   value?: string
   design?: 'primary' | 'secondary' | 'inline' | 'telegram'
   alignment?: 'left' | 'center' | 'right'
-  action: (value: any) => void
+  isLoading?: boolean
+}
+
+interface Emits {
+  (event: 'action'): void
 }
 
 defineProps<Props>()
+defineEmits<Emits>()
 </script>
 
 <style lang="sass" scoped>
