@@ -2,6 +2,7 @@
   <div class="index-students-view">
     <div class="index-students-view__search">
       <search-field
+        v-if="typeof studentsStore.pagination.search !== 'undefined'"
         v-model="studentsStore.pagination.search"
         :is-loading="studentsStore.isListLoading"
       />
@@ -32,42 +33,42 @@
 import type { User } from '@/core/data/entities/User'
 import { useStudentsStore } from '../stores/students'
 import { setPageTitle } from '@/core/utils/setPageTitle'
-import { Core } from '@/core/Core'
+import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 
-const cols = [
+const cols: ColType[] = [
   {
     title: '',
-    keys: ['telegramAvatarUrl', 'name'],
-    type: 'avatar'
+    type: 'avatar',
+    value: (user: User) => user
   },
   {
     title: 'Имя',
-    keys: ['name'],
-    type: 'text'
+    value: (user: User) => {
+      const name = user.name
+
+      if (user.verificationToken) {
+        return `<span title="Пользователь не подтвержден">⛔</span> ${name}`
+      }
+
+      return name
+    },
+    type: 'text',
+    linkTo: (user: User) => `/users/edit/${user.username}`
   },
   {
     title: 'Никнейм',
-    keys: ['username'],
-    type: 'text'
+    type: 'text',
+    value: (user: User) => user.username
   },
   {
     title: 'E-mail',
-    keys: ['email'],
-    type: 'text'
+    type: 'text',
+    value: (user: User) => user.email
   },
   {
-    title: 'Telegram',
-    keys: ['telegramUsername'],
-    type: 'link',
-    design: 'telegram',
-    linkTo: (user: User) => `https://t.me/${user.telegramUsername}`
-  },
-  {
-    title: '',
-    value: Core.Context.User?.role === 'mentor' ? 'Перейти' : 'Редактировать',
-    type: 'link',
-    design: 'secondary',
-    linkTo: (user: User) => `/users/edit/${user.username}`
+    title: 'Дата регистрации',
+    type: 'date',
+    value: (user: User) => user.createdAt
   }
 ]
 

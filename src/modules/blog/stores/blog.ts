@@ -42,15 +42,11 @@ export const useBlogStore = defineStore('blog-module:blog', () => {
    * Delete post
    */
   async function deletePost(id: string) {
-    uiService.setLoading(true)
-
     try {
-      await blogService.deletePost(id)
+      await blogService.deletePost(id, { showLoader: true })
       trigger()
     } catch (error: any) {
       uiService.openErrorModal('Ошибка при удалении поста', error.message)
-    } finally {
-      uiService.setLoading(false)
     }
   }
 

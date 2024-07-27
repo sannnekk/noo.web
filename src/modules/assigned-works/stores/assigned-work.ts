@@ -59,10 +59,12 @@ export const useAssignedWorkStore = defineStore(
      * Load assigned work
      */
     async function fetchAssignedWork() {
-      uiService.setLoading(true)
       try {
         const response = await assignedWorkService.getAssignedWork(
-          assignedWorkId.value
+          assignedWorkId.value,
+          {
+            showLoader: true
+          }
         )
         assignedWork.value = response.data
 
@@ -100,8 +102,6 @@ export const useAssignedWorkStore = defineStore(
             : e.message
         )
         assignedWork.value = null
-      } finally {
-        uiService.setLoading(false)
       }
     }
 
@@ -325,7 +325,7 @@ export const useAssignedWorkStore = defineStore(
         mode.value === 'solve' ||
         assignedWork.value?.solveStatus === 'not-started' ||
         assignedWork.value?.solveStatus === 'in-progress' ||
-        (Core.Context.User?.role !== 'mentor' &&
+        (Core.Context.roleIs(['admin', 'teacher', 'student']) &&
           (assignedWork.value?.checkStatus === 'not-checked' ||
             assignedWork.value?.checkStatus === 'in-progress'))
       ) {
@@ -347,7 +347,7 @@ export const useAssignedWorkStore = defineStore(
       if (
         (assignedWork.value?.checkStatus === 'not-checked' ||
           assignedWork.value?.checkStatus === 'in-progress') &&
-        Core.Context.User?.role !== 'mentor'
+        Core.Context.roleIs(['admin', 'teacher', 'student'])
       ) {
         return null
       }
@@ -384,8 +384,6 @@ export const useAssignedWorkStore = defineStore(
         return
       }
 
-      uiService.setLoading(true)
-
       const onSolvedActions: ModalAction[] = [
         {
           label: 'Вернуться к списку работ',
@@ -410,20 +408,28 @@ export const useAssignedWorkStore = defineStore(
 
       try {
         if (mode.value === 'solve') {
-          await assignedWorkService.solveAssignedWork(assignedWork.value.id, {
-            answers: assignedWork.value.answers
-          })
+          await assignedWorkService.solveAssignedWork(
+            assignedWork.value.id,
+            {
+              answers: assignedWork.value.answers
+            },
+            { showLoader: true }
+          )
           uiService.openSuccessModal(
             'Работа успешно сдана!',
             '',
             onSolvedActions
           )
         } else if (mode.value === 'check') {
-          await assignedWorkService.checkAssignedWork(assignedWork.value.id, {
-            // send answers even though its only check - text&image comments are stored in answers
-            answers: assignedWork.value.answers,
-            comments: assignedWork.value.comments
-          })
+          await assignedWorkService.checkAssignedWork(
+            assignedWork.value.id,
+            {
+              // send answers even though its only check - text&image comments are stored in answers
+              answers: assignedWork.value.answers,
+              comments: assignedWork.value.comments
+            },
+            { showLoader: true }
+          )
           uiService.openSuccessModal(
             'Работа успешно проверена!',
             'Если работа без открытых вопросов, она будет проверена автоматически и Вы можете просмотреть результат сразу. В случае работ с хотя б одним открытым вопросом требуется проверка куратора',
@@ -440,8 +446,6 @@ export const useAssignedWorkStore = defineStore(
         }
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при отправке работы', e.message)
-      } finally {
-        uiService.setLoading(false)
       }
     }
 
@@ -456,17 +460,14 @@ export const useAssignedWorkStore = defineStore(
         return
       }
 
-      uiService.setLoading(true)
-
       try {
         await assignedWorkService.shiftAssignedWorkDeadline(
-          assignedWork.value.id
+          assignedWork.value.id,
+          { showLoader: true }
         )
         uiService.openSuccessModal('Дедлайн успешно сдвинут!')
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при сдвиге дедлайна', e.message)
-      } finally {
-        uiService.setLoading(false)
       }
     }
 
@@ -476,14 +477,13 @@ export const useAssignedWorkStore = defineStore(
     async function saveProgress() {
       if (!assignedWork.value) return
 
-      uiService.setLoading(true)
-
       const payload = { ...assignedWork.value, work: undefined }
 
       try {
         await assignedWorkService.saveAssignedWorkProgress(
           assignedWork.value.id,
-          payload
+          payload,
+          { showLoader: true }
         )
         uiService.openSuccessModal('Прогресс успешно сохранен!', '', [
           {
@@ -496,8 +496,6 @@ export const useAssignedWorkStore = defineStore(
         ])
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при сохранении прогресса', e.message)
-      } finally {
-        uiService.setLoading(false)
       }
     }
 
@@ -515,12 +513,11 @@ export const useAssignedWorkStore = defineStore(
         return
       }
 
-      uiService.setLoading(true)
-
       try {
         await assignedWorkService.remakeAssignedWork(
           assignedWork.value.id,
-          remakeModal.onlyFalse
+          remakeModal.onlyFalse,
+          { showLoader: true }
         )
 
         uiService.openSuccessModal(
@@ -541,8 +538,6 @@ export const useAssignedWorkStore = defineStore(
           'Ошибка при создании нового экземпляра работы',
           e.message
         )
-      } finally {
-        uiService.setLoading(false)
       }
     }
 

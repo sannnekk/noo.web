@@ -52,11 +52,10 @@ export const useCreateCourseStore = defineStore(
         return
       }
 
-      uiService.setLoading(true)
-
       try {
         const response = await courseService.getCourse(
-          _route.params.courseSlug as string
+          _route.params.courseSlug as string,
+          { showLoader: true }
         )
 
         if (!response.data) {
@@ -71,8 +70,6 @@ export const useCreateCourseStore = defineStore(
           'Произошла ошибка при загрузке курса',
           error.message
         )
-      } finally {
-        uiService.setLoading(false)
       }
     }
 
@@ -240,8 +237,6 @@ export const useCreateCourseStore = defineStore(
         }
       }
 
-      uiService.setLoading(true)
-
       course.value.chapters?.forEach((chapter, index) => {
         if (chapter.materials) {
           chapter.order = index
@@ -254,7 +249,7 @@ export const useCreateCourseStore = defineStore(
 
       if (!_route.params.courseSlug) {
         try {
-          await courseService.createCourse(course.value)
+          await courseService.createCourse(course.value, { showLoader: true })
           uiService.openSuccessModal('Курс успешно создан', '', [
             {
               label: 'Вернуться к списку курсов',
@@ -269,12 +264,12 @@ export const useCreateCourseStore = defineStore(
             'Произошла ошибка при создании курса',
             error.message
           )
-        } finally {
-          uiService.setLoading(false)
         }
       } else {
         try {
-          await courseService.updateCourse(course.value.id, course.value)
+          await courseService.updateCourse(course.value.id, course.value, {
+            showLoader: true
+          })
           uiService.openSuccessModal('Курс успешно обновлен', '', [
             {
               label: 'Вернуться к списку курсов',
@@ -289,8 +284,6 @@ export const useCreateCourseStore = defineStore(
             'Произошла ошибка при обновлении курса',
             error.message
           )
-        } finally {
-          uiService.setLoading(false)
         }
       }
     }

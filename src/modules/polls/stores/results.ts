@@ -74,10 +74,10 @@ export const usePollResultsStore = defineStore('polls-module:results', () => {
    * Fetch poll
    */
   async function fetchPoll() {
-    uiService.setLoading(true)
-
     try {
-      const response = await pollService.getPollInfo(pollId.value)
+      const response = await pollService.getPollInfo(pollId.value, {
+        showLoader: true
+      })
 
       poll.value = response.data!
     } catch (error: any) {
@@ -92,8 +92,6 @@ export const usePollResultsStore = defineStore('polls-module:results', () => {
           }
         ]
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 

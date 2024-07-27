@@ -1,7 +1,11 @@
 import type { Pagination } from './../../data/Pagination'
 import type { Context } from '@/core/context/Context'
 import type { BlogPost, Reaction } from '@/core/data/entities/BlogPost'
-import { ApiService, type ApiResponse } from '@/core/services/ApiService'
+import {
+  ApiService,
+  type ApiResponse,
+  type ServiceOptions
+} from '@/core/services/ApiService'
 
 /**
  * Poll service
@@ -20,18 +24,25 @@ export class BlogService extends ApiService {
    * Get posts
    */
   public async getPosts(
-    pagination?: Pagination
+    pagination?: Pagination,
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<BlogPost[]>> {
-    return await this.httpGet(this._route, pagination)
+    return await this.httpGet(this._route, pagination, undefined, options)
   }
 
   /**
    * Get post
    */
   public async getPost(
-    id: BlogPost['id']
+    id: BlogPost['id'],
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<BlogPost | null>> {
-    return await this.httpGet(`${this._route}/${id}`)
+    return await this.httpGet(
+      `${this._route}/${id}`,
+      undefined,
+      undefined,
+      options
+    )
   }
 
   /**
@@ -39,10 +50,14 @@ export class BlogService extends ApiService {
    */
   public async toggleReaction(
     id: BlogPost['id'],
-    reaction: Reaction
+    reaction: Reaction,
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<BlogPost['reactionCounts'] | null>> {
     return await this.httpPatch<BlogPost['reactionCounts']>(
-      `${this._route}/${id}/react/${reaction}`
+      `${this._route}/${id}/react/${reaction}`,
+      undefined,
+      undefined,
+      options
     )
   }
 
@@ -50,22 +65,30 @@ export class BlogService extends ApiService {
    * Create post
    */
   public async createPost(
-    event: BlogPost
+    event: BlogPost,
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<BlogPost | null>> {
-    return await this.httpPost(this._route, event)
+    return await this.httpPost(this._route, event, undefined, options)
   }
 
   /**
    * Update post
    */
-  public async updatePost(id: BlogPost['id'], post: BlogPost): Promise<void> {
-    await this.httpPatch(`${this._route}/${id}`, post)
+  public async updatePost(
+    id: BlogPost['id'],
+    post: BlogPost,
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpPatch(`${this._route}/${id}`, post, undefined, options)
   }
 
   /**
    * Delete post
    */
-  public async deletePost(id: BlogPost['id']): Promise<void> {
-    await this.httpDelete(`${this._route}/${id}`)
+  public async deletePost(
+    id: BlogPost['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpDelete(`${this._route}/${id}`, undefined, options)
   }
 }

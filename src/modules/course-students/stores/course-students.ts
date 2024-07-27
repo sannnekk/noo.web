@@ -23,21 +23,19 @@ export const useCourseStudentsStore = defineStore(
     })
 
     async function fetchCourse() {
-      uiService.setLoading(true)
-
       try {
-        const response = await courseService.getCourse(courseSlug.value)
+        const response = await courseService.getCourse(courseSlug.value, {
+          showLoader: true
+        })
 
         course.value = response.data
       } catch (error: any) {
         uiService.openErrorModal('', error.message)
-      } finally {
-        uiService.setLoading(false)
       }
     }
 
     async function fetchStudents(pagination: Pagination) {
-      if (Core.Context.User?.role !== 'teacher') {
+      if (Core.Context.roleIs(['admin', 'student', 'mentor'])) {
         return
       }
 

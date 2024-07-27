@@ -1,5 +1,5 @@
 import type { Context } from '@/core/context/Context'
-import { ApiService } from '@/core/services/ApiService'
+import { ApiService, type ServiceOptions } from '@/core/services/ApiService'
 import type { User } from '@/core/data/entities/User'
 import { SessionService } from './SessionService'
 
@@ -40,13 +40,18 @@ export class AuthService extends ApiService {
   /**
    * Login
    */
-  public async login({ usernameOrEmail, password }: LoginPayload) {
+  public async login(
+    { usernameOrEmail, password }: LoginPayload,
+    options: ServiceOptions = {}
+  ) {
     const response = await this.httpPost<LoginResponse>(
       `${this._route}/login`,
       {
         usernameOrEmail,
         password
-      }
+      },
+      undefined,
+      options
     )
 
     if (
@@ -64,16 +69,18 @@ export class AuthService extends ApiService {
     return response
   }
 
-  public async retryLogin({
-    usernameOrEmail,
-    password
-  }: LoginPayload): Promise<boolean> {
+  public async retryLogin(
+    { usernameOrEmail, password }: LoginPayload,
+    options: ServiceOptions = {}
+  ): Promise<boolean> {
     const response = await this.httpPost<LoginResponse>(
       `${this._route}/login`,
       {
         usernameOrEmail,
         password
-      }
+      },
+      undefined,
+      options
     )
 
     if (
@@ -95,7 +102,12 @@ export class AuthService extends ApiService {
    * Logout
    */
   public async logout() {
-    await this.sessionService.deleteCurrentSession()
+    try {
+      await this.sessionService.deleteCurrentSession({ showLoader: true })
+    } catch (error) {
+      console.error('Error deleting session', error)
+    }
+
     this._context.clear()
     this._context.Events.emit('global:logout', this._context)
   }
@@ -103,52 +115,89 @@ export class AuthService extends ApiService {
   /**
    * Register
    */
-  public async register(payload: RegisterPayload) {
-    await this.httpPost(`${this._route}/register`, payload)
+  public async register(
+    payload: RegisterPayload,
+    options: ServiceOptions = {}
+  ) {
+    await this.httpPost(`${this._route}/register`, payload, undefined, options)
   }
 
   /**
    * check username availability
    */
-  public async checkUsername(username: string): Promise<boolean> {
+  public async checkUsername(
+    username: string,
+    options: ServiceOptions = {}
+  ): Promise<boolean> {
     const response = await this.httpGet<{ exists: boolean }>(
-      `${this._route}/check-username/${username}`
+      `${this._route}/check-username/${username}`,
+      undefined,
+      undefined,
+      options
     )
 
-    return response.data!.exists
+    return response!.data!.exists
   }
 
   /**
    * Verify
    */
-  public async verify(username: string, token: string) {
-    await this.httpPatch(`${this._route}/verify`, {
-      username,
-      token
-    })
+  public async verify(
+    username: string,
+    token: string,
+    options: ServiceOptions = {}
+  ) {
+    await this.httpPatch(
+      `${this._route}/verify`,
+      {
+        username,
+        token
+      },
+      undefined,
+      options
+    )
   }
 
   /**
    * Change email
    */
-  public async verifyEmailChange(username: string, token: string) {
-    await this.httpPatch(`${this._route}/verify-email-change`, {
-      username,
-      token
-    })
+  public async verifyEmailChange(
+    username: string,
+    token: string,
+    options: ServiceOptions = {}
+  ) {
+    await this.httpPatch(
+      `${this._route}/verify-email-change`,
+      {
+        username,
+        token
+      },
+      undefined,
+      options
+    )
   }
 
   /**
    * Resend verification email
    */
-  public async resendVerification(email: string) {
-    await this.httpPost(`${this._route}/resend-verification`, { email })
+  public async resendVerification(email: string, options: ServiceOptions = {}) {
+    await this.httpPost(
+      `${this._route}/resend-verification`,
+      { email },
+      undefined,
+      options
+    )
   }
 
   /**
    * Forgot password
    */
-  public async forgotPassword(email: string) {
-    await this.httpPost(`${this._route}/forgot-password`, { email })
+  public async forgotPassword(email: string, options: ServiceOptions = {}) {
+    await this.httpPost(
+      `${this._route}/forgot-password`,
+      { email },
+      undefined,
+      options
+    )
   }
 }

@@ -27,9 +27,11 @@ export const usePollStore = defineStore('polls-module:poll', () => {
    * Fetch poll function
    */
   async function fetchPoll() {
-    uiService.setLoading(true)
     try {
-      const response = await pollService.getPoll(route.params.pollId as string)
+      const response = await pollService.getPoll(
+        route.params.pollId as string,
+        { showLoader: true }
+      )
 
       if (!response?.data) {
         throw new Error('Опрос не найден или недоступен')
@@ -49,8 +51,6 @@ export const usePollStore = defineStore('polls-module:poll', () => {
           }
         ]
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 
@@ -86,8 +86,6 @@ export const usePollStore = defineStore('polls-module:poll', () => {
       return
     }
 
-    uiService.setLoading(true)
-
     try {
       validateAnswers(poll.value.questions, answers.value)
 
@@ -96,7 +94,10 @@ export const usePollStore = defineStore('polls-module:poll', () => {
         id: undefined
       })) as unknown as PollAnswer[]
 
-      await pollService.saveAnswers(poll.value.id, payload)
+      await pollService.saveAnswers(poll.value.id, payload, {
+        showLoader: true
+      })
+
       uiService.openSuccessModal(
         'Спасибо за участие в опросе!',
         'Ваши ответы успешно сохранены',
@@ -120,8 +121,6 @@ export const usePollStore = defineStore('polls-module:poll', () => {
           }
         ]
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 

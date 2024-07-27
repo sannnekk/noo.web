@@ -39,7 +39,7 @@ export const useAssignWorkToMaterialStore = defineStore(
     watch(
       materialSlug,
       () => {
-        if (Core.Context.User?.role !== 'teacher') {
+        if (Core.Context.roleIs(['admin', 'student', 'mentor'])) {
           return
         }
 
@@ -85,7 +85,7 @@ export const useAssignWorkToMaterialStore = defineStore(
      * Watch for search query and load works
      */
     async function fetchWorks(pagination: Pagination) {
-      if (Core.Context.User?.role !== 'teacher') {
+      if (Core.Context.roleIs(['admin', 'student', 'mentor'])) {
         return
       }
 
@@ -103,7 +103,7 @@ export const useAssignWorkToMaterialStore = defineStore(
      * Submit work to material
      */
     async function assign() {
-      if (Core.Context.User?.role !== 'teacher') {
+      if (Core.Context.roleIs(['admin', 'student', 'mentor'])) {
         return
       }
 
@@ -111,8 +111,6 @@ export const useAssignWorkToMaterialStore = defineStore(
         uiService.openWarningModal('Выберите одну работу для добавления')
         return
       }
-
-      uiService.setLoading(true)
 
       try {
         await courseService.assignWorkToMaterial(
@@ -123,7 +121,8 @@ export const useAssignWorkToMaterialStore = defineStore(
                 checkDeadline: checkDeadline.value,
                 solveDeadline: solveDeadline.value
               }
-            : {}
+            : {},
+          { showLoader: true }
         )
 
         uiService.openSuccessModal('Работа успешно добавлена к материалу')
@@ -133,8 +132,6 @@ export const useAssignWorkToMaterialStore = defineStore(
           'Произошла ошибка при добавлении работы к материалу',
           error.message
         )
-      } finally {
-        uiService.setLoading(false)
       }
     }
 

@@ -12,7 +12,7 @@
       </div>
       <div
         class="index-view__header__create"
-        v-if="Core.Context.User?.role === 'teacher'"
+        v-if="Core.Context.roleIs(['teacher'])"
       >
         <common-button
           to="/create-course"

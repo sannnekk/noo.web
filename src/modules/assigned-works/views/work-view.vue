@@ -10,7 +10,7 @@
           <div class="work-view__sidebar__info">
             <p
               v-if="
-                Core.Context.User?.role === 'mentor' &&
+                Core.Context.roleIs(['mentor']) &&
                 assignedWorkStore.assignedWork.checkDeadlineAt
               "
               class="work-view__sidebar__info__check-deadline"
@@ -115,7 +115,7 @@
               v-if="
                 assignedWorkStore.mode === 'read' &&
                 assignedWorkStore.assignedWork?.work?.type === 'test' &&
-                Core.Context.User?.role === 'student' &&
+                Core.Context.roleIs(['student']) &&
                 (assignedWorkStore.assignedWork?.checkStatus ==
                   'checked-in-deadline' ||
                   assignedWorkStore.assignedWork?.checkStatus ==
@@ -160,7 +160,11 @@
               Сдвинуть дедлайн
             </common-button>
             <common-button
-              :to="['admin', 'teacher'].includes(Core.Context.User?.role!) ? '/works' : '/assigned-works'"
+              :to="
+                Core.Context.roleIs(['teacher', 'admin'])
+                  ? '/works'
+                  : '/assigned-works'
+              "
               alignment="stretch"
               design="inline"
               class="work-view__sidebar__back-button"

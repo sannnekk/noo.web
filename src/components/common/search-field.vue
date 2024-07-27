@@ -20,6 +20,7 @@
       class="search-field__input"
       type="text"
       v-model="model"
+      :autocomplete="false"
     />
     <inline-icon
       v-show="model && model.length"
@@ -34,19 +35,19 @@
 import { computed, ref } from 'vue'
 
 interface Props {
-  modelValue: string
+  modelValue?: string
   isLoading?: boolean
 }
 
 interface Emits {
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:modelValue', value?: string): void
 }
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 const model = computed({
-  get: () => props.modelValue,
+  get: () => props.modelValue || '',
   set: (value) => emits('update:modelValue', value)
 })
 

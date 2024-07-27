@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ColType } from '@/components/structures/entity-table.vue'
+import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 import { useCourseStudentsStore } from '../stores/course-students'
 import type { User } from '@/core/data/entities/User'
 import { reactive, ref } from 'vue'
@@ -41,11 +41,11 @@ const courseStudentsStore = useCourseStudentsStore()
 const nowAddingList = ref<User['id'][]>([])
 const nowRemovingList = ref<User['id'][]>([])
 
-const cols: ColType[] = reactive([
+const cols = reactive<ColType[]>([
   {
     title: '',
-    keys: ['telegramAvatarUrl', 'name'],
-    type: 'avatar'
+    type: 'avatar',
+    value: (user: User) => user
   },
   {
     title: 'Имя',
@@ -66,13 +66,13 @@ const cols: ColType[] = reactive([
   },
   {
     title: 'Никнейм',
-    keys: ['username'],
-    type: 'text'
+    type: 'text',
+    value: (user: User) => user.username
   },
   {
     title: 'E-mail',
-    keys: ['email'],
-    type: 'text'
+    type: 'text',
+    value: (user: User) => user.email
   },
   {
     title: '',
@@ -81,7 +81,7 @@ const cols: ColType[] = reactive([
     value: (user: User) => {
       return userInCourse(user.id) ? 'Добавлен' : 'Не на курсе'
     },
-    type: 'link',
+    type: 'button',
     design: (user: User) => {
       return userInCourse(user.id) ? 'primary' : 'secondary'
     },

@@ -7,6 +7,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 import type { Poll } from '@/core/data/entities/Poll'
 import type { User } from '@/core/data/entities/User'
 
@@ -18,38 +19,38 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const cols = [
+const cols: ColType[] = [
   {
     title: '',
-    keys: ['telegramAvatarUrl', 'name'],
-    type: 'avatar'
+    type: 'avatar',
+    value: (user: User) => user
   },
   {
     title: 'Имя',
-    keys: ['name'],
-    type: 'text'
+    type: 'text',
+    value: (user: User) => user.name
   },
   {
     title: 'Никнейм',
-    keys: ['username'],
-    type: 'text'
+    type: 'text',
+    value: (user: User) => user.username
   },
   {
     title: 'E-mail',
-    keys: ['email'],
-    type: 'text'
+    type: 'text',
+    value: (user: User) => user.email
   },
   {
     title: 'Telegram',
-    keys: ['telegramUsername'],
-    type: 'link',
+    type: 'button',
     design: 'telegram',
+    value: (user: User) => user.telegramUsername,
     linkTo: (user: User) => `https://t.me/${user.telegramUsername}`
   },
   {
     title: '',
-    value: 'Посмотреть',
-    type: 'link',
+    value: () => 'Посмотреть',
+    type: 'button',
     design: 'secondary',
     linkTo: (user: User) => `/poll/${props.pollId}/results/${user.username}`
   }

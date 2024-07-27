@@ -5,11 +5,7 @@
   >
     <span
       class="poll-question__edit-button"
-      v-if="
-        readonly &&
-        (Core.Context.User?.role === 'teacher' ||
-          Core.Context.User?.role === 'admin')
-      "
+      v-if="readonly && Core.Context.roleIs(['admin', 'teacher'])"
       @click="$emit('edit')"
     >
       Редактировать

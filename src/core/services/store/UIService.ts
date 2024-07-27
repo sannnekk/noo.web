@@ -38,6 +38,16 @@ export class UIService extends StoreService {
    */
   public setLoading(isLoading: boolean) {
     this._store.isLoading = isLoading
+
+    if (isLoading) {
+      this._store.loadingProgress = 0.05
+    } else {
+      this._store.loadingProgress = 0
+    }
+  }
+
+  public setLoadingProgress(progress: number) {
+    this._store.loadingProgress = progress
   }
 
   /**

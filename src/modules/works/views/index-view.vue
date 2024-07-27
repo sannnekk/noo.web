@@ -74,12 +74,12 @@ function onWorkDelete(workId: string) {
 
 <style lang="sass" scoped>
 .index-works-view
-  padding: 1rem
 
   &__header
     padding-bottom: 1rem
     display: flex
     gap: 1rem
+    padding: 1rem
 
     @media screen and (max-width: 768px)
       flex-direction: column

@@ -1,5 +1,5 @@
 import type { Context } from '@/core/context/Context'
-import { ApiService, type ApiResponse } from '@/core/services/ApiService'
+import { ApiService } from '@/core/services/ApiService'
 
 /**
  * Notification service

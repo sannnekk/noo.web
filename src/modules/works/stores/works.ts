@@ -11,7 +11,7 @@ export const useWorksStore = defineStore('works-module', () => {
   /**
    * Search
    */
-  const { pagination, results, resultsMeta, isListLoading } =
+  const { pagination, results, resultsMeta, isListLoading, trigger } =
     useSearch(fetchWorks)
 
   /**
@@ -32,22 +32,18 @@ export const useWorksStore = defineStore('works-module', () => {
    * Copy work
    */
   async function copyWork(workSlug: Work['slug']) {
-    uiService.setLoading(true)
     try {
-      await workService.copyWork(workSlug)
+      await workService.copyWork(workSlug, { showLoader: true })
 
       pagination.value.page = 1
 
       // trigger reload
-      pagination.value.search = '$$$'
-      pagination.value.search = ''
+      trigger()
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при копировании работы',
         error.message
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 
@@ -55,20 +51,16 @@ export const useWorksStore = defineStore('works-module', () => {
    * Delete work
    */
   async function deleteWork(workSlug: Work['slug']) {
-    uiService.setLoading(true)
     try {
-      await workService.deleteWork(workSlug)
+      await workService.deleteWork(workSlug, { showLoader: true })
 
       // trigger reload
-      pagination.value.search = '$$$'
-      pagination.value.search = ''
+      trigger()
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при удалении работы',
         error.message
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 

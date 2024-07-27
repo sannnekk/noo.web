@@ -1,7 +1,11 @@
 import type { Pagination } from '@/core/data/Pagination'
 import type { Context } from '@/core/context/Context'
 import type { User, UserWithOnlineStatus } from '@/core/data/entities/User'
-import { ApiService, type ApiResponse } from '@/core/services/ApiService'
+import {
+  ApiService,
+  type ApiResponse,
+  type ServiceOptions
+} from '@/core/services/ApiService'
 
 export type UserRelations = 'students' | 'mentor' | 'courses'
 
@@ -28,42 +32,63 @@ export class UserService extends ApiService {
    * get user by slug
    */
   public async getUser(
-    username: string
+    username: string,
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<UserWithOnlineStatus | null>> {
     return await this.httpGet<UserWithOnlineStatus>(
-      `${this._route}/${username}`
+      `${this._route}/${username}`,
+      undefined,
+      undefined,
+      options
     )
   }
 
   /**
    * get users
    */
-  public async getUsers(pagination?: Pagination): Promise<ApiResponse<User[]>> {
-    return await this.httpGet<User[]>(this._route, pagination)
+  public async getUsers(
+    pagination?: Pagination,
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<User[]>> {
+    return await this.httpGet<User[]>(
+      this._route,
+      pagination,
+      undefined,
+      options
+    )
   }
 
   /**
    * get users with mentor if student
    */
   public async getUsersWithMentors(
-    pagination?: Pagination
+    pagination?: Pagination,
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<User[]>> {
     const _pagination = { ...pagination }
 
     _pagination.relations = ['mentor', 'students']
 
-    return await this.httpGet<User[]>(this._route, _pagination)
+    return await this.httpGet<User[]>(
+      this._route,
+      _pagination,
+      undefined,
+      options
+    )
   }
 
   /**
    * get students
    */
   public async getStudents(
-    pagination?: Pagination
+    pagination?: Pagination,
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<User[]>> {
     return await this.httpGet<User[]>(
       `${this._route}/student/search`,
-      pagination
+      pagination,
+      undefined,
+      options
     )
   }
 
@@ -71,11 +96,14 @@ export class UserService extends ApiService {
    * get own students
    */
   public async getOwnStudents(
-    pagination?: Pagination
+    pagination?: Pagination,
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<User[]>> {
     return await this.httpGet<User[]>(
       `${this._route}/student/search/own`,
-      pagination
+      pagination,
+      undefined,
+      options
     )
   }
 
@@ -83,11 +111,14 @@ export class UserService extends ApiService {
    * get mentors
    */
   public async getMentors(
-    pagination?: Pagination
+    pagination?: Pagination,
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<User[]>> {
     return await this.httpGet<User[]>(
       `${this._route}/mentor/search`,
-      pagination
+      pagination,
+      undefined,
+      options
     )
   }
 
@@ -95,11 +126,14 @@ export class UserService extends ApiService {
    * get teachers
    */
   public async getTeachers(
-    pagination?: Pagination
+    pagination?: Pagination,
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<User[]>> {
     return await this.httpGet<User[]>(
       `${this._route}/teacher/search`,
-      pagination
+      pagination,
+      undefined,
+      options
     )
   }
 
@@ -108,10 +142,14 @@ export class UserService extends ApiService {
    */
   public async assignMentor(
     studentId: User['id'],
-    mentorId: User['id']
+    mentorId: User['id'],
+    options: ServiceOptions = {}
   ): Promise<void> {
     await this.httpPatch(
-      `${this._route}/${studentId}/assign-mentor/${mentorId}`
+      `${this._route}/${studentId}/assign-mentor/${mentorId}`,
+      undefined,
+      undefined,
+      options
     )
   }
 
@@ -120,9 +158,10 @@ export class UserService extends ApiService {
    */
   public async updateUser(
     userId: User['id'],
-    user: Partial<User> & { id: User['id'] }
+    user: Partial<User> & { id: User['id'] },
+    options: ServiceOptions = {}
   ): Promise<void> {
-    await this.httpPatch(`${this._route}/${userId}`, user)
+    await this.httpPatch(`${this._route}/${userId}`, user, undefined, options)
   }
 
   /**
@@ -130,25 +169,43 @@ export class UserService extends ApiService {
    */
   public async updateTelegram(
     userId: User['id'],
-    telegram: TelegramUpdatePayload
+    telegram: TelegramUpdatePayload,
+    options: ServiceOptions = {}
   ): Promise<void> {
-    await this.httpPatch(`${this._route}/${userId}/telegram`, telegram)
+    await this.httpPatch(
+      `${this._route}/${userId}/telegram`,
+      telegram,
+      undefined,
+      options
+    )
   }
 
+  /**
+   * Request change email
+   */
   public async requestChangeEmail(
     userId: User['id'],
-    newEmail: string
+    newEmail: string,
+    options: ServiceOptions = {}
   ): Promise<void> {
-    await this.httpPatch(`${this._route}/${userId}/email`, {
-      email: newEmail
-    })
+    await this.httpPatch(
+      `${this._route}/${userId}/email`,
+      {
+        email: newEmail
+      },
+      undefined,
+      options
+    )
   }
 
   /**
    * delete user
    */
-  public async deleteUser(id: User['id']): Promise<void> {
-    await this.httpDelete(`${this._route}/${id}`)
+  public async deleteUser(
+    id: User['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpDelete(`${this._route}/${id}`, undefined, options)
   }
 
   /**
@@ -163,8 +220,16 @@ export class UserService extends ApiService {
   /**
    * confirm user
    */
-  public async confirmUser(username: string): Promise<void> {
-    await this.httpPatch(`${this._route}/${username}/verify-manual`)
+  public async confirmUser(
+    username: string,
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpPatch(
+      `${this._route}/${username}/verify-manual`,
+      undefined,
+      undefined,
+      options
+    )
   }
 
   /**

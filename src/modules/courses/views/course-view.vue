@@ -14,7 +14,7 @@
           </router-link>
           <router-link
             class="index-materials-view__tree__students"
-            v-if="Core.Context.User?.role === 'teacher'"
+            v-if="Core.Context.roleIs(['teacher'])"
             :to="`/course-students/${courseStore.course.slug}`"
           >
             Ученики курса ({{ courseStore.course.studentIds?.length || 0 }})
@@ -49,7 +49,6 @@
       </template>
     </the-sidebar-layout>
   </div>
-  <assign-student-modal />
 </template>
 
 <script lang="ts" setup>

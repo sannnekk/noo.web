@@ -131,6 +131,8 @@ onUnmounted(() => unregister())
 
     &__chapters
       margin: 1em 0 2em 0
+      max-height: 90vh
+      overflow-y: auto
 
     &__buttons
       margin-top: 1em

@@ -6,10 +6,7 @@
       </div>
       <div class="index-view__search__add-post">
         <common-button
-          v-if="
-            Core.Context.User?.role === 'admin' ||
-            Core.Context.User?.role === 'teacher'
-          "
+          v-if="Core.Context.roleIs(['teacher', 'admin'])"
           design="primary"
           to="/blog/post/create"
         >

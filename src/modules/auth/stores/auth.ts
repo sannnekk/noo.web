@@ -155,18 +155,16 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
       return
     }
 
-    Core.Services.UI.setLoading(true)
-
     try {
-      await Core.Services.Auth.forgotPassword(forgotPasswordCredentials.email)
+      await Core.Services.Auth.forgotPassword(forgotPasswordCredentials.email, {
+        showLoader: true
+      })
       Core.Services.UI.openSuccessModal(
         'Письмо с инструкциями отправлено на вашу почту'
       )
       mode.value = 'login'
     } catch (error: any) {
       Core.Services.UI.openErrorModal(error.message || 'Что-то пошло не так')
-    } finally {
-      Core.Services.UI.setLoading(false)
     }
   }
 
@@ -179,16 +177,16 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
       !route.query.username ||
       route.query.verify === undefined
     ) {
-      console.log('return')
       return
     }
-
-    Core.Services.UI.setLoading(true)
 
     try {
       await Core.Services.Auth.verify(
         route.query.username as string,
-        route.query.token as string
+        route.query.token as string,
+        {
+          showLoader: true
+        }
       )
       Core.Services.UI.openSuccessModal(
         'Аккаунт подтвержден',
@@ -199,8 +197,6 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
         'Не удалось подтвердить аккаунт',
         error.message
       )
-    } finally {
-      Core.Services.UI.setLoading(false)
     }
   }
 
@@ -216,12 +212,13 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
       return
     }
 
-    Core.Services.UI.setLoading(true)
-
     try {
       await Core.Services.Auth.verifyEmailChange(
         route.query.username as string,
-        route.query.token as string
+        route.query.token as string,
+        {
+          showLoader: true
+        }
       )
       Core.Services.UI.openSuccessModal(
         'Email успешно изменен',
@@ -232,8 +229,6 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
         'Не удалось изменить email',
         error.message
       )
-    } finally {
-      Core.Services.UI.setLoading(false)
     }
   }
 
@@ -246,11 +241,12 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
       return
     }
 
-    Core.Services.UI.setLoading(true)
-
     try {
       await Core.Services.Auth.resendVerification(
-        resendVerificationCredentials.email
+        resendVerificationCredentials.email,
+        {
+          showLoader: true
+        }
       )
       Core.Services.UI.openSuccessModal(
         'Письмо с инструкциями повторно отправлено на вашу почту'
@@ -258,8 +254,6 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
       mode.value = 'login'
     } catch (error: any) {
       Core.Services.UI.openErrorModal(error.message || 'Что-то пошло не так')
-    } finally {
-      Core.Services.UI.setLoading(false)
     }
   }
 

@@ -19,10 +19,9 @@ export const usePostStore = defineStore('blog-module:post', () => {
    */
   async function fetchPost() {
     const id = route.params.id as string
-    uiService.setLoading(true)
 
     try {
-      const response = await blogService.getPost(id)
+      const response = await blogService.getPost(id, { showLoader: true })
 
       if (!response.data) {
         throw new Error('Пост не найден')
@@ -31,8 +30,6 @@ export const usePostStore = defineStore('blog-module:post', () => {
       post.value = response.data
     } catch (error: any) {
       uiService.openErrorModal('Ошибка при загрузке поста', error.message)
-    } finally {
-      uiService.setLoading(false)
     }
   }
 

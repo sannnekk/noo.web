@@ -33,10 +33,8 @@ export const useCreateBlogpostStore = defineStore(
      * Fetch blogpost by id
      */
     async function fetchBlogpost(id: string) {
-      uiService.setLoading(true)
-
       try {
-        const response = await blogService.getPost(id)
+        const response = await blogService.getPost(id, { showLoader: true })
 
         if (!response.data) {
           throw new Error('Пост не найден')
@@ -45,8 +43,6 @@ export const useCreateBlogpostStore = defineStore(
         blogpost.value = response.data
       } catch (error: any) {
         uiService.openErrorModal('Ошибка при загрузке поста', error.message)
-      } finally {
-        uiService.setLoading(false)
       }
     }
 
@@ -99,8 +95,6 @@ export const useCreateBlogpostStore = defineStore(
      * Save blogpost
      */
     async function saveBlogpost() {
-      uiService.setLoading(true)
-
       try {
         if (mode.value === 'create') {
           blogpost.value.id = undefined as unknown as string
@@ -115,9 +109,11 @@ export const useCreateBlogpostStore = defineStore(
             payload.poll.questions = sortQuestions(payload.poll.questions)
           }
 
-          await blogService.createPost(payload)
+          await blogService.createPost(payload, { showLoader: true })
         } else {
-          await blogService.updatePost(blogpost.value.id, blogpost.value)
+          await blogService.updatePost(blogpost.value.id, blogpost.value, {
+            showLoader: true
+          })
         }
 
         uiService.openSuccessModal(
@@ -133,8 +129,6 @@ export const useCreateBlogpostStore = defineStore(
         )
       } catch (error: any) {
         uiService.openErrorModal('Ошибка при сохранении поста', error.message)
-      } finally {
-        uiService.setLoading(false)
       }
     }
 

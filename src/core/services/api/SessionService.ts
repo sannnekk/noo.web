@@ -1,5 +1,9 @@
 import type { Context } from '@/core/context/Context'
-import { ApiService, type ApiResponse } from '@/core/services/ApiService'
+import {
+  ApiService,
+  type ApiResponse,
+  type ServiceOptions
+} from '@/core/services/ApiService'
 import type { Session } from '@/core/data/entities/Session'
 
 /**
@@ -18,21 +22,28 @@ export class SessionService extends ApiService {
   /**
    * Get sessions
    */
-  public async getSessions(): Promise<ApiResponse<Session[]>> {
-    return await this.httpGet(this._route)
+  public async getSessions(
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<Session[]>> {
+    return await this.httpGet(this._route, undefined, undefined, options)
   }
 
   /**
    * Delete session
    */
-  public async deleteSession(id: Session['id']): Promise<void> {
-    await this.httpDelete(`${this._route}/${id}`)
+  public async deleteSession(
+    id: Session['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpDelete(`${this._route}/${id}`, undefined, options)
   }
 
   /**
    * Delete current session
    */
-  public async deleteCurrentSession(): Promise<void> {
-    await this.httpDelete(`${this._route}`)
+  public async deleteCurrentSession(
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpDelete(`${this._route}`, undefined, options)
   }
 }

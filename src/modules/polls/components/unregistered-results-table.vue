@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ColType } from '@/components/structures/entity-table.vue'
+import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 
 interface Props {
   results: any[]
@@ -20,30 +20,33 @@ const props = defineProps<Props>()
 const cols: ColType[] = [
   {
     title: '',
-    keys: ['avatarUrl', 'name'],
-    type: 'avatar'
+    type: 'avatar',
+    value: (user: any) => ({
+      avatarUrl: user.avatarUrl,
+      name: user.firstName + ' ' + user.lastName
+    })
   },
   {
     title: 'Имя',
-    keys: ['firstName', 'lastName'],
-    type: 'text'
+    type: 'text',
+    joinType: ',',
+    value: (user: any) => [user.firstName, user.lastName]
   },
   {
     title: 'Telegram',
-    keys: ['username'],
-    type: 'link',
+    type: 'button',
     design: 'telegram',
+    alignment: 'center',
+    value: (user: any) => user.username,
     linkTo: ({ username }: { username: string }) => `https://t.me/${username}`
   },
   {
     title: '',
-    value: 'Посмотреть',
-    type: 'link',
+    value: () => 'Посмотреть',
+    type: 'button',
     design: 'secondary',
     linkTo: ({ identifier }: { identifier: string }) =>
       `/poll/${props.pollId}/results/${identifier}?unregistered`
   }
 ]
 </script>
-
-<style scoped lang="sass"></style>

@@ -2,6 +2,7 @@
   <div class="index-students-view">
     <div class="index-students-view__search">
       <search-field
+        v-if="typeof usersStore.pagination.search !== 'undefined'"
         v-model="usersStore.pagination.search"
         :is-loading="usersStore.isListLoading"
       />
@@ -42,7 +43,7 @@ import AssignMentorModal from '../components/assign-mentor-modal.vue'
 import type { User } from '@/core/data/entities/User'
 import { useUsersStore } from '../stores/users'
 import { setPageTitle } from '@/core/utils/setPageTitle'
-import type { ColType } from '@/components/structures/entity-table.vue'
+import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 import type { MenuItem } from '@/components/widgets/more-widget.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
@@ -61,8 +62,8 @@ setPageTitle('Пользователи')
 const cols: ColType[] = [
   {
     title: '',
-    keys: ['telegramAvatarUrl', 'name', 'isOnline'],
-    type: 'avatar'
+    type: 'avatar',
+    value: (user: User) => user
   },
   {
     title: 'Имя',
@@ -83,31 +84,30 @@ const cols: ColType[] = [
   },
   {
     title: 'Роль',
-    keys: ['role'],
-    type: 'tag',
-    tagFunction: (key: string, value: string | number | Date | boolean) => {
-      switch (value) {
+    type: 'text',
+    value: (user: User) => {
+      switch (user.role) {
         case 'admin':
-          return { text: 'Администратор', type: 'danger' }
+          return "<span style='color: var(--danger)'>Администратор</span>"
         case 'teacher':
-          return { text: 'Преподаватель', type: 'success' }
+          return "<span style='color: var(--success)'>Преподаватель</span>"
         case 'mentor':
-          return { text: 'Куратор', type: 'info' }
+          return "<span style='color: var(--warning)'>Куратор</span>"
         case 'student':
         default:
-          return { text: 'Ученик', type: 'info' }
+          return "<span style='color: var(--text-light)'>Ученик</span>"
       }
     }
   },
   {
     title: 'Никнейм',
-    keys: ['username'],
-    type: 'text'
+    type: 'text',
+    value: (user: User) => user.username
   },
   {
     title: 'E-mail',
-    keys: ['email'],
-    type: 'text'
+    type: 'text',
+    value: (user: User) => user.email
   }
 ]
 

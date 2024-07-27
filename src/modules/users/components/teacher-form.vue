@@ -9,31 +9,30 @@
 </template>
 
 <script setup lang="ts">
+import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 import type { Course } from '@/core/data/entities/Course'
 
 interface Props {
-  courses: Partial<Course>[] | undefined
+  courses: Course[] | undefined
 }
 
 defineProps<Props>()
 
-const columns = [
+const columns: ColType[] = [
   {
     title: '#',
     type: 'iterator'
   },
   {
     title: 'Название',
-    keys: ['name'],
-    type: 'text'
+    type: 'text',
+    value: (course: Course) => course.name,
+    linkTo: (course: Course) => `/courses/${course.slug}`
   },
   {
     title: 'Участники',
-    keys: ['students'],
     type: 'text',
     value: (course: Course) => (course.students || []).length
   }
 ]
 </script>
-
-<style scoped lang="sass"></style>

@@ -36,7 +36,7 @@ interface Props {
   label: string
   type: string
   placeholder?: string
-  modelValue: string | number | Date
+  modelValue?: string | number | Date
   readonly?: boolean
   min?: number
   max?: number
@@ -55,6 +55,10 @@ const errors = ref<string[]>([])
 
 const model = computed({
   get: () => {
+    if (typeof props.modelValue === 'undefined') {
+      return ''
+    }
+
     if (props.type && props.type === 'date') {
       return new Date(props.modelValue).toISOString().slice(0, 10)
     } else if (props.type && props.type === 'datetime-local') {

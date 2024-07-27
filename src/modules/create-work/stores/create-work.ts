@@ -82,11 +82,10 @@ export const useCreateWorkStore = defineStore(
         return
       }
 
-      uiService.setLoading(true)
-
       try {
         const response = await workService.getWork(
-          _route.params.workSlug as string
+          _route.params.workSlug as string,
+          { showLoader: true }
         )
 
         if (!response.data) {
@@ -98,8 +97,6 @@ export const useCreateWorkStore = defineStore(
       } catch (error: any) {
         work.value = emptyWork()
         uiService.openErrorModal('Произошла ошибка при загрузке работы')
-      } finally {
-        uiService.setLoading(false)
       }
     }
 
@@ -233,8 +230,6 @@ export const useCreateWorkStore = defineStore(
         return
       }
 
-      uiService.setLoading(true)
-
       // add order to tasks
       payload.tasks = payload.tasks.map((task, index) => {
         return {
@@ -245,27 +240,25 @@ export const useCreateWorkStore = defineStore(
 
       if (_route.params.workSlug && _route.params.workSlug.length) {
         try {
-          await workService.updateWork(work.value.id, payload as Work)
+          await workService.updateWork(work.value.id, payload as Work, {
+            showLoader: true
+          })
           _router.push('/create-work/success')
         } catch (error: any) {
           uiService.openErrorModal(
             'Произошла ошибка при обновлении работы',
             error.message
           )
-        } finally {
-          uiService.setLoading(false)
         }
       } else {
         try {
-          await workService.createWork(payload as Work)
+          await workService.createWork(payload as Work, { showLoader: true })
           _router.push('/create-work/success')
         } catch (error: any) {
           uiService.openErrorModal(
             'Произошла ошибка при создании работы',
             error.message
           )
-        } finally {
-          uiService.setLoading(false)
         }
       }
     }

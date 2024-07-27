@@ -8,7 +8,7 @@
             label="Роль"
             :options="roles"
             :readonly="
-              model.role !== 'student' || Core.Context.User?.role === 'mentor'
+              model.role !== 'student' || Core.Context.roleIs(['mentor'])
             "
           />
         </div>
@@ -26,7 +26,7 @@
       <div class="col-md-4">
         <div
           class="form-group is-blocked"
-          v-if="['admin', 'teacher'].includes(Core.Context.User?.role!)"
+          v-if="Core.Context.roleIs(['admin', 'teacher'])"
         >
           <form-checkbox
             :readonly="model.id === Core.Context.User?.id"
@@ -70,7 +70,7 @@ import type { User } from '@/core/data/entities/User'
 import { Core } from '@/core/Core'
 
 interface Props {
-  modelValue: Partial<User>
+  modelValue: User
 }
 
 interface Emits {

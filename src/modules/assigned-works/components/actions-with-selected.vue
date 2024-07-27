@@ -5,9 +5,7 @@
   >
     <div
       class="actions-with-selected__inner"
-      v-if="
-        selectedAssignedWorks.length && Core.Context.User?.role === 'mentor'
-      "
+      v-if="selectedAssignedWorks.length && Core.Context.roleIs(['mentor'])"
     >
       <p class="actions-with-selected__label">
         Выбрано: {{ selectedAssignedWorks.length }}

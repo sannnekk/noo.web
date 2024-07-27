@@ -60,8 +60,6 @@ export const useUserResultStore = defineStore(
      * Load user poll answers
      */
     async function fetchAnswers() {
-      uiService.setLoading(true)
-
       try {
         if (typeof route.query['unregistered'] !== 'undefined') {
           await fetchUnregisteredUser()
@@ -82,8 +80,6 @@ export const useUserResultStore = defineStore(
           'Не удалось загрузить ответы пользователя',
           error.message
         )
-      } finally {
-        uiService.setLoading(false)
       }
     }
 
@@ -91,18 +87,16 @@ export const useUserResultStore = defineStore(
      * Load user
      */
     async function fetchUser() {
-      uiService.setLoading(true)
-
       try {
-        const response = await userService.getUser(username.value)
+        const response = await userService.getUser(username.value, {
+          showLoader: true
+        })
         user.value = response.data!
       } catch (error: any) {
         uiService.openErrorModal(
           'Не удалось загрузить пользователя',
           error.message
         )
-      } finally {
-        uiService.setLoading(false)
       }
     }
 
@@ -110,33 +104,21 @@ export const useUserResultStore = defineStore(
      * Load unregistered user
      */
     async function fetchUnregisteredUser() {
-      uiService.setLoading(true)
-
-      try {
-        telegramUsername.value = username.value
-      } catch (error: any) {
-        uiService.openErrorModal(
-          'Не удалось загрузить пользователя',
-          error.message
-        )
-      } finally {
-        uiService.setLoading(false)
-      }
+      // just take the user from answers
+      telegramUsername.value = username.value
     }
 
     /**
      * Load poll
      */
     async function fetchPoll() {
-      uiService.setLoading(true)
-
       try {
-        const response = await pollService.getPoll(pollId.value)
+        const response = await pollService.getPoll(pollId.value, {
+          showLoader: true
+        })
         poll.value = response.data!
       } catch (error: any) {
         uiService.openErrorModal('Не удалось загрузить опрос', error.message)
-      } finally {
-        uiService.setLoading(false)
       }
     }
 
@@ -144,20 +126,20 @@ export const useUserResultStore = defineStore(
      * Submit edited answer
      */
     async function submitAnswer() {
-      uiService.setLoading(true)
-
       if (!answerToEdit.value) {
         uiService.openErrorModal('Ответ не выбран')
         return
       }
 
       try {
-        await pollService.editAnswer(answerToEdit.value.id, answerToEdit.value)
+        await pollService.editAnswer(
+          answerToEdit.value.id,
+          answerToEdit.value,
+          { showLoader: true }
+        )
         uiService.openSuccessModal('Ответы сохранены')
       } catch (error: any) {
         uiService.openErrorModal('Не удалось сохранить ответы', error.message)
-      } finally {
-        uiService.setLoading(false)
       }
     }
 

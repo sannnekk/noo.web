@@ -1,10 +1,14 @@
 import type { Pagination } from './../../data/Pagination'
 import type { Context } from '@/core/context/Context'
-import type { BlogPost, Reaction } from '@/core/data/entities/BlogPost'
+import type { BlogPost } from '@/core/data/entities/BlogPost'
 import type { Poll } from '@/core/data/entities/Poll'
 import type { PollAnswer } from '@/core/data/entities/PollAnswer'
 import type { User } from '@/core/data/entities/User'
-import { ApiService, type ApiResponse } from '@/core/services/ApiService'
+import {
+  ApiService,
+  type ApiResponse,
+  type ServiceOptions
+} from '@/core/services/ApiService'
 
 /**
  * Poll service
@@ -22,15 +26,31 @@ export class PollService extends ApiService {
   /**
    * Get poll
    */
-  public async getPoll(id: BlogPost['id']): Promise<ApiResponse<Poll | null>> {
-    return await this.httpGet(`${this._route}/${id}`)
+  public async getPoll(
+    id: BlogPost['id'],
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<Poll | null>> {
+    return await this.httpGet(
+      `${this._route}/${id}`,
+      undefined,
+      undefined,
+      options
+    )
   }
 
   /**
    * Get poll info
    */
-  public async getPollInfo(id: Poll['id']): Promise<ApiResponse<Poll | null>> {
-    return await this.httpGet(`${this._route}/${id}/info`)
+  public async getPollInfo(
+    id: Poll['id'],
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<Poll | null>> {
+    return await this.httpGet(
+      `${this._route}/${id}/info`,
+      undefined,
+      undefined,
+      options
+    )
   }
 
   /**
@@ -38,9 +58,15 @@ export class PollService extends ApiService {
    */
   public async saveAnswers(
     pollId: Poll['id'],
-    answers: PollAnswer[]
+    answers: PollAnswer[],
+    options: ServiceOptions = {}
   ): Promise<void> {
-    await this.httpPost(`${this._route}/${pollId}/answer`, answers)
+    await this.httpPost(
+      `${this._route}/${pollId}/answer`,
+      answers,
+      undefined,
+      options
+    )
   }
 
   /**
@@ -48,9 +74,15 @@ export class PollService extends ApiService {
    */
   public async searchWhoVoted(
     pollId: Poll['id'],
-    pagination?: Pagination
+    pagination?: Pagination,
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<PollAnswer[]>> {
-    return await this.httpGet(`${this._route}/${pollId}/user`, pagination)
+    return await this.httpGet(
+      `${this._route}/${pollId}/user`,
+      pagination,
+      undefined,
+      options
+    )
   }
 
   /**
@@ -58,11 +90,14 @@ export class PollService extends ApiService {
    */
   public async searchWhoVotedUnregistered(
     pollId: Poll['id'],
-    pagination?: Pagination
+    pagination?: Pagination,
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<PollAnswer[]>> {
     return await this.httpGet(
       `${this._route}/${pollId}/unregistered`,
-      pagination
+      pagination,
+      undefined,
+      options
     )
   }
 
@@ -71,9 +106,15 @@ export class PollService extends ApiService {
    */
   public async getAnswers(
     pollId: Poll['id'],
-    userId: User['id']
+    userId: User['id'],
+    options: ServiceOptions = {}
   ): Promise<ApiResponse<PollAnswer[]>> {
-    return await this.httpGet(`${this._route}/${pollId}/user/${userId}/answer`)
+    return await this.httpGet(
+      `${this._route}/${pollId}/user/${userId}/answer`,
+      undefined,
+      undefined,
+      options
+    )
   }
 
   /*
@@ -81,8 +122,14 @@ export class PollService extends ApiService {
    */
   public async editAnswer(
     answerId: PollAnswer['id'],
-    answer: PollAnswer
+    answer: PollAnswer,
+    options: ServiceOptions = {}
   ): Promise<void> {
-    await this.httpPatch(`${this._route}/answer/${answerId}`, answer)
+    await this.httpPatch(
+      `${this._route}/answer/${answerId}`,
+      answer,
+      undefined,
+      options
+    )
   }
 }

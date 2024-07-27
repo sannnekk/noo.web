@@ -8,6 +8,7 @@
       :class="{ error }"
       v-model="model"
       @keypress.enter="$emit('enter-press')"
+      :autocomplete="autocomplete ? 'on' : 'off'"
     />
   </div>
 </template>
@@ -20,6 +21,7 @@ interface Props {
   error?: boolean
   placeholder: string
   modelValue: string
+  autocomplete?: boolean
 }
 
 interface Emits {

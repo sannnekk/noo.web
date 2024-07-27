@@ -2,8 +2,14 @@ import type { FilterType, Pagination } from '../data/Pagination'
 import { Constants } from '../constants'
 import { Service } from './Service'
 import type { Media } from '../data/entities/Media'
+import { UIService } from './store/UIService'
+import { Context } from '../context/Context'
 
 type ApiRoute = `/${string}`
+
+export interface ServiceOptions {
+  showLoader?: boolean
+}
 
 export interface ApiResponse<T> {
   data: T
@@ -20,16 +26,30 @@ export interface ResponseMeta {
  * Api service
  */
 export class ApiService extends Service {
+  private readonly uiService: UIService
+
+  constructor(context: Context) {
+    super(context)
+    this.uiService = new UIService(context)
+  }
+
   /**
    * Api get request
    */
   protected httpGet<T>(
     route: ApiRoute,
     params = {} as Pagination,
-    additionalHeaders = {} as { [key: string]: string }
+    additionalHeaders = {} as { [key: string]: string },
+    options: ServiceOptions = {}
   ) {
     const url: ApiRoute = `${route}?${this._getParams(params)}`
-    return this._httpRequest<T>('GET', url, undefined, additionalHeaders)
+    return this._httpRequest<T>(
+      'GET',
+      url,
+      undefined,
+      additionalHeaders,
+      options
+    )
   }
 
   /**
@@ -38,9 +58,10 @@ export class ApiService extends Service {
   protected httpPost<T>(
     route: ApiRoute,
     body = {} as { [key: string]: any },
-    additionalHeaders = {} as { [key: string]: string }
+    additionalHeaders = {} as { [key: string]: string },
+    options: ServiceOptions = {}
   ) {
-    return this._httpRequest<T>('POST', route, body, additionalHeaders)
+    return this._httpRequest<T>('POST', route, body, additionalHeaders, options)
   }
 
   /**
@@ -49,9 +70,16 @@ export class ApiService extends Service {
   protected httpPatch<T>(
     route: ApiRoute,
     body = {} as { [key: string]: any },
-    additionalHeaders = {} as { [key: string]: string }
+    additionalHeaders = {} as { [key: string]: string },
+    options: ServiceOptions = {}
   ) {
-    return this._httpRequest<T>('PATCH', route, body, additionalHeaders)
+    return this._httpRequest<T>(
+      'PATCH',
+      route,
+      body,
+      additionalHeaders,
+      options
+    )
   }
 
   /**
@@ -59,9 +87,16 @@ export class ApiService extends Service {
    */
   protected httpDelete(
     route: ApiRoute,
-    additionalHeaders = {} as { [key: string]: string }
+    additionalHeaders = {} as { [key: string]: string },
+    options: ServiceOptions = {}
   ) {
-    return this._httpRequest('DELETE', route, undefined, additionalHeaders)
+    return this._httpRequest(
+      'DELETE',
+      route,
+      undefined,
+      additionalHeaders,
+      options
+    )
   }
 
   /**
@@ -142,7 +177,8 @@ export class ApiService extends Service {
     method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
     route: ApiRoute,
     body?: any,
-    additionalHeaders = {} as { [key: string]: string }
+    additionalHeaders = {} as { [key: string]: string },
+    serviceOptions: ServiceOptions = {}
   ): Promise<
     T extends void
       ? void
@@ -159,21 +195,15 @@ export class ApiService extends Service {
       body: this._getBody(body)
     }
 
+    this.onProgress(0)
+
+    if (serviceOptions.showLoader) {
+      this.uiService.setLoading(true)
+      this.onProgress(5)
+    }
+
     try {
-      const response = await fetch(url, options)
-
-      const result = await response.text()
-
-      if (!response.ok)
-        throw { status: response.status, message: JSON.parse(result).error }
-
-      if (!result) return undefined as T extends void ? void : ApiResponse<T>
-
-      return JSON.parse(result, (_, value) =>
-        /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)
-          ? new Date(value)
-          : value
-      )
+      return (await this.xhrRequest(url, options)) as any
     } catch (error: any) {
       if (error.status === 401) {
         if (this._context.isInitialized()) {
@@ -184,7 +214,78 @@ export class ApiService extends Service {
       }
 
       throw error
+    } finally {
+      if (serviceOptions.showLoader) {
+        this.uiService.setLoading(false)
+      }
     }
+  }
+
+  private async xhrRequest(url: string, options: RequestInit) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest()
+
+      xhr.open(options.method || 'GET', url)
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          this.onProgress(100)
+
+          try {
+            resolve(JSON.parse(xhr.responseText, this.dateParser))
+          } catch (error) {
+            reject({
+              status: xhr.status,
+              message: 'Неизвестная ошибка'
+            })
+          }
+        } else {
+          try {
+            reject({
+              status: xhr.status,
+              message:
+                JSON.parse(xhr.responseText, this.dateParser)?.error ||
+                'Неизвестная ошибка'
+            })
+          } catch (error) {
+            reject({
+              status: xhr.status,
+              message: 'Неизвестная ошибка'
+            })
+          }
+        }
+      }
+
+      xhr.onerror = () => {
+        reject({
+          status: 400,
+          message: 'Неизвестная ошибка'
+        })
+      }
+
+      if (options.method === 'GET') {
+        xhr.onprogress = (event) => {
+          if (event.lengthComputable) {
+            this.onProgress(Math.round((event.loaded / event.total) * 100))
+          }
+        }
+      } else {
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            this.onProgress(Math.round((event.loaded / event.total) * 100))
+          }
+        }
+      }
+
+      for (const key in options.headers) {
+        xhr.setRequestHeader(
+          key,
+          options.headers[key as keyof typeof options.headers] as string
+        )
+      }
+
+      xhr.send(options.body as any)
+    })
   }
 
   /**
@@ -303,5 +404,21 @@ export class ApiService extends Service {
     }
 
     return JSON.stringify(body)
+  }
+
+  /**
+   * Date parser
+   */
+  private dateParser(key: string, value: any) {
+    return /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)
+      ? new Date(value)
+      : value
+  }
+
+  /**
+   * On progress
+   */
+  private onProgress(progress: number) {
+    this.uiService.setLoadingProgress(progress)
   }
 }

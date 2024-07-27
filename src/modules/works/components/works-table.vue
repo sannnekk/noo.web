@@ -2,7 +2,7 @@
   <div class="works-table">
     <entity-table
       :cols="cols"
-      :data="works as any"
+      :data="works"
       :is-loading="loading"
       :actions="actions"
     />
@@ -10,13 +10,13 @@
 </template>
 
 <script setup lang="ts">
-import type { ColType } from '@/components/structures/entity-table.vue'
+import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 import type { MenuItem } from '@/components/widgets/more-widget.vue'
 import type { Work } from '@/core/data/entities/Work'
 import { useRouter } from 'vue-router'
 
 interface Props {
-  works: Partial<Work>[]
+  works: Work[]
   loading?: boolean
 }
 
@@ -33,35 +33,35 @@ const router = useRouter()
 const cols: ColType[] = [
   {
     title: 'Название работы',
-    keys: ['name'],
-    type: 'text'
+    type: 'text',
+    value: (work: Work) => work.name
   },
   {
     title: 'Тип',
-    keys: ['type'],
-    type: 'tag',
-    tagFunction
+    type: 'text',
+    value: (work: Work) => {
+      switch (work.type) {
+        case 'trial-work':
+          return '<span style="color: var(--danger)">Пробник</span>'
+        case 'phrase':
+          return '<span style="color: var(--success)">Фраза</span>'
+        case 'mini-test':
+          return '<span style="color: var(--info)">Мини-тест</span>'
+        case 'test':
+          return '<span style="color: var(--warning)">Тест</span>'
+        case 'second-part':
+          return '<span style="color: var(--text-light)">Вторая часть</span>'
+        default:
+          return '-'
+      }
+    }
+  },
+  {
+    title: 'Дата создания/изменения',
+    type: 'date',
+    joinType: '/',
+    value: (work: Work) => [work.createdAt, work.updatedAt]
   }
-  /* {
-    title: '',
-    value: 'Копировать',
-    type: 'link',
-    design: 'secondary',
-    action: (work: Work) => emits('copy-work', work.slug)
-  },
-  {
-    title: '',
-    value: 'Посмотреть / Редактировать',
-    type: 'link',
-    linkTo: (work: Work) => `/create-work${work.slug}`
-  },
-  {
-    title: '',
-    value: 'Удалить',
-    type: 'link',
-    design: 'danger',
-    action: (work: Work) => emits('delete-work', work.id)
-  } */
 ]
 
 function actions(row: Work): MenuItem[] {
@@ -88,46 +88,5 @@ function actions(row: Work): MenuItem[] {
       }
     }
   ]
-}
-
-function tagFunction(
-  _: string,
-  value: string | number | Date
-): {
-  text: string
-  type: 'danger' | 'success' | 'warning' | 'info' | 'primary'
-} {
-  switch (value) {
-    case 'trial-work':
-      return {
-        text: 'Пробник',
-        type: 'danger'
-      }
-    case 'phrase':
-      return {
-        text: 'Фраза',
-        type: 'success'
-      }
-    case 'mini-test':
-      return {
-        text: 'Мини-тест',
-        type: 'primary'
-      }
-    case 'test':
-      return {
-        text: 'Тест',
-        type: 'warning'
-      }
-    case 'second-part':
-      return {
-        text: 'Вторая часть',
-        type: 'info'
-      }
-    default:
-      return {
-        text: '-',
-        type: 'info'
-      }
-  }
 }
 </script>

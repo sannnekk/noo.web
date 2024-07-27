@@ -104,9 +104,7 @@ const actions = reactive<MenuItem[]>([
   {
     title: 'Редактировать',
     icon: 'edit',
-    if:
-      Core.Context.User?.role === 'teacher' ||
-      Core.Context.User?.role === 'admin',
+    if: Core.Context.roleIs(['teacher', 'admin']),
     action: () => {
       router.push(`/blog/post/create${props.post.id}`)
     }
@@ -131,9 +129,7 @@ const actions = reactive<MenuItem[]>([
   {
     title: 'Удалить пост',
     icon: 'delete',
-    if:
-      Core.Context.User?.role === 'teacher' ||
-      Core.Context.User?.role === 'admin',
+    if: Core.Context.roleIs(['teacher', 'admin']),
     action: () => {
       onPostDelete()
     }

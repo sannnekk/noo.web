@@ -27,54 +27,58 @@
       class="file-input__files"
       v-auto-animate
     >
-      <div
-        class="file-input__files__file"
-        v-for="file in files"
-        :key="file.id"
+      <draggable-list
+        :key="files.length"
+        v-model="files"
+        item-key="id"
       >
-        <a
-          :href="`${Core.Constants.MEDIA_URL}/${file.src}`"
-          target="_blank"
-          class="file-input__files__file__preview"
-        >
-          <inline-icon
-            v-if="file.src && file.extension === 'pdf'"
-            name="pdf-file"
-          />
-          <uploaded-image
-            v-else
-            :src="file.src"
-          />
-        </a>
-        <div class="file-input__files__file__data">
-          <p class="file-input__files__file__data__name">
-            {{ file.fileName }}
-          </p>
-          <div
-            class="file-input__files__file__data__error"
-            v-if="file.error"
-          >
-            <p>Ошибка: {{ file.error }}</p>
+        <template v-slot="{ item }">
+          <div class="file-input__files__file">
+            <a
+              :href="`${Core.Constants.MEDIA_URL}/${item.src}`"
+              target="_blank"
+              class="file-input__files__file__preview"
+            >
+              <inline-icon
+                v-if="item.src && item.extension === 'pdf'"
+                name="pdf-file"
+              />
+              <uploaded-image
+                v-else
+                :src="item.src"
+              />
+            </a>
+            <div class="file-input__files__file__data">
+              <p class="file-input__files__file__data__name">
+                {{ item.fileName }}
+              </p>
+              <div
+                class="file-input__files__file__data__error"
+                v-if="item.error"
+              >
+                <p>Ошибка: {{ item.error }}</p>
+              </div>
+              <div
+                class="file-input__files__file__data__progress"
+                v-else-if="!item.isUploaded"
+              >
+                <progress-bar :value="item.progress" />
+              </div>
+            </div>
+            <div
+              class="file-input__files__file__actions"
+              v-if="!props.readonly"
+            >
+              <div class="file-input__files__file__actions__delete">
+                <inline-icon
+                  name="delete"
+                  @click="removeFile(item)"
+                />
+              </div>
+            </div>
           </div>
-          <div
-            class="file-input__files__file__data__progress"
-            v-else-if="!file.isUploaded"
-          >
-            <progress-bar :value="file.progress" />
-          </div>
-        </div>
-        <div
-          class="file-input__files__file__actions"
-          v-if="!props.readonly"
-        >
-          <div class="file-input__files__file__actions__delete">
-            <inline-icon
-              name="delete"
-              @click="removeFile(file)"
-            />
-          </div>
-        </div>
-      </div>
+        </template>
+      </draggable-list>
     </div>
   </div>
   <crop-modal
@@ -257,7 +261,7 @@ async function uploadFiles(_files: File[]) {
     }
 
     if (file.file.size > props.maxFileSize) {
-      file.error = `Размер файла привышает допустимый (${Math.floor(
+      file.error = `Размер файла превышает допустимый (${Math.floor(
         props.maxFileSize / 1024 / 1024
       )} МБ})`
       filesForUpload.value.push(file)

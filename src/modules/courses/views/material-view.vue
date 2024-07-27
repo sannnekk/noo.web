@@ -10,9 +10,7 @@
       </div>
       <div
         class="material-view__header__work-link"
-        v-if="
-          courseStore.material.workId && Core.Context.User?.role === 'student'
-        "
+        v-if="courseStore.material.workId && Core.Context.roleIs(['student'])"
       >
         <common-button @click="courseStore.assignMeWork()">
           К работе
@@ -20,7 +18,7 @@
       </div>
       <div
         class="material-view__header__work-link"
-        v-if="Core.Context.User?.role === 'teacher'"
+        v-if="Core.Context.roleIs(['teacher'])"
       >
         <common-button @click="assignWorkStore.modalVisible = true">
           {{

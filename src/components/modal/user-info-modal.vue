@@ -58,7 +58,7 @@
           </div>
           <div class="user-info-modal__buttons">
             <common-button
-              v-if="Core.Context.User?.role !== 'student'"
+              v-if="Core.Context.roleIs(['teacher', 'mentor', 'admin'])"
               alignment="stretch"
               :to="`/users/edit/${user.username}`"
               design="primary"

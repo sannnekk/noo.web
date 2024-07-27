@@ -99,26 +99,23 @@ async function fetchEvents(newDate: Date, oldDate?: Date) {
 }
 
 async function onEventRemove(id: string) {
-  uiService.setLoading(true)
-
   try {
-    await calenderService.deleteEvent(id)
+    await calenderService.deleteEvent(id, { showLoading: true })
     events.value = events.value.filter((event) => event.id !== id)
   } catch (error: any) {
     uiService.openErrorModal('Ошибка при удалении события', error.message)
-  } finally {
-    uiService.setLoading(false)
   }
 }
 
 async function onEventSubmit() {
-  uiService.setLoading(true)
-
   try {
-    const response = await calenderService.createEvent({
-      ...newEvent.value,
-      id: undefined
-    } as any)
+    const response = await calenderService.createEvent(
+      {
+        ...newEvent.value,
+        id: undefined
+      } as any,
+      { showLoading: true }
+    )
 
     if (!response.data) {
       throw new Error('Не удалось создать событие')
@@ -128,8 +125,6 @@ async function onEventSubmit() {
     newEvent.value = emptyEvent()
   } catch (error: any) {
     uiService.openErrorModal('Ошибка при создании события', error.message)
-  } finally {
-    uiService.setLoading(false)
   }
 }
 

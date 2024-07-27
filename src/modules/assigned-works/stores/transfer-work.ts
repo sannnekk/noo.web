@@ -4,8 +4,7 @@ import type { Pagination } from '@/core/data/Pagination'
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { User } from '@/core/data/entities/User'
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
-import { useAssignedWorksStore } from './assigned-works'
+import { ref } from 'vue'
 
 export const useTransferWorkStore = defineStore(
   'assigned-works-module:transfer-work',
@@ -50,18 +49,15 @@ export const useTransferWorkStore = defineStore(
         return
       }
 
-      uiService.setLoading(true)
-
       try {
         await assignedWorkService.transferAssignedWork(
           workId,
-          selectedMentorId.value
+          selectedMentorId.value,
+          { showLoader: true }
         )
         uiService.openSuccessModal('Работа успешно передана другому ментору')
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при передаче работы', e.message)
-      } finally {
-        uiService.setLoading(false)
       }
     }
 

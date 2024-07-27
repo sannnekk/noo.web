@@ -1,5 +1,5 @@
 import type { Context } from '@/core/context/Context'
-import { ApiService } from '@/core/services/ApiService'
+import { ApiService, type ServiceOptions } from '@/core/services/ApiService'
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { Pagination } from '@/core/data/Pagination'
 
@@ -19,62 +19,118 @@ export class AssignedWorkService extends ApiService {
   /**
    * Get assigned work
    */
-  public async getAssignedWork(id: AssignedWork['id']) {
-    return await this.httpGet<AssignedWork>(`${this._route}/${id}`)
+  public async getAssignedWork(
+    id: AssignedWork['id'],
+    options: ServiceOptions = {}
+  ) {
+    return await this.httpGet<AssignedWork>(
+      `${this._route}/${id}`,
+      undefined,
+      undefined,
+      options
+    )
   }
 
   /**
    * Get assigned works
    */
-  public async getAssignedWorks(pagination: Pagination) {
-    return await this.httpGet<AssignedWork[]>(`${this._route}`, pagination)
+  public async getAssignedWorks(
+    pagination: Pagination,
+    options: ServiceOptions = {}
+  ) {
+    return await this.httpGet<AssignedWork[]>(
+      `${this._route}`,
+      pagination,
+      undefined,
+      options
+    )
   }
 
+  /**
+   * Get assigned works from user
+   */
   public async getAssignedWorksFromUser(
     userId: string,
-    pagination?: Pagination
+    pagination?: Pagination,
+    options: ServiceOptions = {}
   ) {
     return await this.httpGet<AssignedWork[]>(
       `${this._route}/from-user/${userId}`,
-      pagination
+      pagination,
+      undefined,
+      options
     )
   }
 
   /**
    * Create assigned work
    */
-  public async createAssignedWork(data: AssignedWork) {
-    await this.httpPost(`${this._route}`, data)
+  public async createAssignedWork(
+    data: AssignedWork,
+    options: ServiceOptions = {}
+  ) {
+    await this.httpPost(`${this._route}`, data, undefined, options)
   }
 
+  /**
+   * Remake assigned work
+   */
   public async remakeAssignedWork(
     id: AssignedWork['id'],
-    onlyFalse: boolean = false
+    onlyFalse: boolean = false,
+    options: ServiceOptions = {}
   ) {
-    await this.httpPost(`${this._route}/${id}/remake`, { onlyFalse })
+    await this.httpPost(
+      `${this._route}/${id}/remake`,
+      { onlyFalse },
+      undefined,
+      options
+    )
   }
 
   /**
    * Get or create assigned work
    */
-  public async getOrCreateAssignedWork(materialSlug: string) {
+  public async getOrCreateAssignedWork(
+    materialSlug: string,
+    options: ServiceOptions = {}
+  ) {
     return await this.httpPost<{ link: string }>(
-      `${this._route}/${materialSlug}`
+      `${this._route}/${materialSlug}`,
+      undefined,
+      {},
+      options
     )
   }
 
   /**
    * Archive assigned work
    */
-  public async archiveAssignedWork(id: AssignedWork['id']) {
-    await this.httpPatch(`${this._route}/${id}/archive`)
+  public async archiveAssignedWork(
+    id: AssignedWork['id'],
+    options?: ServiceOptions
+  ) {
+    await this.httpPatch(
+      `${this._route}/${id}/archive`,
+      undefined,
+      undefined,
+      options
+    )
   }
 
   /**
    * Archive assigned work
    */
-  public async unarchiveAssignedWork(id: AssignedWork['id']) {
-    await this.httpPatch(`${this._route}/${id}/unarchive`)
+  public async unarchiveAssignedWork(
+    id: AssignedWork['id'],
+    options?: ServiceOptions
+  ) {
+    await this.httpPatch(
+      `${this._route}/${id}/unarchive`,
+      undefined,
+      undefined,
+      options
+    )
   }
 
   /**
@@ -82,9 +138,10 @@ export class AssignedWorkService extends ApiService {
    */
   public async solveAssignedWork(
     id: AssignedWork['id'],
-    data: Partial<AssignedWork>
+    data: Partial<AssignedWork>,
+    options: ServiceOptions = {}
   ) {
-    await this.httpPatch(`${this._route}/${id}/solve`, data)
+    await this.httpPatch(`${this._route}/${id}/solve`, data, undefined, options)
   }
 
   /**
@@ -92,16 +149,18 @@ export class AssignedWorkService extends ApiService {
    */
   public async checkAssignedWork(
     id: AssignedWork['id'],
-    data: Partial<AssignedWork>
+    data: Partial<AssignedWork>,
+    options: ServiceOptions = {}
   ) {
-    await this.httpPatch(`${this._route}/${id}/check`, data)
+    await this.httpPatch(`${this._route}/${id}/check`, data, undefined, options)
   }
 
   public async saveAssignedWorkProgress(
     id: AssignedWork['id'],
-    data: Partial<AssignedWork>
+    data: Partial<AssignedWork>,
+    options: ServiceOptions = {}
   ) {
-    await this.httpPatch(`${this._route}/${id}/save`, data)
+    await this.httpPatch(`${this._route}/${id}/save`, data, undefined, options)
   }
 
   /**
@@ -109,10 +168,14 @@ export class AssignedWorkService extends ApiService {
    */
   public async transferAssignedWork(
     assignedWorkId: AssignedWork['id'],
-    mentorId: string
+    mentorId: string,
+    options: ServiceOptions = {}
   ) {
     await this.httpPatch(
-      `${this._route}/${assignedWorkId}/transfer/${mentorId}`
+      `${this._route}/${assignedWorkId}/transfer/${mentorId}`,
+      undefined,
+      undefined,
+      options
     )
   }
 
@@ -121,24 +184,43 @@ export class AssignedWorkService extends ApiService {
    */
   public async changeMentor(
     assignedWorkId: AssignedWork['id'],
-    mentorId: string
+    mentorId: string,
+    options: ServiceOptions = {}
   ) {
     await this.httpPatch(
-      `${this._route}/${assignedWorkId}/replace-mentor/${mentorId}`
+      `${this._route}/${assignedWorkId}/replace-mentor/${mentorId}`,
+      undefined,
+      undefined,
+      options
     )
   }
 
   /**
    * Shift the deadline of the assigned work
    */
-  public async shiftAssignedWorkDeadline(assignedWorkId: AssignedWork['id']) {
-    await this.httpPatch(`${this._route}/${assignedWorkId}/shift-deadline`)
+  public async shiftAssignedWorkDeadline(
+    assignedWorkId: AssignedWork['id'],
+    options: ServiceOptions = {}
+  ) {
+    await this.httpPatch(
+      `${this._route}/${assignedWorkId}/shift-deadline`,
+      undefined,
+      undefined,
+      options
+    )
   }
 
   /**
    * Delete the assigned work
    */
-  public async deleteAssignedWork(assignedWorkId: AssignedWork['id']) {
-    await this.httpDelete(`${this._route}/${assignedWorkId}`)
+  public async deleteAssignedWork(
+    assignedWorkId: AssignedWork['id'],
+    options: ServiceOptions = {}
+  ) {
+    await this.httpDelete(
+      `${this._route}/${assignedWorkId}`,
+      undefined,
+      options
+    )
   }
 }

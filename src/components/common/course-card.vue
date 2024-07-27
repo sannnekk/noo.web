@@ -54,18 +54,10 @@ interface Props {
 const props = defineProps<Props>()
 
 const actions = reactive<MenuItem[]>([
-  /* {
-    title: 'Добавить главу',
-    icon: 'add',
-    if: Core.Context.User?.role === 'teacher',
-    action: () => {
-      router.push(`/create-chapter/${props.slug}`)
-    }
-  }, */
   {
     title: 'Редактировать',
     icon: 'edit',
-    if: Core.Context.User?.role === 'teacher',
+    if: Core.Context.roleIs(['teacher']),
     action: () => {
       router.push(`/create-course${props.slug}`)
     }
@@ -73,9 +65,7 @@ const actions = reactive<MenuItem[]>([
   {
     title: 'Добавить/Убрать учеников',
     icon: 'user',
-    if:
-      Core.Context.User?.role === 'teacher' ||
-      Core.Context.User?.role === 'admin',
+    if: Core.Context.roleIs(['teacher', 'admin']),
     action: () => {
       router.push(`/course-students/${props.slug}`)
     }

@@ -1,5 +1,4 @@
 import type { IconName } from '@/components/decorations/inline-icon.vue'
-import { Core } from '@/core/Core'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -25,6 +24,11 @@ export function installUIStore() {
      * Loading overlay visibility state
      */
     const isLoading = ref(false)
+
+    /**
+     * Loading progress state
+     */
+    const loadingProgress = ref(0)
 
     /**
      * Pane visibility state
@@ -117,6 +121,7 @@ export function installUIStore() {
 
     return {
       isLoading,
+      loadingProgress,
       isPaneOpen,
       navEntries,
       globalModal,

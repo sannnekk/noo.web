@@ -40,10 +40,10 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
       return
     }
 
-    uiService.setLoading(true)
-
     try {
-      const response = await userService.getUser(Core.Context.User.username)
+      const response = await userService.getUser(Core.Context.User.username, {
+        showLoader: true
+      })
 
       user.value = response.data
     } catch (error: any) {
@@ -58,8 +58,6 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
           }
         ]
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 
@@ -79,13 +77,15 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
       return
     }
 
-    uiService.setLoading(true)
-
     try {
-      await userService.updateUser(user.value.id, {
-        id: user.value.id,
-        password: passwords.value.newPassword
-      })
+      await userService.updateUser(
+        user.value.id,
+        {
+          id: user.value.id,
+          password: passwords.value.newPassword
+        },
+        { showLoader: true }
+      )
       uiService.openSuccessModal('Пароль успешно изменен')
     } catch (error: any) {
       uiService.openErrorModal(
@@ -99,7 +99,6 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
         repeatPassword: '',
         passwordIsCorrect: false
       }
-      uiService.setLoading(false)
     }
   }
 
@@ -109,19 +108,15 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
   async function deleteAccount() {
     if (!user.value) return
 
-    uiService.setLoading(true)
-
     try {
-      await userService.deleteUser(user.value.id)
+      await userService.deleteUser(user.value.id, { showLoader: true })
       uiService.openSuccessModal('Аккаунт успешно удален')
-      authService.logout()
+      await authService.logout()
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при удалении аккаунта',
         error.message
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 
@@ -131,14 +126,16 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
   async function updateCredentials() {
     if (!user.value) return
 
-    uiService.setLoading(true)
-
     try {
-      await userService.updateUser(user.value.id, {
-        id: user.value.id,
-        name: user.value.name,
-        telegramUsername: user.value.telegramUsername?.replace('@', '')
-      })
+      await userService.updateUser(
+        user.value.id,
+        {
+          id: user.value.id,
+          name: user.value.name,
+          telegramUsername: user.value.telegramUsername?.replace('@', '')
+        },
+        { showLoader: true }
+      )
       uiService.openSuccessModal(
         'Данные успешно обновлены',
         'Чтобы изменения вступили в силу, обновите страницу',
@@ -155,8 +152,6 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
         'Произошла ошибка при обновлении данных',
         error.message
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 
@@ -166,10 +161,10 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
   async function updateTelegram(data: TelegramUpdatePayload | null) {
     if (!user.value || !data) return
 
-    uiService.setLoading(true)
-
     try {
-      await userService.updateTelegram(user.value.id, data)
+      await userService.updateTelegram(user.value.id, data, {
+        showLoader: true
+      })
 
       user.value.telegramUsername = data.telegramUsername || undefined
       user.value.telegramId = data.telegramId || undefined
@@ -181,8 +176,6 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
         'Произошла ошибка при привязке Telegram',
         error.message
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 
@@ -203,10 +196,10 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
   async function requestChangeEmail(newEmail: string) {
     if (!user.value) return
 
-    uiService.setLoading(true)
-
     try {
-      await userService.requestChangeEmail(user.value.id, newEmail)
+      await userService.requestChangeEmail(user.value.id, newEmail, {
+        showLoader: true
+      })
       uiService.openWarningModal(
         'Запрос на изменение почты отправлен',
         'Проверьте почту для подтверждения'
@@ -216,8 +209,6 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
         'Произошла ошибка при запросе на изменение почты',
         error.message
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 

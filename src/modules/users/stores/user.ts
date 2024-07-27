@@ -18,11 +18,10 @@ export const useUserStore = defineStore('users-module:user', () => {
    * Fetch user by username
    */
   async function fetchUser() {
-    uiService.setLoading(true)
-
     try {
       const response = await userService.getUser(
-        route.params.username as string
+        route.params.username as string,
+        { showLoader: true }
       )
       user.value = response.data
     } catch (error: any) {
@@ -30,8 +29,6 @@ export const useUserStore = defineStore('users-module:user', () => {
         'Произошла ошибка при получении данных пользователя',
         error.message
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 
@@ -43,18 +40,16 @@ export const useUserStore = defineStore('users-module:user', () => {
       return
     }
 
-    uiService.setLoading(true)
-
     try {
-      await userService.updateUser(user.value.id, user.value)
+      await userService.updateUser(user.value.id, user.value, {
+        showLoader: true
+      })
       uiService.openSuccessModal('Данные успешно сохранены')
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при сохранении данных пользователя',
         error.message
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 
@@ -66,18 +61,14 @@ export const useUserStore = defineStore('users-module:user', () => {
       return
     }
 
-    uiService.setLoading(true)
-
     try {
-      await userService.confirmUser(user.value.username)
+      await userService.confirmUser(user.value.username, { showLoader: true })
       uiService.openSuccessModal('Пользователь подтвержден')
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при подтверждении пользователя',
         error.message
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 
@@ -89,26 +80,26 @@ export const useUserStore = defineStore('users-module:user', () => {
       return
     }
 
-    if (!['admin', 'teacher'].includes(Core.Context.User!.role)) {
+    if (Core.Context.roleIs(['mentor', 'student'])) {
       uiService.openErrorModal('Недостаточно прав для изменения пароля')
       return
     }
 
-    uiService.setLoading(true)
-
     try {
-      await userService.updateUser(user.value.id, {
-        id: user.value.id,
-        password: newPassword
-      })
+      await userService.updateUser(
+        user.value.id,
+        {
+          id: user.value.id,
+          password: newPassword
+        },
+        { showLoader: true }
+      )
       uiService.openSuccessModal('Пароль успешно изменен')
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при изменении пароля',
         error.message
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 

@@ -39,4 +39,5 @@ defineProps<Props>()
       background-color: var(--secondary)
       border-radius: var(--border-radius)
       overflow: hidden
+      transition: width 0.3s ease
 </style>

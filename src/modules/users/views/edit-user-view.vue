@@ -51,10 +51,7 @@
               </div>
               <div
                 class="edit-user-view__credentials__change-password"
-                v-if="
-                  Core.Context.User?.role === 'admin' ||
-                  Core.Context.User?.role === 'teacher'
-                "
+                v-if="Core.Context.roleIs(['admin', 'teacher'])"
               >
                 <common-button
                   design="danger"
@@ -82,11 +79,7 @@
                     свой аккаунт через имейл
                   </p>
                   <common-button
-                    v-if="
-                      ['admin', 'teacher'].includes(
-                        Core.Context.User?.role || '$$anonymous$$'
-                      )
-                    "
+                    v-if="Core.Context.roleIs(['admin', 'teacher'])"
                     design="warning"
                     alignment="right"
                     @click="userStore.confirmUser()"
@@ -110,7 +103,7 @@
                 </div>
                 <div class="edit-user-view__content__actions__save">
                   <common-button
-                    v-if="Core.Context.User?.role !== 'mentor'"
+                    v-if="Core.Context.roleIs(['admin', 'teacher'])"
                     @click="userStore.saveUser()"
                     alignment="right"
                     design="primary"
@@ -143,7 +136,7 @@
     <template #tab-3>
       <div
         class="edit-user-view__assigned-works"
-        v-if="['student', 'mentor'].includes(userStore.user?.role as any) && ['admin', 'teacher'].includes(Core.Context.User?.role || '$$anonymous$$')"
+        v-if="['student', 'mentor'].includes(userStore.user?.role as any) && Core.Context.roleIs(['admin', 'teacher'])"
       >
         <assigned-works-view
           v-if="userStore.user && currentTab === 3"

@@ -7,7 +7,10 @@
       <router-view />
     </component>
     <div>
-      <the-loader-overlay v-if="Core.Services.UI.Store().isLoading" />
+      <the-loader-overlay
+        v-if="Core.Services.UI.Store().isLoading"
+        :loading-progress="Core.Services.UI.Store().loadingProgress"
+      />
       <base-modal
         :title="Core.Services.UI.Store().globalModal.title"
         :message="Core.Services.UI.Store().globalModal.message"
@@ -37,5 +40,3 @@ const layout = computed(() => {
   return useRoute()?.meta?.layout || paneLayout
 })
 </script>
-
-<style scoped></style>

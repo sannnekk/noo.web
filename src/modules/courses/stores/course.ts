@@ -50,17 +50,14 @@ export const useCourseStore = defineStore('courses-module:course', () => {
    * Fetch the course by its slug
    */
   async function fetchCourse() {
-    uiService.setLoading(true)
-
     try {
       const response = await courseService.getCourse(
-        _route.params.courseSlug as string
+        _route.params.courseSlug as string,
+        { showLoader: true }
       )
       course.value = response.data
     } catch (error: any) {
       uiService.openErrorModal('Произошла ошибка при загрузке курса')
-    } finally {
-      uiService.setLoading(false)
     }
   }
 
@@ -89,7 +86,7 @@ export const useCourseStore = defineStore('courses-module:course', () => {
       return
     }
 
-    if (Core.Context.User?.role !== 'student') {
+    if (Core.Context.roleIs(['teacher', 'admin', 'mentor'])) {
       uiService.openErrorModal(
         'Не удалось запросить доступ к работам',
         'Только студенты могут запрашивать доступ к работе'
@@ -97,11 +94,10 @@ export const useCourseStore = defineStore('courses-module:course', () => {
       return
     }
 
-    uiService.setLoading(true)
-
     try {
       const response = await assignedWorkService.getOrCreateAssignedWork(
-        material.value.slug
+        material.value.slug,
+        { showLoader: true }
       )
 
       if (!response.data) {
@@ -114,8 +110,6 @@ export const useCourseStore = defineStore('courses-module:course', () => {
         'Произошла ошибка при запросе доступа к работам',
         error.message
       )
-    } finally {
-      uiService.setLoading(false)
     }
   }
 

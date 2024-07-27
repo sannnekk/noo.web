@@ -29,7 +29,6 @@
           <works-table
             :works="assignedWorksStore.allSearch.results"
             :loading="assignedWorksStore.allSearch.isListLoading"
-            :get-user-action-function="assignedWorksStore.getUserAction"
             @select="assignedWorksStore.allSearchChecklist = $event"
             editable
           />
@@ -56,7 +55,6 @@
           <works-table
             :works="assignedWorksStore.notSolvedSearch.results"
             :loading="assignedWorksStore.notSolvedSearch.isListLoading"
-            :get-user-action-function="assignedWorksStore.getUserAction"
           />
         </div>
         <div class="index-works-view__pagination">
@@ -81,7 +79,6 @@
           <works-table
             :works="assignedWorksStore.notCheckedSearch.results"
             :loading="assignedWorksStore.notCheckedSearch.isListLoading"
-            :get-user-action-function="assignedWorksStore.getUserAction"
           />
         </div>
         <div class="index-works-view__pagination">
@@ -106,7 +103,6 @@
           <works-table
             :works="assignedWorksStore.checkedSearch.results"
             :loading="assignedWorksStore.checkedSearch.isListLoading"
-            :get-user-action-function="assignedWorksStore.getUserAction"
           />
         </div>
         <div class="index-works-view__pagination">
@@ -138,7 +134,6 @@
           <works-table
             :works="assignedWorksStore.archivedSearch.results"
             :loading="assignedWorksStore.archivedSearch.isListLoading"
-            :get-user-action-function="assignedWorksStore.getUserAction"
             @select="assignedWorksStore.archivedSearchChecklist = $event"
             editable
           />

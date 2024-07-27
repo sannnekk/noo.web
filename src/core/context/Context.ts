@@ -94,6 +94,13 @@ export class Context {
   }
 
   /**
+   * Check user role
+   */
+  public roleIs(roles: User['role'][]) {
+    return roles.includes(Storage.User?.role)
+  }
+
+  /**
    * clear the context
    */
   public clear() {

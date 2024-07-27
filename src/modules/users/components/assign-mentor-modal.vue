@@ -89,7 +89,7 @@ const mentorSearch = useSearch(fetchMentors)
  * Fetch mentors
  */
 async function fetchMentors(pagination: Pagination) {
-  if (Core.Context.User?.role === 'student') {
+  if (Core.Context.roleIs(['student'])) {
     return
   }
 

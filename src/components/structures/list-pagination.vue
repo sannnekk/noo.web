@@ -19,9 +19,9 @@
 import { computed } from 'vue'
 
 interface Props {
-  page: number
-  total: number
-  limit: number
+  page?: number
+  total?: number
+  limit?: number
 }
 
 interface Emits {
@@ -33,7 +33,11 @@ interface Page {
   type: 'page' | 'ellipsis'
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  page: 1,
+  total: 1,
+  limit: 25
+})
 const emit = defineEmits<Emits>()
 
 const changePage = (page: number) => {
