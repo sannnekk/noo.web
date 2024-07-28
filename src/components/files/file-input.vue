@@ -153,11 +153,11 @@ const files = computed<FileItem[]>({
   set(value) {
     emits(
       'update:modelValue',
-      value.map((file) => ({
+      value.map((file, index) => ({
         id: file.id,
         src: file.src,
         name: file.fileName,
-        order: file.order,
+        order: index + 1,
         mimeType:
           file.extension === 'pdf'
             ? 'application/pdf'

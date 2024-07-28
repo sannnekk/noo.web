@@ -11,7 +11,6 @@ export const initTrigger: EventFunc = (context: Context) => {
     context.User === null
   ) {
     context.clear()
-    console.log('Redirect to /auth', context.Route.path)
     useRouter().push('/auth')
   }
 }
