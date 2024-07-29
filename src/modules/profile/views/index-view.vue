@@ -35,7 +35,10 @@
         </div>
         <div
           class="index-profile-view__charts"
-          v-if="Core.Context.User && Core.Context.User.role !== 'admin'"
+          v-if="
+            Core.Context.User &&
+            Core.Context.roleIs(['teacher', 'mentor', 'student'])
+          "
         >
           <h3 class="index-profile-view__charts__header">Моя статистика</h3>
           <statistics-view
@@ -44,11 +47,24 @@
           />
         </div>
         <div
-          class="index-profile-view__charts"
-          v-if="Core.Context.User && Core.Context.User.role !== 'admin'"
+          class="index-profile-view__active-sessions"
+          v-if="Core.Context.User"
         >
-          <h3 class="index-profile-view__charts__header">Активные сеансы</h3>
+          <h3 class="index-profile-view__active-sessions__header">
+            Активные сеансы
+          </h3>
           <session-view />
+        </div>
+        <div
+          class="index-profile-view__google-docs-integrations"
+          v-if="Core.Context.User && Core.Context.roleIs(['teacher'])"
+        >
+          <h3 class="index-profile-view__charts__header">
+            Итеграции Google Docs
+          </h3>
+          <router-link to="/google-docs-bindings">
+            Перейти в раздел интеграций
+          </router-link>
         </div>
       </template>
     </the-sidebar-layout>
@@ -108,4 +124,14 @@ const changeEmailModalVisible = ref(false)
 
   &__mentor
     margin-bottom: 2em
+
+  &__google-docs-integrations
+    margin-top: 2em
+
+    a
+      color: var(--lila)
+      text-decoration: none
+
+      &:hover
+        text-decoration: underline
 </style>

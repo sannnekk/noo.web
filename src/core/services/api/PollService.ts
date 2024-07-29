@@ -24,6 +24,28 @@ export class PollService extends ApiService {
   }
 
   /**
+   * Get polls
+   */
+  public async getPolls(
+    pagination?: Pagination,
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<Poll[]>> {
+    return await this.httpGet(this._route, pagination, undefined, options)
+  }
+
+  public async getPollQuestions(
+    pagination?: Pagination,
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<Poll[]>> {
+    return await this.httpGet(
+      `${this._route}/question`,
+      pagination,
+      undefined,
+      options
+    )
+  }
+
+  /**
    * Get poll
    */
   public async getPoll(

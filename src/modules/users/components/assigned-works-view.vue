@@ -48,9 +48,9 @@
     </div>
   </div>
   <change-mentor-modal
-    v-model:opened="changeMentorModal.opened"
-    v-model:mentorId="changeMentorModal.mentorId"
-    :assigned-works="changeMentorModal.assignedWorks"
+    v-model:opened="changeMentorModalData.opened"
+    v-model:mentorId="changeMentorModalData.mentorId"
+    :assigned-works="changeMentorModalData.assignedWorks"
     @confirm="onMentorChanged()"
   />
 </template>
@@ -79,7 +79,7 @@ const search = useSearch(fetchAssignedWorks, {
   immediate: true
 })
 
-const changeMentorModal = ref<{
+const changeMentorModalData = ref<{
   opened: boolean
   mentorId: string | null
   assignedWorks: AssignedWork[]
@@ -325,7 +325,7 @@ function onSelect(assignedWorkIds: AssignedWork['id'][]) {
 }
 
 function openChangeMentorModal(assignedWorks: AssignedWork[]) {
-  changeMentorModal.value = {
+  changeMentorModalData.value = {
     opened: true,
     mentorId: null,
     assignedWorks

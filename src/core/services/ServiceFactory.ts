@@ -4,6 +4,7 @@ import { AuthService } from './api/AuthService'
 import { BlogService } from './api/BlogService'
 import { CalenderService } from './api/CalenderService'
 import { CourseService } from './api/CourseService'
+import { GoogleDocsBindingService } from './api/GoogleDocsBindingService'
 import { MediaService } from './api/MediaService'
 import { NotificationService } from './api/NotificationService'
 import { PollService } from './api/PollService'
@@ -42,6 +43,7 @@ export type Services = {
   Blog: BlogService
   Poll: PollService
   Session: SessionService
+  GoogleDocsBinding: GoogleDocsBindingService
 }
 
 /**
@@ -65,6 +67,7 @@ export class ServiceFactory {
     Blog: BlogService,
     Poll: PollService,
     Session: SessionService,
+    GoogleDocsBinding: GoogleDocsBindingService,
     // storage
     UI: UIService
   }

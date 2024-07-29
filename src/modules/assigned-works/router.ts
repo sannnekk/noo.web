@@ -1,4 +1,4 @@
-import module from './module.vue'
+import module from './module-root.vue'
 import index from './views/index-view.vue'
 import WorkView from './views/work-view.vue'
 import TaskView from './views/task-view.vue'

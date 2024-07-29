@@ -1,4 +1,4 @@
-import module from './module.vue'
+import module from './module-root.vue'
 import index from './views/index-view.vue'
 import ResultsView from './views/results-view.vue'
 import UserResultView from './views/user-result-view.vue'

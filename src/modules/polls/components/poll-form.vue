@@ -20,7 +20,6 @@ import pollQuestion from './poll-question.vue'
 import type { PollAnswer } from '@/core/data/entities/PollAnswer'
 import type { PollQuestion } from '@/core/data/entities/PollQuestion'
 import { computed } from 'vue'
-import { v4 as uuid } from 'uuid'
 
 interface Props {
   questions: PollQuestion[]
@@ -38,32 +37,6 @@ const model = computed({
   get: () => props.answers,
   set: (value) => emit('update:answers', value)
 })
-
-function answer(question: PollQuestion): PollAnswer {
-  const answer = props.answers.find(
-    (answer) => answer.questionId === question.id
-  )
-
-  if (answer) {
-    return answer
-  }
-
-  return emptyAnswer(question)
-}
-
-function emptyAnswer(question: PollQuestion): PollAnswer {
-  return {
-    id: uuid(),
-    questionId: question.id,
-    questionType: question.type,
-    date: new Date(),
-    text: '',
-    choices: [],
-    rating: 0,
-    files: [],
-    number: 0
-  }
-}
 </script>
 
 <style scoped lang="sass">

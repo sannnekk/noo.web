@@ -1,5 +1,5 @@
 import indexView from './views/index-view.vue'
-import module from './module.vue'
+import module from './module-root.vue'
 
 export default {
   path: '/course-students',

@@ -1,4 +1,4 @@
-import module from './module.vue'
+import module from './module-root.vue'
 
 export default {
   path: '/auth',

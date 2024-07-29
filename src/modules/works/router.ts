@@ -1,4 +1,4 @@
-import module from './module.vue'
+import module from './module-root.vue'
 import paneLayout from '@/layouts/pane-layout.vue'
 import index from './views/index-view.vue'
 

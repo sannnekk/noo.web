@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { type PasswordChangeForm } from '../types/PasswordChangeForm'
 import { Core } from '@/core/Core'
-import type { User } from '@/core/data/entities/User'
+import type { UserWithOnlineStatus } from '@/core/data/entities/User'
 import type { TelegramUpdatePayload } from '@/core/services/api/UserService'
 
 export const useProfileStore = defineStore('profile-module:profile', () => {
@@ -13,7 +13,7 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
   /*
    * logged in user
    */
-  const user = ref<User | null>()
+  const user = ref<UserWithOnlineStatus | null>()
 
   /*
    * users mentor if its a student

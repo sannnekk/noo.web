@@ -1,4 +1,4 @@
-import module from './module.vue'
+import module from './module-root.vue'
 import GeneralInfoView from './views/general-info-view.vue'
 import index from './views/index-view.vue'
 import SuccessView from './views/success-view.vue'

@@ -1,4 +1,4 @@
-import module from './module.vue'
+import module from './module-root.vue'
 import indexView from './views/index-view.vue'
 import materialView from './views/material-view.vue'
 

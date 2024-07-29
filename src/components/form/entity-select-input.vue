@@ -16,7 +16,7 @@
         :key="index"
       >
         <span>
-          {{ labelKeys.map((key) => entity[key]).join(' / ') }}
+          {{ getLabel(entity) }}
         </span>
         <b
           class="entity-select-input__selected__item__remove"
@@ -56,7 +56,7 @@
           @click="addItem()"
           @mouseenter="hoveredItemId = (item as any).id"
         >
-          {{ labelKeys.map((key) => (item as any)[key]).join(' / ') }}
+          {{ getLabel(item) }}
         </li>
       </ul>
       <div
@@ -132,6 +132,24 @@ watch(
     deep: true
   }
 )
+
+function getLabel(item: any) {
+  return props.labelKeys
+    .map((key) => {
+      if (key.includes('.')) {
+        return key.split('.').reduce((acc, key) => {
+          if (!acc) {
+            return ''
+          }
+
+          return acc[key]
+        }, item)
+      }
+
+      return item[key]
+    })
+    .join(' / ')
+}
 
 function addItem() {
   if (model.value.length >= props.maxCount) {

@@ -66,6 +66,6 @@ export class QuillSelectionModule extends QuillModule {
     const delta = this.quill.clipboard.convert({ html })
 
     // insert delta without removing the current quill content
-    const result = this.quill.updateContents(delta)
+    this.quill.updateContents(delta)
   }
 }

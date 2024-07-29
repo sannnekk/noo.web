@@ -1,6 +1,6 @@
-import module from './module.vue'
-import index from './views/index.vue'
-import paneLayout from '@/layouts/pane-layout.vue'
+import module from './module-root.vue'
+import index from './views/index-view.vue'
+//import paneLayout from '@/layouts/pane-layout.vue'
 
 export default {
   path: '/[route-path]',

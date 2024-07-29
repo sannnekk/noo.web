@@ -37,7 +37,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
 import BlogpostCard from './blogpost-card.vue'
 import type { BlogPost, Reaction } from '@/core/data/entities/BlogPost'
 
@@ -60,8 +59,6 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
-
-const reactionsModel = ref<Record<BlogPost['id'], Reaction>>({})
 </script>
 
 <style lang="sass" scoped>

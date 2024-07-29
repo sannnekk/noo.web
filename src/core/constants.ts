@@ -14,5 +14,7 @@ export const Constants = {
   POLL_URL:
     import.meta.env.MODE === 'production'
       ? 'https://poll.noo-school.ru'
-      : 'http://localhost:3001'
+      : 'http://localhost:3001',
+  GOOGLE_CLIENT_ID:
+    '643513066461-h6vrkoirgj91vr2isaqsm7hrv6tbkml8.apps.googleusercontent.com'
 } as const

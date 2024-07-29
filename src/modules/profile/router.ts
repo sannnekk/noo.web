@@ -1,4 +1,4 @@
-import module from './module.vue'
+import module from './module-root.vue'
 import Index from './views/index-view.vue'
 
 export default {
