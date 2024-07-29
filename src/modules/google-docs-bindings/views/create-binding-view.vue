@@ -43,9 +43,23 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
+        <div
+          class="col-md-6"
+          v-auto-animate
+        >
           <h3>Google-Аккаунт</h3>
-          <div class="create-binding-view__form-field">
+          <success-block
+            v-if="bindingStore.createBindingForm.googleCredentials?.email"
+          >
+            Вы вошли как
+            <strong>
+              {{ bindingStore.createBindingForm.googleCredentials.email }}
+            </strong>
+          </success-block>
+          <div
+            class="create-binding-view__form-field"
+            v-else
+          >
             <google-auth-button @login="bindingStore.onGoogleLogin($event)" />
           </div>
         </div>

@@ -120,6 +120,7 @@ declare module 'vue' {
     StrikeIcon: typeof import('./src/components/decorations/icons/text-format-icons/strike-icon.vue')['default']
     StudentIcon: typeof import('./src/components/decorations/icons/student-icon.vue')['default']
     SubscriptIcon: typeof import('./src/components/decorations/icons/text-format-icons/subscript-icon.vue')['default']
+    SuccessBlock: typeof import('./src/components/common/success-block.vue')['default']
     SunIcon: typeof import('./src/components/decorations/icons/sun-icon.vue')['default']
     SuperscriptIcon: typeof import('./src/components/decorations/icons/text-format-icons/superscript-icon.vue')['default']
     SureModal: typeof import('./src/components/modal/sure-modal.vue')['default']
