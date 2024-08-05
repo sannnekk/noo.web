@@ -48,13 +48,8 @@
           v-auto-animate
         >
           <h3>Google-Аккаунт</h3>
-          <success-block
-            v-if="bindingStore.createBindingForm.googleCredentials?.email"
-          >
-            Вы вошли как
-            <strong>
-              {{ bindingStore.createBindingForm.googleCredentials.email }}
-            </strong>
+          <success-block v-if="bindingStore.createBindingForm.googleOAuthToken">
+            Вы успешно авторизовались в Google
           </success-block>
           <div
             class="create-binding-view__form-field"

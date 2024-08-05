@@ -2,9 +2,8 @@ import { useSearch } from '@/composables/useSearch'
 import { Core } from '@/core/Core'
 import type { Pagination } from '@/core/data/Pagination'
 import type { GoogleDocsBinding } from '@/core/data/entities/GoogleDocsBinding'
-import { decodeLoginJWTResponse } from '@/core/utils/google-auth'
 import { defineStore } from 'pinia'
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export const useGoogleDocsBindingsStore = defineStore(
@@ -15,22 +14,29 @@ export const useGoogleDocsBindingsStore = defineStore(
 
     const router = useRouter()
 
-    const createBindingForm = reactive<
+    const createBindingForm = ref<
       Omit<GoogleDocsBinding, 'id' | 'createdAt' | 'updatedAt'>
-    >({
-      name: '',
-      entityName: '',
-      entitySelector: {
-        prop: '',
-        value: ''
-      },
-      status: 'active',
-      frequency: 'daily',
-      filePath: '',
-      format: 'csv',
-      googleOAuthToken: '',
-      googleCredentials: null as any
-    })
+    >(emptyBindingForm())
+
+    function emptyBindingForm(): Omit<
+      GoogleDocsBinding,
+      'id' | 'createdAt' | 'updatedAt'
+    > {
+      return {
+        name: '',
+        entityName: '',
+        entitySelector: {
+          prop: '',
+          value: ''
+        },
+        status: 'active',
+        frequency: 'daily',
+        filePath: '',
+        format: 'csv',
+        googleOAuthToken: '',
+        googleCredentials: null as any
+      }
+    }
 
     const bindingsSearch = useSearch(fetchBindings, { immediate: true })
 
@@ -43,22 +49,19 @@ export const useGoogleDocsBindingsStore = defineStore(
     }
 
     async function onGoogleLogin(rawCredentials: any) {
-      const credentials = await decodeLoginJWTResponse(
-        rawCredentials.credential
-      )
-
-      createBindingForm.googleOAuthToken = rawCredentials.credential
-      createBindingForm.googleCredentials = credentials
+      createBindingForm.value.googleOAuthToken = rawCredentials.code
+      createBindingForm.value.googleCredentials = rawCredentials
     }
 
     async function saveBinding() {
       try {
-        validateBindingForm(createBindingForm)
+        validateBindingForm(createBindingForm.value)
 
         await googleBindingService.createBinding(
-          createBindingForm as GoogleDocsBinding,
+          createBindingForm.value as GoogleDocsBinding,
           { showLoader: true }
         )
+        createBindingForm.value = emptyBindingForm()
         uiService.openSuccessModal('Успешно сохранено', undefined, [
           {
             label: 'Назад к списку',

@@ -1,10 +1,5 @@
 import type { SupportedEntity } from '../types/SupportedEntity'
-import {
-  fetchPollQuestions,
-  fetchPolls,
-  fetchUserRoles,
-  fetchUsers
-} from '../utils/fetch'
+import { fetchPolls, fetchUserRoles } from '../utils/fetch'
 
 export const SupportedEntities: SupportedEntity[] = [
   {
@@ -18,13 +13,6 @@ export const SupportedEntities: SupportedEntity[] = [
         labelKeys: ['title'],
         fetchFunction: fetchPolls,
         toPropValue: (value) => value.id
-      },
-      {
-        label: 'По вопросу',
-        value: 'questionId',
-        labelKeys: ['poll.title', 'text'],
-        fetchFunction: fetchPollQuestions,
-        toPropValue: (value) => value.id
       }
     ]
   },
@@ -33,13 +21,6 @@ export const SupportedEntities: SupportedEntity[] = [
     technicalName: 'user',
     icon: 'users',
     availableSelectorProps: [
-      {
-        label: 'По никнейму',
-        value: 'name',
-        labelKeys: ['username'],
-        fetchFunction: fetchUsers,
-        toPropValue: (value) => value.username
-      },
       {
         label: 'По роли',
         value: 'role',
