@@ -9,7 +9,7 @@
     >
       <div class="auth-form__group">
         <text-input
-          v-model="loginModel.usernameOrEmail"
+          v-model.trim="loginModel.usernameOrEmail"
           placeholder="Email или никнейм"
           @enter-press="onLogin()"
         />
@@ -48,14 +48,14 @@
     >
       <div class="auth-form__group">
         <text-input
-          v-model="registerModel.name"
+          v-model.trim="registerModel.name"
           placeholder="Имя и фамилия"
           @enter-press="onRegister()"
         />
       </div>
       <div class="auth-form__group">
         <text-input
-          v-model="registerModel.email"
+          v-model.trim="registerModel.email"
           placeholder="Email"
           @enter-press="onRegister()"
         />
@@ -65,7 +65,7 @@
         v-auto-animate
       >
         <text-input
-          v-model="registerModel.username"
+          v-model.trim="registerModel.username"
           placeholder="Никнейм"
           @enter-press="onRegister()"
         />
@@ -123,7 +123,7 @@
     >
       <div class="auth-form__group">
         <text-input
-          v-model="forgotPasswordModel.email"
+          v-model.trim="forgotPasswordModel.email"
           placeholder="Почта"
           @enter-press="onForgotPassword()"
         />
@@ -158,7 +158,7 @@
     >
       <div class="auth-form__group">
         <text-input
-          v-model="resendVerificationModel.email"
+          v-model.trim="resendVerificationModel.email"
           placeholder="Почта"
           @enter-press="onResendVerification()"
         />

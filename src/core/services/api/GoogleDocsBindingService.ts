@@ -27,7 +27,37 @@ export class GoogleDocsBindingService extends ApiService {
     pagination?: Pagination,
     options: ServiceOptions = {}
   ): Promise<ApiResponse<GoogleDocsBinding[]>> {
-    return await this.httpGet(this._route, pagination, undefined, options)
+    return this.httpGet(this._route, pagination, undefined, options)
+  }
+
+  /**
+   * Trigger a binding
+   */
+  public async trigger(
+    id: GoogleDocsBinding['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    return this.httpPatch<void>(
+      `${this._route}/${id}/trigger`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Toggle binding status
+   */
+  public async switchOnOff(
+    id: GoogleDocsBinding['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    return this.httpPatch<void>(
+      `${this._route}/${id}/switch-on-off`,
+      undefined,
+      undefined,
+      options
+    )
   }
 
   /**

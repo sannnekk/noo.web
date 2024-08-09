@@ -11,21 +11,12 @@
             />
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
           <div class="create-binding-view__form-field">
             <select-input
               v-model="bindingStore.createBindingForm.frequency"
               label="Частота обновления"
               :options="frequencyOptions"
-            />
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="create-binding-view__form-field">
-            <select-input
-              v-model="bindingStore.createBindingForm.format"
-              label="Формат"
-              :options="formatOptions"
             />
           </div>
         </div>
@@ -95,11 +86,6 @@ const frequencyOptions: {
   { value: 'weekly', label: 'Еженедельно' },
   { value: 'monthly', label: 'Ежемесячно' }
 ]
-
-const formatOptions: {
-  value: GoogleDocsBinding['format']
-  label: string
-}[] = [{ value: 'csv', label: 'CSV (формат файлов Excel)' }]
 
 const statusModel = computed({
   get: () => bindingStore.createBindingForm.status === 'active',

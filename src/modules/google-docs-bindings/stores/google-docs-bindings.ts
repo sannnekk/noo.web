@@ -30,11 +30,12 @@ export const useGoogleDocsBindingsStore = defineStore(
           value: ''
         },
         status: 'active',
+        lastErrorText: null,
         frequency: 'daily',
-        filePath: '',
-        format: 'csv',
+        filePath: [],
         googleOAuthToken: '',
-        googleCredentials: null as any
+        googleCredentials: null as any,
+        lastRunAt: null
       }
     }
 
@@ -115,12 +116,34 @@ export const useGoogleDocsBindingsStore = defineStore(
       }
     }
 
+    async function triggerBinding(id: GoogleDocsBinding['id']) {
+      try {
+        await googleBindingService.trigger(id, { showLoader: true })
+        uiService.openSuccessModal('Интеграция запущена')
+        bindingsSearch.trigger()
+      } catch (error: any) {
+        uiService.openErrorModal('Ошибка при запуске задания', error.message)
+      }
+    }
+
+    async function switchBindingOnOff(id: GoogleDocsBinding['id']) {
+      try {
+        await googleBindingService.switchOnOff(id, { showLoader: true })
+        uiService.openSuccessModal('Интеграция переключена')
+        bindingsSearch.trigger()
+      } catch (error: any) {
+        uiService.openErrorModal('Ошибка при переключении', error.message)
+      }
+    }
+
     return {
       bindingsSearch,
       createBindingForm,
       onGoogleLogin,
       saveBinding,
-      deleteBinding
+      deleteBinding,
+      triggerBinding,
+      switchBindingOnOff
     }
   }
 )

@@ -8,12 +8,13 @@ export interface GoogleDocsBinding extends Entity {
     prop: string
     value: string
   }
-  filePath: string
+  filePath: string[]
   googleOAuthToken: string
   googleCredentials: GoogleAuthCredential
   status: 'active' | 'inactive' | 'error'
-  format: 'csv'
+  lastErrorText: string | null
   frequency: 'hourly' | 'daily' | 'weekly' | 'monthly'
+  lastRunAt: Date | null
   createdAt: Date
   updatedAt: Date
 }

@@ -21,6 +21,9 @@
         :results="bindingStore.bindingsSearch.results"
         :is-loading="bindingStore.bindingsSearch.isListLoading"
         @delete="bindingStore.deleteBinding($event)"
+        @trigger="bindingStore.triggerBinding($event)"
+        @switch-on-off="bindingStore.switchBindingOnOff($event)"
+        @show-error="showError($event)"
       />
     </div>
     <div class="index-view__pagination">
@@ -31,13 +34,36 @@
       />
     </div>
   </div>
+  <base-modal
+    v-model:visible="errorModal.visible"
+    :title="`Ошибка интеграции ${errorModal.name}`"
+    :message="errorModal.error"
+    type="error"
+  />
 </template>
 
 <script setup lang="ts">
+import { reactive } from 'vue'
 import bindingsTable from '../components/bindings-table.vue'
 import { useGoogleDocsBindingsStore } from '../stores/google-docs-bindings'
 
 const bindingStore = useGoogleDocsBindingsStore()
+
+const errorModal = reactive({
+  name: '',
+  error: '',
+  visible: false
+})
+
+function showError(bindingId: string) {
+  const binding = bindingStore.bindingsSearch.results.find(
+    (binding) => binding.id === bindingId
+  )!
+
+  errorModal.name = binding.name
+  errorModal.error = binding.lastErrorText || 'Неизвестная ошибка'
+  errorModal.visible = true
+}
 </script>
 
 <style scoped lang="sass">

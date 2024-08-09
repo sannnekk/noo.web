@@ -20,6 +20,9 @@ interface Props {
 
 interface Emits {
   (event: 'delete', id: string): void
+  (event: 'trigger', id: string): void
+  (event: 'show-error', id: string): void
+  (event: 'switch-on-off', id: string): void
 }
 
 defineProps<Props>()
@@ -42,9 +45,9 @@ const cols: ColType[] = [
     value: (item: GoogleDocsBinding) => item.entityName
   },
   {
-    title: 'Файл',
-    type: 'text',
-    value: (item: GoogleDocsBinding) => item.filePath
+    title: 'Последний запуск',
+    type: 'date',
+    value: (item: GoogleDocsBinding) => item.lastRunAt
   },
   {
     title: 'Статус',
@@ -65,7 +68,7 @@ const cols: ColType[] = [
   {
     title: 'Аккаунт Google',
     type: 'text',
-    value: (item: GoogleDocsBinding) => item.googleCredentials.email || ''
+    value: (item: GoogleDocsBinding) => item.googleCredentials?.email || ''
   },
   {
     title: 'Дата создания',
@@ -76,6 +79,27 @@ const cols: ColType[] = [
 
 function actions(item: GoogleDocsBinding): MenuItem[] {
   return [
+    {
+      title: 'Запустить сейчас',
+      icon: 'attention-yellow',
+      action: () => {
+        emits('trigger', item.id)
+      }
+    },
+    {
+      title: 'Включить/выключить',
+      icon: 'check-green',
+      action: () => {
+        emits('switch-on-off', item.id)
+      }
+    },
+    {
+      title: 'Просмотреть ошибку',
+      icon: 'cross-red',
+      action: () => {
+        emits('show-error', item.id)
+      }
+    },
     {
       title: 'Удалить',
       icon: 'delete',
