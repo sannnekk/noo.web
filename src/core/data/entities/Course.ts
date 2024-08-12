@@ -1,6 +1,7 @@
 import type { Entity } from '../Entity'
 import type { Chapter } from './Chapter'
 import type { Media } from './Media'
+import type { Subject } from './Subject'
 import type { User } from './User'
 
 export interface Course extends Entity {
@@ -13,6 +14,8 @@ export interface Course extends Entity {
   chapters?: Chapter[]
   students?: User[]
   studentIds?: User['id'][]
+  subject: Subject
+  subjectId: Subject['id']
   createdAt: Date
   updatedAt: Date
 }

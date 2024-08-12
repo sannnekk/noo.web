@@ -22,16 +22,13 @@
 </template>
 
 <script setup lang="ts">
-import type { Media } from '@/core/data/entities/Media'
-import type { User } from '@/core/data/entities/User'
+import type { UserAvatar } from '@/core/data/entities/UserAvatar'
 import { computed } from 'vue'
 
 interface Props {
   name?: string
+  avatar?: UserAvatar | null
   isOnline?: boolean
-  telegramAvatarUrl?: string
-  avatarType?: User['avatarType']
-  avatarMedia?: Media
 }
 
 const props = defineProps<Props>()
@@ -45,11 +42,11 @@ const initials = computed(() => {
 })
 
 const src = computed(() => {
-  switch (props.avatarType) {
+  switch (props.avatar?.avatarType) {
     case 'telegram':
-      return props.telegramAvatarUrl
+      return props.avatar.telegramAvatarUrl
     case 'custom':
-      return props.avatarMedia?.src
+      return props.avatar.media?.src
     case undefined:
     default:
       return null

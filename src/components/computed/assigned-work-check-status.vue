@@ -2,7 +2,7 @@
   <div
     class="assigned-work-solve-status"
     :class="{
-      'assigned-work-solve-status--not-started': props.status === 'not-started',
+      'assigned-work-solve-status--not-checked': props.status === 'not-checked',
       'assigned-work-solve-status--in-progress': props.status === 'in-progress',
       'assigned-work-solve-status--checked-in-deadline':
         props.status === 'checked-in-deadline',
@@ -19,10 +19,11 @@
 </template>
 
 <script lang="ts" setup>
+import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import { computed } from 'vue'
 
 interface Props {
-  status: string
+  status: AssignedWork['checkStatus']
 }
 
 const props = defineProps<Props>()
@@ -49,7 +50,7 @@ const statusText = computed(() => {
 .assigned-work-solve-status
   font-weight: bold
 
-  &--not-started
+  &--not-checked
     color: var(--text-light)
 
   &--in-progress

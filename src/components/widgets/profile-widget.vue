@@ -5,10 +5,8 @@
   >
     <div class="profile-widget__avatar">
       <user-avatar
-        :telegram-avatar-url="Core.Context.User?.telegramAvatarUrl"
-        :avatar-type="Core.Context.User?.avatarType"
-        :avatar-media="Core.Context.User?.avatar"
         :name="Core.Context.User?.name"
+        :avatar="Core.Context.User?.avatar"
       />
     </div>
     <div class="profile-widget__credentials">

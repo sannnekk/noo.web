@@ -22,6 +22,11 @@ export const usePollResultsStore = defineStore('polls-module:results', () => {
   const poll = ref<Poll>()
 
   /**
+   * Current tab index
+   */
+  const currentTabIndex = ref(0)
+
+  /**
    * Search who voted
    */
   const resultsSearch = useSearch(fetchAnswers)
@@ -97,6 +102,7 @@ export const usePollResultsStore = defineStore('polls-module:results', () => {
 
   return {
     poll,
+    currentTabIndex,
     resultsSearch,
     unregisteredResultsSearch,
     fetchPoll

@@ -3,6 +3,7 @@
     :alignment="alignment"
     :design="design"
     :is-loading="isLoading"
+    :to="linkTo"
     @click="$emit('action')"
   >
     {{ value }}
@@ -14,6 +15,7 @@ interface Props {
   value?: string
   design?: 'primary' | 'secondary' | 'inline' | 'telegram'
   alignment?: 'left' | 'center' | 'right'
+  linkTo?: string
   isLoading?: boolean
 }
 

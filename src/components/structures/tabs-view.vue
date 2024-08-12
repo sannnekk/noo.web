@@ -25,24 +25,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
 
 interface Props {
   titles: string[]
+  tabIndex?: number
 }
 
 interface Emits {
-  (e: 'tabChange', index: number): void
+  (e: 'update:tabIndex', index: number): void
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
-const activeTabIndex = ref(0)
+const activeTabIndex = computed({
+  get: () => props.tabIndex || 0,
+  set: (index: number) => emits('update:tabIndex', index)
+})
 
 function onTabChange(index: number) {
   activeTabIndex.value = index
-  emits('tabChange', index)
 }
 </script>
 

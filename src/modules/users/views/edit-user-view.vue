@@ -1,7 +1,7 @@
 <template>
   <tabs-view
     :titles="['Данные', 'Календарь', 'Статистика', 'Работы']"
-    @tab-change="currentTab = $event"
+    v-model:tab-index="currentTab"
   >
     <template #tab-0>
       <div class="edit-user-view">
@@ -10,7 +10,7 @@
             <div class="edit-user-view__credentials">
               <div class="edit-user-view__credentials__avatar">
                 <user-avatar
-                  :src="userStore.user.telegramAvatarUrl"
+                  :avatar="userStore.user.avatar"
                   :name="userStore.user.name"
                 />
               </div>

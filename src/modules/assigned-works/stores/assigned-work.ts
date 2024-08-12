@@ -477,7 +477,10 @@ export const useAssignedWorkStore = defineStore(
     async function saveProgress() {
       if (!assignedWork.value) return
 
-      const payload = { ...assignedWork.value, work: undefined }
+      const payload = {
+        answers: assignedWork.value.answers,
+        comments: assignedWork.value.comments
+      }
 
       try {
         await assignedWorkService.saveAssignedWorkProgress(

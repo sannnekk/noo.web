@@ -1,6 +1,6 @@
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { Core } from '@/core/Core'
 import { useSearch } from '@/composables/useSearch'
 import type { Pagination } from '@/core/data/Pagination'
@@ -10,6 +10,11 @@ export const useAssignedWorksStore = defineStore(
   () => {
     const assignedWorkService = Core.Services.AssignedWork
     const uiService = Core.Services.UI
+
+    /**
+     * Current tab index
+     */
+    const currentTabIndex = ref(0)
 
     /**
      * Load assigned works
@@ -249,8 +254,8 @@ export const useAssignedWorksStore = defineStore(
     /**
      * On tab change
      */
-    function changeTab(tab: number) {
-      switch (tab) {
+    function changeTab() {
+      switch (currentTabIndex.value) {
         case 0:
           allSearch.triggerOnce()
           break
@@ -268,6 +273,8 @@ export const useAssignedWorksStore = defineStore(
           break
       }
     }
+
+    watch(currentTabIndex, changeTab)
 
     return {
       allSearch,
@@ -287,7 +294,7 @@ export const useAssignedWorksStore = defineStore(
       checkedSearchSelectedWorks,
       archiveWorks,
       unarchiveWorks,
-      changeTab
+      currentTabIndex
     }
   }
 )

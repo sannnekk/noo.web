@@ -22,7 +22,10 @@ const cols: ColType[] = [
     title: '',
     type: 'avatar',
     value: (user: any) => ({
-      avatarUrl: user.avatarUrl,
+      avatar: {
+        telegramAvatarUrl: user.avatarUrl,
+        avatarType: 'telegram'
+      },
       name: user.firstName + ' ' + user.lastName
     })
   },
@@ -37,6 +40,7 @@ const cols: ColType[] = [
     type: 'button',
     design: 'telegram',
     alignment: 'center',
+
     value: (user: any) => user.username,
     linkTo: ({ username }: { username: string }) => `https://t.me/${username}`
   },

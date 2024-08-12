@@ -139,6 +139,8 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
         { showLoader: true }
       )
 
+      await fetchUser()
+
       uiService.openSuccessModal(
         'Данные успешно обновлены',
         'Изменения вступят полностью в силу после следующего входа на платформу',
@@ -171,7 +173,6 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
 
       user.value.telegramUsername = data.telegramUsername || undefined
       user.value.telegramId = data.telegramId || undefined
-      user.value.telegramAvatarUrl = data.telegramAvatarUrl || undefined
 
       uiService.openSuccessModal('Telegram успешно привязан')
     } catch (error: any) {
@@ -224,11 +225,14 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
     try {
       await userService.updateUser(user.value.id, {
         id: user.value.id,
-        avatar: avatarData.media.at(0),
-        avatarType: avatarData.useTelegramAvatar ? 'telegram' : 'custom'
+        avatar: {
+          ...user.value.avatar!,
+          media: avatarData.media.at(0),
+          avatarType: avatarData.useTelegramAvatar ? 'telegram' : 'custom'
+        }
       })
-      uiService.openSuccessModal('Аватар успешно изменен')
       await fetchUser()
+      uiService.openSuccessModal('Аватар успешно изменен')
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при изменении аватара',

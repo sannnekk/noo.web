@@ -20,8 +20,11 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
   async function fetchCourses(pagination: Pagination) {
     try {
       return await courseService.getCourses(pagination)
-    } catch (error) {
-      uiService.openErrorModal('Произошла ошибка при загрузке курсов')
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при загрузке курсов',
+        error.message
+      )
     }
   }
 

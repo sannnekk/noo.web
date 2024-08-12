@@ -1,9 +1,9 @@
 <template>
   <router-link
     class="back-button"
-    :to="to"
+    :to="to || '#'"
   >
-    &#8249; Ко всем курсам
+    &#8249; <slot />
   </router-link>
 </template>
 

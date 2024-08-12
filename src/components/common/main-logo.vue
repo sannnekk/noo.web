@@ -7,7 +7,6 @@
 <script setup lang="ts">
 interface Props {
   dark?: boolean
-  image?: boolean
 }
 
 defineProps<Props>()

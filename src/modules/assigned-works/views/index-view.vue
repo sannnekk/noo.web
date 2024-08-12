@@ -8,7 +8,7 @@
         'Проверенные',
         'Архивированные'
       ]"
-      @tab-change="assignedWorksStore.changeTab($event)"
+      v-model:tab-index="assignedWorksStore.currentTabIndex"
     >
       <template #tab-0>
         <!-- All assigned works -->

@@ -22,16 +22,9 @@
       </div>
     </div>
   </div>
-  <assign-mentor-modal
-    v-model:visible="assignMentorModalVisible"
-    :current-mentor="mentor || null"
-    :user-id="userStore.user!.id"
-    @confirmed="onMentorSelectConfirm($event)"
-  />
 </template>
 
 <script setup lang="ts">
-import assignMentorModal from './assign-mentor-modal.vue'
 import type { User } from '@/core/data/entities/User'
 import { ref } from 'vue'
 import { useUserStore } from '../stores/user'

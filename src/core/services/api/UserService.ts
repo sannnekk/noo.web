@@ -6,6 +6,7 @@ import {
   type ApiResponse,
   type ServiceOptions
 } from '@/core/services/ApiService'
+import type { Subject } from '@/core/data/entities/Subject'
 
 export type UserRelations = 'students' | 'mentor' | 'courses'
 
@@ -143,10 +144,11 @@ export class UserService extends ApiService {
   public async assignMentor(
     studentId: User['id'],
     mentorId: User['id'],
+    subjectId: Subject['id'],
     options: ServiceOptions = {}
   ): Promise<void> {
     await this.httpPatch(
-      `${this._route}/${studentId}/assign-mentor/${mentorId}`,
+      `${this._route}/${studentId}/${subjectId}/mentor/${mentorId}`,
       undefined,
       undefined,
       options

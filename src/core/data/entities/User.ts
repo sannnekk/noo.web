@@ -1,6 +1,7 @@
 import type { Entity } from '../Entity'
 import type { Course } from './Course'
-import type { Media } from './Media'
+import type { MentorAssignment } from './MentorAssignment'
+import type { UserAvatar } from './UserAvatar'
 
 export interface User extends Entity {
   slug: string
@@ -9,14 +10,12 @@ export interface User extends Entity {
   username: string
   email: string
   newEmail?: string
-  avatar?: Media
-  avatarType?: 'telegram' | 'custom'
-  mentor?: User
+  avatar?: UserAvatar
   courses?: Course[]
-  students?: User[]
+  mentorAssignmentsAsMentor?: MentorAssignment[]
+  mentorAssignmentsAsStudent?: MentorAssignment[]
   telegramUsername?: string
   telegramId?: string
-  telegramAvatarUrl?: string
   password?: string
   isBlocked: boolean
   forbidden?: number

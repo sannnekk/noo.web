@@ -6,7 +6,7 @@ export const Constants = {
   MEDIA_URL:
     import.meta.env.MODE === 'production'
       ? 'https://cdn.noo-school.ru/uploads'
-      : 'file://C:\\Users\\nukle\\OneDrive\\projects\\noo\\web-2.0\\uploads',
+      : 'http://localhost:5500/uploads',
   APP_URL:
     import.meta.env.MODE === 'production'
       ? 'https://noo-school.ru'

@@ -7,7 +7,10 @@
       <back-button to="/blog"> Назад к блогу</back-button>
       <h1>{{ resultsStore.poll.title }}</h1>
     </div>
-    <tabs-view :titles="['Зарегистрированные', 'Не зарегистрированные']">
+    <tabs-view
+      :titles="['Зарегистрированные', 'Не зарегистрированные']"
+      v-model:tab-index="resultsStore.currentTabIndex"
+    >
       <template #tab-0>
         <div class="results-view__search-input">
           <search-field

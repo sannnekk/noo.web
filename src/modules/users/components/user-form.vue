@@ -54,7 +54,9 @@
           class="fomr-group__student-statistics"
           v-else-if="model.role === 'student'"
         >
-          <student-form :mentor="model.mentor" />
+          <student-mentors-view
+            v-model:mentor-assignments="(model as any).mentorAssignmentsAsStudent"
+          />
         </div>
       </div>
     </div>
@@ -64,7 +66,6 @@
 <script setup lang="ts">
 import teacherForm from './teacher-form.vue'
 import mentorForm from './mentor-form.vue'
-import studentForm from './student-form.vue'
 import { computed } from 'vue'
 import type { User } from '@/core/data/entities/User'
 import { Core } from '@/core/Core'

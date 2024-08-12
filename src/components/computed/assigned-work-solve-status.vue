@@ -17,10 +17,11 @@
 </template>
 
 <script lang="ts" setup>
+import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import { computed } from 'vue'
 
 interface Props {
-  status: string
+  status: AssignedWork['solveStatus']
 }
 
 const props = defineProps<Props>()

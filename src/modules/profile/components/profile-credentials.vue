@@ -3,9 +3,7 @@
     <div class="profile-credentials__avatar">
       <div class="profile-credentials__avatar__image">
         <user-avatar
-          :telegram-avatar-url="credentialsModel.telegramAvatarUrl"
-          :avatar-type="credentialsModel.avatarType"
-          :avatar-media="credentialsModel.avatar"
+          :avatar="credentialsModel.avatar"
           :name="credentialsModel.name"
         />
       </div>

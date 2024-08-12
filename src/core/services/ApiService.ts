@@ -241,7 +241,7 @@ export class ApiService extends Service {
           } catch (error) {
             reject({
               status: xhr.status,
-              message: 'Неизвестная ошибка 1'
+              message: 'Неизвестная ошибка'
             })
           }
         } else {
@@ -250,12 +250,12 @@ export class ApiService extends Service {
               status: xhr.status,
               message:
                 JSON.parse(xhr.responseText, this.dateParser)?.error ||
-                'Неизвестная ошибка 2'
+                'Ошибка сервера'
             })
           } catch (error) {
             reject({
               status: xhr.status,
-              message: 'Неизвестная ошибка 3'
+              message: 'Вероятно, сервер недоступен. Попробуйте снова'
             })
           }
         }
@@ -264,7 +264,7 @@ export class ApiService extends Service {
       xhr.onerror = () => {
         reject({
           status: 400,
-          message: 'Неизвестная ошибка 4'
+          message: 'Ошибка соединения. Проверьте интернет соединение'
         })
       }
 

@@ -48,6 +48,11 @@
                     : col.design
                 "
                 :is-loading="col.isLoading?.(object)"
+                :link-to="
+                  typeof col.linkTo === 'function'
+                    ? col.linkTo(object)
+                    : col.linkTo
+                "
                 @action="onAction(col, object, colIndex)"
               />
               <br v-if="value.joinType === 'br'" />
