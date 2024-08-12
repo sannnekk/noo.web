@@ -33,7 +33,14 @@ export class Context {
    * get current User
    */
   public get User() {
-    return Object.freeze(Storage.User)
+    return Storage.User
+  }
+
+  /**
+   * Set context user
+   */
+  public setUser(value: User) {
+    Storage.User = value
   }
 
   /**

@@ -3,7 +3,9 @@
     <div class="user-card__avatar">
       <user-avatar
         :name="user.name"
-        :src="user.telegramAvatarUrl"
+        :telegram-avatar-url="user.telegramAvatarUrl"
+        :avatar-type="user.avatarType"
+        :avatar-media="user.avatar"
         @click="isModalOpen = true"
       />
     </div>
@@ -14,28 +16,19 @@
       <h3 class="user-card__credentials__name">{{ user.name }}</h3>
       <p class="user-card__credentials__username">{{ user.username }}</p>
     </div>
-    <!-- <div
-      class="user-card__telegram"
-      v-if="user.telegramUsername"
-    >
-      <telegram-button
-        v-if="user.telegramUsername"
-        :username="user.telegramUsername"
-      />
-    </div> -->
   </div>
   <user-info-modal
     v-model:visible="isModalOpen"
-    :user="user"
+    :user="user as UserWithOnlineStatus"
   />
 </template>
 
 <script setup lang="ts">
-import type { User } from '@/core/data/entities/User'
+import type { User, UserWithOnlineStatus } from '@/core/data/entities/User'
 import { ref } from 'vue'
 
 interface Props {
-  user: User
+  user: UserWithOnlineStatus | User
 }
 
 defineProps<Props>()

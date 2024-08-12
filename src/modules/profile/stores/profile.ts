@@ -4,6 +4,7 @@ import { type PasswordChangeForm } from '../types/PasswordChangeForm'
 import { Core } from '@/core/Core'
 import type { UserWithOnlineStatus } from '@/core/data/entities/User'
 import type { TelegramUpdatePayload } from '@/core/services/api/UserService'
+import type { AvatarData } from '../components/change-avatar-modal.vue'
 
 export const useProfileStore = defineStore('profile-module:profile', () => {
   const userService = Core.Services.User
@@ -46,6 +47,7 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
       })
 
       user.value = response.data
+      Core.Context.setUser(user.value!)
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при загрузке данных пользователя',
@@ -136,9 +138,10 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
         },
         { showLoader: true }
       )
+
       uiService.openSuccessModal(
         'Данные успешно обновлены',
-        'Чтобы изменения вступили в силу, обновите страницу',
+        'Изменения вступят полностью в силу после следующего входа на платформу',
         [
           {
             label: 'Обновить страницу',
@@ -212,6 +215,28 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
     }
   }
 
+  /**
+   * change avatar
+   */
+  async function changeAvatar(avatarData: AvatarData) {
+    if (!user.value) return
+
+    try {
+      await userService.updateUser(user.value.id, {
+        id: user.value.id,
+        avatar: avatarData.media.at(0),
+        avatarType: avatarData.useTelegramAvatar ? 'telegram' : 'custom'
+      })
+      uiService.openSuccessModal('Аватар успешно изменен')
+      await fetchUser()
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при изменении аватара',
+        error.message
+      )
+    }
+  }
+
   return {
     user,
     mentor,
@@ -222,6 +247,7 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
     updateTelegram,
     removeTelegram,
     fetchUser,
-    requestChangeEmail
+    requestChangeEmail,
+    changeAvatar
   }
 })

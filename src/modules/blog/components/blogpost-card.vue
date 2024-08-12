@@ -51,7 +51,9 @@
         <div class="blogpost-card__footer__author__avatar">
           <user-avatar
             :name="post.author.name"
-            :src="post.author.telegramAvatarUrl"
+            :telegram-avatar-url="post.author.telegramAvatarUrl"
+            :avatar-type="post.author.avatarType"
+            :avatar-media="post.author.avatar"
           />
         </div>
         <div class="blogpost-card__footer__author__name">

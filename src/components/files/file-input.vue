@@ -5,7 +5,7 @@
       type="file"
       :accept="allowedMimeTypes.join(', ')"
       :multiple="!!maxCount && maxCount > 1"
-      @change="onFilesChange()"
+      @change="onFileInputChange()"
       area-hidden="true"
       hidden
     />
@@ -13,7 +13,7 @@
     <div
       v-if="!props.readonly"
       class="file-input__area"
-      :class="{ 'file-input__area--drag': drag }"
+      :class="{ 'file-input__area--drag': isDragActive }"
       @click=";($refs.fileInput as HTMLInputElement).click()"
       @dragenter.prevent="onDragEnter()"
       @dragleave.prevent="onDragLeave()"
@@ -31,16 +31,19 @@
         :key="files.length"
         v-model="files"
         item-key="id"
+        @update:model-value="onReorder($event)"
       >
-        <template v-slot="{ item }">
+        <template v-slot="{ item }: { item: ExtendedMedia }">
           <div class="file-input__files__file">
             <a
-              :href="`${Core.Constants.MEDIA_URL}/${item.src}`"
-              target="_blank"
+              :href="
+                item.src ? `${Core.Constants.MEDIA_URL}/${item.src}` : void 0
+              "
+              :target="item.src ? '_blank' : void 0"
               class="file-input__files__file__preview"
             >
               <inline-icon
-                v-if="item.src && item.extension === 'pdf'"
+                v-if="item.src && item.mimeType === 'application/pdf'"
                 name="pdf-file"
               />
               <uploaded-image
@@ -50,7 +53,7 @@
             </a>
             <div class="file-input__files__file__data">
               <p class="file-input__files__file__data__name">
-                {{ item.fileName }}
+                {{ item.name }}
               </p>
               <div
                 class="file-input__files__file__data__error"
@@ -84,35 +87,28 @@
   <crop-modal
     v-model:visible="cropModalVisible"
     v-model:files="filesForUpload"
-    @confirm="sendFiles()"
+    :files-with-errors="filesWithErrors"
+    @confirm="uploadFiles()"
     @cancel="filesCancel()"
   />
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { v4 as uuid } from 'uuid'
 import type { Media } from '@/core/data/entities/Media'
 import { Core } from '@/core/Core'
+import type { WithOptional } from '@/core/type-utils/WithOptional'
 
-interface FileItem {
-  key: string
-  id?: string
-  fileName: string
-  src: string
-  extension: 'png' | 'jpeg' | 'pdf'
+export interface ExtendedMedia extends WithOptional<Media, 'id' | 'createdAt'> {
   progress: number
   isUploaded: boolean
-  error: string
+  error?: string
   file: File | null
-  order: number
 }
 
 interface Props {
   label: string
-  modelValue: (Omit<Media, 'id' | 'createdAt'> & {
-    id?: Media['id']
-  })[]
+  modelValue: Media[]
   allowedMimeTypes: ('image/png' | 'image/jpeg' | 'application/pdf')[]
   maxFileSize?: number
   maxCount?: number
@@ -120,10 +116,7 @@ interface Props {
 }
 
 interface Emits {
-  (
-    event: 'update:modelValue',
-    value: (Omit<Media, 'id' | 'createdAt'> & { id: Media['id'] | undefined })[]
-  ): void
+  (event: 'update:modelValue', value: Media[]): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -135,128 +128,84 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emits = defineEmits<Emits>()
 
-const files = computed<FileItem[]>({
+const files = computed<ExtendedMedia[]>({
   get() {
-    return (props.modelValue || []).map((media, index) => ({
-      id: media.id,
-      key: uuid(),
-      fileName: media.name || media.src,
-      src: media.src,
-      extension: media.src.split('.').pop() as FileItem['extension'],
+    return (props.modelValue || []).map((media) => ({
+      ...media,
       progress: 100,
       isUploaded: true,
-      error: '',
-      file: null,
-      order: index
+      error: undefined,
+      file: null
     }))
   },
   set(value) {
-    emits(
-      'update:modelValue',
-      value.map((file, index) => ({
-        id: file.id,
-        src: file.src,
-        name: file.fileName,
-        order: index + 1,
-        mimeType:
-          file.extension === 'pdf'
-            ? 'application/pdf'
-            : file.extension === 'png'
-            ? 'image/png'
-            : 'image/jpeg'
-      }))
-    )
+    emits('update:modelValue', value as Media[])
   }
 })
 
-const filesForUpload = ref<FileItem[]>([])
+const filesWithErrors = ref<ExtendedMedia[]>([])
 
+const filesForUpload = ref<ExtendedMedia[]>([])
 const fileInput = ref<HTMLInputElement | null>(null)
-const drag = ref(false)
-
+const isDragActive = ref(false)
 const cropModalVisible = ref(false)
 
 let dragTimeoutId = 0
 
 function onDragEnter() {
-  drag.value = true
+  isDragActive.value = true
   clearTimeout(dragTimeoutId)
 }
 
 function onDragLeave() {
   dragTimeoutId = setTimeout(() => {
-    drag.value = false
+    isDragActive.value = false
   }, 50) as any
 }
 
-function onFilesChange() {
-  if (
-    props.maxCount &&
-    files.value.length + (fileInput.value?.files?.length || 0) > props.maxCount
-  ) {
-    return Core.Services.UI.openWarningModal(
-      `Превышен лимит файлов, которые можно загрузить. Можно загрузить не более ${props.maxCount} файлов`
-    )
+function onReorder(newFiles: ExtendedMedia[]) {
+  files.value = newFiles.map((file, index) => ({
+    ...file,
+    order: index
+  }))
+}
+
+function onFileInputChange() {
+  const selectedFiles = Array.from(fileInput.value?.files || [])
+
+  if (selectedFiles.length) {
+    filesForUpload.value = selectedFiles.map(mediaFromFile)
+
+    validateFiles()
   }
-
-  for (const file of Array.from(fileInput.value?.files || [])) {
-    if (!file) continue
-
-    if (!props.allowedMimeTypes.includes(file.type as any)) {
-      Core.Services.UI.openWarningModal(
-        'Этот тип файла не поддерживается. Поддерживаемые типы: .jpeg, .png, .pdf'
-      )
-      return
-    }
-
-    if (file.size > props.maxFileSize) {
-      Core.Services.UI.openWarningModal(
-        `Размер файла привышает допустимый (${Math.floor(
-          props.maxFileSize / 1024 / 1024
-        )} МБ)`
-      )
-      return
-    }
-  }
-
-  uploadFiles(Array.from(fileInput.value?.files || []))
 }
 
 function onFilesDropped(event: DragEvent) {
-  const _files = Array.from(event.dataTransfer?.files || [])
+  const droppedFiles = Array.from(event.dataTransfer?.files || [])
 
-  if (
-    props.maxCount &&
-    files.value.length + (_files.length || 0) > props.maxCount
-  ) {
-    Core.Services.UI.openWarningModal(
-      `Превышен лимит файлов, которые можно загрузить. Можно загрузить не более ${props.maxCount} файлов`
+  if (droppedFiles.length) {
+    filesForUpload.value = droppedFiles.map(mediaFromFile)
+
+    validateFiles()
+  }
+}
+
+function validateFiles() {
+  if (filesForUpload.value.length > props.maxCount) {
+    Core.Services.UI.openErrorModal(
+      `Максимальное количество файлов (${props.maxCount}) превышено`
     )
+    filesForUpload.value = []
     return
   }
 
-  uploadFiles(_files)
-}
-
-async function uploadFiles(_files: File[]) {
-  const fileItems: FileItem[] = Array.from(_files).map((file, index) => ({
-    key: uuid(),
-    fileName: file.name,
-    src: '',
-    extension: file.name.split('.').pop() as any,
-    progress: 1,
-    isUploaded: false,
-    error: '',
-    order: files.value.length + index,
-    file
-  }))
-
-  for (const file of fileItems) {
+  for (const file of filesForUpload.value) {
     if (!file.file) continue
 
     if (!props.allowedMimeTypes.includes(file.file.type as any)) {
-      file.error = 'Этот тип файла не поддерживается'
-      filesForUpload.value.push(file)
+      file.error =
+        'Этот тип файла не поддерживается, разрешены: ' +
+        props.allowedMimeTypes.join(', ')
       continue
     }
 
@@ -264,17 +213,17 @@ async function uploadFiles(_files: File[]) {
       file.error = `Размер файла превышает допустимый (${Math.floor(
         props.maxFileSize / 1024 / 1024
       )} МБ})`
-      filesForUpload.value.push(file)
       continue
     }
-
-    filesForUpload.value.push(file)
   }
 
-  cropModalVisible.value = true
+  filesWithErrors.value = filesForUpload.value.filter((file) => file.error)
+  filesForUpload.value = filesForUpload.value.filter((file) => !file.error)
+
+  openFilelistModal()
 }
 
-async function sendFiles() {
+async function uploadFiles() {
   cropModalVisible.value = false
 
   for (const file of filesForUpload.value) {
@@ -289,47 +238,70 @@ async function sendFiles() {
       )
 
       if (!response || !response.data) {
-        Core.Services.UI.openErrorModal('Ошибка при загрузке файла')
-        continue
+        throw new Error('Ошибка при загрузке файлов')
       }
 
       file.src = response.data[0].src
-      file.fileName = response.data[0].name
-      file.extension = response.data[0].mimeType.split('/').pop() as any
+      file.name = response.data[0].name
+      file.mimeType = response.data[0].mimeType
       file.isUploaded = true
       file.progress = 100
-
-      emits(
-        'update:modelValue',
-        files.value.map((file) => ({
-          id: file.id,
-          src: file.src,
-          name: file.fileName,
-          mimeType:
-            file.extension === 'pdf'
-              ? 'application/pdf'
-              : file.extension === 'png'
-              ? 'image/png'
-              : 'image/jpeg',
-          order: file.order
-        }))
-      )
+      file.error = undefined
     } catch (error: any) {
       file.error = error.message
     }
   }
 
+  files.value = files.value
+    .filter((file) => !file.error)
+    .map((file, index) => ({ ...file, order: index }))
+
+  filesWithErrors.value = filesForUpload.value.filter((file) => file.error)
+
   filesForUpload.value = []
+
+  if (filesWithErrors.value.length) {
+    const errorText = filesWithErrors.value
+      .map((file) => {
+        return `Файл "${file.name}": ${file.error}`
+      })
+      .join(', ')
+
+    Core.Services.UI.openErrorModal(
+      'Ошибка с загрузкой некоторых файлов',
+      errorText
+    )
+
+    filesWithErrors.value = []
+  }
 }
 
-function removeFile(file: FileItem) {
+function removeFile(file: ExtendedMedia) {
   if (props.readonly) return
 
-  files.value = files.value.filter((_file) => _file.key !== file.key)
+  files.value = files.value.filter((item) => item.name !== file.name)
 }
 
 function filesCancel() {
   filesForUpload.value = []
+  filesWithErrors.value = []
+}
+
+function openFilelistModal() {
+  cropModalVisible.value = true
+}
+
+function mediaFromFile(file: File): ExtendedMedia {
+  return {
+    name: file.name,
+    src: '',
+    mimeType: file.type as ExtendedMedia['mimeType'],
+    progress: 1,
+    isUploaded: false,
+    error: undefined,
+    order: files.value.length,
+    file
+  }
 }
 </script>
 
@@ -376,6 +348,7 @@ function filesCancel() {
     gap: 0.2em
 
     &__file
+      margin: 0.3em 0
       display: flex
       align-items: center
       padding: 0.8em 0
@@ -383,6 +356,7 @@ function filesCancel() {
       border-radius: var(--border-radius)
 
       &__preview
+        cursor: pointer
         width: 50px
         height: 50px
         min-width: 50px
@@ -418,6 +392,7 @@ function filesCancel() {
           color: var(--text-light)
           text-overflow: ellipsis
           overflow: hidden
+          cursor: move
 
         &__error
           p
@@ -436,8 +411,7 @@ function filesCancel() {
 
         &__delete
           cursor: pointer
-          transition: transform 0.1s ease-in-out
 
           &:hover
-            transform: scale(1.2)
+            --danger: var(--border-color)
 </style>

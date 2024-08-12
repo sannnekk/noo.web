@@ -19,7 +19,9 @@
               <div class="user-info-modal__content__image__avatar">
                 <user-avatar
                   :name="user.name"
-                  :src="user.telegramAvatarUrl"
+                  :telegram-avatar-url="user.telegramAvatarUrl"
+                  :avatar-type="user.avatarType"
+                  :avatar-media="user.avatar"
                 />
               </div>
               <div class="user-info-modal__content__image__online-status">

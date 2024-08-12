@@ -8,16 +8,16 @@
     <div class="file-list__body">
       <div class="file-list__body__list">
         <file-card
-          v-for="(file, index) in filesModel"
+          v-for="(mediaItem, index) in mediaModel"
           :key="index"
-          :src="file.src"
-          :extension="file.extension"
-          :file="file.file"
-          :name="(file as any).name || file.fileName"
+          :src="mediaItem.src"
+          :extension="getExtension(mediaItem.mimeType)"
+          :file="(mediaItem as ExtendedMedia).file"
+          :name="(mediaItem as any).name || mediaItem.name"
           :actions="actions"
-          :selected="!!(selectable && file.key && file.key === selectedKey)"
+          :selected="!!(selectable && mediaItem.name === selectedModel?.name)"
           :downloadable="actions && actions.includes('download')"
-          @click="onFileSelect(file.key)"
+          @click="onFileSelect(mediaItem)"
         />
       </div>
     </div>
@@ -26,49 +26,43 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-
-interface FileItem {
-  key: string
-  id?: string
-  fileName: string
-  src: string
-  extension: 'png' | 'jpeg' | 'pdf'
-  progress: number
-  isUploaded: boolean
-  error: string
-  file: File | null
-}
+import type { ExtendedMedia } from './file-input.vue'
+import type { Media } from '@/core/data/entities/Media'
 
 type Action = 'delete' | 'download'
 
 interface Props {
   label?: string
-  files: FileItem[]
+  files: (ExtendedMedia | Media)[]
   actions?: Action[]
   selectable?: boolean
-  selectedKey?: string
+  selected?: ExtendedMedia | Media
 }
 
 interface Emits {
   (e: 'update:files', value: Props['files']): void
-  (e: 'update:selectedKey', value: Props['selectedKey']): void
+  (e: 'update:selected', value: Props['selected']): void
 }
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
-const filesModel = computed({
+const mediaModel = computed({
   get: () => props.files,
   set: (value) => emits('update:files', value)
 })
 
-const selectedKeyModel = computed({
-  get: () => props.selectedKey,
-  set: (value) => emits('update:selectedKey', value)
+const selectedModel = computed({
+  get: () => props.files.find((file) => file.name === props.selected?.name),
+  set: (value) => emits('update:selected', value)
 })
 
-function onFileSelect(key: string) {
-  selectedKeyModel.value = key
+function onFileSelect(current: Media | ExtendedMedia) {
+  selectedModel.value = current
+}
+
+function getExtension(mimeType: string) {
+  return mimeType.split('/').at(1)! as 'png' | 'jpeg' | 'pdf'
 }
 </script>
 

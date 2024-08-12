@@ -3,6 +3,19 @@
     <the-sidebar-layout>
       <template #sidebar>
         <div class="index-create-course-view__sidebar">
+          <div class="index-create-course-view__sidebar__back-button">
+            <back-button to="/courses">Назад к курсам</back-button>
+          </div>
+          <div
+            class="index-create-course-view__sidebar__general-view-link"
+            v-if="createCourseStore.course"
+          >
+            <router-link
+              :to="`/create-course${createCourseStore.course.slug}/general`"
+            >
+              Общая информация
+            </router-link>
+          </div>
           <h3 class="index-create-course-view__sidebar__title">Главы</h3>
           <div
             class="index-create-course-view__sidebar__chapters"
@@ -40,39 +53,6 @@
         <div class="index-create-course-view__content">
           <router-view :key="$route.fullPath" />
         </div>
-        <div class="index-create-course-view__course-form">
-          <h3 class="index-create-course-view__course-form__title">
-            Общая информация о курсе
-          </h3>
-          <div class="form-group">
-            <form-input
-              v-model="createCourseStore.course.name"
-              label="Название курса"
-              type="text"
-            />
-          </div>
-          <div class="form-group">
-            <entity-select-input
-              label="Автор курса (по умолчанию - Вы)"
-              :fetch-function="createCourseStore.fetchTeachers"
-              :max-count="1"
-              :label-keys="['name', 'username']"
-              v-model="authorModel"
-            />
-          </div>
-          <div class="form-group">
-            <file-input
-              label="Картинка курса"
-              :max-count="1"
-              :allowed-mime-types="['image/jpeg', 'image/png']"
-              v-model="createCourseStore.course.images"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-group__label">Описание курса</label>
-            <text-area v-model="createCourseStore.course.description" />
-          </div>
-        </div>
       </template>
     </the-sidebar-layout>
   </div>
@@ -95,29 +75,13 @@ import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useCreateCourseStore } from '../stores/create-course'
 import { registerHotkeys } from '@/core/device/Hotkeys'
 import { HOT_KEYS } from '../utils/hotkeys'
-import { computed, onUnmounted } from 'vue'
-import type { User } from '@/core/data/entities/User'
+import { onUnmounted } from 'vue'
 
 const createCourseStore = useCreateCourseStore()
 
 createCourseStore.fetchCourse()
 
 setPageTitle('Создание/редактирование курса')
-
-const authorModel = computed<User[]>({
-  get: () => {
-    if (createCourseStore.course.author) {
-      return [createCourseStore.course.author]
-    }
-    return []
-  },
-  set: (value) => {
-    if (value.length === 0) {
-      createCourseStore.course.author = undefined
-    }
-    createCourseStore.course.author = value[0]
-  }
-})
 
 const unregister = registerHotkeys(HOT_KEYS)
 onUnmounted(() => unregister())
@@ -126,6 +90,17 @@ onUnmounted(() => unregister())
 <style lang="sass" scoped>
 .index-create-course-view
   &__sidebar
+    &__general-view-link
+      margin-bottom: 1em
+      font-size: 0.8em
+
+      a
+        color: var(--form-text-color)
+        text-decoration: none
+
+        &:hover
+          color: var(--secondary)
+
     &__title
       margin: 0
 
@@ -144,14 +119,4 @@ onUnmounted(() => unregister())
       &__delete
         margin-top: 3em
         font-size: 0.7em
-
-  &__course-form
-    padding: 1em
-    margin-bottom: 2em
-    border-radius: var(--border-radius)
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
-
-    .form-group__label
-      color: var(--text-light)
-      font-size: 0.8em
 </style>

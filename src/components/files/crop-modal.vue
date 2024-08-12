@@ -27,9 +27,9 @@
           </div>
           <div
             class="crop-modal__preview__pdf-preview"
-            v-else-if="currentFileItem?.extension === 'pdf'"
+            v-else-if="selectedMedia?.mimeType === 'application/pdf'"
           >
-            <pdf-preview :src="createObjectUrl(currentFileItem.file!)" />
+            <pdf-preview :src="createObjectUrl(selectedMedia.file!)" />
           </div>
         </div>
         <div class="crop-modal__menu">
@@ -38,9 +38,22 @@
           </div>
           <div class="crop-modal__menu__file-list">
             <file-list
+              selectable
               v-model:files="filesModel"
-              v-model:selected-key="selectedFileKey"
+              v-model:selected="selectedMedia"
             />
+          </div>
+          <div class="crop-modal__menu__error-list">
+            <p
+              class="crop-modal__menu__error-list__error"
+              v-for="file in filesWithErrors"
+              :key="file.order"
+            >
+              <b> {{ file.name }}: </b>
+              <span>
+                {{ file.error }}
+              </span>
+            </p>
           </div>
           <div class="crop-modal__menu__actions">
             <div class="row">
@@ -71,25 +84,15 @@
 </template>
 
 <script setup lang="ts">
+import type { ExtendedMedia } from './file-input.vue'
 import { computed, ref, watch } from 'vue'
 import { Cropper } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css'
 
-interface FileItem {
-  key: string
-  id?: string
-  fileName: string
-  src: string
-  extension: 'png' | 'jpeg' | 'pdf'
-  progress: number
-  isUploaded: boolean
-  error: string
-  file: File | null
-}
-
 interface Props {
   visible: boolean
-  files: FileItem[]
+  files: ExtendedMedia[]
+  filesWithErrors: ExtendedMedia[]
 }
 
 interface Emits {
@@ -107,32 +110,32 @@ const filesModel = computed({
   set: (value) => emits('update:files', value)
 })
 
-const selectedFileKey = ref('')
-
-const currentFileItem = ref<FileItem>()
+const selectedMedia = ref<ExtendedMedia>()
 const currentImage = ref<string>('')
 
 const showCroppper = computed(() => {
-  return currentFileItem.value?.extension !== 'pdf'
+  return (
+    selectedMedia.value?.mimeType === 'image/jpeg' ||
+    selectedMedia.value?.mimeType === 'image/png'
+  )
 })
 const cropperCurrentCanvas = ref<HTMLCanvasElement>()
 
+// select the first one when opened
 watch(
-  props.files,
+  () => props.visible,
   () => {
-    selectedFileKey.value = props.files[0]?.key || ''
+    selectedMedia.value = props.files?.at(0)
   },
   { immediate: true }
 )
 
 watch(
-  selectedFileKey,
+  selectedMedia,
   () => {
-    currentFileItem.value = filesModel.value.find(
-      (file) => file.key === selectedFileKey.value
-    )
-
-    if (currentFileItem.value) getBase64Image(currentFileItem.value)
+    if (selectedMedia.value) {
+      setTimeout(() => setBase64Image(selectedMedia.value!), 25)
+    }
   },
   { immediate: true }
 )
@@ -142,16 +145,16 @@ function onCropChange({ canvas }: { canvas: HTMLCanvasElement }) {
 }
 
 function onImageCrop() {
-  if (!currentFileItem.value) return
+  if (!selectedMedia.value) return
   if (!cropperCurrentCanvas.value) return
 
   const file = dataURLtoFile(
     cropperCurrentCanvas.value.toDataURL(),
-    currentFileItem.value.fileName
+    selectedMedia.value.name
   )
 
   filesModel.value = filesModel.value.map((fileItem) => {
-    if (fileItem.key === currentFileItem.value?.key) {
+    if (fileItem.name === selectedMedia.value?.name) {
       return {
         ...fileItem,
         file
@@ -176,7 +179,7 @@ function dataURLtoFile(dataurl: string, filename: string) {
   return new File([u8arr], filename, { type: mime })
 }
 
-function getBase64Image(file: FileItem) {
+function setBase64Image(file: ExtendedMedia) {
   if (!file.file) {
     currentImage.value = ''
     return
@@ -201,6 +204,7 @@ function onFilesConfirm() {
 }
 
 function onFilesCancel() {
+  filesModel.value = []
   emits('update:visible', false)
   emits('cancel')
 }
@@ -227,11 +231,17 @@ function onFilesCancel() {
     width: min(1110px, 100%)
     display: flex
 
+    @media only screen and (max-width: 768px)
+      flex-direction: column
+
   &__preview
     width: 100%
     height: 100%
     overflow: hidden
     flex: 1
+
+    @media only screen and (max-width: 768px)
+      height: 45vh
 
     &__image-preview
       height: 90vh
@@ -240,6 +250,9 @@ function onFilesCancel() {
       align-items: center
       justify-content: center
       background-color: var(--border-color)
+
+      @media only screen and (max-width: 768px)
+        height: 42vh
 
       &__cropper
         z-index: 1
@@ -270,6 +283,11 @@ function onFilesCancel() {
     width: min(350px, 100%)
     padding: 1em
 
+    @media only screen and (max-width: 768px)
+      height: auto
+      width: 100%
+      overflow-x: auto
+
     &__header
       padding-top: 1em
       height: 3.5em
@@ -277,12 +295,35 @@ function onFilesCancel() {
 
       h3
         font-size: 1.2em
-        color: var(--dark)
+        color: var(--form-text-color)
         margin-top: 0
 
     &__file-list
       flex: 1
       overflow-y: auto
+      width: auto
+
+      :deep()
+        .file-list__body__list
+          @media only screen and (max-width: 768px)
+            display: flex
+            width: unset
+
+          .file-card
+            @media only screen and (max-width: 768px)
+              min-width: 130px
+              max-width: 130px
+
+    &__error-list
+      font-size: 0.7em
+      margin: 0
+      display: none
+
+      &__error
+        margin: 0
+
+        span
+          color: var(--danger)
 
     &__actions
       height: 2.5em

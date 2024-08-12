@@ -22,12 +22,16 @@
 </template>
 
 <script setup lang="ts">
+import type { Media } from '@/core/data/entities/Media'
+import type { User } from '@/core/data/entities/User'
 import { computed } from 'vue'
 
 interface Props {
-  src?: string
   name?: string
   isOnline?: boolean
+  telegramAvatarUrl?: string
+  avatarType?: User['avatarType']
+  avatarMedia?: Media
 }
 
 const props = defineProps<Props>()
@@ -38,6 +42,18 @@ const initials = computed(() => {
   return `${(firstName || '-')[0]}${(lastName || ' ')[0]}`
     .toUpperCase()
     .replace(' ', '')
+})
+
+const src = computed(() => {
+  switch (props.avatarType) {
+    case 'telegram':
+      return props.telegramAvatarUrl
+    case 'custom':
+      return props.avatarMedia?.src
+    case undefined:
+    default:
+      return null
+  }
 })
 
 const bgColor = computed(() => {

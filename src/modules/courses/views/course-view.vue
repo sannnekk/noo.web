@@ -6,12 +6,7 @@
     <the-sidebar-layout>
       <template #sidebar>
         <div class="index-materials-view__tree">
-          <router-link
-            class="index-materials-view__tree__back-button"
-            to="/courses"
-          >
-            &#8249; Ко всем курсам
-          </router-link>
+          <back-button to="/courses">Ко всем курсам</back-button>
           <router-link
             class="index-materials-view__tree__students"
             v-if="Core.Context.roleIs(['teacher'])"
@@ -29,7 +24,11 @@
             <div class="index-materials-view__tree__author__avatar">
               <user-avatar
                 :name="courseStore.course.author.name"
-                :src="courseStore.course.author.telegramAvatarUrl"
+                :telegram-avatar-url="
+                  courseStore.course.author.telegramAvatarUrl
+                "
+                :avatar-type="courseStore.course.author.avatarType"
+                :avatar-media="courseStore.course.author.avatar"
               />
             </div>
             <div class="index-materials-view__tree__author__name">
@@ -79,16 +78,6 @@ watch(
 <style lang="sass" scoped>
 .index-materials-view
   &__tree
-    &__back-button
-      display: block
-      margin-bottom: 1rem
-      font-size: 0.8em
-      color: var(--text-light)
-      text-decoration: none
-
-      &:hover
-        color: var(--secondary)
-
     &__students
       cursor: pointer
       display: block

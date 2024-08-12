@@ -4,12 +4,7 @@
     v-if="resultsStore.poll"
   >
     <div class="results-view__head">
-      <router-link
-        to="/blog"
-        class="results-view__head__back"
-      >
-        Назад к блогу
-      </router-link>
+      <back-button to="/blog"> Назад к блогу</back-button>
       <h1>{{ resultsStore.poll.title }}</h1>
     </div>
     <tabs-view :titles="['Зарегистрированные', 'Не зарегистрированные']">
@@ -97,12 +92,4 @@ watch(
 <style scoped lang="sass">
 .results-view
   padding: 1em
-
-  &__head
-    &__back
-      text-decoration: none
-      color: var(--text-light)
-
-      &:hover
-        text-decoration: underline
 </style>

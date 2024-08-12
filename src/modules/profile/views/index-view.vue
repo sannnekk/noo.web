@@ -13,6 +13,7 @@
               @add-telegram="telegramModal.visible = true"
               @remove-telegram="profileStore.removeTelegram()"
               @change-email="changeEmailModalVisible = true"
+              @change-avatar="profileStore.changeAvatar($event)"
             />
           </div>
           <div class="index-profile-view__password-change">

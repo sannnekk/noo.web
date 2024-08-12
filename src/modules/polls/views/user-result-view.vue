@@ -10,12 +10,9 @@
     <the-sidebar-layout>
       <template #sidebar>
         <div class="user-result-view__sidebar">
-          <router-link
-            class="user-result-view__back"
-            :to="`/poll/${resultStore.poll.id}/results`"
-          >
+          <back-button :to="`/poll/${resultStore.poll.id}/results`">
             Назад ко всем результатам
-          </router-link>
+          </back-button>
           <h3>Опрос:</h3>
           <p>{{ resultStore.poll.title }}</p>
           <h3>Дата голосования:</h3>
@@ -80,16 +77,3 @@ function editAnswer(answerId: PollAnswer['id']) {
   editAnswerModalVisible.value = true
 }
 </script>
-
-<style scoped lang="sass">
-.user-result-view
-  &__back
-    display: block
-    margin-bottom: 20px
-    color: var(--text-light)
-    font-size: 14px
-    text-decoration: none
-
-    &:hover
-      text-decoration: underline
-</style>

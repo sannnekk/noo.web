@@ -16,7 +16,7 @@ import { computed } from 'vue'
 interface Props {
   modelValue: ({
     id: string
-  } & Record<string, any>)[]
+  } & any)[]
 }
 
 interface Emits {

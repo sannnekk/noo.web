@@ -2,7 +2,9 @@
   <user-avatar
     v-if="value"
     :name="value.name"
-    :src="value.telegramAvatarUrl"
+    :telegram-avatar-url="value.telegramAvatarUrl"
+    :avatar-type="value.avatarType"
+    :avatar-media="value.avatar"
     :is-online="(value as UserWithOnlineStatus).isOnline"
   />
 </template>
