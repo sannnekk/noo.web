@@ -14,6 +14,7 @@
     </div>
     <div class="index-view__tabs">
       <tabs-view
+        v-model:tab-index="tabIndex"
         :titles="['Добавить/убрать учеников', 'Синхронизация через email']"
       >
         <template #tab-0>
@@ -32,12 +33,15 @@ import addStudentsView from '../components/add-students-view.vue'
 import emailSyncView from '../components/email-sync-view.vue'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useCourseStudentsStore } from '../stores/course-students'
+import { ref } from 'vue'
 
 const courseStudentsStore = useCourseStudentsStore()
 
 courseStudentsStore.fetchCourse().then(() => {
   setPageTitle(`Ученики курса "${courseStudentsStore.course?.name ?? '???'}"`)
 })
+
+const tabIndex = ref(0)
 </script>
 
 <style scoped lang="sass">
