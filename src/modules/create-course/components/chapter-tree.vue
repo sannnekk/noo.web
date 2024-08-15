@@ -345,8 +345,8 @@ function addChapter() {
           cursor: move
           display: inline-block
           user-select: none
-          width: 1em
-          text-align: right
+          width: 1.7em
+          text-align: center
           font-weight: bold
 
         &__title
@@ -361,7 +361,7 @@ function addChapter() {
             padding: 0.5em 0.5em
 
             &.router-link-active
-              color: var(--secondary)
+              font-weight: bold
 
             &:hover
               background-color: var(--border-color)

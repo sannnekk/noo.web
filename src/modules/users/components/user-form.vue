@@ -1,5 +1,6 @@
 <template>
   <div class="user-form">
+    <h3>Данные пользователя</h3>
     <div class="row">
       <div class="col-md-6">
         <div class="form-group registration-date">
@@ -36,7 +37,7 @@
           class="fomr-group__student-list"
           v-else-if="model.role === 'mentor'"
         >
-          <!-- <mentor-form :students="model.students" /> -->
+          <mentor-form :students="studentsWithSubjects" />
         </div>
         <div
           class="fomr-group__student-statistics"
@@ -54,13 +55,16 @@
 </template>
 
 <script setup lang="ts">
+import mentorForm from './mentor-form.vue'
 import teacherForm from './teacher-form.vue'
 import { computed } from 'vue'
 import type { User } from '@/core/data/entities/User'
 import { Core } from '@/core/Core'
+import type { UserWithSubject } from '@/modules/students/stores/students'
 
 interface Props {
   modelValue: User
+  studentsWithSubjects: UserWithSubject[]
 }
 
 interface Emits {

@@ -18,6 +18,12 @@
           design="danger"
           @click="archiveWorksModalVisible = true"
         >
+          Удалить
+        </common-button>
+        <common-button
+          design="danger"
+          @click="archiveWorksModalVisible = true"
+        >
           Архивировать
         </common-button>
         <common-button

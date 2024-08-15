@@ -113,6 +113,7 @@
         alignment="left"
         design="warning"
         v-if="
+          assignedWorkStore.task.isAnswerVisibleBeforeCheck &&
           assignedWorkStore.task.type === 'word' &&
           assignedWorkStore.mode === 'solve'
         "
@@ -150,6 +151,7 @@
 </template>
 
 <script setup lang="ts">
+import AnswerModal from '../components/answer-modal.vue'
 import { useAssignedWorkStore } from '../stores/assigned-work'
 import taskAnswerTextContainer from '../components/task-answer-text-container.vue'
 import taskAnswerWordContainer from '../components/task-answer-word-container.vue'
@@ -166,8 +168,8 @@ const answerModalData = ref({
 })
 
 function openAnswerModal() {
-  answerModalData.value.visible = true
   answerModalData.value.answer = assignedWorkStore.task.rightAnswer
+  answerModalData.value.visible = true
 }
 </script>
 

@@ -22,9 +22,11 @@ defineProps<Props>()
 .subject-name
   display: block
   padding: 0.25rem 0.5rem
+  padding-left: 0
   border-radius: var(--border-radius)
   font-size: 1em
   font-weight: 500
+  white-space: nowrap
 
   &__badge
     display: inline-block

@@ -15,6 +15,7 @@ export interface Task extends Entity {
   solveHint?: DeltaContentType
   checkHint?: DeltaContentType
   checkingStrategy?: 'type1' | 'type2' | 'type3' | 'type4'
+  isAnswerVisibleBeforeCheck: boolean
   options?: TaskOption[]
   optionsIds?: TaskOption['id'][]
   createdAt: Date

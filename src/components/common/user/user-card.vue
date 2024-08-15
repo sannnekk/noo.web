@@ -48,11 +48,15 @@ const isModalOpen = ref(false)
   cursor: pointer
 
   &:hover
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2)
-    background-color: var(--border-color)
+    .user-card__avatar
+      transform: scale(1.1)
+
+    .user-card__credentials__name
+      color: var(--lila)
 
   &__avatar
     font-size: 50px
+    transition: 0.2s ease all
 
   &__credentials
     display: block
@@ -67,6 +71,7 @@ const isModalOpen = ref(false)
       cursor: pointer
       line-height: 1
       margin-bottom: 0.1em
+      transition: 0.2s ease all
 
     &__username
       margin: 0

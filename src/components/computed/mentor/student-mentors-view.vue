@@ -75,7 +75,7 @@
             <div
               v-else-if="
 								Core.Context.roleIs(['mentor']) && 
-								(subject.assignment!.mentor.id !== Core.Context.User!.id)
+								(subject.assignment?.mentor.id !== Core.Context.User!.id)
 							"
               design="secondary"
               class="student-mentors-view__card__mentor__assign-button"

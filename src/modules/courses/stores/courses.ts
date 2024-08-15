@@ -11,8 +11,13 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
   /**
    * search
    */
-  const { pagination, results, resultsMeta, isListLoading } =
-    useSearch<Course>(fetchCourses)
+  const {
+    pagination,
+    results,
+    resultsMeta,
+    isListLoading,
+    trigger: triggerSearch
+  } = useSearch<Course>(fetchCourses)
 
   /**
    * Fetch the courses
@@ -32,6 +37,7 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
     pagination,
     results,
     resultsMeta,
-    isListLoading
+    isListLoading,
+    triggerSearch
   }
 })

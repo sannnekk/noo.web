@@ -30,6 +30,12 @@
           label="Способ проверки"
           :options="checkingStrategyOptions"
         />
+        <div class="task-form__checkbox">
+          <form-checkbox
+            v-model="model.isAnswerVisibleBeforeCheck"
+            label="Показывать ответ до проверки"
+          />
+        </div>
       </div>
     </div>
     <div class="task-form__row">
@@ -40,17 +46,6 @@
         />
       </div>
     </div>
-    <!-- <div
-      class="task-form__row"
-      v-if="['one_choice', 'multiple_choice'].includes(model.type)"
-    >
-      <div class="task-form__col-12 form-group">
-        <create-work-task-options
-          v-model="model.options"
-          :task="model"
-        />
-      </div>
-    </div> -->
     <div
       class="task-form__row"
       v-if="['word'].includes(model.type)"
@@ -123,14 +118,6 @@ const model = computed({
 })
 
 const taskTypeOptions = reactive<TaskTypeOption[]>([
-  /* {
-    label: 'Несколько вариантов ответа',
-    value: 'multiple_choice'
-  },
-  {
-    label: 'Один вариант ответа',
-    value: 'one_choice'
-  }, */
   {
     label: 'Ответ в одну строку',
     value: 'word'
@@ -188,4 +175,15 @@ const taskTypeOptions = reactive<TaskTypeOption[]>([
   &__row
     display: flex
     flex-wrap: wrap
+
+  &__checkbox
+    :deep()
+      .form-checkbox
+        margin-top: 1em
+
+        &__text
+          line-height: 0.8em
+          color: var(--text-light)
+          font-size: 0.8em
+          display: inline-block
 </style>

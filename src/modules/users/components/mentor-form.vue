@@ -11,9 +11,10 @@
 <script setup lang="ts">
 import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 import type { User } from '@/core/data/entities/User'
+import type { UserWithSubject } from '@/modules/students/stores/students'
 
 interface Props {
-  students: User[] | undefined
+  students: UserWithSubject[]
 }
 
 defineProps<Props>()
@@ -28,6 +29,11 @@ const columns: ColType[] = [
     type: 'text',
     value: (student: User) => student.name,
     linkTo: (student: User) => `/users/edit/${student.username}`
+  },
+  {
+    title: 'Предмет',
+    type: 'subject',
+    value: (student: UserWithSubject) => student.subject
   },
   {
     title: 'Никнейм',

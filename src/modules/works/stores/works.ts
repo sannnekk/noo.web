@@ -65,6 +65,7 @@ export const useWorksStore = defineStore('works-module', () => {
   }
 
   return {
+    triggerSearch: trigger,
     pagination,
     results,
     resultsMeta,

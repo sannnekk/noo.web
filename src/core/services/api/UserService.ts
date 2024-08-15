@@ -97,11 +97,12 @@ export class UserService extends ApiService {
    * get own students
    */
   public async getOwnStudents(
+    userId: User['id'] | undefined,
     pagination?: Pagination,
     options: ServiceOptions = {}
   ): Promise<ApiResponse<(User & { subject: Subject })[]>> {
     return await this.httpGet<(User & { subject: Subject })[]>(
-      `${this._route}/student/search/own`,
+      `${this._route}/student/search/own${userId ? `/${userId}` : ''}`,
       pagination,
       undefined,
       options

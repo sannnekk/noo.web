@@ -88,9 +88,19 @@
                   </common-button>
                 </div>
               </warning-block>
+              <div class="edit-user-view__content__role">
+                <change-role-form
+                  :available="
+                    Core.Context.roleIs(['admin', 'teacher']) &&
+                    userStore.user.role === 'student'
+                  "
+                  @change-role="userStore.changeRole($event)"
+                />
+              </div>
               <div class="edit-user-view__content__form">
                 <user-form
                   v-model="userStore.user"
+                  :students-with-subjects="userStore.studentsWithSubjects"
                   @mentor-assigned="userStore.fetchUser()"
                 />
               </div>
@@ -161,6 +171,7 @@
 </template>
 
 <script setup lang="ts">
+import ChangeRoleForm from '../components/change-role-form.vue'
 import assignedWorksView from '../components/assigned-works-view.vue'
 import changePasswordModal from '../components/change-password-modal.vue'
 import userForm from '../components/user-form.vue'
@@ -254,6 +265,7 @@ const currentTab = ref(0)
 
     &__form
       padding: 1em
+      padding-top: 0
 
     &__actions
       padding: 1em

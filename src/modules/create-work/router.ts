@@ -1,7 +1,6 @@
 import module from './module-root.vue'
 import GeneralInfoView from './views/general-info-view.vue'
 import index from './views/index-view.vue'
-import SuccessView from './views/success-view.vue'
 import TaskFormView from './views/task-form-view.vue'
 
 export default {
@@ -25,11 +24,6 @@ export default {
           component: TaskFormView
         }
       ]
-    },
-    {
-      path: 'success',
-      name: 'Работа создана',
-      component: SuccessView
     }
   ]
 }

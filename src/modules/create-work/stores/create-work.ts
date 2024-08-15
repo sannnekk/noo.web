@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { v4 as uuid } from 'uuid'
 import type { Work } from '@/core/data/entities/Work'
 import { Core } from '@/core/Core'
+import { useWorksStore } from '@/modules/works/stores/works'
 
 export const useCreateWorkStore = defineStore(
   'create-work-module:create-work',
@@ -13,6 +14,8 @@ export const useCreateWorkStore = defineStore(
     const uiService = Core.Services.UI
     const _router = useRouter()
     const _route = useRoute()
+
+    const worksStore = useWorksStore()
 
     /**
      * Work types
@@ -135,6 +138,7 @@ export const useCreateWorkStore = defineStore(
         rightAnswer: '',
         createdAt: new Date(),
         updatedAt: new Date(),
+        isAnswerVisibleBeforeCheck: false,
         workId: ''
       }
     }
@@ -231,6 +235,11 @@ export const useCreateWorkStore = defineStore(
         return
       }
 
+      if (!payload.subject) {
+        uiService.openWarningModal('У работы должен быть предмет')
+        return
+      }
+
       // add order to tasks
       payload.tasks = payload.tasks.map((task, index) => {
         return {
@@ -244,7 +253,16 @@ export const useCreateWorkStore = defineStore(
           await workService.updateWork(work.value.id, payload as Work, {
             showLoader: true
           })
-          _router.push('/create-work/success')
+          uiService.openSuccessModal('Работа успешно создана', undefined, [
+            {
+              label: 'Вернуться к списку работ',
+              design: 'primary',
+              handler: () => {
+                worksStore.triggerSearch()
+                _router.push('/works')
+              }
+            }
+          ])
         } catch (error: any) {
           uiService.openErrorModal(
             'Произошла ошибка при обновлении работы',
@@ -254,7 +272,16 @@ export const useCreateWorkStore = defineStore(
       } else {
         try {
           await workService.createWork(payload as Work, { showLoader: true })
-          _router.push('/create-work/success')
+          uiService.openSuccessModal('Работа успешно создана', undefined, [
+            {
+              label: 'Вернуться к списку работ',
+              design: 'primary',
+              handler: () => {
+                worksStore.triggerSearch()
+                _router.push('/works')
+              }
+            }
+          ])
         } catch (error: any) {
           uiService.openErrorModal(
             'Произошла ошибка при создании работы',

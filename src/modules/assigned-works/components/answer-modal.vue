@@ -1,14 +1,16 @@
 <template>
-  <base-modal v-model:visible="visibilityModel">
-    <template #title> Правильный ответ </template>
-    <template #content>
-      <form-input
-        type="text"
-        :modelValue="rightAnswer"
-        label="Правильный ответ"
-        readonly
-      />
-    </template>
+  <base-modal
+    v-model:visible="visibilityModel"
+    type="info"
+    title="Правильный ответ"
+  >
+    <form-input
+      type="text"
+      :modelValue="rightAnswer"
+      label="Правильный ответ"
+      readonly
+    />
+    <br />
   </base-modal>
 </template>
 

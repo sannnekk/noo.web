@@ -7,6 +7,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Core } from '@/core/Core'
 import type { Chapter } from '@/core/data/entities/Chapter'
 import type { Pagination } from '@/core/data/Pagination'
+import { useCoursesStore } from '@/modules/courses/stores/courses'
 
 export const useCreateCourseStore = defineStore(
   'create-course-module:create-course',
@@ -16,6 +17,8 @@ export const useCreateCourseStore = defineStore(
     const uiService = Core.Services.UI
     const _route = useRoute()
     const _router = useRouter()
+
+    const coursesStore = useCoursesStore()
 
     /**
      * Empty course
@@ -262,6 +265,7 @@ export const useCreateCourseStore = defineStore(
               label: 'Вернуться к списку курсов',
               design: 'primary',
               handler: () => {
+                coursesStore.triggerSearch()
                 _router.push('/courses')
               }
             }
@@ -282,6 +286,7 @@ export const useCreateCourseStore = defineStore(
               label: 'Вернуться к списку курсов',
               design: 'primary',
               handler: () => {
+                coursesStore.triggerSearch()
                 _router.push('/courses')
               }
             }
@@ -311,6 +316,7 @@ export const useCreateCourseStore = defineStore(
             label: 'Вернуться к списку курсов',
             design: 'primary',
             handler: () => {
+              coursesStore.triggerSearch()
               _router.push('/courses')
             }
           }

@@ -1,5 +1,6 @@
 import { Core } from '@/core/Core'
-import type { UserWithOnlineStatus } from '@/core/data/entities/User'
+import type { User, UserWithOnlineStatus } from '@/core/data/entities/User'
+import type { UserWithSubject } from '@/modules/students/stores/students'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -15,6 +16,11 @@ export const useUserStore = defineStore('users-module:user', () => {
   const user = ref<UserWithOnlineStatus | null>(null)
 
   /**
+   * Mentor students with subjects
+   */
+  const studentsWithSubjects = ref<UserWithSubject[]>([])
+
+  /**
    * Fetch user by username
    */
   async function fetchUser() {
@@ -24,6 +30,19 @@ export const useUserStore = defineStore('users-module:user', () => {
         { showLoader: true }
       )
       user.value = response.data
+
+      if (user.value?.role === 'mentor') {
+        const studentsResponse = await userService.getOwnStudents(
+          user.value!.id,
+          {
+            page: 1,
+            limit: 500
+          },
+          { showLoader: true }
+        )
+
+        studentsWithSubjects.value = studentsResponse.data
+      }
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при получении данных пользователя',
@@ -103,11 +122,33 @@ export const useUserStore = defineStore('users-module:user', () => {
     }
   }
 
+  /**
+   * Change user role
+   */
+  async function changeRole(role: User['role']) {
+    if (!user.value) {
+      return
+    }
+
+    try {
+      await userService.changeRole(user.value.id, role, { showLoader: true })
+      uiService.openSuccessModal('Роль успешно изменена')
+      await fetchUser()
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при изменении роли',
+        error.message
+      )
+    }
+  }
+
   return {
     user,
+    studentsWithSubjects,
     fetchUser,
     saveUser,
     confirmUser,
-    changePassword
+    changePassword,
+    changeRole
   }
 })
