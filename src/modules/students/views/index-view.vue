@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import type { User } from '@/core/data/entities/User'
-import { useStudentsStore } from '../stores/students'
+import { useStudentsStore, type UserWithSubject } from '../stores/students'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 
@@ -54,6 +54,11 @@ const cols: ColType[] = [
     },
     type: 'text',
     linkTo: (user: User) => `/users/edit/${user.username}`
+  },
+  {
+    title: 'Предмет',
+    type: 'subject',
+    value: (user: UserWithSubject) => user.subject
   },
   {
     title: 'Никнейм',

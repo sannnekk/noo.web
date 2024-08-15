@@ -99,8 +99,8 @@ export class UserService extends ApiService {
   public async getOwnStudents(
     pagination?: Pagination,
     options: ServiceOptions = {}
-  ): Promise<ApiResponse<User[]>> {
-    return await this.httpGet<User[]>(
+  ): Promise<ApiResponse<(User & { subject: Subject })[]>> {
+    return await this.httpGet<(User & { subject: Subject })[]>(
       `${this._route}/student/search/own`,
       pagination,
       undefined,
@@ -167,6 +167,44 @@ export class UserService extends ApiService {
   }
 
   /**
+   * Change users password
+   */
+  public async changePassword(
+    userId: User['id'],
+    oldPassword: string,
+    newPassword: string,
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpPatch(
+      `${this._route}/${userId}/password`,
+      {
+        oldPassword,
+        newPassword
+      },
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Change users role
+   */
+  public async changeRole(
+    userId: User['id'],
+    role: User['role'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpPatch(
+      `${this._route}/${userId}/role`,
+      {
+        role
+      },
+      undefined,
+      options
+    )
+  }
+
+  /**
    * Update telegram
    */
   public async updateTelegram(
@@ -205,9 +243,14 @@ export class UserService extends ApiService {
    */
   public async deleteUser(
     id: User['id'],
+    password: string,
     options: ServiceOptions = {}
   ): Promise<void> {
-    await this.httpDelete(`${this._route}/${id}`, undefined, options)
+    await this.httpDelete(
+      `${this._route}/${id}/${password}`,
+      undefined,
+      options
+    )
   }
 
   /**

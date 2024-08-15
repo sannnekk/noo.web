@@ -5,12 +5,10 @@
     @cancel="selectedMentorIds = []"
   >
     <template #title>
-      <h2>Выбор куратора для учника {{ student.name }}</h2>
+      <div class="subject"><subject-name :subject="subject" /></div>
+      <h2>Выбор куратора для учника <br />{{ student.name }}</h2>
     </template>
     <template #text>
-      <div class="subject">
-        <subject-name :subject="subject" />
-      </div>
       <div class="search">
         <search-field
           v-model="search.pagination.value.search"
@@ -53,14 +51,7 @@ interface Props {
 
 interface Emits {
   (e: 'update:visible', value: boolean): void
-  (
-    e: 'mentor-assigned',
-    value: {
-      mentorId: User['id']
-      studentId: User['id']
-      subjectId: Subject['id']
-    }
-  ): void
+  (e: 'mentor-assigned'): void
 }
 
 const props = defineProps<Props>()
@@ -107,9 +98,11 @@ async function assignMentor() {
       throw new Error('Не указан предмет')
     }
 
-    await Core.Services.User.assignMentor(mentorId, studentId, subjectId)
+    await Core.Services.User.assignMentor(studentId, mentorId, subjectId, {
+      showLoader: true
+    })
 
-    emits('mentor-assigned', { mentorId, studentId, subjectId })
+    emits('mentor-assigned')
   } catch (error: any) {
     Core.Services.UI.openErrorModal(
       'Не удалось назначить куратора',
@@ -118,3 +111,8 @@ async function assignMentor() {
   }
 }
 </script>
+
+<style lang="sass" scoped>
+.list
+	margin: 1em 0 0 0
+</style>

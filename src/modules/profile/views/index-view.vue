@@ -10,28 +10,20 @@
             <profile-credentials
               v-model="profileStore.user"
               @save="profileStore.updateCredentials()"
-              @add-telegram="telegramModal.visible = true"
-              @remove-telegram="profileStore.removeTelegram()"
               @change-email="changeEmailModalVisible = true"
               @change-avatar="profileStore.changeAvatar($event)"
             />
           </div>
-          <div class="index-profile-view__password-change">
-            <profile-password-form
-              v-model="profileStore.passwords"
-              @save="profileStore.changePassword()"
-            />
-          </div>
-          <div class="index-profile-view__delete-account">
-            <delete-account @delete-account="profileStore.deleteAccount()" />
-          </div>
         </div>
       </template>
       <template #content>
-        <div class="index-profile-view__mentor">
-          <user-mentor
-            v-if="profileStore.mentor"
-            :mentor="profileStore.mentor"
+        <div
+          class="index-profile-view__mentor"
+          v-if="Core.Context.roleIs(['student'])"
+        >
+          <student-mentors-view
+            :mentor-assignments="profileStore.user.mentorAssignmentsAsStudent!"
+            :student="Core.Context.User!"
           />
         </div>
         <div
@@ -47,34 +39,9 @@
             :username="Core.Context.User?.username"
           />
         </div>
-        <div
-          class="index-profile-view__active-sessions"
-          v-if="Core.Context.User"
-        >
-          <h3 class="index-profile-view__active-sessions__header">
-            Активные сеансы
-          </h3>
-          <session-view />
-        </div>
-        <div
-          class="index-profile-view__google-docs-integrations"
-          v-if="Core.Context.User && Core.Context.roleIs(['teacher'])"
-        >
-          <h3 class="index-profile-view__charts__header">
-            Итеграции Google Docs
-          </h3>
-          <router-link to="/google-docs-bindings">
-            Перейти в раздел интеграций
-          </router-link>
-        </div>
       </template>
     </the-sidebar-layout>
   </div>
-  <add-telegram-modal
-    v-model:visible="telegramModal.visible"
-    v-model:auth-data="telegramModal.authData"
-    @confirm="profileStore.updateTelegram(telegramModal.authData)"
-  />
   <change-email-modal
     v-model:visible="changeEmailModalVisible"
     @confirm="profileStore.requestChangeEmail($event)"
@@ -83,27 +50,17 @@
 
 <script lang="ts" setup>
 import changeEmailModal from '../components/change-email-modal.vue'
-import addTelegramModal from '../components/add-telegram-modal.vue'
 import ProfileCredentials from '../components/profile-credentials.vue'
-import ProfilePasswordForm from '../components/profile-password-form.vue'
-import deleteAccount from '../components/delete-account.vue'
-import userMentor from '../components/user-mentor.vue'
 import { Core } from '@/core/Core'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useProfileStore } from '../stores/profile'
 import { ref } from 'vue'
-import SessionView from '../components/session-view.vue'
 
 const profileStore = useProfileStore()
 
 setPageTitle('Мой профиль')
 
 profileStore.fetchUser()
-
-const telegramModal = ref({
-  visible: false,
-  authData: null
-})
 
 const changeEmailModalVisible = ref(false)
 </script>

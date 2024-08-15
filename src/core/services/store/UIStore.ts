@@ -40,7 +40,7 @@ export function installUIStore() {
      */
     const navEntries = ref<NavEntry[]>([
       {
-        title: 'Блог/Новости',
+        title: 'Опросы',
         icon: 'home',
         route: '/blog',
         for: ['admin', 'teacher', 'mentor', 'student']
@@ -85,6 +85,12 @@ export function installUIStore() {
         title: 'Профиль',
         icon: 'user',
         route: '/profile',
+        for: ['admin', 'student', 'teacher', 'mentor']
+      },
+      {
+        title: 'Настройки',
+        icon: 'settings',
+        route: '/settings',
         for: ['admin', 'student', 'teacher', 'mentor']
       }
     ])

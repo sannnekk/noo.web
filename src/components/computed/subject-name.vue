@@ -1,6 +1,10 @@
 <template>
   <div class="subject-name">
-    <span :style="{ color: subject.color }">{{ subject.name }}</span>
+    <div
+      class="subject-name__badge"
+      :style="{ backgroundColor: subject.color }"
+    ></div>
+    <span class="subject-name__name">{{ subject.name }}</span>
   </div>
 </template>
 
@@ -16,18 +20,17 @@ defineProps<Props>()
 
 <style scoped lang="sass">
 .subject-name
-  display: inline-block
+  display: block
   padding: 0.25rem 0.5rem
-  border-radius: 0.25rem
-  background-color: #f0f0f0
-  font-size: 0.875rem
+  border-radius: var(--border-radius)
+  font-size: 1em
   font-weight: 500
-  color: #333
-  margin-right: 0.5rem
-  margin-bottom: 0.5rem
-  cursor: pointer
-  transition: background-color 0.2s
 
-  &:hover
-    background-color: #e0e0e0
+  &__badge
+    display: inline-block
+    width: 0.3em
+    height: 1em
+    margin-right: 0.5em
+    position: relative
+    top: 0.1em
 </style>

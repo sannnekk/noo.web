@@ -44,6 +44,10 @@ export type IconName =
   | 'change-user'
   | 'eye'
   | 'poll'
+  | 'google-sheets'
+  | 'settings'
+  | 'danger'
+  | 'subject'
 
 interface Props {
   name: IconName

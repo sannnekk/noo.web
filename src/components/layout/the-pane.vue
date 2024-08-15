@@ -124,11 +124,13 @@ watch(
     height: 100%
 
   &__logo
-    padding: 45px 5px
+    padding: 30px 5px
     text-align: center
 
   &__nav
     flex: 1
+    max-height: 80%
+    overflow-y: auto
 
     nav
       ul

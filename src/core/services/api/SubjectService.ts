@@ -39,7 +39,7 @@ export class SubjectService extends ApiService {
    * create subject
    */
   public async createSubject(
-    data: Subject,
+    data: Omit<Subject, 'id'>,
     options: ServiceOptions = {}
   ): Promise<void> {
     return this.httpPost<void>(this._route, data, undefined, options)

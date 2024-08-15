@@ -42,13 +42,15 @@ export const useAssignedWorksStore = defineStore(
       useFetchAssignedWorks(
         Core.Context.User!.role === 'mentor'
           ? {
-              'filter[isArchived]': { type: 'boolean', value: false },
+              'filter[isArchivedByMentors]': { type: 'boolean', value: false },
               'filter[solveStatus]': {
                 type: 'arr',
                 value: ['made-in-deadline', 'made-after-deadline']
               }
             }
-          : {}
+          : {
+              'filter[isArchivedByStudent]': { type: 'boolean', value: false }
+            }
       ),
       {
         immediate: true
@@ -77,7 +79,7 @@ export const useAssignedWorksStore = defineStore(
                 type: 'arr',
                 value: ['not-started', 'in-progress']
               },
-              'filter[isArchived]': {
+              'filter[isArchivedByMentors]': {
                 type: 'boolean',
                 value: false
               }
@@ -86,6 +88,10 @@ export const useAssignedWorksStore = defineStore(
               'filter[solveStatus]': {
                 type: 'arr',
                 value: ['not-started', 'in-progress']
+              },
+              'filter[isArchivedByStudent]': {
+                type: 'boolean',
+                value: false
               }
             }
       ),
@@ -118,7 +124,7 @@ export const useAssignedWorksStore = defineStore(
                 type: 'arr',
                 value: ['made-in-deadline', 'made-after-deadline']
               },
-              'filter[isArchived]': {
+              'filter[isArchivedByMentors]': {
                 type: 'boolean',
                 value: false
               }
@@ -127,6 +133,10 @@ export const useAssignedWorksStore = defineStore(
               'filter[checkStatus]': {
                 type: 'arr',
                 value: ['not-checked', 'in-progress']
+              },
+              'filter[isArchivedByStudent]': {
+                type: 'boolean',
+                value: false
               }
             }
       ),
@@ -161,7 +171,7 @@ export const useAssignedWorksStore = defineStore(
                   'checked-automatically'
                 ]
               },
-              'filter[isArchived]': {
+              'filter[isArchivedByMentors]': {
                 type: 'boolean',
                 value: false
               }
@@ -174,6 +184,10 @@ export const useAssignedWorksStore = defineStore(
                   'checked-after-deadline',
                   'checked-automatically'
                 ]
+              },
+              'filter[isArchivedByStudent]': {
+                type: 'boolean',
+                value: false
               }
             }
       ),
@@ -195,12 +209,21 @@ export const useAssignedWorksStore = defineStore(
      * Search for archived works
      */
     const archivedSearch = useSearch<AssignedWork>(
-      useFetchAssignedWorks({
-        'filter[isArchived]': {
-          type: 'boolean',
-          value: true
-        }
-      }),
+      useFetchAssignedWorks(
+        Core.Context.User!.role === 'mentor'
+          ? {
+              'filter[isArchivedByMentors]': {
+                type: 'boolean',
+                value: true
+              }
+            }
+          : {
+              'filter[isArchivedByStudent]': {
+                type: 'boolean',
+                value: true
+              }
+            }
+      ),
       { immediate: false }
     )
 
@@ -224,7 +247,10 @@ export const useAssignedWorksStore = defineStore(
         await Promise.all(
           works.map((work) => assignedWorkService.archiveAssignedWork(work.id))
         )
-        uiService.openSuccessModal('Работы успешно архивированы!')
+        uiService.openSuccessModal(
+          'Работы успешно архивированы!',
+          'Изменения вступят в силу после обновления страницы'
+        )
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при архивировании работ', e.message)
       } finally {
@@ -243,7 +269,10 @@ export const useAssignedWorksStore = defineStore(
             assignedWorkService.unarchiveAssignedWork(work.id)
           )
         )
-        uiService.openSuccessModal('Работы успешно архивированы!')
+        uiService.openSuccessModal(
+          'Работы успешно архивированы!',
+          'Изменения вступят в силу после обновления страницы'
+        )
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при архивировании работ', e.message)
       } finally {

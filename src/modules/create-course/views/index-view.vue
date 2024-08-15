@@ -11,7 +11,9 @@
             v-if="createCourseStore.course"
           >
             <router-link
-              :to="`/create-course${createCourseStore.course.slug}/general`"
+              :to="`/create-course${
+                createCourseStore.course.slug || ''
+              }/general`"
             >
               Общая информация
             </router-link>

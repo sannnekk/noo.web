@@ -12,8 +12,5 @@ export function validateUsername(username: string): boolean {
 }
 
 export function validateName(name: string): boolean {
-  return z
-    .string()
-    .regex(/^[A-Za-zÀ-ÖØ-öø-ÿА-Яа-я\s-']+$/i)
-    .safeParse(name).success
+  return z.string().safeParse(name).success
 }

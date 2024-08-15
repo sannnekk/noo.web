@@ -3,10 +3,10 @@
     <div class="course-card__img">
       <router-link
         class="router-link"
-        :to="to"
+        :to="link"
       >
         <uploaded-image
-          :src="image"
+          :src="course.images?.at(0)?.src"
           alt="Card title"
         />
       </router-link>
@@ -14,22 +14,17 @@
         <more-widget :items="actions" />
       </div>
     </div>
+    <div
+      class="course-card__subject"
+      v-if="course.subject"
+    >
+      <subject-name :subject="course.subject" />
+    </div>
     <div class="course-card__title">
-      <router-link :to="to">{{ title }}</router-link>
+      <router-link :to="link">{{ course.name }}</router-link>
     </div>
     <div class="course-card__description">
-      {{ description }}
-    </div>
-    <div
-      class="course-card__author"
-      v-if="author && showAuthor"
-    >
-      <div class="course-card__author__avatar">
-        <user-avatar :name="author" />
-      </div>
-      <div class="course-card__author__name">
-        <span>{{ author }}</span>
-      </div>
+      {{ course.description }}
     </div>
   </div>
 </template>
@@ -38,17 +33,12 @@
 import { copyText } from '@/core/device/Clipboard'
 import { Core } from '@/core/Core'
 import { useRouter } from 'vue-router'
-import { reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import type { MenuItem } from '../widgets/more-widget.vue'
+import type { Course } from '@/core/data/entities/Course'
 
 interface Props {
-  image?: string | undefined
-  title: string
-  author?: string
-  showAuthor?: boolean
-  description: string
-  slug: string
-  to: string
+  course: Course
 }
 
 const props = defineProps<Props>()
@@ -59,7 +49,7 @@ const actions = reactive<MenuItem[]>([
     icon: 'edit',
     if: Core.Context.roleIs(['teacher']),
     action: () => {
-      router.push(`/create-course${props.slug}`)
+      router.push(`/create-course${props.course.slug}`)
     }
   },
   {
@@ -67,7 +57,7 @@ const actions = reactive<MenuItem[]>([
     icon: 'user',
     if: Core.Context.roleIs(['teacher', 'admin']),
     action: () => {
-      router.push(`/course-students/${props.slug}`)
+      router.push(`/course-students/${props.course.slug}`)
     }
   },
   {
@@ -75,15 +65,17 @@ const actions = reactive<MenuItem[]>([
     icon: 'copy',
     stayOpened: true,
     action: function (selfRef: any) {
-      copyAction(selfRef, props.slug)
+      copyAction(selfRef)
     }
   }
 ])
 
 const router = useRouter()
 
-function copyAction(thisRef: any, slug: string) {
-  copyText(`${Core.Constants.APP_URL}/courses/${slug}`)
+const link = computed(() => `/courses/${props.course.slug}`)
+
+function copyAction(thisRef: any) {
+  copyText(`${Core.Constants.APP_URL}${link.value}`)
 
   thisRef.icon = 'check-green'
   thisRef.title = 'Скопировано'
@@ -113,6 +105,7 @@ function copyAction(thisRef: any, slug: string) {
     overflow: hidden
     border-radius: var(--border-radius)
     margin-bottom: 1rem
+    position: relative
 
     a
       display: block
@@ -129,8 +122,8 @@ function copyAction(thisRef: any, slug: string) {
 
     &__more-widget
       position: absolute
-      top: 23px
-      right: 40px
+      top: 10px
+      right: 10px
       z-index: 1
 
   &__title

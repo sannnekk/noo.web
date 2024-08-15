@@ -5,7 +5,10 @@
   >
     <div
       class="actions-with-selected__inner"
-      v-if="selectedAssignedWorks.length && Core.Context.roleIs(['mentor'])"
+      v-if="
+        selectedAssignedWorks.length &&
+        Core.Context.roleIs(['mentor', 'student'])
+      "
     >
       <p class="actions-with-selected__label">
         Выбрано: {{ selectedAssignedWorks.length }}
@@ -18,6 +21,7 @@
           Архивировать
         </common-button>
         <common-button
+          v-if="Core.Context.roleIs(['mentor'])"
           design="secondary"
           @click="transferAssignedWorkModalVisible = true"
         >

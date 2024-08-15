@@ -24,7 +24,7 @@ type LoginResponse = {
  * Auth service
  */
 export class AuthService extends ApiService {
-  private _route = '/user/auth' as const
+  private _route = '/auth' as const
 
   private readonly sessionService: SessionService
 

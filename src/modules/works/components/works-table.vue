@@ -37,6 +37,11 @@ const cols: ColType[] = [
     value: (work: Work) => work.name
   },
   {
+    title: 'Предмет',
+    type: 'subject',
+    value: (work: Work) => work.subject
+  },
+  {
     title: 'Тип',
     type: 'text',
     value: (work: Work) => {

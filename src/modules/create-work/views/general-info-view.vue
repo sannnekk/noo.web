@@ -1,7 +1,7 @@
 <template>
   <div class="general-info-view">
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-6">
         <div class="form-group">
           <form-input
             v-model="createWorkStore.work.name"
@@ -10,11 +10,17 @@
           />
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <select-input
           label="Тип работы"
           v-model="createWorkStore.work.type"
           :options="createWorkStore.workTypeOptions"
+        />
+      </div>
+      <div class="col-md-3">
+        <subject-select
+          label="Предмет"
+          v-model="createWorkStore.work.subject"
         />
       </div>
     </div>

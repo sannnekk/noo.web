@@ -60,6 +60,7 @@ onUnmounted(() => {
 
   &__sidebar
     width: 300px
+    height: fit-content
     padding: 1rem
     margin: 1rem
     border-radius: var(--border-radius)

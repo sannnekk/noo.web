@@ -2,6 +2,7 @@
   <draggable
     v-model="model"
     item-key="id"
+    :handle="handle"
   >
     <template #item="{ element }">
       <div><slot :item="element" /></div>
@@ -17,6 +18,7 @@ interface Props {
   modelValue: ({
     id: string
   } & any)[]
+  handle?: string
 }
 
 interface Emits {

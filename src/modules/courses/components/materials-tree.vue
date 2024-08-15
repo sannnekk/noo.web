@@ -80,6 +80,7 @@ watch(
   user-select: none
   list-style: none
   margin: 0
+  margin-top: 1em
 
   &:not(.lvl-0):not(.lvl-1)
     margin-left: 0.5rem
@@ -118,20 +119,18 @@ watch(
       line-height: 1.1
 
       &.router-link-active
-        font-weight: bold
+        color: var(--lila)
 
-      &__icon
-        font-size: 1.3em
-        transform: translateY(0.3em)
+      &:not(&.router-link-active):hover
+        color: var(--secondary)
+
+        &__icon
+          font-size: 1.5em
+          transform: translateY(0.5em)
 
     &--opened
       transition: all 0.2s ease-in-out
 
       & > .materials-tree__opener
         transform: rotate(0deg)
-
-    &:hover
-      > .materials-tree__item__name
-        color: var(--secondary)
 </style>
-@/types/entities/Course @/core/data/entities/Course

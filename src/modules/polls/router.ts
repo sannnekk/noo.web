@@ -5,7 +5,7 @@ import UserResultView from './views/user-result-view.vue'
 
 export default {
   path: '/poll/:pollId',
-  name: 'Опросы',
+  name: 'Polls',
   component: module, // <-- necessary
   children: [
     // <-- your routes

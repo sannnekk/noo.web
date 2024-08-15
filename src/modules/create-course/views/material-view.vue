@@ -25,7 +25,7 @@
     <div class="form-group">
       <file-input
         label="Файлы, прикрепленные к материалу"
-        :max-count="15"
+        :max-count="20"
         :allowed-mime-types="['application/pdf', 'image/jpeg', 'image/png']"
         :max-file-size="50 * 1024 * 1024"
         v-model="currentMaterial.files"

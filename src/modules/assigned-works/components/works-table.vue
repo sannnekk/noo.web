@@ -5,7 +5,7 @@
         :cols="cols"
         :data="works"
         :is-loading="loading"
-        :editable="Core.Context.roleIs(['mentor']) && editable"
+        :editable="editable"
         @select="onSelect($event)"
       />
     </div>

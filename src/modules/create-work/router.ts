@@ -9,15 +9,14 @@ export default {
   name: 'Создание работы',
   component: module, // <-- necessary
   children: [
-    // <-- your routes
     {
       path: '',
-      name: 'Список заданий',
+      name: 'Создание работы',
       component: index,
       children: [
         {
           path: 'general-info',
-          name: 'Общая информация',
+          name: 'О работе',
           component: GeneralInfoView
         },
         {

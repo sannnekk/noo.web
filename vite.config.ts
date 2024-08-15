@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -16,8 +15,12 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      // @ts-expect-error
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    port: 5189
   },
   define: {
     __VUE_I18N_FULL_INSTALL__: true,

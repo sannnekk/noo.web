@@ -2,10 +2,14 @@
   <draggable-list
     v-model="chaptersModel"
     item-key="name"
+    :handle="`.handle-chapters`"
   >
     <template v-slot="chapter">
       <div class="chapter-tree__item">
         <div class="chapter-tree__item__title">
+          <span class="chapter-tree__item__title__dragger handle-chapters">
+            ::
+          </span>
           <span class="chapter-tree__item__title__text">
             {{ chapter.item.name }}
           </span>
@@ -16,8 +20,14 @@
               :title="
                 chapter.item.isActive ? 'Глава активна' : 'Глава не активна'
               "
-              @click="chapter.item.isActive = !(chapter.item.isActive || false)"
+              @click="onToggleChapterIsActive(chapter.item)"
             />
+          </div>
+          <div
+            class="chapter-tree__item__title__edit"
+            @click="onChapterCopy(chapter.item)"
+          >
+            <inline-icon name="copy" />
           </div>
           <div
             class="chapter-tree__item__title__edit"
@@ -36,12 +46,20 @@
           <draggable-list
             v-model="chapter.item.materials"
             item-key="name"
+            :handle="`.handle-materials`"
           >
             <template v-slot="{ item }">
               <li class="chapter-tree__item__materials__item">
+                <span
+                  class="chapter-tree__item__materials__item__dragger handle-materials"
+                >
+                  ::
+                </span>
                 <div class="chapter-tree__item__materials__item__title">
                   <router-link
-                    :to="`/create-course${courseSlug}/${chapter.item.slug}--${item.slug}`"
+                    :to="`/create-course${courseSlug || ''}/${
+                      chapter.item.slug
+                    }--${item.slug}`"
                   >
                     {{ item.name }}
                   </router-link>
@@ -111,7 +129,7 @@ import { computed, reactive } from 'vue'
 
 interface Props {
   chapters: Chapter[]
-  courseSlug: string
+  courseSlug?: string
 }
 
 interface Emits {
@@ -167,6 +185,33 @@ function onMaterialRemove(chapterSlug: string, materialSlug: string) {
   sureModalData.action = () => {
     removeMaterial(chapterSlug, materialSlug)
   }
+}
+
+function onToggleChapterIsActive(chapter: Chapter) {
+  chapter.isActive = !(chapter.isActive || false)
+
+  for (const material of chapter.materials || []) {
+    material.isActive = chapter.isActive
+  }
+}
+
+function onChapterCopy(chapter: Chapter) {
+  const newChapter = entityFactory<Chapter>('chapter')
+  newChapter.name = `${chapter.name} (копия)`
+  newChapter.isActive = chapter.isActive
+  newChapter.order = chapter.order
+
+  newChapter.materials = chapter.materials?.map((material) => {
+    const newMaterial = entityFactory<Material>('material')
+    newMaterial.name = `${material.name} (копия)`
+    newMaterial.isActive = material.isActive
+    newMaterial.order = material.order
+    newMaterial.content = material.content
+    newMaterial.description = material.description
+    return newMaterial
+  })
+
+  chaptersModel.value = [...props.chapters, newChapter]
 }
 
 // actions
@@ -250,6 +295,11 @@ function addChapter() {
       font-weight: bold
       gap: 0.5em
 
+      &__dragger
+        cursor: move
+        display: inline-block
+        user-select: none
+
       &__text
         flex: 1
 
@@ -291,6 +341,14 @@ function addChapter() {
         justify-content: space-between
         align-items: center
 
+        &__dragger
+          cursor: move
+          display: inline-block
+          user-select: none
+          width: 1em
+          text-align: right
+          font-weight: bold
+
         &__title
           flex: 1
           a
@@ -301,8 +359,6 @@ function addChapter() {
             width: 100%
             height: 100%
             padding: 0.5em 0.5em
-            border-top-left-radius: var(--border-radius)
-            border-bottom-left-radius: var(--border-radius)
 
             &.router-link-active
               color: var(--secondary)

@@ -57,7 +57,10 @@ export const useCourseStore = defineStore('courses-module:course', () => {
       )
       course.value = response.data
     } catch (error: any) {
-      uiService.openErrorModal('Произошла ошибка при загрузке курса')
+      uiService.openErrorModal(
+        'Произошла ошибка при загрузке курса',
+        error.message
+      )
     }
   }
 

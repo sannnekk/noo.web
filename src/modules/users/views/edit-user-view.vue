@@ -89,7 +89,10 @@
                 </div>
               </warning-block>
               <div class="edit-user-view__content__form">
-                <user-form v-model="userStore.user" />
+                <user-form
+                  v-model="userStore.user"
+                  @mentor-assigned="userStore.fetchUser()"
+                />
               </div>
               <div class="edit-user-view__content__actions">
                 <div class="edit-user-view__content__actions__return">

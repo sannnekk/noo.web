@@ -62,6 +62,8 @@ const model = computed({
     border-radius: var(--border-radius)
     outline: none
     padding: 0.6em 0.8em
+    height: 2.5em
+    box-sizing: border-box
     font-size: 1em
     font-family: inherit
     width: 100%

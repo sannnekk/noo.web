@@ -25,7 +25,8 @@ export const useCreateCourseStore = defineStore(
         name: '',
         description: '',
         chapters: [],
-        images: []
+        images: [],
+        subject: null
       } as unknown as Course)
 
     /**
@@ -146,6 +147,7 @@ export const useCreateCourseStore = defineStore(
         },
         order: 0,
         workSolveDeadline: undefined,
+        isActive: true,
         workCheckDeadline: undefined
       } as Omit<Material, 'id' | 'chapterId' | 'createdAt' | 'updatedAt'>
     }
@@ -205,6 +207,11 @@ export const useCreateCourseStore = defineStore(
     async function publishCourse() {
       if (!course.value.name.trim()) {
         uiService.openWarningModal('У курса должно быть название')
+        return
+      }
+
+      if (!course.value.subject) {
+        uiService.openWarningModal('У курса должен быть предмет')
         return
       }
 
@@ -297,10 +304,8 @@ export const useCreateCourseStore = defineStore(
         return
       }
 
-      uiService.setLoading(true)
-
       try {
-        await courseService.deleteCourse(course.value.id)
+        await courseService.deleteCourse(course.value.id, { showLoader: true })
         uiService.openSuccessModal('Курс успешно удален', '', [
           {
             label: 'Вернуться к списку курсов',
@@ -316,7 +321,6 @@ export const useCreateCourseStore = defineStore(
           'Для удаления курса необходимо сначала убрать всех учеников'
         )
       } finally {
-        uiService.setLoading(false)
         removeCourseModalVisible.value = false
       }
     }

@@ -48,18 +48,7 @@
     </div>
     <div class="blogpost-card__footer">
       <div class="blogpost-card__footer__author">
-        <div class="blogpost-card__footer__author__avatar">
-          <user-avatar
-            :name="post.author.name"
-            :avatar="post.author.avatar"
-          />
-        </div>
-        <div class="blogpost-card__footer__author__name">
-          <user-link
-            :username="post.author.username"
-            :name="post.author.name"
-          />
-        </div>
+        <inline-user-card :user="post.author" />
       </div>
       <div class="blogpost-card__footer__reactions">
         <blogpost-reactions

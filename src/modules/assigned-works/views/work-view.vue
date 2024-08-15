@@ -3,8 +3,13 @@
     <the-sidebar-layout v-if="assignedWorkStore.assignedWork">
       <template #sidebar>
         <div class="work-view__sidebar">
+          <div class="work-view__sidebar__subject">
+            <subject-name
+              :subject="assignedWorkStore.assignedWork.work!.subject"
+            />
+          </div>
           <h2 class="work-view__sidebar__title">
-            {{ assignedWorkStore.mode === 'check' ? 'Проверка' : 'Работа' }}
+            {{ readableWorkType(assignedWorkStore.assignedWork.work!.type) }}
           </h2>
           <p v-if="assignedWorkStore.mode === 'solve'"></p>
           <div class="work-view__sidebar__info">
@@ -277,6 +282,7 @@ import { setPageTitle } from '@/core/utils/setPageTitle'
 import { onUnmounted, watch } from 'vue'
 import { HOT_KEYS } from '../utils/hotkeys'
 import { registerHotkeys } from '@/core/device/Hotkeys'
+import type { Work } from '@/core/data/entities/Work'
 
 const assignedWorkStore = useAssignedWorkStore()
 
@@ -291,6 +297,23 @@ watch(
   },
   { deep: true, immediate: true }
 )
+
+function readableWorkType(type: Work['type']) {
+  switch (type) {
+    case 'trial-work':
+      return 'Пробник'
+    case 'phrase':
+      return 'Фраза'
+    case 'mini-test':
+      return 'Мини-тест'
+    case 'test':
+      return 'Тест'
+    case 'second-part':
+      return 'Вторая часть'
+    default:
+      return '-'
+  }
+}
 
 const unregister = registerHotkeys(HOT_KEYS)
 onUnmounted(() => {

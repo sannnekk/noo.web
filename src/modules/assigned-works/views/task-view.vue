@@ -111,6 +111,17 @@
     >
       <common-button
         alignment="left"
+        design="warning"
+        v-if="
+          assignedWorkStore.task.type === 'word' &&
+          assignedWorkStore.mode === 'solve'
+        "
+        @click="openAnswerModal()"
+      >
+        Посмотреть ответ
+      </common-button>
+      <common-button
+        alignment="left"
         design="secondary"
         v-if="assignedWorkStore.previousTaskLink"
         :to="assignedWorkStore.previousTaskLink"
@@ -132,6 +143,10 @@
   >
     <p class="task-view__task-not-found">Выберите задание</p>
   </div>
+  <answer-modal
+    v-model:visible="answerModalData.visible"
+    :right-answer="answerModalData.answer"
+  />
 </template>
 
 <script setup lang="ts">
@@ -141,8 +156,19 @@ import taskAnswerWordContainer from '../components/task-answer-word-container.vu
 import taskCommentContainer from '../components/task-comment-container.vue'
 import taskScoreContainer from '../components/task-score-container.vue'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
+import { ref } from 'vue'
 
 const assignedWorkStore = useAssignedWorkStore()
+
+const answerModalData = ref({
+  visible: false,
+  answer: ''
+})
+
+function openAnswerModal() {
+  answerModalData.value.visible = true
+  answerModalData.value.answer = assignedWorkStore.task.rightAnswer
+}
 </script>
 
 <style scoped lang="sass">

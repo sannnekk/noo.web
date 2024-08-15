@@ -50,8 +50,9 @@ export const useCreateWorkStore = defineStore(
         tasks: [],
         type: 'trial-work',
         solveHint: '',
-        checkHint: ''
-      } as unknown as Work)
+        checkHint: '',
+        subject: null
+      } as any as Work)
 
     /**
      * Current work

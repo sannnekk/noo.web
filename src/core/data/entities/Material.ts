@@ -13,6 +13,7 @@ export interface Material extends Entity {
   chapterId: string
   chapter?: Chapter
   workId?: string
+  isActive: boolean
   work?: Work
   files: Media[]
   createdAt: Date

@@ -4,11 +4,13 @@ import { AuthService } from './api/AuthService'
 import { BlogService } from './api/BlogService'
 import { CalenderService } from './api/CalenderService'
 import { CourseService } from './api/CourseService'
-import { GoogleDocsBindingService } from './api/GoogleDocsBindingService'
+import { GoogleSheetsBindingService } from './api/GoogleSheetsBindingService'
 import { MediaService } from './api/MediaService'
 import { NotificationService } from './api/NotificationService'
+import { PlatformService } from './api/PlatformService'
 import { PollService } from './api/PollService'
 import { SessionService } from './api/SessionService'
+import { SnippetService } from './api/SnippetService'
 import { StatisticsService } from './api/StatisticsService'
 import { SubjectService } from './api/SubjectService'
 import { UserService } from './api/UserService'
@@ -29,6 +31,9 @@ export type ServiceName =
   | 'Blog'
   | 'Poll'
   | 'Session'
+  | 'GoogleSheetsBinding'
+  | 'Subject'
+  | 'Platform'
 
 export type Services = {
   Auth: AuthService
@@ -44,8 +49,10 @@ export type Services = {
   Blog: BlogService
   Poll: PollService
   Session: SessionService
-  GoogleDocsBinding: GoogleDocsBindingService
+  GoogleSheetsBinding: GoogleSheetsBindingService
   Subject: SubjectService
+  Platform: PlatformService
+  Snippet: SnippetService
 }
 
 /**
@@ -69,8 +76,10 @@ export class ServiceFactory {
     Blog: BlogService,
     Poll: PollService,
     Session: SessionService,
-    GoogleDocsBinding: GoogleDocsBindingService,
+    GoogleSheetsBinding: GoogleSheetsBindingService,
     Subject: SubjectService,
+    Platform: PlatformService,
+    Snippet: SnippetService,
     // storage
     UI: UIService
   }

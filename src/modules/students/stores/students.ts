@@ -3,6 +3,9 @@ import type { User } from '@/core/data/entities/User'
 import { Core } from '@/core/Core'
 import type { Pagination } from '@/core/data/Pagination'
 import { useSearch } from '@/composables/useSearch'
+import type { Subject } from '@/core/data/entities/Subject'
+
+export type UserWithSubject = User & { subject: Subject }
 
 export const useStudentsStore = defineStore('students-module:students', () => {
   const userService = Core.Services.User
@@ -12,7 +15,7 @@ export const useStudentsStore = defineStore('students-module:students', () => {
    * search
    */
   const { pagination, results, resultsMeta, isListLoading } =
-    useSearch<User>(fetchStudents)
+    useSearch<UserWithSubject>(fetchStudents)
 
   /**
    * load student list

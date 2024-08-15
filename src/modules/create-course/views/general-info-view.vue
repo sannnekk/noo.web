@@ -8,14 +8,24 @@
         type="text"
       />
     </div>
-    <div class="form-group">
-      <entity-select-input
-        label="Автор курса (по умолчанию - Вы)"
-        :fetch-function="createCourseStore.fetchTeachers"
-        :max-count="1"
-        :label-keys="['name', 'username']"
-        v-model="authorModel"
-      />
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <user-select
+            label="Автор курса"
+            v-model="createCourseStore.course.author"
+            role="teacher"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <subject-select
+            label="Предмет"
+            v-model="createCourseStore.course.subject"
+          />
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <file-input
@@ -35,24 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { User } from '@/core/data/entities/User'
 import { useCreateCourseStore } from '../stores/create-course'
 
 const createCourseStore = useCreateCourseStore()
-
-const authorModel = computed<User[]>({
-  get: () => {
-    if (createCourseStore.course.author) {
-      return [createCourseStore.course.author]
-    }
-    return []
-  },
-  set: (value) => {
-    if (value.length === 0) {
-      createCourseStore.course.author = undefined
-    }
-    createCourseStore.course.author = value[0]
-  }
-})
 </script>

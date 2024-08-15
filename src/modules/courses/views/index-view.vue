@@ -32,14 +32,7 @@
         v-for="course in coursesStore.results"
         :key="course.id"
       >
-        <course-card
-          :to="`/courses/${course.slug}`"
-          :image="course.images[0]?.src"
-          :title="course.name"
-          :description="course.description"
-          :author="course?.author?.name"
-          :slug="course.slug"
-        />
+        <course-card :course="course" />
       </div>
     </div>
     <div

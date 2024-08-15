@@ -98,13 +98,14 @@ import entityTableDateCell from './entity-table-date-cell.vue'
 import entityTableIconCell from './entity-table-icon-cell.vue'
 import entityTableIteratorCell from './entity-table-iterator-cell.vue'
 import entityTableTextCell from './entity-table-text-cell.vue'
+import entityTableSubjectCell from './entity-table-subject-cell.vue'
 import { useRouter } from 'vue-router'
 
 type ButtonType = 'primary' | 'secondary' | 'warning' | 'danger' | 'telegram'
 
 export interface ColType {
   title: string
-  type: 'icon' | 'date' | 'avatar' | 'text' | 'iterator' | 'button'
+  type: 'icon' | 'date' | 'avatar' | 'text' | 'iterator' | 'button' | 'subject'
   value?: (row: any) => any | any[]
   linkTo?: string | ((row: any) => string)
   width?: string
@@ -146,6 +147,7 @@ function getValue(col: ColType, row: any, index: number): any[] {
     case 'date':
     case 'avatar':
     case 'text':
+    case 'subject':
     case 'button':
       result = col.value?.(row)
       break
@@ -185,6 +187,8 @@ function getCellComponent(type: ColType['type']) {
       return entityTableIteratorCell
     case 'button':
       return entityTableButtonCell
+    case 'subject':
+      return entityTableSubjectCell
     default:
       return 'td'
   }

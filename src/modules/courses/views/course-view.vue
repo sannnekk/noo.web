@@ -6,37 +6,31 @@
     <the-sidebar-layout>
       <template #sidebar>
         <div class="index-materials-view__tree">
-          <back-button to="/courses">Ко всем курсам</back-button>
-          <router-link
-            class="index-materials-view__tree__students"
-            v-if="Core.Context.roleIs(['teacher'])"
-            :to="`/course-students/${courseStore.course.slug}`"
+          <div class="index-materials-view__tree__back-button">
+            <back-button to="/courses">Ко всем курсам</back-button>
+          </div>
+          <div class="index-materials-view__tree__students">
+            <router-link
+              v-if="Core.Context.roleIs(['teacher'])"
+              :to="`/course-students/${courseStore.course.slug}`"
+            >
+              Ученики курса ({{ courseStore.course.studentIds?.length || 0 }})
+            </router-link>
+          </div>
+          <div
+            class="index-materials-view__tree__subject"
+            v-if="courseStore.course.subject"
           >
-            Ученики курса ({{ courseStore.course.studentIds?.length || 0 }})
-          </router-link>
-          <h2 class="index-materials-view__tree__title">
-            {{ courseStore.course.name }}
-          </h2>
+            <subject-name :subject="courseStore.course.subject" />
+          </div>
+          <div class="index-materials-view__tree__title">
+            <h2>{{ courseStore.course.name }}</h2>
+          </div>
           <div
             class="index-materials-view__tree__author"
             v-if="courseStore.course.author"
           >
-            <div class="index-materials-view__tree__author__avatar">
-              <user-avatar
-                :name="courseStore.course.author.name"
-                :telegram-avatar-url="
-                  courseStore.course.author.telegramAvatarUrl
-                "
-                :avatar-type="courseStore.course.author.avatarType"
-                :avatar-media="courseStore.course.author.avatar"
-              />
-            </div>
-            <div class="index-materials-view__tree__author__name">
-              <user-link
-                :username="courseStore.course.author.username"
-                :name="courseStore.course.author.name"
-              />
-            </div>
+            <inline-user-card :user="courseStore.course.author" />
           </div>
           <materials-tree :data="courseStore.materialsTree" />
         </div>
@@ -79,39 +73,22 @@ watch(
 .index-materials-view
   &__tree
     &__students
-      cursor: pointer
-      display: block
-      margin-bottom: 1rem
-      font-size: 0.8em
-      color: var(--text-light)
-      text-decoration: none
+      a
+        cursor: pointer
+        display: block
+        margin-bottom: 1rem
+        font-size: 0.8em
+        color: var(--text-light)
+        text-decoration: none
 
-      &:hover
-        color: var(--secondary)
+        &:hover
+          color: var(--secondary)
 
     &__title
-      margin-bottom: 0
-      font-size: 1.3rem
-      font-weight: bold
-
-    &__author
-      display: flex
-      align-items: center
-      margin-bottom: 1em
-      margin-top: 1em
-
-      &__avatar
-        margin-right: 0.5rem
-        font-size: 2rem
-
-      &__name
-        font-size: 0.9em
-        font-weight: 500
-
-        span
-          text-decoration: none
-          color: var(--text-light)
-
+      h2
+        margin-bottom: 1em
+        font-size: 1.3rem
+        font-weight: bold
 
 .students-modal
   &__search
@@ -121,4 +98,3 @@ watch(
     max-height: 60vh
     overflow-y: auto
 </style>
-../stores/courses

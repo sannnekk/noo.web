@@ -32,11 +32,11 @@ import { useRoute } from 'vue-router'
 import paneLayout from './layouts/pane-layout.vue'
 import { Core } from './core/Core'
 
+const route = useRoute()
+
 onBeforeMount(() => {
   Core.init()
 })
 
-const layout = computed(() => {
-  return useRoute()?.meta?.layout || paneLayout
-})
+const layout = computed(() => route?.meta?.layout || paneLayout)
 </script>

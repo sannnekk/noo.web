@@ -1,19 +1,7 @@
 <template>
   <div class="user-form">
     <div class="row">
-      <div class="col-md-4">
-        <div class="form-group role">
-          <select-input
-            v-model="model.role"
-            label="Роль"
-            :options="roles"
-            :readonly="
-              model.role !== 'student' || Core.Context.roleIs(['mentor'])
-            "
-          />
-        </div>
-      </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div class="form-group registration-date">
           <form-input
             v-model="model.createdAt"
@@ -23,7 +11,7 @@
           />
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div
           class="form-group is-blocked"
           v-if="Core.Context.roleIs(['admin', 'teacher'])"
@@ -48,14 +36,16 @@
           class="fomr-group__student-list"
           v-else-if="model.role === 'mentor'"
         >
-          <mentor-form :students="model.students" />
+          <!-- <mentor-form :students="model.students" /> -->
         </div>
         <div
           class="fomr-group__student-statistics"
           v-else-if="model.role === 'student'"
         >
           <student-mentors-view
-            v-model:mentor-assignments="(model as any).mentorAssignmentsAsStudent"
+            :mentor-assignments="(model as any).mentorAssignmentsAsStudent"
+            :student="model"
+            @mentor-assigned="$emit('mentor-assigned')"
           />
         </div>
       </div>
@@ -65,7 +55,6 @@
 
 <script setup lang="ts">
 import teacherForm from './teacher-form.vue'
-import mentorForm from './mentor-form.vue'
 import { computed } from 'vue'
 import type { User } from '@/core/data/entities/User'
 import { Core } from '@/core/Core'
@@ -76,6 +65,7 @@ interface Props {
 
 interface Emits {
   (e: 'update:modelValue', value: Partial<User>): void
+  (e: 'mentor-assigned'): void
 }
 
 const props = defineProps<Props>()

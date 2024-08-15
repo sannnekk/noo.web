@@ -85,28 +85,6 @@
         Сохранить
       </common-button>
     </div>
-    <div class="profile-credentials__telegram">
-      <p v-if="credentialsModel.telegramId">
-        К этому аккаунту привязан Telegram:
-        {{ credentialsModel.telegramUsername }}
-      </p>
-      <common-button
-        design="telegram"
-        alignment="stretch"
-        v-if="credentialsModel.telegramId === null"
-        @click="$emit('add-telegram')"
-      >
-        Привязать Telegram
-      </common-button>
-      <common-button
-        design="telegram"
-        alignment="stretch"
-        v-else
-        @click="$emit('remove-telegram')"
-      >
-        Отвязать Telegram
-      </common-button>
-    </div>
   </div>
   <change-avatar-modal
     v-model:visible="isAvatarModalVisible"

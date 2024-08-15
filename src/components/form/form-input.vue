@@ -99,8 +99,11 @@ const model = computed({
     border-radius: var(--border-radius)
     outline: none
     padding: 0.5em 0.8em
+    height: 2.5em
+    box-sizing: border-box
     font-family: inherit
     width: 100%
+    min-width: 100%
     background: var(--form-background)
     color: var(--form-text-color)
     font-size: 1em
@@ -121,4 +124,6 @@ const model = computed({
     font-size: 0.8rem
     color: var(--danger)
     margin-top: 0.2em
+    line-height: 0.95em
+    display: block
 </style>
