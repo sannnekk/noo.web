@@ -2,7 +2,7 @@
   <div class="user-form">
     <h3>Данные пользователя</h3>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-lg-6">
         <div class="form-group registration-date">
           <form-input
             v-model="model.createdAt"
@@ -12,15 +12,23 @@
           />
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-lg-6">
         <div
           class="form-group is-blocked"
           v-if="Core.Context.roleIs(['admin', 'teacher'])"
         >
-          <form-checkbox
-            :readonly="model.id === Core.Context.User?.id"
-            v-model="model.isBlocked"
-            label="Заблокирован"
+          <form-toggle
+            v-model="model.isBlocked as any"
+            :values="[
+              {
+                value: false,
+                label: 'Пользователь разблокирован'
+              },
+              {
+                value: true,
+                label: 'Пользователь заблокирован'
+              }
+            ]"
           />
         </div>
       </div>
@@ -79,25 +87,6 @@ const model = computed({
   get: () => props.modelValue,
   set: (value) => emits('update:modelValue', value)
 })
-
-const roles = [
-  {
-    label: 'Ученик',
-    value: 'student'
-  },
-  {
-    label: 'Куратор',
-    value: 'mentor'
-  },
-  {
-    label: 'Преподаватель',
-    value: 'teacher'
-  },
-  {
-    label: 'Администратор',
-    value: 'admin'
-  }
-]
 </script>
 
 <style scoped lang="sass">
@@ -105,5 +94,6 @@ const roles = [
   &.is-blocked
     margin-top: 1.8em
     display: flex
-    justify-content: center
+    color: var(--text-light)
+    margin-bottom: 0.3em
 </style>

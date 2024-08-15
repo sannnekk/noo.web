@@ -20,14 +20,20 @@ defineProps<Props>()
 
 const columns: ColType[] = [
   {
-    title: '#',
-    type: 'iterator'
+    title: '',
+    type: 'image',
+    value: (course: Course) => course.images.at(0)
   },
   {
     title: 'Название',
     type: 'text',
     value: (course: Course) => course.name,
     linkTo: (course: Course) => `/courses/${course.slug}`
+  },
+  {
+    title: 'Предмет',
+    type: 'subject',
+    value: (course: Course) => course.subject
   },
   {
     title: 'Участники',

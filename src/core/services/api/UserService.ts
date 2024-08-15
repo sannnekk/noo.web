@@ -68,7 +68,7 @@ export class UserService extends ApiService {
   ): Promise<ApiResponse<User[]>> {
     const _pagination = { ...pagination }
 
-    _pagination.relations = ['mentor', 'students']
+    _pagination.relations = ['mentorAssignmentsAsStudent']
 
     return await this.httpGet<User[]>(
       this._route,
@@ -151,6 +151,21 @@ export class UserService extends ApiService {
     await this.httpPatch(
       `${this._route}/${studentId}/${subjectId}/mentor/${mentorId}`,
       undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Remove mentor from student
+   */
+  public async removeMentor(
+    studentId: User['id'],
+    subjectId: Subject['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpDelete(
+      `${this._route}/${studentId}/${subjectId}/mentor`,
       undefined,
       options
     )

@@ -44,9 +44,11 @@ const cols: ColType[] = [
       return [
         a.work?.name || '-',
         `<small>${a.student?.name || '-'}</small>`,
-        `<small>Кураторы: ${
-          a.mentors?.map((m) => m.name).join(', ') || '-'
-        }</small>`
+        a.work!.type === 'test'
+          ? ''
+          : `<small>Кураторы: ${
+              a.mentors?.map((m) => m.name).join(', ') || '-'
+            }</small>`
       ]
     }
   },

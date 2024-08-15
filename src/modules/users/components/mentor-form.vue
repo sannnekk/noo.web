@@ -47,3 +47,9 @@ const columns: ColType[] = [
   }
 ]
 </script>
+
+<style lang="sass" scoped>
+.mentor-form
+	max-width: 100%
+	overflow-x: auto
+</style>

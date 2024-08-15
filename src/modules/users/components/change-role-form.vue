@@ -99,6 +99,9 @@ function openChangeRoleModal(role: User['role']) {
 		display: flex
 		gap: 1em
 
+		@media (max-width: 1100px)
+			flex-direction: column
+
 	&__not-available
 		p
 			color: var(--text-light)

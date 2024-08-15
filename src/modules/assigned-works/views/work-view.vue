@@ -183,10 +183,7 @@
               </div>
               <div
                 class="work-view__sidebar__people__mentor"
-                v-if="
-                  assignedWorkStore.assignedWork.checkStatus !==
-                  'checked-automatically'
-                "
+                v-if="assignedWorkStore.assignedWork.work?.type !== 'test'"
               >
                 <label>Проверяющие кураторы: </label>
                 <user-card

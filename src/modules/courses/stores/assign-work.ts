@@ -127,6 +127,8 @@ export const useAssignWorkToMaterialStore = defineStore(
 
         uiService.openSuccessModal('Работа успешно добавлена к материалу')
         modalVisible.value = false
+
+        await courseStore.fetchCourse()
       } catch (error: any) {
         uiService.openErrorModal(
           'Произошла ошибка при добавлении работы к материалу',

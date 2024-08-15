@@ -91,6 +91,7 @@
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue'
 import type { MenuItem } from '../../widgets/more-widget.vue'
+import { useRouter } from 'vue-router'
 
 import entityTableAvatarCell from './entity-table-avatar-cell.vue'
 import entityTableButtonCell from './entity-table-button-cell.vue'
@@ -99,13 +100,23 @@ import entityTableIconCell from './entity-table-icon-cell.vue'
 import entityTableIteratorCell from './entity-table-iterator-cell.vue'
 import entityTableTextCell from './entity-table-text-cell.vue'
 import entityTableSubjectCell from './entity-table-subject-cell.vue'
-import { useRouter } from 'vue-router'
+import entityTableImageCell from './entity-table-image-cell.vue'
+import entityTableUserCell from './entity-table-user-cell.vue'
 
 type ButtonType = 'primary' | 'secondary' | 'warning' | 'danger' | 'telegram'
 
 export interface ColType {
   title: string
-  type: 'icon' | 'date' | 'avatar' | 'text' | 'iterator' | 'button' | 'subject'
+  type:
+    | 'icon'
+    | 'date'
+    | 'avatar'
+    | 'text'
+    | 'iterator'
+    | 'button'
+    | 'image'
+    | 'subject'
+    | 'user'
   value?: (row: any) => any | any[]
   linkTo?: string | ((row: any) => string)
   width?: string
@@ -148,6 +159,8 @@ function getValue(col: ColType, row: any, index: number): any[] {
     case 'avatar':
     case 'text':
     case 'subject':
+    case 'image':
+    case 'user':
     case 'button':
       result = col.value?.(row)
       break
@@ -189,6 +202,10 @@ function getCellComponent(type: ColType['type']) {
       return entityTableButtonCell
     case 'subject':
       return entityTableSubjectCell
+    case 'image':
+      return entityTableImageCell
+    case 'user':
+      return entityTableUserCell
     default:
       return 'td'
   }
@@ -294,7 +311,7 @@ async function onAction(col: ColType, row: any, index: number) {
 
         &.is-link
           cursor: pointer
-          border-radius: var(--border-radius)
+          //border-radius: var(--border-radius)
 
           &:hover
             background-color: var(--light-background-color)

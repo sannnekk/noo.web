@@ -53,20 +53,9 @@ const cols: ColType[] = [
   },
   {
     title: 'Имя',
-    value: (user: User) => {
-      const name = user.name
-
-      if (user.verificationToken) {
-        return `<span title="Пользователь не подтвержден">⛔</span> ${name}`
-      }
-
-      /* if (user.mentor && user.role === 'student') {
-        return `${name}<br><small>Куратор: ${user.mentor.name}</small>`
-      } */
-
-      return name
-    },
-    type: 'text'
+    linkTo: (user: User) => `/users/edit/${user.username}`,
+    value: (user: User) => user,
+    type: 'user'
   },
   {
     title: 'Роль',

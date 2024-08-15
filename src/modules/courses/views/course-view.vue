@@ -11,10 +11,26 @@
           </div>
           <div class="index-materials-view__tree__students">
             <router-link
-              v-if="Core.Context.roleIs(['teacher'])"
+              v-if="Core.Context.roleIs(['teacher', 'admin'])"
               :to="`/course-students/${courseStore.course.slug}`"
             >
+              <inline-icon
+                name="user"
+                class="index-materials-view__tree__students__icon"
+              />
               Ученики курса ({{ courseStore.course.studentIds?.length || 0 }})
+            </router-link>
+          </div>
+          <div class="index-materials-view__tree__edit-course">
+            <router-link
+              v-if="Core.Context.roleIs(['teacher', 'admin'])"
+              :to="`/create-course${courseStore.course.slug}`"
+            >
+              <inline-icon
+                name="edit"
+                class="index-materials-view__tree__edit-course__icon"
+              />
+              Редактировать курс
             </router-link>
           </div>
           <div
@@ -73,6 +89,29 @@ watch(
 .index-materials-view
   &__tree
     &__students
+      &__icon
+        font-size: 1.5em
+        position: relative
+        top: 0.2em
+
+      a
+        cursor: pointer
+        display: block
+        margin-bottom: 1rem
+        font-size: 0.8em
+        color: var(--text-light)
+        text-decoration: none
+
+        &:hover
+          color: var(--secondary)
+
+    &__edit-course
+      &__icon
+        font-size: 1.3em
+        margin-left: 0.1em
+        position: relative
+        top: 0.2em
+
       a
         cursor: pointer
         display: block

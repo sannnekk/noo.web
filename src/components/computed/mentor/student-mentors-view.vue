@@ -8,7 +8,7 @@
   >
     <div class="row">
       <div
-        class="col-md-6"
+        class="col-lg-6"
         v-for="subject in subjectsToSHow"
         :key="subject.id"
       >
@@ -24,71 +24,18 @@
               <div class="student-mentors-view__card__mentor__card">
                 <user-card :user="subject.assignment.mentor" />
               </div>
-              <span
-                class="student-mentors-view__card__mentor__assign-button"
-                v-if="Core.Context.roleIs(['admin', 'teacher'])"
-                @click="
-                  openAssignMentorModal(
-                    subject,
-                    subject.assignment?.mentor || null,
-                    subject.assignment?.student || null
-                  )
-                "
-              >
-                <inline-icon
-                  name="edit"
-                  class="student-mentors-view__card__mentor__assign-button__icon"
-                />
-                Сменить куратора
-              </span>
-
-              <div
-                v-else-if="Core.Context.roleIs(['mentor']) && 
-								(subject.assignment!.mentor.id !== Core.Context.User!.id)"
-                design="secondary"
-                class="student-mentors-view__card__mentor__assign-button"
-                @click="assignMeStudent(subject)"
-              >
-                <span>
-                  <inline-icon
-                    name="add"
-                    class="student-mentors-view__card__mentor__assign-button__icon"
-                  />
-                  Стать куратором
-                </span>
-              </div>
             </div>
-            <div
-              v-else-if="Core.Context.roleIs(['admin', 'teacher'])"
-              design="secondary"
-              class="student-mentors-view__card__mentor__assign-button"
-              @click="openAssignMentorModal(subject, null, student)"
-            >
-              <span>
-                <inline-icon
-                  name="add"
-                  class="student-mentors-view__card__mentor__assign-button__icon"
-                />
-                Назначить куратора
-              </span>
-            </div>
-            <div
-              v-else-if="
-								Core.Context.roleIs(['mentor']) && 
-								(subject.assignment?.mentor.id !== Core.Context.User!.id)
-							"
-              design="secondary"
-              class="student-mentors-view__card__mentor__assign-button"
-              @click="assignMeStudent(subject)"
-            >
-              <span>
-                <inline-icon
-                  name="add"
-                  class="student-mentors-view__card__mentor__assign-button__icon"
-                />
-                Стать куратором
-              </span>
-            </div>
+            <student-mentors-action
+              :mentor-id="subject.assignment?.mentor?.id || null"
+              @assign-mentor="
+                openAssignMentorModal(
+                  subject,
+                  subject.assignment?.mentor || null
+                )
+              "
+              @assign-me-student="assignMeStudent(subject)"
+              @remove-mentor="removeMentor(subject)"
+            />
           </div>
         </div>
       </div>
@@ -164,20 +111,19 @@ const subjectsToSHow = computed<SubjectToShow[]>(() => {
 
 function openAssignMentorModal(
   subject: Subject | null,
-  currentMentor: MentorAssignment['mentor'] | null,
-  student: MentorAssignment['student'] | null
+  currentMentor: MentorAssignment['mentor'] | null
 ) {
   if (Core.Context.roleIs(['student'])) {
     return
   }
 
-  if (!subject || !student) {
+  if (!subject) {
     return
   }
 
   assignMentorModalData.subject = subject
   assignMentorModalData.currentMentor = currentMentor
-  assignMentorModalData.student = student
+  assignMentorModalData.student = props.student
 
   assignMentorModalVisible.value = true
 }
@@ -196,6 +142,17 @@ async function assignMeStudent(subject: Subject) {
   }
 }
 
+async function removeMentor(subject: Subject) {
+  try {
+    await userService.removeMentor(props.student.id, subject.id, {
+      showLoader: true
+    })
+    emits('mentor-assigned')
+  } catch (error: any) {
+    uiService.openErrorModal('Не удалось отвязать куратора', error.message)
+  }
+}
+
 onMounted(async () => {
   subjects.value = (await subjectService.getSubjects()).data
 })
@@ -207,7 +164,7 @@ onMounted(async () => {
 		padding-top: 1em
 
 	&__card
-		margin-bottom: 1em
+		margin-bottom: 1.5em
 		padding: 1em
 		border: 1px solid var(--border-color)
 		border-radius: var(--border-radius)
@@ -223,17 +180,6 @@ onMounted(async () => {
 				> *
 					border: none
 					padding: 0.2em
-
-			&__assign-button
-				margin-top: 1em
-				cursor: pointer
-
-				&:hover
-					color: var(--text-light)
-
-				&__icon
-					position: relative
-					top: 0.15em
 
 	&__no-mentors
 		p
