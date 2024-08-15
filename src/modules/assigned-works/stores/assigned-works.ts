@@ -247,10 +247,9 @@ export const useAssignedWorksStore = defineStore(
         await Promise.all(
           works.map((work) => assignedWorkService.archiveAssignedWork(work.id))
         )
-        uiService.openSuccessModal(
-          'Работы успешно архивированы!',
-          'Изменения вступят в силу после обновления страницы'
-        )
+        uiService.openSuccessModal('Работы успешно архивированы!')
+        allSearch.trigger()
+        archivedSearch.trigger()
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при архивировании работ', e.message)
       } finally {
@@ -262,19 +261,33 @@ export const useAssignedWorksStore = defineStore(
      * Unrchive works
      */
     async function unarchiveWorks(works: AssignedWork[]) {
-      uiService.setLoading(true)
       try {
         await Promise.all(
           works.map((work) =>
-            assignedWorkService.unarchiveAssignedWork(work.id)
+            assignedWorkService.unarchiveAssignedWork(work.id, {
+              showLoader: true
+            })
           )
         )
-        uiService.openSuccessModal(
-          'Работы успешно архивированы!',
-          'Изменения вступят в силу после обновления страницы'
-        )
+        uiService.openSuccessModal('Работы успешно архивированы!')
+        allSearch.trigger()
+        archivedSearch.trigger()
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при архивировании работ', e.message)
+      }
+    }
+
+    async function deleteWorks(works: AssignedWork[]) {
+      uiService.setLoading(true)
+
+      try {
+        await Promise.all(
+          works.map((work) => assignedWorkService.deleteAssignedWork(work.id))
+        )
+        uiService.openSuccessModal('Работы успешно удалены!')
+        allSearch.trigger()
+      } catch (e: any) {
+        uiService.openErrorModal('Ошибка при удалении работ', e.message)
       } finally {
         uiService.setLoading(false)
       }
@@ -323,7 +336,8 @@ export const useAssignedWorksStore = defineStore(
       checkedSearchSelectedWorks,
       archiveWorks,
       unarchiveWorks,
-      currentTabIndex
+      currentTabIndex,
+      deleteWorks
     }
   }
 )

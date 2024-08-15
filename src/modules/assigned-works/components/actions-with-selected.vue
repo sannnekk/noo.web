@@ -16,12 +16,12 @@
       <div class="actions-with-selected__actions">
         <common-button
           design="danger"
-          @click="archiveWorksModalVisible = true"
+          @click="deleteWorkModalVisible = true"
         >
           Удалить
         </common-button>
         <common-button
-          design="danger"
+          design="warning"
           @click="archiveWorksModalVisible = true"
         >
           Архивировать
@@ -44,6 +44,15 @@
     :assigned-works="selectedAssignedWorks"
     v-model:visible="archiveWorksModalVisible"
   />
+  <sure-modal
+    v-model:visible="deleteWorkModalVisible"
+    @confirm="$emit('delete', selectedAssignedWorks)"
+  >
+    <template #title> Удаление работ </template>
+    <template #text>
+      Вы уверены, что хотите удалить выбранные работы?
+    </template>
+  </sure-modal>
 </template>
 
 <script setup lang="ts">
@@ -57,10 +66,16 @@ interface Props {
   selectedAssignedWorks: AssignedWork[]
 }
 
+interface Emits {
+  (event: 'delete', assignedWorks: AssignedWork[]): void
+}
+
 defineProps<Props>()
+defineEmits<Emits>()
 
 const transferAssignedWorkModalVisible = ref(false)
 const archiveWorksModalVisible = ref(false)
+const deleteWorkModalVisible = ref(false)
 </script>
 
 <style lang="sass" scoped>
@@ -72,10 +87,18 @@ const archiveWorksModalVisible = ref(false)
     justify-content: flex-end
     align-items: center
 
+    @media (max-width: 768px)
+      flex-direction: column
+      gap: 1em
+
   &__label
     margin: 0
 
   &__actions
     display: flex
     font-size: 0.8em
+
+    @media (max-width: 768px)
+      flex-wrap: wrap
+      gap: 1em
 </style>

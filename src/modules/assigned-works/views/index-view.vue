@@ -23,6 +23,7 @@
         <div class="index-works-view__selected-actions">
           <actions-with-selected
             :selected-assigned-works="assignedWorksStore.allSearchSelectedWorks"
+            @delete="assignedWorksStore.deleteWorks($event)"
           />
         </div>
         <div class="index-works-view__table">
