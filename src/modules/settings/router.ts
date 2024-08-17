@@ -38,6 +38,11 @@ export default {
           component: () => import('./views/subjects-view.vue')
         },
         {
+          path: 'help-page',
+          name: 'Страница помощи',
+          component: () => import('./views/help-page-view.vue')
+        },
+        {
           path: 'platform-info',
           name: 'Общая информация',
           component: () => import('./views/platform-info-view.vue')

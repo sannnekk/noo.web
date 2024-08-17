@@ -127,6 +127,11 @@ watch(
     padding: 30px 5px
     text-align: center
 
+    @media screen and (max-width: 768px)
+      :deep()
+        h1
+          font-size: 1.3rem
+
   &__nav
     flex: 1
     max-height: 80%
@@ -148,6 +153,11 @@ watch(
         display: flex
         align-items: center
         padding: 0.7em 0
+
+        @media screen and (max-width: 768px)
+          padding-top: 0.5em
+          padding-bottom: 0.5em
+          font-size: 15px
 
         &.router-link-active
           background-color: var(--lightest)

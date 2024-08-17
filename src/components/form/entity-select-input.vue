@@ -214,6 +214,7 @@ label
   gap: 0.5rem
   border: 1px solid var(--border-color)
   border-radius: var(--border-radius)
+  background-color: var(--form-background)
   padding: 0.5em
 
   &--focus

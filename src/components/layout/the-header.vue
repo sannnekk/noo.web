@@ -14,6 +14,9 @@
         <div class="header__help__theme-toggle-widget">
           <theme-toggle-widget />
         </div>
+        <div class="header__help__theme-toggle-widget">
+          <help-widget />
+        </div>
       </div>
       <div class="header__profile-widget">
         <profile-widget />

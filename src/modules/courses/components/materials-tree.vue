@@ -10,13 +10,10 @@
       :key="subject.id"
       v-auto-animate
     >
-      <span
-        v-if="subject.children && subject.children.length"
-        class="materials-tree__opener"
+      <list-opener-arrow
+        :opened="subject.children && !!subject.children.length"
         @click="subject.opened = !subject.opened"
-      >
-        ▼
-      </span>
+      />
       <component
         :is="
           subject.children && subject.children.length ? 'span' : 'router-link'
@@ -98,14 +95,6 @@ watch(
       > .materials-tree__item__name
         font-weight: 500
 
-  &__opener
-    margin-right: 0.3rem
-    cursor: pointer
-    float: left
-    transform: rotate(-90deg)
-    transition: all 0.2s ease-in-out
-    color: var(--secondary)
-
   &__item
     cursor: pointer
     margin-bottom: 0.3rem
@@ -127,10 +116,4 @@ watch(
         &__icon
           font-size: 1.5em
           transform: translateY(0.5em)
-
-    &--opened
-      transition: all 0.2s ease-in-out
-
-      & > .materials-tree__opener
-        transform: rotate(0deg)
 </style>

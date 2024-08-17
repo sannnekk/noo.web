@@ -41,6 +41,13 @@ export const useSettingsStore = defineStore('settings-module:settings', () => {
       for: ['teacher', 'admin', 'mentor']
     },
     {
+      title: 'Страница помощи',
+      description: 'Редактирование страницы помощи',
+      icon: 'help',
+      route: '/settings/help-page',
+      for: ['admin', 'teacher']
+    },
+    {
       title: 'Общая информация',
       description: 'Информация о платформе, версиях и changelog',
       icon: 'info',

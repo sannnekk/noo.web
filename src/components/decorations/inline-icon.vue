@@ -48,6 +48,7 @@ export type IconName =
   | 'settings'
   | 'danger'
   | 'subject'
+  | 'help'
 
 interface Props {
   name: IconName

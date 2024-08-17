@@ -271,7 +271,9 @@ export const useCreateWorkStore = defineStore(
         }
       } else {
         try {
-          await workService.createWork(payload as Work, { showLoader: true })
+          const createdWork = await workService.createWork(payload as Work, {
+            showLoader: true
+          })
           uiService.openSuccessModal('Работа успешно создана', undefined, [
             {
               label: 'Вернуться к списку работ',
@@ -282,6 +284,7 @@ export const useCreateWorkStore = defineStore(
               }
             }
           ])
+          _router.push(`/create-work${createdWork.data?.slug}`)
         } catch (error: any) {
           uiService.openErrorModal(
             'Произошла ошибка при создании работы',

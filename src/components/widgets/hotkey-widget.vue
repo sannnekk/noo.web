@@ -7,6 +7,7 @@
       class="hotkey-widget__button"
       @click="toggleHint()"
       ref="button"
+      title="Горячие клавиши"
     >
       <inline-icon name="keyboard" />
     </div>

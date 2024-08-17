@@ -1,0 +1,108 @@
+.entity-table-container
+  overflow-x: auto
+  margin: 1em 0
+
+.entity-table
+  width: 100%
+  border-collapse: collapse
+
+  @media screen and (max-width: 768px)
+    font-size: 12px
+
+  &__loading
+    text-align: center
+    padding: 8em 0
+
+    &__icon
+      font-size: 60px
+      display: inline-block
+
+  &__empty-text
+    text-align: center
+    color: var(--text-light)
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 1em
+    margin: 1em 0
+
+    &__img
+      width: min(90%, 500px)
+      height: auto
+      margin-bottom: 1em
+
+  thead
+    tr
+      th
+        text-align: left
+        font-weight: normal
+        color: var(--text-light)
+        padding: 0.5rem
+        vertical-align: top
+
+        &.col-type-link
+          text-align: center
+
+  tbody
+    tr
+      border-top: 1px solid var(--border-color)
+
+      &:hover
+        td
+          .edit-checkbox
+            width: 15px
+
+      td
+        padding: 0.5rem
+        position: relative
+
+        &.is-link
+          cursor: pointer
+          //border-radius: var(--border-radius)
+
+          &:hover
+            background-color: var(--light-background-color)
+        
+        :deep()
+          small
+            color: var(--text-light)
+            font-size: 0.8em
+            white-space: nowrap
+
+        .edit-checkbox
+          display: block
+          position: absolute
+          top: 0
+          left: 0
+          width: 0
+          height: 100%
+          background-color: var(--primary)
+          transition: width 0.2s ease
+
+          *
+            display: none
+
+          &--checked
+            width: 8px
+            background-color: var(--lila)
+
+        &.col-type-text
+          white-space: pre-wrap
+
+        &.col-type-link
+          font-size: 0.8em
+
+        &.col-type-icon
+          vertical-align: middle
+          font-size: 1.7em
+          width: 2em
+          text-align: center
+
+          span
+            width: 1em
+            height: 1em
+            display: inline-block
+
+        &.col-type-avatar
+          font-size: 1em
+          width: 1em

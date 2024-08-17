@@ -56,8 +56,8 @@ export class WorkService extends ApiService {
   public async createWork(
     work: Work,
     options: ServiceOptions = {}
-  ): Promise<void> {
-    await this.httpPost(this._route, work, undefined, options)
+  ): Promise<ApiResponse<Work | null>> {
+    return this.httpPost<Work | null>(this._route, work, undefined, options)
   }
 
   /**

@@ -4,6 +4,7 @@ import { AuthService } from './api/AuthService'
 import { BlogService } from './api/BlogService'
 import { CalenderService } from './api/CalenderService'
 import { CourseService } from './api/CourseService'
+import { FAQService } from './api/FAQService'
 import { GoogleSheetsBindingService } from './api/GoogleSheetsBindingService'
 import { MediaService } from './api/MediaService'
 import { NotificationService } from './api/NotificationService'
@@ -53,6 +54,7 @@ export type Services = {
   Subject: SubjectService
   Platform: PlatformService
   Snippet: SnippetService
+  FAQ: FAQService
 }
 
 /**
@@ -80,6 +82,7 @@ export class ServiceFactory {
     Subject: SubjectService,
     Platform: PlatformService,
     Snippet: SnippetService,
+    FAQ: FAQService,
     // storage
     UI: UIService
   }

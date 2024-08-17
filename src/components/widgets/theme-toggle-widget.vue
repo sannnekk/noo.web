@@ -7,6 +7,7 @@
     <button
       @click="toggleTheme"
       class="theme-toggle-widget__button"
+      title="Сменить тему"
     >
       <inline-icon
         name="moon"
@@ -64,6 +65,10 @@ onMounted(() => {
     background-color: transparent
     cursor: pointer
     border: none
+
+    @media screen and (max-width: 768px)
+      font-size: 1rem
+      padding: 0.3em
 
     &:hover
       background-color: var(--light)
