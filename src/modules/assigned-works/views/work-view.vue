@@ -182,7 +182,10 @@
             >
               Вернуться к списку работ
             </common-button>
-            <div class="work-view__sidebar_">
+            <div
+              class="work-view__sidebar_autosave"
+              v-if="assignedWorkStore.mode !== 'read'"
+            >
               <autosave-block />
             </div>
             <div class="work-view__sidebar__people">
