@@ -6,6 +6,7 @@ import type { Task } from '@/core/data/entities/Task'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
 import { Core } from '@/core/Core'
 import type { ModalAction } from '@/core/services/store/UIStore'
+import { debounce } from '@/core/utils/debounce'
 
 export type ActionType = 'read' | 'solve' | 'check'
 
@@ -411,7 +412,8 @@ export const useAssignedWorkStore = defineStore(
           await assignedWorkService.solveAssignedWork(
             assignedWork.value.id,
             {
-              answers: assignedWork.value.answers
+              answers: assignedWork.value.answers,
+              studentComment: assignedWork.value.studentComment || null
             },
             { showLoader: true }
           )
@@ -426,7 +428,8 @@ export const useAssignedWorkStore = defineStore(
             {
               // send answers even though its only check - text&image comments are stored in answers
               answers: assignedWork.value.answers,
-              comments: assignedWork.value.comments
+              comments: assignedWork.value.comments,
+              mentorComment: assignedWork.value.mentorComment || null
             },
             { showLoader: true }
           )
@@ -447,6 +450,46 @@ export const useAssignedWorkStore = defineStore(
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при отправке работы', e.message)
       }
+    }
+
+    const autoSave = reactive({
+      enabled: false,
+      state: 'unset' as 'unset' | 'error' | 'success',
+      loading: false,
+      reset() {
+        autoSave.state = 'unset'
+        autoSave.enabled = false
+      }
+    })
+
+    watch(assignedWork, debounce(triggerAutoSave, 5000), { deep: true })
+
+    async function triggerAutoSave() {
+      if (!assignedWork.value || !autoSave.enabled || autoSave.loading) {
+        return
+      }
+
+      autoSave.loading = true
+
+      const payload = {
+        answers: assignedWork.value.answers,
+        comments: assignedWork.value.comments,
+        studentComment: assignedWork.value.studentComment || null,
+        mentorComment: assignedWork.value.mentorComment || null
+      }
+
+      try {
+        await assignedWorkService.saveAssignedWorkProgress(
+          assignedWork.value.id,
+          payload
+        )
+        autoSave.state = 'success'
+        assignedWork.value.solveStatus = 'in-progress'
+      } catch (e: any) {
+        autoSave.state = 'error'
+      }
+
+      autoSave.loading = false
     }
 
     /**
@@ -479,7 +522,9 @@ export const useAssignedWorkStore = defineStore(
 
       const payload = {
         answers: assignedWork.value.answers,
-        comments: assignedWork.value.comments
+        comments: assignedWork.value.comments,
+        studentComment: assignedWork.value.studentComment || null,
+        mentorComment: assignedWork.value.mentorComment || null
       }
 
       try {
@@ -493,7 +538,7 @@ export const useAssignedWorkStore = defineStore(
             label: 'Вернуться к списку работ',
             design: 'primary',
             handler: () => {
-              window.location
+              window.location.href = '/assigned-works'
             }
           }
         ])
@@ -569,7 +614,8 @@ export const useAssignedWorkStore = defineStore(
       saveProgress,
       remakeWork,
       remakeModal,
-      _router
+      _router,
+      autoSave
     }
   }
 )

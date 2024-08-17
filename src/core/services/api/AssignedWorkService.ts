@@ -1,7 +1,11 @@
 import type { Context } from '@/core/context/Context'
 import { ApiService, type ServiceOptions } from '@/core/services/ApiService'
-import type { AssignedWork } from '@/core/data/entities/AssignedWork'
+import type {
+  AssignedWork,
+  AssignedWorkProgress
+} from '@/core/data/entities/AssignedWork'
 import type { Pagination } from '@/core/data/Pagination'
+import type { Work } from '@/core/data/entities/Work'
 
 /**
  * AssignedWork service
@@ -25,6 +29,23 @@ export class AssignedWorkService extends ApiService {
   ) {
     return await this.httpGet<AssignedWork>(
       `${this._route}/${id}`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Get assigned work progress
+   *
+   * @param workId !!! This is a work id, not an assigned work id
+   */
+  public async getAssignedWorkProgress(
+    workId: Work['id'],
+    options: ServiceOptions = {}
+  ) {
+    return await this.httpGet<AssignedWorkProgress>(
+      `${this._route}/progress/${workId}`,
       undefined,
       undefined,
       options

@@ -11,7 +11,8 @@
       v-auto-animate
     >
       <list-opener-arrow
-        :opened="subject.children && !!subject.children.length"
+        v-if="subject.children && !!subject.children.length"
+        :opened="subject.opened"
         @click="subject.opened = !subject.opened"
       />
       <component

@@ -3,6 +3,14 @@ import type { User } from './User'
 import type { Work } from './Work'
 import type { Comment } from './Comment'
 import type { Entity } from '../Entity'
+import type { DeltaContentType } from '@/types/composed/DeltaContentType'
+
+export interface AssignedWorkProgress {
+  solveStatus: AssignedWork['solveStatus']
+  checkStatus: AssignedWork['checkStatus']
+  score: AssignedWork['score'] | null
+  maxScore: AssignedWork['maxScore']
+}
 
 export interface AssignedWork extends Entity {
   slug: string
@@ -34,6 +42,8 @@ export interface AssignedWork extends Entity {
   score?: number
   maxScore: number
   isArchived: boolean
+  studentComment: DeltaContentType | null
+  mentorComment: DeltaContentType | null
   createdAt: Date
   updatedAt: Date
 }

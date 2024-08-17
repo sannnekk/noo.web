@@ -9,12 +9,20 @@
         <h1>{{ courseStore.material.name }}</h1>
       </div>
       <div
-        class="material-view__header__work-link"
+        class="material-view__header__work-widget"
         v-if="courseStore.material.workId && Core.Context.roleIs(['student'])"
       >
-        <common-button @click="courseStore.assignMeWork()">
-          К работе
-        </common-button>
+        <div class="material-view__header__work-widget__progress">
+          <assigned-work-progress :workId="courseStore.material.workId" />
+        </div>
+        <div class="material-view__header__work-widget__link">
+          <common-button
+            @click="courseStore.assignMeWork()"
+            alignment="right"
+          >
+            К работе
+          </common-button>
+        </div>
       </div>
       <div
         class="material-view__header__work-link"
@@ -45,7 +53,7 @@
       v-if="courseStore.material.files.length"
     >
       <file-list
-        :files="courseStore.material.files as any as FileItem[]"
+        :files="courseStore.material.files"
         label="Файлы курса"
         :actions="['download']"
       />
@@ -65,7 +73,6 @@ import AssignWorkModal from '../components/assign-work-modal.vue'
 import { Core } from '@/core/Core'
 import { useCourseStore } from '../stores/course'
 import { useAssignWorkToMaterialStore } from '../stores/assign-work'
-import type { FileItem } from '@/types/composed/FileItem'
 
 const courseStore = useCourseStore()
 const assignWorkStore = useAssignWorkToMaterialStore()
@@ -94,22 +101,29 @@ const assignWorkStore = useAssignWorkToMaterialStore()
     width: 100%
     display: flex
     justify-content: space-between
-    align-items: center
 
     @media screen and (max-width: 768px)
       flex-direction: column
 
     &__title
       flex: 1
+      margin-top: 0.6em
 
-    &__work-link
+    &__work-widget
+      max-width: 300px
+      text-align: right
 
       @media screen and (max-width: 768px)
         margin-bottom: 1em
 
-      .v-button:deep()
-        button
-          font-size: 1.05em
+      &__link
+        .v-button:deep()
+          button
+            font-size: 1.05em
+
+      &__progress
+        margin-bottom: 0.5em
+        text-align: center
 
   &__description
     padding: 1rem

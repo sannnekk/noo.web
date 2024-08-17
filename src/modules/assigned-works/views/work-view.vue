@@ -80,6 +80,12 @@
             :base-url="assignedWorkStore.baseUrl"
             :tasks="assignedWorkStore.assignedWork.work?.tasks || []"
           />
+          <div class="work-view__sidebar__comments-link">
+            <router-link :to="assignedWorkStore.baseUrl">
+              <inline-icon name="edit" />
+              Комментарии к работе
+            </router-link>
+          </div>
           <p class="work-view__sidebar__score">
             Оценка:
             <b>
@@ -176,6 +182,9 @@
             >
               Вернуться к списку работ
             </common-button>
+            <div class="work-view__sidebar_">
+              <autosave-block />
+            </div>
             <div class="work-view__sidebar__people">
               <div class="work-view__sidebar__people__student">
                 <label>Ученик: </label>
@@ -271,6 +280,7 @@
 </template>
 
 <script setup lang="ts">
+import autosaveBlock from '../components/autosave-block.vue'
 import TaskList from '../components/task-list.vue'
 import { Core } from '@/core/Core'
 import { useAssignedWorkStore } from '../stores/assigned-work'
@@ -284,6 +294,7 @@ import type { Work } from '@/core/data/entities/Work'
 const assignedWorkStore = useAssignedWorkStore()
 
 assignedWorkStore.fetchAssignedWork()
+assignedWorkStore.autoSave.reset()
 
 watch(
   () => assignedWorkStore.assignedWork,
@@ -323,6 +334,19 @@ onUnmounted(() => {
   &__sidebar
     &__title
       margin: 0
+
+    &__comments-link
+      margin-top: 1em
+      display: flex
+      align-items: center
+
+      a
+        font-size: 0.8em
+        text-decoration: none
+        color: var(--form-text-color)
+
+        &:hover
+          color: var(--text-light)
 
     &__info
       margin-top: 1em

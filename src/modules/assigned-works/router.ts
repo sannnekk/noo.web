@@ -2,6 +2,7 @@ import module from './module-root.vue'
 import index from './views/index-view.vue'
 import WorkView from './views/work-view.vue'
 import TaskView from './views/task-view.vue'
+import WorkCommentsView from './views/work-comments-view.vue'
 
 export default {
   path: '/assigned-works',
@@ -21,8 +22,13 @@ export default {
       redirect: 'read',
       children: [
         {
-          path: ':mode/:taskSlug?',
-          name: 'Работа',
+          path: ':mode',
+          name: 'Комментари',
+          component: WorkCommentsView
+        },
+        {
+          path: ':mode/:taskSlug',
+          name: 'Задания',
           component: TaskView
         }
       ]
