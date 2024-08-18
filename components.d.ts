@@ -105,6 +105,7 @@ declare module 'vue' {
     PdfFileIcon: typeof import('./src/components/decorations/icons/pdf-file-icon.vue')['default']
     PdfPreview: typeof import('./src/components/files/pdf-preview.vue')['default']
     PngFileIcon: typeof import('./src/components/decorations/icons/png-file-icon.vue')['default']
+    PollCreateForm: typeof import('./src/components/form/entity-upsert/poll-create-form.vue')['default']
     PollIcon: typeof import('./src/components/decorations/icons/poll-icon.vue')['default']
     ProfileWidget: typeof import('./src/components/widgets/profile-widget.vue')['default']
     ProgressBar: typeof import('./src/components/computed/progress-bar.vue')['default']

@@ -299,17 +299,36 @@ export class CustomQuill extends Quill {
     event.preventDefault()
 
     setTimeout(async () => {
+      const errors = []
+
       for (const file of Array.from(files)) {
         if (!this.ALLOWED_MIME_TYPES.includes(file.type as any)) {
+          errors.push(
+            `Файл ${file.name} не был загружен, т.к. его тип ${file.type} не поддерживается`
+          )
+          this.insertImgAndRemoveDataUrl(index, undefined)
           continue
         }
 
         if (file.size > this.MAX_FILE_SIZE) {
+          errors.push(
+            `Файл ${file.name} не был загружен, т.к. его размер ${
+              file.size / 1024 / 1024
+            } превышает 3 МБ`
+          )
+          this.insertImgAndRemoveDataUrl(index, undefined)
           continue
         }
 
         const url = await this.uploadFile(file)
         this.insertImgAndRemoveDataUrl(index, url)
+      }
+
+      if (errors.length) {
+        Core.Services.UI.openErrorModal(
+          'Ошибка загрузки файлов',
+          errors.join('\n')
+        )
       }
     }, 0)
   }
@@ -349,13 +368,14 @@ export class CustomQuill extends Quill {
   }
 
   private insertImgAndRemoveDataUrl(index: number, url?: string) {
-    if (url) {
-      setTimeout(() => {
-        this.focus()
-        this.deleteText(index, 1)
+    setTimeout(() => {
+      this.focus()
+      this.deleteText(index, 1)
+
+      if (url) {
         this.insertEmbed(index, 'image', url, 'user')
-      }, 0)
-    }
+      }
+    }, 50)
   }
 
   private insertImg(index: number, url?: string) {

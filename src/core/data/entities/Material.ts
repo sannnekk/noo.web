@@ -10,7 +10,7 @@ export interface Material extends Entity {
   description: string
   content: DeltaContentType
   order: number
-  chapterId: string
+  chapterId?: string
   chapter?: Chapter
   workId?: string
   isActive: boolean

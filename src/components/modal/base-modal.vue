@@ -21,6 +21,19 @@
             />
           </div>
           <div
+            class="base-modal__success-img"
+            v-if="type === 'success'"
+          >
+            <img
+              :src="
+                Core.Context.Theme === 'dark'
+                  ? '/img/success-dark-theme.svg'
+                  : '/img/success.svg'
+              "
+              alt="Успех"
+            />
+          </div>
+          <div
             class="base-modal__title"
             :class="`base-modal__title--${type}`"
           >
@@ -36,7 +49,8 @@
           <div
             class="base-modal__buttons"
             :class="{
-              'base-modal__buttons--horizontal': type === 'error'
+              'base-modal__buttons--horizontal':
+                type === 'error' || type === 'success'
             }"
           >
             <common-button
@@ -64,6 +78,8 @@
 </template>
 
 <script setup lang="ts">
+import { Core } from '@/core/Core'
+
 interface Props {
   title?: string
   message?: string
@@ -141,7 +157,7 @@ function onActionClick(handler: () => void | Promise<void>) {
       background-color: var(--border-color)
       border-radius: var(--border-radius)
 
-  &__error-img
+  &__error-img, &__success-img
     img
       width: 89%
       height: auto
@@ -155,6 +171,7 @@ function onActionClick(handler: () => void | Promise<void>) {
 
     &--success
       color: var(--success)
+      text-align: center
 
     &--error
       color: var(--danger)
@@ -167,7 +184,7 @@ function onActionClick(handler: () => void | Promise<void>) {
     margin-bottom: 1em
     color: var(--text-light)
 
-    &--error
+    &--error, &--success
       text-align: center
 
   &__buttons

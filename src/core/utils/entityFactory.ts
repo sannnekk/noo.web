@@ -4,9 +4,19 @@ import type { Chapter } from '@/core/data/entities/Chapter'
 import { v4 as uuid } from 'uuid'
 import type { Material } from '../data/entities/Material'
 import { emptyDelta } from './deltaHelpers'
+import type { Course } from '../data/entities/Course'
+import type { Subject } from '../data/entities/Subject'
+import type { Poll } from '../data/entities/Poll'
 
-type EntityName = 'answer' | 'comment' | 'chapter' | 'material'
-type Entity = Answer | Comment | Chapter | Material
+type EntityName =
+  | 'answer'
+  | 'comment'
+  | 'chapter'
+  | 'material'
+  | 'course'
+  | 'subject'
+  | 'poll'
+type Entity = Answer | Comment | Chapter | Material | Course | Subject | Poll
 
 export function entityFactory<T extends Entity>(name: EntityName): T {
   switch (name) {
@@ -18,6 +28,12 @@ export function entityFactory<T extends Entity>(name: EntityName): T {
       return chapterConstructor() as T
     case 'material':
       return materialConstructor() as T
+    case 'course':
+      return courseConstructor() as T
+    case 'subject':
+      return subjectConstructor() as T
+    case 'poll':
+      return pollConstructor() as T
     default:
       return {} as T
   }
@@ -57,7 +73,7 @@ function chapterConstructor(): Omit<Chapter, 'id'> {
   }
 }
 
-function materialConstructor(): Omit<Material, 'id' | 'chapterId'> {
+function materialConstructor(): Omit<Material, 'id'> {
   return {
     slug: uuid(),
     name: '',
@@ -65,6 +81,43 @@ function materialConstructor(): Omit<Material, 'id' | 'chapterId'> {
     content: emptyDelta(),
     order: 0,
     files: [],
+    isActive: false,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+}
+
+function courseConstructor(): Omit<Course, 'id'> {
+  return {
+    slug: uuid(),
+    name: '',
+    description: '',
+    images: [],
+    subject: null as unknown as Subject,
+    author: null,
+    chapters: [],
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+}
+
+function subjectConstructor(): Omit<Subject, 'id'> {
+  return {
+    name: '',
+    color: ''
+  }
+}
+
+function pollConstructor(): Omit<Poll, 'id' | 'votedCount' | 'votedUserIds'> {
+  return {
+    title: '',
+    description: '',
+    canSeeResults: [],
+    canVote: [],
+    questions: [],
+    requireAuth: true,
+    stopAt: new Date(),
+    isStopped: false,
     createdAt: new Date(),
     updatedAt: new Date()
   }

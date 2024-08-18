@@ -9,13 +9,13 @@ export interface Course extends Entity {
   name: string
   images: Media[]
   author: User | null
-  authorId: User['id']
+  authorId?: User['id']
   description: string
-  chapters?: Chapter[]
+  chapters: Chapter[]
   students?: User[]
   studentIds?: User['id'][]
   subject: Subject
-  subjectId: Subject['id']
+  subjectId?: Subject['id']
   createdAt: Date
   updatedAt: Date
 }

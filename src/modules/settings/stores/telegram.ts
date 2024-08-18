@@ -56,7 +56,11 @@ export const useTelegramStore = defineStore('settings-module:telegram', () => {
       user.value.telegramUsername = data.telegramUsername || undefined
       user.value.telegramId = data.telegramId || undefined
 
-      uiService.openSuccessModal('Telegram успешно привязан')
+      uiService.openSuccessModal(
+        data.telegramId
+          ? 'Telegram успешно привязан'
+          : 'Telegram успешно отвязан'
+      )
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при обновлении Telegram',
