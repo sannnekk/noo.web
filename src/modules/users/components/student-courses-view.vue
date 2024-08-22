@@ -56,7 +56,7 @@ import type { ColType } from '@/components/structures/entity-table/entity-table.
 import { Core } from '@/core/Core'
 import type { Course } from '@/core/data/entities/Course'
 import type { User } from '@/core/data/entities/User'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 interface Props {
   userId: User['id']
@@ -167,7 +167,7 @@ async function onAddStudentToCourses(newCourseSlugs: Course['slug'][]) {
   }
 }
 
-fetchStudentCourses()
+watch(() => props.userId, fetchStudentCourses, { immediate: true })
 </script>
 
 <style scoped lang="sass">
