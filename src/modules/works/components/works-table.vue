@@ -34,7 +34,8 @@ const cols: ColType[] = [
   {
     title: 'Название работы',
     type: 'text',
-    value: (work: Work) => work.name
+    value: (work: Work) => work.name,
+    linkTo: (work: Work) => `/create-work${work.slug}`
   },
   {
     title: 'Предмет',
@@ -51,7 +52,7 @@ const cols: ColType[] = [
         case 'phrase':
           return '<span style="color: var(--success)">Фраза</span>'
         case 'mini-test':
-          return '<span style="color: var(--info)">Мини-тест</span>'
+          return '<span style="color: var(--info)">Мини-зачет</span>'
         case 'test':
           return '<span style="color: var(--warning)">Тест</span>'
         case 'second-part':

@@ -72,20 +72,24 @@
             <div class="edit-user-view__content">
               <warning-block v-if="userStore.user.verificationToken">
                 <div class="edit-user-view__content__unverified-block">
-                  <p>
+                  <p class="edit-user-view__content__unverified-block__text">
                     <b>Пользователь не подтвержден</b>
                     <br />
                     Пользователь не сможет войти в систему, пока не подтвердит
                     свой аккаунт через имейл
                   </p>
-                  <common-button
-                    v-if="Core.Context.roleIs(['admin', 'teacher'])"
-                    design="warning"
-                    alignment="right"
-                    @click="userStore.confirmUser()"
+                  <div
+                    class="edit-user-view__content__unverified-block__actions"
                   >
-                    Подтвердить
-                  </common-button>
+                    <common-button
+                      v-if="Core.Context.roleIs(['admin', 'teacher'])"
+                      design="warning"
+                      alignment="stretch"
+                      @click="userStore.confirmUser()"
+                    >
+                      Подтвердить
+                    </common-button>
+                  </div>
                 </div>
               </warning-block>
               <div class="edit-user-view__content__role">
@@ -254,14 +258,24 @@ const currentTab = ref(0)
   &__content
     &__unverified-block
       display: flex
+      gap: 1em
 
-      p
+      &__text
         margin: 0
         font-size: 0.8em
         width: 100%
 
         b
           font-size: 1.3em
+
+      &__actions
+        display: flex
+        flex-direction: column
+        justify-content: center
+
+      @media screen and (max-width: 992px)
+        gap: 1em
+        flex-direction: column
 
     &__form
       padding: 1em

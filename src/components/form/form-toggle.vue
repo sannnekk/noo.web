@@ -18,7 +18,7 @@
 import { computed, ref } from 'vue'
 
 interface Props {
-  modelValue: string
+  modelValue: any
   values: [
     {
       value: any

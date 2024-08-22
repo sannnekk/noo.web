@@ -127,12 +127,8 @@
                 assignedWorkStore.mode === 'read' &&
                 assignedWorkStore.assignedWork?.work?.type === 'test' &&
                 Core.Context.roleIs(['student']) &&
-                (assignedWorkStore.assignedWork?.checkStatus ==
-                  'checked-in-deadline' ||
-                  assignedWorkStore.assignedWork?.checkStatus ==
-                    'checked-after-deadline' ||
-                  assignedWorkStore.assignedWork?.checkStatus ==
-                    'checked-automatically')
+                assignedWorkStore.assignedWork?.checkStatus ==
+                  'checked-automatically'
               "
             >
               Переделать работу
@@ -184,7 +180,10 @@
             </common-button>
             <div
               class="work-view__sidebar_autosave"
-              v-if="assignedWorkStore.mode !== 'read'"
+              v-if="
+                assignedWorkStore.mode !== 'read' &&
+                Core.Context.roleIs(['student', 'mentor'])
+              "
             >
               <autosave-block />
             </div>
@@ -316,7 +315,7 @@ function readableWorkType(type: Work['type']) {
     case 'phrase':
       return 'Фраза'
     case 'mini-test':
-      return 'Мини-тест'
+      return 'Мини-зачет'
     case 'test':
       return 'Тест'
     case 'second-part':

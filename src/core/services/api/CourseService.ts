@@ -36,12 +36,28 @@ export class CourseService extends ApiService {
    * Get courses
    */
   public async getCourses(
-    pagination: Pagination,
+    pagination?: Pagination,
     options: ServiceOptions = {}
   ) {
     return await this.httpGet<Course[]>(
       this._route,
-      pagination as any,
+      pagination,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Get courses by student
+   */
+  public async getStudentCourses(
+    studentId: User['id'],
+    pagination?: Pagination,
+    options: ServiceOptions = {}
+  ) {
+    return await this.httpGet<Course[]>(
+      `${this._route}/student/${studentId}`,
+      pagination,
       undefined,
       options
     )

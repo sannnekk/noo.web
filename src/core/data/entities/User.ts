@@ -12,6 +12,8 @@ export interface User extends Entity {
   newEmail?: string
   avatar?: UserAvatar
   courses?: Course[]
+  coursesAsStudent?: Course[]
+  courseAsStudentIds?: Course['id'][]
   mentorAssignmentsAsMentor?: MentorAssignment[]
   mentorAssignmentsAsStudent?: MentorAssignment[]
   telegramUsername?: string

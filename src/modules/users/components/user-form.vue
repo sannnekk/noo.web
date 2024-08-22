@@ -48,8 +48,8 @@
           <mentor-form :students="studentsWithSubjects" />
         </div>
         <div
-          class="fomr-group__student-statistics"
-          v-else-if="model.role === 'student'"
+          class="fomr-group__student-mentors-list"
+          v-else-if="model?.role === 'student'"
         >
           <student-mentors-view
             :mentor-assignments="(model as any).mentorAssignmentsAsStudent"
@@ -57,12 +57,19 @@
             @mentor-assigned="$emit('mentor-assigned')"
           />
         </div>
+        <div
+          class="fomr-group__student-mentors-list"
+          v-if="model.role === 'student'"
+        >
+          <student-courses-view :user-id="model.id" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import studentCoursesView from './student-courses-view.vue'
 import mentorForm from './mentor-form.vue'
 import teacherForm from './teacher-form.vue'
 import { computed } from 'vue'
@@ -78,6 +85,7 @@ interface Props {
 interface Emits {
   (e: 'update:modelValue', value: Partial<User>): void
   (e: 'mentor-assigned'): void
+  (e: 'course-toggle'): void
 }
 
 const props = defineProps<Props>()
