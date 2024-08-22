@@ -1,6 +1,5 @@
 import type { DeltaContentType } from '../../../types/composed/DeltaContentType'
 import type { Entity } from '../Entity'
-import type { TaskOption } from './TaskOption'
 import type { Work } from './Work'
 
 export interface Task extends Entity {
@@ -16,8 +15,6 @@ export interface Task extends Entity {
   checkHint?: DeltaContentType
   checkingStrategy?: 'type1' | 'type2' | 'type3' | 'type4'
   isAnswerVisibleBeforeCheck: boolean
-  options?: TaskOption[]
-  optionsIds?: TaskOption['id'][]
   createdAt: Date
   updatedAt: Date
 }
