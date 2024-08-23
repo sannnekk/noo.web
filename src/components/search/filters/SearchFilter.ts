@@ -12,10 +12,12 @@ export interface SearchFilter {
   // tags
 
   // array
-  arrayOptions?: {
-    label: string
-    value: string
-  }[]
+  arrayOptions?:
+    | {
+        label: string
+        value: string
+      }[]
+    | (() => Promise<{ label: string; value: string }[]>)
 
   // boolean
   booleanLabels?: [string, string]

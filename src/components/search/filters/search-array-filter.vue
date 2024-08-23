@@ -6,7 +6,7 @@
     <check-list
       item-label-key="label"
       item-key="value"
-      :items="filter.arrayOptions!"
+      :items="options"
       v-model="(model as any)"
       multiple
     />
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import type { FilterType } from '@/core/data/Pagination'
 import type { SearchFilter } from './SearchFilter'
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 interface Props {
   filter: SearchFilter
@@ -34,6 +34,20 @@ const model = computed({
   get: () => props.modelValue,
   set: (value) => emits('update:modelValue', value)
 })
+
+const options = ref<{ label: string; value: any }[]>([])
+
+watch(
+  () => props.filter.arrayOptions,
+  async (arrayOptions) => {
+    if (typeof arrayOptions === 'function') {
+      options.value = await arrayOptions()
+    } else {
+      options.value = arrayOptions!
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped lang="sass">

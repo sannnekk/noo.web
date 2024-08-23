@@ -11,6 +11,12 @@
         <common-button to="/create-work">Создать работу</common-button>
       </div>
     </div>
+    <div class="index-works-view__">
+      <search-filters
+        :filters="filters"
+        v-model:pagination="worksStore.pagination"
+      />
+    </div>
     <div class="index-works-view__table">
       <works-table
         :works="worksStore.results"
@@ -55,7 +61,9 @@
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useWorksStore } from '../stores/works'
 import worksTable from '../components/works-table.vue'
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import type { SearchFilter } from '@/components/search/filters/SearchFilter'
+import { subjectFilter } from '@/core/filters/subject-filter'
 
 setPageTitle('Работы')
 
@@ -70,11 +78,33 @@ function onWorkDelete(workId: string) {
   deleteWorkModal.workId = workId
   deleteWorkModal.visible = true
 }
+
+const filters = ref<SearchFilter[]>([
+  {
+    name: 'Тип',
+    type: 'arr',
+    key: 'type',
+    arrayOptions: [
+      { label: 'Тест', value: 'test' },
+      { label: 'Мини-зачет', value: 'mini-test' },
+      { label: 'Вторая часть', value: 'second-part' },
+      { label: 'Пробник', value: 'trial-work' },
+      { label: 'Фраза', value: 'phrase' }
+    ]
+  },
+  {
+    name: 'Дата создания',
+    type: 'range',
+    key: 'createdAt',
+    rangeType: 'date',
+    rangeValues: [new Date(), new Date()]
+  },
+  subjectFilter
+])
 </script>
 
 <style lang="sass" scoped>
 .index-works-view
-
   &__header
     padding-bottom: 1rem
     display: flex
