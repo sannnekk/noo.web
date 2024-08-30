@@ -58,6 +58,13 @@ export class UIService extends StoreService {
   }
 
   /**
+   * Set notifications pane open state
+   */
+  public setNotificationsPaneOpen(isOpen: boolean) {
+    this._store.isNotificationsPaneOpen = isOpen
+  }
+
+  /**
    * Get nav entries for current user
    */
   public getNavEntries() {

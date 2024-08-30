@@ -15,6 +15,7 @@
       </div>
     </div>
   </div>
+  <the-notifications-pane />
 </template>
 
 <style lang="sass" scoped>

@@ -1,6 +1,6 @@
 <template>
   <div class="poll-question-text">
-    <form-input
+    <text-area
       label="Ответ"
       type="text"
       v-model="model.text"

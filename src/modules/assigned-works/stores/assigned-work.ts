@@ -304,11 +304,6 @@ export const useAssignedWorkStore = defineStore(
       if (!answer) return false
 
       switch (task.type) {
-        case 'one_choice':
-        case 'multiple_choice':
-          return !!(
-            answer.chosenTaskOptionIds && answer.chosenTaskOptionIds.length > 0
-          )
         case 'word':
           return !!(answer.word && answer.word.trim().length > 0)
         case 'text':

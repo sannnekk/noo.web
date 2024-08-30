@@ -103,6 +103,7 @@
         :task="assignedWorkStore.task"
         :readonly="assignedWorkStore.fieldVisibility.checkBox === 'readonly'"
         :mode="assignedWorkStore.mode"
+        :snippets="snippetStore.snippets"
       />
     </div>
     <div
@@ -159,8 +160,10 @@ import taskCommentContainer from '../components/task-comment-container.vue'
 import taskScoreContainer from '../components/task-score-container.vue'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
 import { ref } from 'vue'
+import { useSnippetStore } from '../stores/snippet'
 
 const assignedWorkStore = useAssignedWorkStore()
+const snippetStore = useSnippetStore()
 
 const answerModalData = ref({
   visible: false,

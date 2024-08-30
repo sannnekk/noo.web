@@ -48,6 +48,13 @@ export const useSettingsStore = defineStore('settings-module:settings', () => {
       for: ['admin', 'teacher']
     },
     {
+      title: 'Уведомления',
+      description: 'Управление уведомлениями',
+      icon: 'notifications',
+      route: '/settings/notifications',
+      for: ['admin', 'teacher']
+    },
+    {
       title: 'Общая информация',
       description: 'Информация о платформе, версиях и changelog',
       icon: 'info',

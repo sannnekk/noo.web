@@ -16,12 +16,14 @@
       <div class="actions-with-selected__actions">
         <common-button
           design="danger"
+          alignment="stretch"
           @click="deleteWorkModalVisible = true"
         >
           Удалить
         </common-button>
         <common-button
           design="warning"
+          alignment="stretch"
           @click="archiveWorksModalVisible = true"
         >
           Архивировать
@@ -29,6 +31,15 @@
         <common-button
           v-if="Core.Context.roleIs(['mentor'])"
           design="secondary"
+          alignment="stretch"
+          @click="sendToRevisionModalVisible = true"
+        >
+          Отправить на дорешивание
+        </common-button>
+        <common-button
+          v-if="Core.Context.roleIs(['mentor'])"
+          design="secondary"
+          alignment="stretch"
           @click="transferAssignedWorkModalVisible = true"
         >
           Передать другому куратору
@@ -53,6 +64,16 @@
       Вы уверены, что хотите удалить выбранные работы?
     </template>
   </sure-modal>
+  <sure-modal
+    v-model:visible="sendToRevisionModalVisible"
+    @confirm="$emit('send-to-revision', selectedAssignedWorks)"
+  >
+    <template #title> Отправка на дорешивание </template>
+    <template #text>
+      Вы уверены, что хотите отправить выбранные работы обратно ученикам на
+      дорешивание?
+    </template>
+  </sure-modal>
 </template>
 
 <script setup lang="ts">
@@ -68,6 +89,7 @@ interface Props {
 
 interface Emits {
   (event: 'delete', assignedWorks: AssignedWork[]): void
+  (event: 'send-to-revision', assignedWorks: AssignedWork[]): void
 }
 
 defineProps<Props>()
@@ -76,6 +98,7 @@ defineEmits<Emits>()
 const transferAssignedWorkModalVisible = ref(false)
 const archiveWorksModalVisible = ref(false)
 const deleteWorkModalVisible = ref(false)
+const sendToRevisionModalVisible = ref(false)
 </script>
 
 <style lang="sass" scoped>
@@ -96,7 +119,8 @@ const deleteWorkModalVisible = ref(false)
 
   &__actions
     display: flex
-    font-size: 0.8em
+    gap: 0.3em
+    font-size: 0.7em
 
     @media (max-width: 768px)
       flex-wrap: wrap

@@ -14,9 +14,12 @@
         <div class="header__help__theme-toggle-widget">
           <theme-toggle-widget />
         </div>
-        <div class="header__help__theme-toggle-widget">
-          <help-widget />
+        <div class="header__help__notifications-widget">
+          <notifications-widget />
         </div>
+        <!-- <div class="header__help__theme-toggle-widget">
+          <help-widget />
+        </div> -->
       </div>
       <div class="header__profile-widget">
         <profile-widget />

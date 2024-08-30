@@ -86,6 +86,7 @@ onUnmounted(() => {
   &__content
     flex: 1
     padding: 1rem
+    width: calc(100% - 300px)
 
     @media screen and (max-width: 768px)
       width: 100%

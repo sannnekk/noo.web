@@ -55,12 +55,13 @@ function onTabChange(index: number) {
     padding-top: 1em
     display: flex
     justify-content: center
-    gap: 2em
+    gap: 1em
 
     @media (max-width: 768px)
-      flex-direction: column
-      justify-content: center
+      overflow-x: auto
       gap: 0.5em
+      padding-left: 0.5em
+      padding-right: 0.5em
 
     &__title
       padding: 10px

@@ -49,6 +49,18 @@
       <rich-text-container :content="courseStore.material.content" />
     </div>
     <div
+      class="material-view__poll"
+      v-if="courseStore.material.pollId"
+    >
+      <h3>К этому материалу прикреплен опрос</h3>
+      <common-button
+        design="primary"
+        :to="`/poll/${courseStore.material.pollId}`"
+      >
+        Пройти опрос
+      </common-button>
+    </div>
+    <div
       class="material-view__files"
       v-if="courseStore.material.files.length"
     >

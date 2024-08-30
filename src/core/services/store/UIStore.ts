@@ -36,6 +36,11 @@ export function installUIStore() {
     const isPaneOpen = ref(false)
 
     /**
+     * Notifications pane visibility state
+     */
+    const isNotificationsPaneOpen = ref(false)
+
+    /**
      * All the navigation entries
      */
     const navEntries = ref<NavEntry[]>([
@@ -92,6 +97,12 @@ export function installUIStore() {
         icon: 'settings',
         route: '/settings',
         for: ['admin', 'student', 'teacher', 'mentor']
+      },
+      {
+        title: 'Помощь',
+        icon: 'help',
+        route: '/help',
+        for: ['admin', 'student', 'teacher', 'mentor']
       }
     ])
 
@@ -129,6 +140,7 @@ export function installUIStore() {
       isLoading,
       loadingProgress,
       isPaneOpen,
+      isNotificationsPaneOpen,
       navEntries,
       globalModal,
       retryLoginModal

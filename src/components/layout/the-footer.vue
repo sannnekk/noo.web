@@ -38,6 +38,14 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-12">
+          <p class="the-footer__cookies">
+            Используя сайт, вы даете согласие на использование файлов cookie для
+            улучшения работы сайта.
+          </p>
+        </div>
+      </div>
     </div>
   </footer>
 </template>
@@ -115,6 +123,23 @@
 
       &:hover
         color: var(--lila)
+
+  &__cookies
+    color: var(--text-light)
+    font-size: 0.8rem
+    margin-top: 0.5rem
+    margin-bottom: 0
+    text-align: right
+    padding: 0
+    font-weight: 300
+    line-height: 1.2
+
+    @media (max-width: 1200px)
+      font-size: 0.8rem
+
+    @media (max-width: 992px)
+      font-size: 0.6rem
+      text-align: left
 </style>
 
 <style lang="sass">

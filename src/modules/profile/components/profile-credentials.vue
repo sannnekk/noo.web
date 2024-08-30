@@ -88,6 +88,7 @@
   </div>
   <change-avatar-modal
     v-model:visible="isAvatarModalVisible"
+    :existing-avatar-media="credentialsModel.avatar?.media || null"
     @confirm="$emit('change-avatar', $event)"
   />
 </template>

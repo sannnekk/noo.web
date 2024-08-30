@@ -9,7 +9,7 @@
       v-auto-animate
     >
       <div
-        class="col-md-4 col-12"
+        class="col-lg-4 col-12"
         v-for="session in sessions"
         :key="session.id"
       >

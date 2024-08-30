@@ -39,7 +39,6 @@
 </template>
 
 <script setup lang="ts">
-import { Core } from '@/core/Core'
 import type { Media } from '@/core/data/entities/Media'
 import { computed, reactive } from 'vue'
 
@@ -49,6 +48,7 @@ export interface AvatarData {
 }
 
 interface Props {
+  existingAvatarMedia: Media | null
   visible: boolean
 }
 
@@ -60,26 +60,17 @@ interface Emits {
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
-const uiService = Core.Services.UI
-
 const visibilityModel = computed({
   get: () => props.visible,
   set: (value) => emits('update:visible', value)
 })
 
 const data = reactive<AvatarData>({
-  media: [],
+  media: props.existingAvatarMedia ? [props.existingAvatarMedia] : [],
   useTelegramAvatar: false
 })
 
 function onConfirm() {
-  if (data.media.length === 0 && !data.useTelegramAvatar) {
-    uiService.openWarningModal('Необходимо выбрать аватарку')
-
-    setTimeout(() => (visibilityModel.value = true), 10)
-    return
-  }
-
   emits('confirm', data)
 }
 </script>

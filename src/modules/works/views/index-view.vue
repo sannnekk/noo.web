@@ -11,7 +11,7 @@
         <common-button to="/create-work">Создать работу</common-button>
       </div>
     </div>
-    <div class="index-works-view__">
+    <div class="index-works-view__filters">
       <search-filters
         :filters="filters"
         v-model:pagination="worksStore.pagination"
@@ -51,7 +51,7 @@
       <br />
       <warning-block>
         Все, кто решал/проверял эту работу, больше не смогут её открыть.
-        Сохранится только дедлайн и общий балл.
+        Сохранится только статус, дедлайн и общий балл.
       </warning-block>
     </template>
   </sure-modal>
@@ -127,4 +127,7 @@ const filters = ref<SearchFilter[]>([
 
       @media screen and (max-width: 768px)
         font-size: 12px
+
+  &__filters
+    padding: 0 1em
 </style>

@@ -67,7 +67,7 @@ onMounted(() => {
     border: none
 
     @media screen and (max-width: 768px)
-      font-size: 1rem
+      font-size: 1.4rem
       padding: 0.3em
 
     &:hover

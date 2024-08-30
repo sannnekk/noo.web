@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { Core } from '@/core/Core'
 import type { UserWithOnlineStatus } from '@/core/data/entities/User'
 import type { AvatarData } from '../components/change-avatar-modal.vue'
@@ -115,12 +115,12 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
         id: user.value.id,
         avatar: {
           ...user.value.avatar!,
-          media: avatarData.media.at(0),
+          media: avatarData.media.at(0) || null,
           avatarType: avatarData.useTelegramAvatar ? 'telegram' : 'custom'
         }
       })
       await fetchUser()
-      uiService.openSuccessModal('Аватар успешно изменен')
+      uiService.openSuccessModal('Аватар успешно изменен', 'Обновите страницу')
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при изменении аватара',

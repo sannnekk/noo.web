@@ -10,11 +10,35 @@ import type { Subject } from '@/core/data/entities/Subject'
 
 export type UserRelations = 'students' | 'mentor' | 'courses'
 
+export type VisibleRole = {
+  label: string
+  value: User['role']
+}
+
 export interface TelegramUpdatePayload {
   telegramId: string | null
   telegramUsername: string | null
   telegramAvatarUrl: string | null
 }
+
+export const UserRoleOptions: VisibleRole[] = [
+  {
+    label: 'Ученик',
+    value: 'student'
+  },
+  {
+    label: 'Преподаватель',
+    value: 'teacher'
+  },
+  {
+    label: 'Куратор',
+    value: 'mentor'
+  },
+  {
+    label: 'Администратор',
+    value: 'admin'
+  }
+]
 
 /**
  * User service
@@ -57,6 +81,19 @@ export class UserService extends ApiService {
       undefined,
       options
     )
+  }
+
+  /**
+   * Get user roles
+   */
+  public getRoles(pagination?: Pagination) {
+    if (pagination?.search) {
+      return UserRoleOptions.filter((role) =>
+        role.label.toLowerCase().includes(pagination.search!.toLowerCase())
+      )
+    }
+
+    return UserRoleOptions
   }
 
   /**

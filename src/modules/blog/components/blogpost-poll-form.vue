@@ -95,7 +95,7 @@
 import BlogpostPollFormQuestion from './blogpost-poll-form-question.vue'
 import type { Poll } from '@/core/data/entities/Poll'
 import type { PollQuestion } from '@/core/data/entities/PollQuestion'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 interface Props {
   modelValue: Poll
@@ -166,6 +166,32 @@ function emptyQuestion(): PollQuestion {
     onlyPastDate: false
   }
 }
+
+watch(
+  () => model.value.canVote,
+  () => {
+    const canVote = model.value.canVote
+
+    if (canVote.at(-1) === 'everyone' && canVote.length > 1) {
+      model.value.canVote = ['everyone']
+    } else if (canVote.at(0) === 'everyone' && canVote.length > 1) {
+      model.value.canVote = canVote.filter((v) => v !== 'everyone')
+    }
+  }
+)
+
+watch(
+  () => model.value.canSeeResults,
+  () => {
+    const canSeeResults = model.value.canSeeResults
+
+    if (canSeeResults.at(-1) === 'everyone' && canSeeResults.length > 1) {
+      model.value.canSeeResults = ['everyone']
+    } else if (canSeeResults.at(0) === 'everyone' && canSeeResults.length > 1) {
+      model.value.canSeeResults = canSeeResults.filter((v) => v !== 'everyone')
+    }
+  }
+)
 </script>
 
 <style lang="sass" scoped>

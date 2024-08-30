@@ -7,7 +7,7 @@ import { CourseService } from './api/CourseService'
 import { FAQService } from './api/FAQService'
 import { GoogleSheetsBindingService } from './api/GoogleSheetsBindingService'
 import { MediaService } from './api/MediaService'
-import { NotificationService } from './api/NotificationService'
+import { NotificationService } from './store/NotificationService'
 import { PlatformService } from './api/PlatformService'
 import { PollService } from './api/PollService'
 import { SessionService } from './api/SessionService'
@@ -44,8 +44,6 @@ export type Services = {
   Course: CourseService
   Media: MediaService
   Statistics: StatisticsService
-  Notification: NotificationService
-  UI: UIService
   Calender: CalenderService
   Blog: BlogService
   Poll: PollService
@@ -55,6 +53,9 @@ export type Services = {
   Platform: PlatformService
   Snippet: SnippetService
   FAQ: FAQService
+
+  Notification: NotificationService
+  UI: UIService
 }
 
 /**
@@ -73,7 +74,6 @@ export class ServiceFactory {
     Course: CourseService,
     Media: MediaService,
     Statistics: StatisticsService,
-    Notification: NotificationService,
     Calender: CalenderService,
     Blog: BlogService,
     Poll: PollService,
@@ -84,6 +84,7 @@ export class ServiceFactory {
     Snippet: SnippetService,
     FAQ: FAQService,
     // storage
+    Notification: NotificationService,
     UI: UIService
   }
 

@@ -232,6 +232,21 @@ export class AssignedWorkService extends ApiService {
   }
 
   /**
+   * Send the assigned work for revision back to student
+   */
+  public async sendToRevision(
+    assignedWorkId: AssignedWork['id'],
+    options: ServiceOptions = {}
+  ) {
+    await this.httpPatch(
+      `${this._route}/${assignedWorkId}/send-to-revision`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
    * Delete the assigned work
    */
   public async deleteAssignedWork(

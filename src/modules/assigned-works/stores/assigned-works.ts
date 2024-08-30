@@ -244,9 +244,11 @@ export const useAssignedWorksStore = defineStore(
     async function archiveWorks(works: AssignedWork[]) {
       uiService.setLoading(true)
       try {
-        await Promise.all(
-          works.map((work) => assignedWorkService.archiveAssignedWork(work.id))
-        )
+        for (const work of works) {
+          await assignedWorkService.archiveAssignedWork(work.id, {
+            showLoader: true
+          })
+        }
         uiService.openSuccessModal('Работы успешно архивированы!')
         allSearch.trigger()
         archivedSearch.trigger()
@@ -262,13 +264,11 @@ export const useAssignedWorksStore = defineStore(
      */
     async function unarchiveWorks(works: AssignedWork[]) {
       try {
-        await Promise.all(
-          works.map((work) =>
-            assignedWorkService.unarchiveAssignedWork(work.id, {
-              showLoader: true
-            })
-          )
-        )
+        for (const work of works) {
+          await assignedWorkService.unarchiveAssignedWork(work.id, {
+            showLoader: true
+          })
+        }
         uiService.openSuccessModal('Работы успешно архивированы!')
         allSearch.trigger()
         archivedSearch.trigger()
@@ -277,13 +277,38 @@ export const useAssignedWorksStore = defineStore(
       }
     }
 
+    /**
+     * Send works to revision
+     */
+    async function sendWorksToRevision(works: AssignedWork[]) {
+      try {
+        for (const work of works) {
+          await assignedWorkService.sendToRevision(work.id, {
+            showLoader: true
+          })
+        }
+        uiService.openSuccessModal('Работы успешно отправлены на доработку!')
+        allSearch.trigger()
+      } catch (e: any) {
+        uiService.openErrorModal(
+          'Ошибка при отправке работ на доработку',
+          e.message
+        )
+      }
+    }
+
+    /**
+     * Delete works
+     */
     async function deleteWorks(works: AssignedWork[]) {
       uiService.setLoading(true)
 
       try {
-        await Promise.all(
-          works.map((work) => assignedWorkService.deleteAssignedWork(work.id))
-        )
+        for (const work of works) {
+          await assignedWorkService.deleteAssignedWork(work.id, {
+            showLoader: true
+          })
+        }
         uiService.openSuccessModal('Работы успешно удалены!')
         allSearch.trigger()
       } catch (e: any) {
@@ -336,6 +361,7 @@ export const useAssignedWorksStore = defineStore(
       checkedSearchSelectedWorks,
       archiveWorks,
       unarchiveWorks,
+      sendWorksToRevision,
       currentTabIndex,
       deleteWorks
     }

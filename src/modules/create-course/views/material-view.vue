@@ -21,6 +21,12 @@
       <label class="material-view__label">Содержание:</label>
       <rich-text-area v-model="currentMaterial.content" />
     </div>
+    <div class="form-group">
+      <poll-select
+        label="Выберите опрос (необязательно)"
+        v-model="currentMaterial.poll"
+      />
+    </div>
     <br />
     <div class="form-group">
       <file-input

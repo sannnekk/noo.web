@@ -2,6 +2,7 @@ import type { DeltaContentType } from '../../../types/composed/DeltaContentType'
 import type { Entity } from '../Entity'
 import type { Chapter } from './Chapter'
 import type { Media } from './Media'
+import type { Poll } from './Poll'
 import type { Work } from './Work'
 
 export interface Material extends Entity {
@@ -20,4 +21,6 @@ export interface Material extends Entity {
   updatedAt: Date
   workSolveDeadline?: Date
   workCheckDeadline?: Date
+  poll?: Poll
+  pollId?: Poll['id']
 }

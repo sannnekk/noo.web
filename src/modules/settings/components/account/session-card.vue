@@ -72,6 +72,7 @@ defineEmits<Emits>()
   border-radius: 8px
   background-color: var(--color-background)
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
+  margin-bottom: 1em
 
   @media (max-width: 768px)
     width: 100%

@@ -5,7 +5,7 @@
   >
     <div
       class="actions-with-selected__inner"
-      v-if="selectedAssignedWorks.length && Core.Context.roleIs(['mentor'])"
+      v-if="selectedAssignedWorks.length"
     >
       <p class="actions-with-selected__label">
         Выбрано: {{ selectedAssignedWorks.length }}
@@ -27,7 +27,6 @@
 </template>
 
 <script setup lang="ts">
-import { Core } from '@/core/Core'
 import { ref } from 'vue'
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import unarchiveWorksModal from './unarchive-works-modal.vue'
@@ -55,5 +54,10 @@ const unarchiveWorksModalVisible = ref(false)
 
   &__actions
     display: flex
-    font-size: 0.8em
+    font-size: 0.7em
+    gap: 0.3em
+
+    @media (max-width: 1100px)
+      flex-direction: column
+      gap: 1em
 </style>

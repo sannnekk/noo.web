@@ -43,6 +43,11 @@ export default {
           component: () => import('./views/help-page-view.vue')
         },
         {
+          path: 'notifications',
+          name: 'Уведомления',
+          component: () => import('./views/notifications-view.vue')
+        },
+        {
           path: 'platform-info',
           name: 'Общая информация',
           component: () => import('./views/platform-info-view.vue')

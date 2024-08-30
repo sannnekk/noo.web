@@ -11,9 +11,30 @@
     <rich-text-area
       v-else
       v-model="model"
-      :additional-modules="additionalModules"
-      :additional-module-options="additionalModuleOptions"
+      :key="reloadTrigger"
     />
+    <div
+      class="task-comment-container__snippets"
+      v-if="!readonly && snippets.length"
+    >
+      <div class="task-comment-container__snippets__title">
+        <h4>Сниппеты:</h4>
+      </div>
+      <div class="task-comment-container__snippets__list">
+        <div
+          class="task-comment-container__snippets__list__item"
+          v-for="snippet in snippets"
+          :key="snippet.id"
+        >
+          <span
+            class="task-comment-container__snippets__list__item__snippet"
+            @click="applySnippet(snippet)"
+          >
+            {{ snippet.name }}
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -23,14 +44,15 @@ import type { Task } from '@/core/data/entities/Task'
 import type { Comment } from '@/core/data/entities/Comment'
 import { entityFactory } from '@/core/utils/entityFactory'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
-import { QuillSelectionModule } from '@/core/utils/quill/QuillSelectionModule'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import type { Snippet } from '@/core/data/entities/Snippet'
 
 interface Props {
   modelValue: AssignedWork
   task: Task
   readonly?: boolean
   mode: 'solve' | 'check' | 'read'
+  snippets: Snippet[]
 }
 
 interface Emits {
@@ -68,12 +90,18 @@ const model = computed<Comment['content']>({
   }
 })
 
-const additionalModules = {
-  quoteSelection: QuillSelectionModule
-}
+const reloadTrigger = ref(0)
 
-const additionalModuleOptions = {
-  quoteSelection: {}
+function applySnippet(snippet: Snippet) {
+  if (isDeltaEmptyOrWhitespace(model.value)) {
+    model.value = snippet.content
+  } else {
+    model.value = {
+      ops: model.value.ops.concat(snippet.content.ops)
+    }
+  }
+
+  reloadTrigger.value++
 }
 </script>
 
@@ -84,4 +112,24 @@ const additionalModuleOptions = {
     font-size: 1.5em
     margin-bottom: 0.5em
     margin-left: 0.3em
+
+  &__snippets
+    margin-top: 1em
+
+    &__list
+      display: flex
+      flex-wrap: wrap
+      gap: 0.5em
+
+      &__item
+        &__snippet
+          font-size: 12px
+          color: var(--form-text-color)
+          cursor: pointer
+          border: 1px dashed var(--border-color)
+          padding: 0.5em 1em
+          border-radius: 100px
+
+          &:hover
+            background-color: var(--border-color)
 </style>

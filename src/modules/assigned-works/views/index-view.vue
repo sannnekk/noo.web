@@ -24,6 +24,7 @@
           <actions-with-selected
             :selected-assigned-works="assignedWorksStore.allSearchSelectedWorks"
             @delete="assignedWorksStore.deleteWorks($event)"
+            @send-to-revision="assignedWorksStore.sendWorksToRevision($event)"
           />
         </div>
         <div class="index-works-view__table">
