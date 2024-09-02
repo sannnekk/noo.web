@@ -38,7 +38,9 @@
           </div>
           <br />
           <p class="base-modal__auth-redirect">
-            <a href="/auth">Выйти, зарегистрироваться или сбросить пароль</a>
+            <a @click="Core.Services.Auth.logout()">
+              Выйти, зарегистрироваться или сбросить пароль
+            </a>
           </p>
           <error-block v-if="error">
             {{ error }}
@@ -140,6 +142,7 @@ watch(
   &__auth-redirect
     font-size: 0.8em
     margin-top: 0
+    cursor: pointer
 
     a
       color: var(--lila)

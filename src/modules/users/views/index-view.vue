@@ -46,7 +46,6 @@ import type { ColType } from '@/components/structures/entity-table/entity-table.
 import type { MenuItem } from '@/components/widgets/more-widget.vue'
 import { useRouter } from 'vue-router'
 import type { SearchFilter } from '@/components/search/filters/SearchFilter'
-import { ref } from 'vue'
 
 const usersStore = useUsersStore()
 const router = useRouter()

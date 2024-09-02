@@ -1,17 +1,21 @@
 <template>
   <div class="task-form-view">
-    <create-work-task-form
+    <div
+      class="task-form-view__form"
       v-if="task"
-      v-model="task"
-      :checking-strategy-options="createWorkStore.checkingStrategyOptions"
-      @remove-task="createWorkStore.removeTask(taskSlug)"
-    />
-    <p v-else>Создайте задание</p>
+    >
+      <task-create-form v-model="task" />
+    </div>
+    <div
+      class="task-form-view__no-tasks"
+      v-else
+    >
+      <p>Создайте задание</p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import CreateWorkTaskForm from '@/modules/create-work/components/create-work-task-form.vue'
 import { useCreateWorkStore } from '../stores/create-work'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'

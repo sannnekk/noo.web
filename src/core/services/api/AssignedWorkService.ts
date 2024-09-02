@@ -176,6 +176,24 @@ export class AssignedWorkService extends ApiService {
     await this.httpPatch(`${this._route}/${id}/check`, data, undefined, options)
   }
 
+  /**
+   * Recheck assigned work
+   */
+  public async recheckAutomatically(
+    id: AssignedWork['id'],
+    options: ServiceOptions = {}
+  ) {
+    await this.httpPatch(
+      `${this._route}/${id}/recheck-automatically`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Save assigned work progress
+   */
   public async saveAssignedWorkProgress(
     id: AssignedWork['id'],
     data: Partial<AssignedWork>,

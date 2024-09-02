@@ -7,6 +7,7 @@ import { emptyDelta } from './deltaHelpers'
 import type { Course } from '../data/entities/Course'
 import type { Subject } from '../data/entities/Subject'
 import type { Poll } from '../data/entities/Poll'
+import type { Task } from '../data/entities/Task'
 
 type EntityName =
   | 'answer'
@@ -16,7 +17,17 @@ type EntityName =
   | 'course'
   | 'subject'
   | 'poll'
-type Entity = Answer | Comment | Chapter | Material | Course | Subject | Poll
+  | 'task'
+
+type Entity =
+  | Answer
+  | Comment
+  | Chapter
+  | Material
+  | Course
+  | Subject
+  | Poll
+  | Task
 
 export function entityFactory<T extends Entity>(name: EntityName): T {
   switch (name) {
@@ -34,6 +45,8 @@ export function entityFactory<T extends Entity>(name: EntityName): T {
       return subjectConstructor() as T
     case 'poll':
       return pollConstructor() as T
+    case 'task':
+      return taskConstructor() as T
     default:
       return {} as T
   }
@@ -120,5 +133,17 @@ function pollConstructor(): Omit<Poll, 'id' | 'votedCount' | 'votedUserIds'> {
     isStopped: false,
     createdAt: new Date(),
     updatedAt: new Date()
+  }
+}
+
+function taskConstructor(): Omit<Task, 'id' | 'createdAt' | 'updatedAt'> {
+  return {
+    slug: uuid(),
+    order: 0,
+    rightAnswer: '',
+    content: emptyDelta(),
+    highestScore: 0,
+    type: 'word',
+    isAnswerVisibleBeforeCheck: false
   }
 }

@@ -1,0 +1,107 @@
+<template>
+  <div
+    class="task-create-form"
+    v-auto-animate
+  >
+    <div
+      class="row"
+      v-auto-animate
+    >
+      <div class="col-lg-4 col-12">
+        <task-type-select
+          label="Тип задания"
+          v-model="model.type"
+        />
+      </div>
+      <div class="col-lg-4 col-12">
+        <form-input
+          v-model="model.highestScore"
+          label="Максимальный балл"
+          type="number"
+        />
+      </div>
+      <div
+        class="col-lg-4 col-12"
+        v-if="model.type !== 'text'"
+      >
+        <task-checking-strategy-select
+          v-model="model.checkingStrategy"
+          label="Способ проверки"
+        />
+        <div class="task-create-form__checkbox">
+          <form-checkbox
+            v-model="model.isAnswerVisibleBeforeCheck"
+            label="Показывать ответ до проверки"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <rich-text-area
+        v-model="model.content"
+        label="Задание"
+      />
+    </div>
+    <div
+      class="form-group"
+      v-if="model.type === 'word'"
+    >
+      <tag-input
+        label="Правильные ответы (нажмите Enter для добавления)"
+        v-model="model.rightAnswer"
+        separator="|"
+      />
+    </div>
+    <div class="form-group">
+      <rich-text-area
+        v-model="model.solveHint"
+        label="Подсказка для ученика"
+      />
+    </div>
+    <div class="form-group">
+      <rich-text-area
+        v-model="model.checkHint"
+        label="Подсказка/пояснение для проверяющего (видна также ученику после проверки)"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import type { Task } from '@/core/data/entities/Task'
+import { entityFactory } from '@/core/utils/entityFactory'
+import { computed } from 'vue'
+
+interface Props {
+  modelValue: Task | null
+}
+
+interface Emits {
+  (event: 'update:modelValue', value: Task): void
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const model = computed<Task>({
+  get: () => props.modelValue || entityFactory<Task>('task'),
+  set: (value: Task) => emit('update:modelValue', value)
+})
+</script>
+
+<style scoped lang="sass">
+.task-create-form
+  .form-group
+    margin-top: 1em
+
+  &__checkbox
+    &:deep()
+      .form-checkbox
+        margin-top: 1em
+
+        &__text
+          line-height: 0.8em
+          color: var(--text-light)
+          font-size: 0.8em
+          display: inline-block
+</style>

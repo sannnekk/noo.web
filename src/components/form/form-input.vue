@@ -99,16 +99,17 @@ const model = computed({
     border-radius: var(--border-radius)
     outline: none
     padding: 0.5em 0.8em
-    height: 2.5em
     box-sizing: border-box
     font-family: inherit
     width: 100%
     min-width: 100%
+    max-width: 100%
     background: var(--form-background)
     color: var(--form-text-color)
-    font-size: 1em
     display: block
-    font-size: 1em
+    font-size: 0.9em
+    line-height: 1
+    height: 2.4em
 
     &:focus
       border-color: var(--primary)

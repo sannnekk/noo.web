@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import WorkComment from '../components/work-comment.vue'
+import WorkComment from '../components/single-work/work-comment.vue'
 import { useAssignedWorkStore } from '../stores/assigned-work'
 
 const assignedWorkStore = useAssignedWorkStore()

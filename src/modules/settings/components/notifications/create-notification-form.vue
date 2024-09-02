@@ -7,7 +7,7 @@
             type="text"
             v-model="notificationModel.title"
             label="Заголовок"
-            :validators="[($v) => !!$v || 'Заголовок обязателен']"
+            :validators="[($v: string) => !!$v || 'Заголовок обязателен']"
           />
         </div>
       </div>
@@ -57,7 +57,7 @@
           class="form-group"
           v-if="sendOptionsModel.selector === 'role'"
         >
-          <role-select
+          <user-role-select
             label="Выберите роль"
             v-model="roleSelectorValueModel"
           />

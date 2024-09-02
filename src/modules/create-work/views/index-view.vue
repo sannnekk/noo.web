@@ -107,8 +107,7 @@ onUnmounted(() => unregister())
         color: var(--text-light)
 
         &.router-link-active
-          font-weight: bold
-          color: var(--dark)
+          color: var(--lila)
 
         &:not(.router-link-active):hover
           color: var(--secondary)

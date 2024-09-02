@@ -9,26 +9,19 @@
         Максимальный балл: {{ assignedWorkStore.task.highestScore }}
       </p>
     </div>
-    <div
-      class="task-view__answer"
-      v-if="
-        ['visible', 'readonly'].includes(
-          assignedWorkStore.fieldVisibility.solveBox
-        )
-      "
-    >
+    <div class="task-view__answer">
       <task-answer-text-container
         v-if="assignedWorkStore.task.type === 'text'"
         v-model="assignedWorkStore.assignedWork"
         :task="assignedWorkStore.task"
-        :readonly="assignedWorkStore.fieldVisibility.solveBox === 'readonly'"
-        :commentable="assignedWorkStore.fieldVisibility.checkBox === 'visible'"
+        :readonly="assignedWorkStore.mode !== 'solve'"
+        :commentable="assignedWorkStore.mode === 'check'"
       />
       <task-answer-word-container
         v-else-if="assignedWorkStore.task.type === 'word'"
         v-model="assignedWorkStore.assignedWork"
         :task="assignedWorkStore.task"
-        :readonly="assignedWorkStore.fieldVisibility.solveBox === 'readonly'"
+        :readonly="assignedWorkStore.mode !== 'solve'"
       />
     </div>
     <br />
@@ -37,34 +30,27 @@
         <div class="col-md-6">
           <form-input
             v-if="
-              ['visible', 'readonly'].includes(
-                assignedWorkStore.fieldVisibility.scoreBox
-              ) && assignedWorkStore.task?.type === 'word'
+              assignedWorkStore.mode === 'read' &&
+              assignedWorkStore.task?.type === 'word'
             "
             readonly
             :label="
-              assignedWorkStore.task?.rightAnswer.split('|').length > 1
+              assignedWorkStore.task?.rightAnswer!.split('|').length > 1
                 ? 'Правильные ответы'
                 : 'Правильный ответ'
             "
             :model-value="
-              assignedWorkStore.task?.rightAnswer.split('|').join(', ') || ''
+              assignedWorkStore.task?.rightAnswer!.split('|').join(', ') || ''
             "
             type="text"
           />
         </div>
         <div class="col-md-6">
           <task-score-container
-            v-if="
-              ['visible', 'readonly'].includes(
-                assignedWorkStore.fieldVisibility.scoreBox
-              )
-            "
+            v-if="assignedWorkStore.mode !== 'solve'"
             v-model="assignedWorkStore.assignedWork"
             :task="assignedWorkStore.task"
-            :readonly="
-              assignedWorkStore.fieldVisibility.scoreBox === 'readonly'
-            "
+            :readonly="assignedWorkStore.mode === 'read'"
           />
         </div>
       </div>
@@ -92,24 +78,17 @@
     </div>
     <div
       class="task-view__comment"
-      v-if="
-        ['visible', 'readonly'].includes(
-          assignedWorkStore.fieldVisibility.checkBox
-        )
-      "
+      v-if="assignedWorkStore.mode !== 'solve'"
     >
       <task-comment-container
         v-model="assignedWorkStore.assignedWork"
         :task="assignedWorkStore.task"
-        :readonly="assignedWorkStore.fieldVisibility.checkBox === 'readonly'"
+        :readonly="assignedWorkStore.mode !== 'check'"
         :mode="assignedWorkStore.mode"
         :snippets="snippetStore.snippets"
       />
     </div>
-    <div
-      class="task-view__action-buttons"
-      v-if="(assignedWorkStore.assignedWork?.work?.tasks.length || 0) > 1"
-    >
+    <div class="task-view__action-buttons">
       <common-button
         alignment="left"
         design="warning"
@@ -152,12 +131,12 @@
 </template>
 
 <script setup lang="ts">
-import AnswerModal from '../components/answer-modal.vue'
+import AnswerModal from '../components/single-work/answer-modal.vue'
 import { useAssignedWorkStore } from '../stores/assigned-work'
-import taskAnswerTextContainer from '../components/task-answer-text-container.vue'
-import taskAnswerWordContainer from '../components/task-answer-word-container.vue'
-import taskCommentContainer from '../components/task-comment-container.vue'
-import taskScoreContainer from '../components/task-score-container.vue'
+import taskAnswerTextContainer from '../components/single-work/task-answer-text-container.vue'
+import taskAnswerWordContainer from '../components/single-work/task-answer-word-container.vue'
+import taskCommentContainer from '../components/single-work/task-comment-container.vue'
+import taskScoreContainer from '../components/single-work/task-score-container.vue'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
 import { ref } from 'vue'
 import { useSnippetStore } from '../stores/snippet'
@@ -171,7 +150,7 @@ const answerModalData = ref({
 })
 
 function openAnswerModal() {
-  answerModalData.value.answer = assignedWorkStore.task.rightAnswer
+  answerModalData.value.answer = assignedWorkStore.task!.rightAnswer!
   answerModalData.value.visible = true
 }
 </script>
@@ -211,7 +190,9 @@ function openAnswerModal() {
   &__action-buttons
     margin-top: 2rem
     display: flex
+    justify-content: space-between
+    font-size: 0.9em
 
     @media (max-width: 768px)
-      font-size: 0.8rem
+      font-size: 0.8em
 </style>

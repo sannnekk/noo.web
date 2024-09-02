@@ -11,10 +11,9 @@
         </div>
       </div>
       <div class="col-md-3">
-        <select-input
+        <work-type-select
           label="Тип работы"
           v-model="createWorkStore.work.type"
-          :options="createWorkStore.workTypeOptions"
         />
       </div>
       <div class="col-md-3">

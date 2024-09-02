@@ -31,15 +31,15 @@ export interface AssignedWork extends Entity {
     | 'checked-in-deadline'
     | 'checked-after-deadline'
     | 'checked-automatically'
-  solveDeadlineAt?: Date
-  checkDeadlineAt?: Date
-  solvedAt?: Date
-  checkedAt?: Date
+  solveDeadlineAt: Date | null
+  checkDeadlineAt: Date | null
+  solvedAt: Date | null
+  checkedAt: Date | null
   answers: Answer[]
   answerIds: Answer['id'][]
   comments: Comment[]
   commentIds: Comment['id'][]
-  score?: number
+  score: number | null
   maxScore: number
   isArchived: boolean
   studentComment: DeltaContentType | null

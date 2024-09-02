@@ -108,13 +108,6 @@ function openDeleteModal(article: FAQArticle) {
   deleteModal.visible = true
 }
 
-function onEdit() {
-  if (editModal.article) {
-    emits('edit', editModal.article)
-  }
-  editModal.visible = false
-}
-
 function onDelete() {
   if (deleteModal.article) {
     emits('delete', deleteModal.article)

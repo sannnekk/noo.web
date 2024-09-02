@@ -215,7 +215,8 @@ label
   border: 1px solid var(--border-color)
   border-radius: var(--border-radius)
   background-color: var(--form-background)
-  padding: 0.5em
+  padding: 0.4em
+  font-size: 0.9em
 
   &--focus
     border-color: var(--primary)
@@ -235,8 +236,9 @@ label
       border-radius: 0.25rem
       cursor: pointer
       position: relative
-      font-size: 0.8em
+      font-size: 0.9em
       white-space: nowrap
+      font-weight: 500
 
       &__remove
         margin-left: 0.5rem

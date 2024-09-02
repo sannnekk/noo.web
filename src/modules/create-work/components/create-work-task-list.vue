@@ -18,7 +18,12 @@
       class="task-list__add"
       v-if="currentTaskId !== 'new'"
     >
-      <span @click="$emit('create-task')"> + Добавить вопрос </span>
+      <inline-button
+        icon="add"
+        @click="$emit('create-task')"
+      >
+        Добавить вопрос
+      </inline-button>
     </div>
   </div>
 </template>
@@ -54,24 +59,7 @@ const model = computed({
   overflow-y: auto
 
   &__add
-    margin-top: 1rem
-    font-weight: 400
-    border: 1px solid var(--border-color)
-    cursor: pointer
-    border-radius: var(--border-radius)
-
-    span
-      color: var(--secondary)
-      text-decoration: none
-      display: block
-      padding: 0.6em
-      font-weight: bold
-      border-radius: var(--border-radius)
-      user-select: none
-
-      &:hover
-        background-color: var(--text-light)
-        color: var(--lightest) !important
+    margin-top: 1em
 
   &__items
     display: flex
@@ -102,4 +90,3 @@ const model = computed({
         background-color: var(--primary)
         border-color: var(--primary)
 </style>
-@/core/data/entities/Task

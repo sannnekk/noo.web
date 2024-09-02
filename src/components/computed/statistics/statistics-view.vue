@@ -31,7 +31,7 @@
               { label: 'Фраза', value: 'phrase' },
               { label: 'Пробник', value: 'trial-work' }
             ]"
-            v-model="statisticsBoundaries.type"
+            v-model="statisticsBoundaries.type!"
           />
         </div>
       </div>

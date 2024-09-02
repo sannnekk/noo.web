@@ -84,19 +84,6 @@ export class UserService extends ApiService {
   }
 
   /**
-   * Get user roles
-   */
-  public getRoles(pagination?: Pagination) {
-    if (pagination?.search) {
-      return UserRoleOptions.filter((role) =>
-        role.label.toLowerCase().includes(pagination.search!.toLowerCase())
-      )
-    }
-
-    return UserRoleOptions
-  }
-
-  /**
    * get users with mentor if student
    */
   public async getUsersWithMentors(

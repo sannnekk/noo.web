@@ -7,16 +7,8 @@ import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
 import { Core } from '@/core/Core'
 import type { ModalAction } from '@/core/services/store/UIStore'
 import { debounce } from '@/core/utils/debounce'
-
-export type ActionType = 'read' | 'solve' | 'check'
-
-export type Visibility = 'visible' | 'readonly' | 'hidden'
-
-export type FieldVisibility = {
-  solveBox: Visibility
-  checkBox: Visibility
-  scoreBox: Visibility
-}
+import type { ReadableWorkScore } from '../types/ReadableWorkScore'
+import type { AssignedWorkViewMode } from '../types/AssignedWorkViewMode'
 
 export const useAssignedWorkStore = defineStore(
   'assigned-works-module:assigned-work',
@@ -29,7 +21,9 @@ export const useAssignedWorkStore = defineStore(
     /**
      * Mode of the page (read, solve, check)
      */
-    const mode = computed<ActionType>(() => _route.params.mode as ActionType)
+    const mode = computed<AssignedWorkViewMode>(
+      () => _route.params.mode as AssignedWorkViewMode
+    )
 
     /**
      * Modal for sure submit
@@ -117,91 +111,53 @@ export const useAssignedWorkStore = defineStore(
      * Current task
      */
     const taskSlug = computed(() => _route.params.taskSlug as string)
-    const taskId = ref()
-    const task = ref()
-
-    /**
-     * Watch for task or assigned work change
-     */
-    watch(
-      [taskSlug, assignedWorkId, mode],
-      () => {
-        if (!assignedWork.value || !taskSlug.value) {
-          task.value = null
-          taskId.value = null
-
-          return
-        }
-
-        const _task = getTaskBySlug(taskSlug.value)
-
-        if (!_task) {
-          task.value = null
-          taskId.value = null
-
-          return
-        }
-
-        taskId.value = _task.id
-        task.value = _task
-      },
-      { immediate: true }
-    )
+    const task = computed(() => getTaskBySlug(taskSlug.value) || null)
 
     /**
      * Current work score
      */
-    const workScore = computed(() => {
-      if (!assignedWork.value) return null
-
-      const role = Core.Context.User!.role
-
-      if (role === 'student' && mode.value === 'read') {
-        return assignedWork.value.score || 0
+    const workScore = computed<ReadableWorkScore>(() => {
+      if (!assignedWork.value) {
+        return {
+          value: 0,
+          of: 0,
+          percentage: 0
+        }
       }
 
-      if (role === 'mentor' && mode.value === 'check') {
-        return assignedWork.value.comments.reduce((acc, comment) => {
+      if (mode.value === 'check') {
+        const value = assignedWork.value.comments.reduce((acc, comment) => {
           return acc + (comment.score || 0)
         }, 0)
+
+        const of = assignedWork.value.maxScore
+
+        const percentage = Number(
+          of === 0 ? 0 : ((value / of) * 100).toFixed(2)
+        )
+
+        return {
+          value,
+          of,
+          percentage
+        }
       }
 
-      if (
-        assignedWork.value.checkStatus === 'checked-in-deadline' ||
-        assignedWork.value.checkStatus === 'checked-after-deadline' ||
-        assignedWork.value.checkStatus === 'checked-automatically'
-      ) {
-        return assignedWork.value.score || 0
+      const score =
+        assignedWork.value.score === null ? 0 : assignedWork.value.score
+      const maxScore = assignedWork.value.maxScore
+
+      const percentage = Number(
+        assignedWork.value.score === 0
+          ? 0
+          : ((score / maxScore) * 100).toFixed(2)
+      )
+
+      return {
+        value: score,
+        of: maxScore,
+        percentage
       }
-
-      return null
-    })
-
-    /**
-     * Work score text
-     */
-    const workScoreText = computed(() => {
-      if (workScore.value === null) return null
-
-      if (workScore.value === 0) {
-        return '0 баллов'
-      }
-
-      const lastDigit = workScore.value % 10
-
-      if (workScore.value > 10 && workScore.value < 20) {
-        return `${workScore.value} баллов`
-      }
-
-      if (lastDigit === 1) {
-        return `${workScore.value} балл`
-      }
-
-      if (lastDigit > 1 && lastDigit < 5) {
-        return `${workScore.value} балла`
-      }
-
-      return `${workScore.value} баллов`
     })
 
     /**
@@ -235,42 +191,6 @@ export const useAssignedWorkStore = defineStore(
         assignedWork.value!.work!.tasks[currentTaskIndex - 1]?.slug
 
       return baseUrl.value + '/' + previousTaskSlug
-    })
-
-    /**
-     * Field visibility based on user role and mode
-     */
-    const fieldVisibility = computed<FieldVisibility>(() => {
-      const role = Core.Context.User!.role
-
-      let solveBox: Visibility = 'hidden'
-      let checkBox: Visibility = 'hidden'
-      let scoreBox: Visibility = 'hidden'
-
-      switch (role) {
-        case 'student':
-          solveBox = mode.value === 'solve' ? 'visible' : 'readonly'
-          checkBox = mode.value === 'solve' ? 'hidden' : 'readonly'
-          scoreBox = mode.value === 'solve' ? 'hidden' : 'readonly'
-          break
-        case 'mentor':
-          solveBox = 'readonly'
-          checkBox = mode.value === 'check' ? 'visible' : 'readonly'
-          scoreBox = mode.value === 'check' ? 'visible' : 'readonly'
-          break
-        case 'admin':
-        case 'teacher':
-          solveBox = 'readonly'
-          checkBox = 'readonly'
-          scoreBox = 'readonly'
-          break
-      }
-
-      return {
-        solveBox,
-        checkBox,
-        scoreBox
-      }
     })
 
     /**
@@ -447,6 +367,9 @@ export const useAssignedWorkStore = defineStore(
       }
     }
 
+    /**
+     * Auto save block
+     */
     const autoSave = reactive({
       enabled: false,
       state: 'unset' as 'unset' | 'error' | 'success',
@@ -584,11 +507,32 @@ export const useAssignedWorkStore = defineStore(
       }
     }
 
+    /**
+     * Recheck automatically
+     */
+    async function recheckAutomatically() {
+      if (!assignedWork.value) {
+        return
+      }
+
+      try {
+        await assignedWorkService.recheckAutomatically(assignedWork.value.id, {
+          showLoader: true
+        })
+        await fetchAssignedWork()
+        uiService.openSuccessModal('Работа успешно перепроверена')
+      } catch (error: any) {
+        uiService.openErrorModal(
+          'Ошибка при автоматической проверке',
+          error.message
+        )
+      }
+    }
+
     return {
       assignedWorkId,
       assignedWork,
       taskSlug,
-      taskId,
       task,
       sureSubmitModalVisible,
       sureSubmitModalError,
@@ -599,14 +543,13 @@ export const useAssignedWorkStore = defineStore(
       taskScoreStatus,
       submitWork,
       mode,
-      fieldVisibility,
       baseUrl,
       nextTaskLink,
       previousTaskLink,
       fetchAssignedWork,
-      workScoreText,
       workScore,
       saveProgress,
+      recheckAutomatically,
       remakeWork,
       remakeModal,
       _router,

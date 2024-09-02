@@ -8,7 +8,7 @@ export interface Task extends Entity {
   content: DeltaContentType
   highestScore: number
   type: 'word' | 'text'
-  workId: Work['id']
+  workId?: Work['id']
   work?: Work
   rightAnswer?: string
   solveHint?: DeltaContentType

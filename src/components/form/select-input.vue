@@ -51,24 +51,25 @@ const model = computed({
 <style scoped lang="sass">
 .select-input
   &__label
-    font-size: 0.8em
     color: var(--text-light)
 
   &__label-text
+    font-size: 0.8em
     margin-right: 0.5em
 
   &__select
     border: 1px solid var(--border-color)
     border-radius: var(--border-radius)
     outline: none
-    padding: 0.6em 0.8em
-    height: 2.5em
+    padding: 0.5em 0.8em
     box-sizing: border-box
-    font-size: 1em
+    font-size: 0.9em
     font-family: inherit
     width: 100%
+    height: 2.4em
     background: var(--form-background)
     color: var(--form-text-color)
+    line-height: 1
 
     &:focus
       border-color: var(--primary)
