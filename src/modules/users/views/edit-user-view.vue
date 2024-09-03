@@ -118,16 +118,6 @@
                     Назад
                   </common-button>
                 </div>
-                <div class="edit-user-view__content__actions__save">
-                  <common-button
-                    v-if="Core.Context.roleIs(['admin', 'teacher'])"
-                    @click="userStore.saveUser()"
-                    alignment="right"
-                    design="primary"
-                  >
-                    Сохранить
-                  </common-button>
-                </div>
               </div>
             </div>
           </template>
