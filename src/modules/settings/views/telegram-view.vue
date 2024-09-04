@@ -17,7 +17,15 @@
     <settings-section>
       <template #title> Уведомления в Telegram </template>
       <template #content>
-        <telegram-notifications-form />
+        <telegram-notifications-form
+          :telegram-id="telegramStore.user?.telegramId"
+          :notifications-enabled="
+            telegramStore.user?.telegramNotificationsEnabled
+          "
+          @notifications-enabled-toggled="
+            telegramStore.toggleNotificationsEnabled()
+          "
+        />
       </template>
     </settings-section>
   </div>

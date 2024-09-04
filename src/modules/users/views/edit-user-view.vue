@@ -106,6 +106,8 @@
                   v-model="userStore.user"
                   :students-with-subjects="userStore.studentsWithSubjects"
                   @mentor-assigned="userStore.fetchUser()"
+                  @blocked="userStore.block()"
+                  @unblocked="userStore.unblock()"
                 />
               </div>
               <div class="edit-user-view__content__actions">

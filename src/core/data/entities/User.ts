@@ -24,6 +24,7 @@ export interface User extends Entity {
   createdAt: Date
   updatedAt: Date
   verificationToken?: string
+  telegramNotificationsEnabled: boolean
 }
 
 export interface UserWithOnlineStatus extends User {

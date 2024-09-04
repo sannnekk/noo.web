@@ -12,6 +12,7 @@ export const useTelegramStore = defineStore('settings-module:telegram', () => {
   const user = ref<User | null>()
 
   const moduleLoading = ref(false)
+
   /*
    * fetch user
    */
@@ -80,5 +81,45 @@ export const useTelegramStore = defineStore('settings-module:telegram', () => {
     })
   }
 
-  return { moduleLoading, user, fetchUser, bindTelegram, unbindTelegram }
+  /**
+   * toggle notifications enabled
+   */
+  async function toggleNotificationsEnabled() {
+    if (!user.value) return
+
+    const value = user.value.telegramNotificationsEnabled
+
+    try {
+      await userService.updateUser(
+        user.value.id,
+        {
+          id: user.value.id,
+          telegramNotificationsEnabled: !value
+        },
+        { showLoader: true }
+      )
+
+      uiService.openSuccessModal(
+        value
+          ? 'Уведомления в Telegram отключены'
+          : 'Уведомления в Telegram включены'
+      )
+
+      user.value.telegramNotificationsEnabled = !value
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при обновлении настроек',
+        error.message
+      )
+    }
+  }
+
+  return {
+    moduleLoading,
+    user,
+    fetchUser,
+    bindTelegram,
+    unbindTelegram,
+    toggleNotificationsEnabled
+  }
 })

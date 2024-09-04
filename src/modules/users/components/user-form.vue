@@ -18,7 +18,7 @@
           v-if="Core.Context.roleIs(['admin', 'teacher'])"
         >
           <form-toggle
-            v-model="model.isBlocked as any"
+            v-model="model.isBlocked"
             :values="[
               {
                 value: false,
@@ -72,7 +72,7 @@
 import studentCoursesView from './student-courses-view.vue'
 import mentorForm from './mentor-form.vue'
 import teacherForm from './teacher-form.vue'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import type { User } from '@/core/data/entities/User'
 import { Core } from '@/core/Core'
 import type { UserWithSubject } from '@/modules/students/stores/students'
@@ -86,6 +86,8 @@ interface Emits {
   (e: 'update:modelValue', value: Partial<User>): void
   (e: 'mentor-assigned'): void
   (e: 'course-toggle'): void
+  (e: 'blocked'): void
+  (e: 'unblocked'): void
 }
 
 const props = defineProps<Props>()
@@ -95,6 +97,17 @@ const model = computed({
   get: () => props.modelValue,
   set: (value) => emits('update:modelValue', value)
 })
+
+watch(
+  () => model.value.isBlocked,
+  (newValue) => {
+    if (newValue === true) {
+      emits('blocked')
+    } else {
+      emits('unblocked')
+    }
+  }
+)
 </script>
 
 <style scoped lang="sass">

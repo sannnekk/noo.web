@@ -21,21 +21,23 @@
       class="search-filters__body"
       v-if="!isLoading && !collpased"
     >
-      <div
-        class="search-filters__filter"
-        v-for="filter in filters"
-        :key="filter.key"
-      >
-        <h5 class="search-filters__filter__name">
-          {{ filter.name }}
-        </h5>
-        <div class="search-filters__filter__component">
-          <component
-            :is="getFilterComponent(filter)"
-            :filter="filter"
-            :modelValue="getFilterValue(filter)"
-            @update:model-value="setFilterValue(filter, $event)"
-          />
+      <div class="row">
+        <div
+          class="search-filters__filter col-12 col-md-6 col-lg-3"
+          v-for="filter in filters"
+          :key="filter.key"
+        >
+          <h5 class="search-filters__filter__name">
+            {{ filter.name }}
+          </h5>
+          <div class="search-filters__filter__component">
+            <component
+              :is="getFilterComponent(filter)"
+              :filter="filter"
+              :modelValue="getFilterValue(filter)"
+              @update:model-value="setFilterValue(filter, $event)"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -140,19 +142,7 @@ function getFilterComponent(filter: SearchFilter) {
 
 
 	&__filter
-		padding: 0 2em
-
-		@media (max-width: 768px)
-			padding-left: 0
-			padding-right: 0
-
-		&:first-child
-			@media (min-width: 768px)
-				padding-left: 0
-
-		&:last-child
-			@media (min-width: 768px)
-				padding-right: 0
+		padding: 0 1em
 
 		&:not(:last-child)
 			@media (min-width: 768px)
@@ -164,11 +154,6 @@ function getFilterComponent(filter: SearchFilter) {
 
 	&__body
 		padding-top: 1em
-		display: flex
-		flex-wrap: wrap
-
-		@media (max-width: 768px)
-			flex-direction: column
 
 		&__loading
 			min-height: 100px

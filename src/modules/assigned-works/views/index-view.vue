@@ -20,6 +20,13 @@
             />
           </div>
         </div>
+        <div class="index-works-view__filters">
+          <search-filters
+            v-model:pagination="assignedWorksStore.allSearch.pagination"
+            :filters="allSearchFilters"
+            :is-loading="assignedWorksStore.allSearch.isListLoading"
+          />
+        </div>
         <div class="index-works-view__selected-actions">
           <actions-with-selected
             :selected-assigned-works="assignedWorksStore.allSearchSelectedWorks"
@@ -158,14 +165,63 @@ import { useAssignedWorksStore } from '../stores/assigned-works'
 import worksTable from '../components/works-table.vue'
 import actionsWithSelected from '../components/actions-with-selected.vue'
 import actionsWithArchivedSelected from '../components/actions-with-archived-selected.vue'
+import type { SearchFilter } from '@/components/search/filters/SearchFilter'
+import { subjectFilter } from '@/core/filters/subject-filter'
 
 const assignedWorksStore = useAssignedWorksStore()
 
 setPageTitle('Мои работы')
+
+const allSearchFilters: SearchFilter[] = [
+  {
+    name: 'Тип работы',
+    type: 'arr',
+    key: 'work.type',
+    arrayOptions: [
+      { label: 'Тест', value: 'test' },
+      { label: 'Мини-зачет', value: 'mini-test' },
+      { label: 'Вторая часть', value: 'second-part' },
+      { label: 'Пробник', value: 'trial-work' },
+      { label: 'Фраза', value: 'phrase' }
+    ]
+  },
+  subjectFilter('work'),
+  {
+    name: 'Дата сдачи',
+    type: 'range',
+    key: 'solvedAt',
+    rangeType: 'date',
+    rangeValues: [new Date(), new Date()]
+  },
+  {
+    name: 'Дедлайн сдачи',
+    type: 'range',
+    key: 'solveDeadlineAt',
+    rangeType: 'date',
+    rangeValues: [new Date(), new Date()]
+  },
+  {
+    name: 'Дата проверки',
+    type: 'range',
+    key: 'checkedAt',
+    rangeType: 'date',
+    rangeValues: [new Date(), new Date()]
+  },
+  {
+    name: 'Дедлайн проверки',
+    type: 'range',
+    key: 'checkDeadlineAt',
+    rangeType: 'date',
+    rangeValues: [new Date(), new Date()]
+  }
+]
 </script>
 
 <style lang="sass" scoped>
 .index-works-view
+  &__filters
+    padding: 1em
+
   &__header
     padding: 1rem
     display: flex

@@ -105,14 +105,9 @@ export const useUserStore = defineStore('users-module:user', () => {
     }
 
     try {
-      await userService.updateUser(
-        user.value.id,
-        {
-          id: user.value.id,
-          password: newPassword
-        },
-        { showLoader: true }
-      )
+      await userService.changePassword(user.value.id, undefined, newPassword, {
+        showLoader: true
+      })
       uiService.openSuccessModal('Пароль успешно изменен')
     } catch (error: any) {
       uiService.openErrorModal(
@@ -142,6 +137,45 @@ export const useUserStore = defineStore('users-module:user', () => {
     }
   }
 
+  /**
+   * Toggle block user
+   */
+  async function block() {
+    if (!user.value) {
+      return
+    }
+
+    try {
+      await userService.block(user.value.id, { showLoader: true })
+      uiService.openSuccessModal('Пользователь заблокирован')
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при блокировке пользователя',
+        error.message
+      )
+    }
+  }
+
+  /**
+   * Unblock user
+   */
+  async function unblock() {
+    if (!user.value) {
+      return
+    }
+
+    try {
+      await userService.unblock(user.value.id, { showLoader: true })
+      uiService.openSuccessModal('Пользователь разблокирован')
+      await fetchUser()
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при разблокировке пользователя',
+        error.message
+      )
+    }
+  }
+
   return {
     user,
     studentsWithSubjects,
@@ -149,6 +183,8 @@ export const useUserStore = defineStore('users-module:user', () => {
     saveUser,
     confirmUser,
     changePassword,
-    changeRole
+    changeRole,
+    block,
+    unblock
   }
 })

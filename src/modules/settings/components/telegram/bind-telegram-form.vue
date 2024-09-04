@@ -39,6 +39,10 @@
     <div class="bind-telegram-form__bind-button">
       <telegram-auth-button @authenticated="onAuthenticated($event)" />
     </div>
+    <info-block>
+      Платформа получит доступ только к тем данным, которые досутпны всем
+      пользователям Telegram.
+    </info-block>
   </div>
 </template>
 

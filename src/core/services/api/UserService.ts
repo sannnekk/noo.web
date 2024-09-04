@@ -211,7 +211,7 @@ export class UserService extends ApiService {
    */
   public async changePassword(
     userId: User['id'],
-    oldPassword: string,
+    oldPassword: string | undefined,
     newPassword: string,
     options: ServiceOptions = {}
   ): Promise<void> {
@@ -239,6 +239,36 @@ export class UserService extends ApiService {
       {
         role
       },
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * block user
+   */
+  public async block(
+    id: User['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpPatch(
+      `${this._route}/${id}/block`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * unblock user
+   */
+  public async unblock(
+    id: User['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpPatch(
+      `${this._route}/${id}/unblock`,
+      undefined,
       undefined,
       options
     )

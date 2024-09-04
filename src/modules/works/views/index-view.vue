@@ -99,7 +99,7 @@ const filters = ref<SearchFilter[]>([
     rangeType: 'date',
     rangeValues: [new Date(), new Date()]
   },
-  subjectFilter
+  subjectFilter()
 ])
 </script>
 
