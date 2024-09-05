@@ -4,20 +4,32 @@
     v-auto-animate
   >
     <span class="form-input__label">{{ label }}</span>
-    <input
-      class="form-input__input"
-      :class="{
-        'form-input__input--error': errors.length,
-        'form-input__input--readonly': readonly
-      }"
-      :type="type"
-      v-model="model"
-      :placholder="placeholder"
-      :disabled="readonly"
-      :min="min"
-      :max="max"
-      :step="step"
-    />
+    <div class="form-input__input-container">
+      <input
+        class="form-input__input"
+        :class="{
+          'form-input__input--error': errors.length,
+          'form-input__input--readonly': readonly
+        }"
+        :type="type"
+        v-model="model"
+        :placholder="placeholder"
+        :disabled="readonly"
+        :min="min"
+        :max="max"
+        :step="step"
+      />
+      <div
+        class="form-input__copy-button"
+        title="Копировать"
+        @click="onCopy()"
+      >
+        <inline-icon
+          :name="copyIcon"
+          :key="copyIcon"
+        />
+      </div>
+    </div>
     <span
       class="form-input__error"
       v-if="errors.length"
@@ -28,7 +40,9 @@
 </template>
 
 <script setup lang="ts">
+import { copyText } from '@/core/device/Clipboard'
 import { computed, ref } from 'vue'
+import type { IconName } from '../decorations/inline-icon.vue'
 
 type InputValidator = (value: string | number | Date) => true | string
 
@@ -42,6 +56,7 @@ interface Props {
   max?: number
   step?: number
   validators?: InputValidator[]
+  copyButton?: boolean
 }
 
 interface Emits {
@@ -86,6 +101,17 @@ const model = computed({
     }
   }
 })
+
+const copyIcon = ref<IconName>('copy')
+
+function onCopy() {
+  copyText(String(model.value || ''))
+  copyIcon.value = 'check-green'
+
+  setTimeout(() => {
+    copyIcon.value = 'copy'
+  }, 1000)
+}
 </script>
 
 <style scoped lang="sass">
@@ -93,6 +119,31 @@ const model = computed({
   &__label
     font-size: 0.8rem
     color: var(--text-light)
+
+  &__input-container
+    position: relative
+
+    &:hover
+      .form-input__copy-button
+        visibility: visible
+
+  &__copy-button
+    position: absolute
+    right: 0.2em
+    top: 50%
+    transform: translateY(-50%)
+    font-size: 1.2em
+    display: flex
+    align-items: center
+    justify-content: center
+    visibility: hidden
+    cursor: pointer
+    background-color: var(--form-background)
+    border-radius: 50%
+    padding: 0.2em
+
+    &:hover
+      background-color: var(--border-color)
 
   &__input
     border: 1px solid var(--border-color)

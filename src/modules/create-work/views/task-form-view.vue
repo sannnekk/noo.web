@@ -7,6 +7,18 @@
       <task-create-form v-model="task" />
     </div>
     <div
+      class="task-form-view__actions"
+      v-if="task"
+    >
+      <common-button
+        @click="createWorkStore.removeTask(taskSlug)"
+        design="danger"
+        alignment="right"
+      >
+        Удалить задание
+      </common-button>
+    </div>
+    <div
       class="task-form-view__no-tasks"
       v-else
     >
@@ -31,4 +43,7 @@ const task = computed(() => createWorkStore.getTask(taskSlug.value))
 .task-form-view
   padding: 1rem
   padding-left: 0
+
+  &__form
+    margin-bottom: 1em
 </style>

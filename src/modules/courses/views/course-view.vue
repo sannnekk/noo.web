@@ -49,6 +49,18 @@
             <inline-user-card :user="courseStore.course.author" />
           </div>
           <materials-tree :data="courseStore.materialsTree" />
+          <div
+            class="index-materials-view__tree__course-id"
+            v-if="Core.Context.roleIs(['admin', 'teacher'])"
+          >
+            <form-input
+              type="text"
+              label="Идентификатор курса"
+              :model-value="courseStore.course.id"
+              readonly
+              copy-button
+            />
+          </div>
         </div>
       </template>
       <template #content>
@@ -125,9 +137,12 @@ watch(
 
     &__title
       h2
-        margin-bottom: 1em
         font-size: 1.3rem
         font-weight: bold
+        margin-bottom: 0.5em
+
+    &__course-id
+      margin-top: 1em
 
 .students-modal
   &__search
