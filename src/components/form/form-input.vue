@@ -20,6 +20,7 @@
         :step="step"
       />
       <div
+        v-if="copyButton"
         class="form-input__copy-button"
         title="Копировать"
         @click="onCopy()"

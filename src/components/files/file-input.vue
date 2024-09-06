@@ -121,7 +121,7 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   allowedMimeTypes: () => ['image/png', 'image/jpeg'],
-  maxFileSize: 3 * 1024 * 1024,
+  maxFileSize: 10 * 1024 * 1024,
   maxCount: 5,
   readonly: false
 })

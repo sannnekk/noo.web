@@ -44,7 +44,7 @@ export class CustomQuill extends Quill {
     'image/jpeg',
     'image/jpg'
   ] as const
-  private readonly MAX_FILE_SIZE = 3 * 1024 * 1024
+  private readonly MAX_FILE_SIZE = 10 * 1024 * 1024
 
   constructor(
     selector: Ref,
