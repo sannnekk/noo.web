@@ -112,13 +112,36 @@ export const useCourseStudentsStore = defineStore(
       }
     }
 
+    async function removeStudentsViaEmail(emails: string[]): Promise<void> {
+      try {
+        if (!course.value) {
+          throw new Error('Курс не найден')
+        }
+
+        await courseService.removeStudentsViaEmail(courseSlug.value, emails, {
+          showLoader: true
+        })
+
+        await fetchCourse()
+        await studentSearch.trigger()
+
+        uiService.openSuccessModal('Ученики успешно удалены через имейлы')
+      } catch (error: any) {
+        uiService.openErrorModal(
+          'Произошла ошибка при удалении учеников через имейлы',
+          error.message
+        )
+      }
+    }
+
     return {
       studentSearch,
       course,
       fetchCourse,
       addStudent,
       removeStudent,
-      syncStudentsViaEmail
+      syncStudentsViaEmail,
+      removeStudentsViaEmail
     }
   }
 )

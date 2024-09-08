@@ -12,6 +12,17 @@ export async function fetchUsers(pagination?: Pagination) {
   }
 }
 
+export async function fetchCourses(pagination?: Pagination) {
+  try {
+    return await Core.Services.Course.getCourses(pagination)
+  } catch (error: any) {
+    Core.Services.UI.openErrorModal(
+      'Ошибка при загрузке учеников курса',
+      error.message
+    )
+  }
+}
+
 export async function fetchUserRoles(pagination?: Pagination) {
   const roles = [
     { label: 'Администратор', role: 'admin', id: '1' },

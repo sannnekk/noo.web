@@ -1,5 +1,9 @@
 import type { SupportedEntity } from '../../types/google-sheets/SupportedEntity'
-import { fetchPolls, fetchUserRoles } from '../../utils/google-sheets/fetch'
+import {
+  fetchCourses,
+  fetchPolls,
+  fetchUserRoles
+} from '../../utils/google-sheets/fetch'
 
 export const SupportedEntities: SupportedEntity[] = [
   {
@@ -27,6 +31,13 @@ export const SupportedEntities: SupportedEntity[] = [
         labelKeys: ['label'],
         fetchFunction: fetchUserRoles,
         toPropValue: (value) => value.role
+      },
+      {
+        label: 'По курсу',
+        value: 'courseId',
+        labelKeys: ['name'],
+        fetchFunction: fetchCourses,
+        toPropValue: (value) => value.id
       }
     ]
   }

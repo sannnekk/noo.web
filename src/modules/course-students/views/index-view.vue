@@ -15,13 +15,20 @@
     <div class="index-view__tabs">
       <tabs-view
         v-model:tab-index="tabIndex"
-        :titles="['Добавить/убрать учеников', 'Синхронизация через email']"
+        :titles="[
+          'Добавить/убрать учеников',
+          'Синхронизация через email',
+          'Удаление к курса по email'
+        ]"
       >
         <template #tab-0>
           <add-students-view />
         </template>
         <template #tab-1>
           <email-sync-view />
+        </template>
+        <template #tab-2>
+          <email-remove-view />
         </template>
       </tabs-view>
     </div>
@@ -31,6 +38,7 @@
 <script lang="ts" setup>
 import addStudentsView from '../components/add-students-view.vue'
 import emailSyncView from '../components/email-sync-view.vue'
+import emailRemoveView from '../components/email-remove-view.vue'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useCourseStudentsStore } from '../stores/course-students'
 import { ref } from 'vue'

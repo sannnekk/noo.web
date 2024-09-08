@@ -174,6 +174,22 @@ export class CourseService extends ApiService {
   }
 
   /**
+   * Remove students from course using emails
+   */
+  public async removeStudentsViaEmail(
+    courseSlug: string,
+    emails: string[],
+    options: ServiceOptions = {}
+  ) {
+    await this.httpPatch(
+      `${this._route}/${courseSlug}/remove-students-via-emails`,
+      { emails },
+      undefined,
+      options
+    )
+  }
+
+  /**
    * Delete course
    */
   public async deleteCourse(slug: string, options: ServiceOptions = {}) {
