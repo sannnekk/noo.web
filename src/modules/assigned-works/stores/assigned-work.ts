@@ -227,6 +227,7 @@ export const useAssignedWorkStore = defineStore(
         case 'word':
           return !!(answer.word && answer.word.trim().length > 0)
         case 'text':
+        case 'essay':
           return !isDeltaEmptyOrWhitespace(answer.content)
       }
     }
@@ -383,7 +384,12 @@ export const useAssignedWorkStore = defineStore(
     watch(assignedWork, debounce(triggerAutoSave, 5000), { deep: true })
 
     async function triggerAutoSave() {
-      if (!assignedWork.value || !autoSave.enabled || autoSave.loading) {
+      if (
+        !assignedWork.value ||
+        !autoSave.enabled ||
+        autoSave.loading ||
+        mode.value === 'read'
+      ) {
         return
       }
 
@@ -401,14 +407,28 @@ export const useAssignedWorkStore = defineStore(
           assignedWork.value.id,
           payload
         )
+
         autoSave.state = 'success'
-        assignedWork.value.solveStatus = 'in-progress'
+
+        if (mode.value === 'check') {
+          assignedWork.value.checkStatus === 'not-checked'
+        } else {
+          assignedWork.value.solveStatus = 'in-progress'
+        }
       } catch (e: any) {
         autoSave.state = 'error'
       }
 
       autoSave.loading = false
     }
+
+    /**
+     * Settings block
+     */
+    const settings = reactive({
+      showCheckHints: true,
+      showSolveHints: true
+    })
 
     /**
      * Shift deadline
@@ -553,7 +573,8 @@ export const useAssignedWorkStore = defineStore(
       remakeWork,
       remakeModal,
       _router,
-      autoSave
+      autoSave,
+      settings
     }
   }
 )

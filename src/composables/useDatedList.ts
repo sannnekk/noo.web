@@ -26,8 +26,8 @@ export function useDatedList(
       any,
       {
         id: string
-        type: string
-        date: Date
+        _type: string
+        _date: Date
         _hashProp?: any
       }
     ] = [] as any
@@ -35,8 +35,8 @@ export function useDatedList(
     for (const item of items) {
       const dateItem = {
         id: 'date-' + item[dateProperty].getTime(),
-        type: 'date',
-        date: item[dateProperty]
+        _type: 'date',
+        _date: item[dateProperty]
       }
 
       const date = useDate(item[dateProperty])
@@ -69,7 +69,7 @@ export function useDatedList(
               {
                 _hashProp: `${item[dateProperty].getFullYear()} ${item[
                   dateProperty
-                ].getMonth()} ${item[dateProperty].getDate()}}`,
+                ].getMonth()} ${item[dateProperty].getDate()}`,
                 ...dateItem
               }
             ]

@@ -4,10 +4,13 @@ import { type Course } from '@/core/data/entities/Course'
 import type { Material } from '@/core/data/entities/Material'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import type { NotificationSendOptions } from '@/core/services/store/NotificationService'
+import type { Notification } from '@/core/data/entities/Notification'
 
 export const useCourseStore = defineStore('courses-module:course', () => {
   const courseService = Core.Services.Course
   const assignedWorkService = Core.Services.AssignedWork
+  const notificationService = Core.Services.Notification
   const uiService = Core.Services.UI
 
   const _route = useRoute()
@@ -116,12 +119,34 @@ export const useCourseStore = defineStore('courses-module:course', () => {
     }
   }
 
+  /**
+   * Send notification
+   */
+  async function sendNotification(notification: Notification) {
+    const sendOptions: NotificationSendOptions = {
+      selector: 'course',
+      value: course.value!.id
+    }
+
+    try {
+      await notificationService.createNotification(notification, sendOptions, {
+        showLoader: true
+      })
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при отправке уведомления',
+        error.message
+      )
+    }
+  }
+
   return {
     course,
     material,
     materialsTree,
     assignMeWork,
     fetchCourse,
-    getMaterialBySlug
+    getMaterialBySlug,
+    sendNotification
   }
 })

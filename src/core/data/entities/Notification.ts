@@ -23,4 +23,5 @@ export interface Notification extends Entity {
   link: string | null
   status: 'read' | 'unread'
   type: NotificationType
+  createdAt: Date
 }

@@ -106,12 +106,17 @@ function readableWorkType(type: Work['type']) {
 	&__section
 		padding: 0.3em 0
 		color: var(--text-light)
+		font-size: 0.9em
 
 		&.type
 			color: var(--form-text-color)
+			font-size: 1em
 
 		&.subject
 			color: var(--form-text-color)
+			font-size: 1em
+
+
 
 	&__loading
 		min-height: 250px

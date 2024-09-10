@@ -22,7 +22,7 @@
       </div>
       <div
         class="col-lg-4 col-12"
-        v-if="model.type !== 'text'"
+        v-if="model.type === 'word'"
       >
         <task-checking-strategy-select
           v-model="model.checkingStrategy"
@@ -48,19 +48,19 @@
     >
       <tag-input
         label="Правильные ответы (нажмите Enter для добавления)"
-        v-model="model.rightAnswer"
+        v-model="model.rightAnswer!"
         separator="|"
       />
     </div>
     <div class="form-group">
       <rich-text-area
-        v-model="model.solveHint"
+        v-model="model.solveHint!"
         label="Подсказка для ученика"
       />
     </div>
     <div class="form-group">
       <rich-text-area
-        v-model="model.checkHint"
+        v-model="model.checkHint!"
         label="Подсказка/пояснение для проверяющего (видна также ученику после проверки)"
       />
     </div>

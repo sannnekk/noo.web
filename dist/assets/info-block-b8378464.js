@@ -1,0 +1,1 @@
+import{_ as n,a as s,j as c,g as e,k as t,$ as a,a0 as i}from"./index-f5d4a483.js";const d={},l={class:"info-block"},r={class:"info-block__icon"},f={class:"info-block__text"};function p(o,u){const _=i;return s(),c("div",l,[e("div",r,[t(_,{name:"info"})]),e("div",f,[a(o.$slots,"default",{},void 0,!0)])])}const k=n(d,[["render",p],["__scopeId","data-v-18f8825e"]]);export{k as _};

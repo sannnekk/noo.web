@@ -33,10 +33,19 @@
             >
               <div
                 class="notifications-pane__list__item"
-                v-for="notification in notificationStore.newNotifications"
-                :key="notification.id"
+                v-for="item in unreadNotificationsDatedList"
+                :key="item.id"
               >
-                <app-notification :notification="notification" />
+                <app-notification
+                  v-if="item._type !== 'date'"
+                  :notification="item"
+                />
+                <span
+                  class="notifications-pane__list__date-item"
+                  v-else
+                >
+                  {{ useDate(item._date, { precision: 'day' }).toBeautiful() }}
+                </span>
               </div>
             </div>
           </template>
@@ -60,10 +69,19 @@
             >
               <div
                 class="notifications-pane__list__item"
-                v-for="notification in notificationStore.notifications"
-                :key="notification.id"
+                v-for="item in readNotificationsDatedList"
+                :key="item.id"
               >
-                <app-notification :notification="notification" />
+                <app-notification
+                  v-if="item._type !== 'date'"
+                  :notification="item"
+                />
+                <span
+                  class="notifications-pane__list__date-item"
+                  v-else
+                >
+                  {{ useDate(item._date, { precision: 'day' }).toBeautiful() }}
+                </span>
               </div>
             </div>
           </template>
@@ -82,6 +100,8 @@
 </template>
 
 <script setup lang="ts">
+import { useDate } from '@/composables/useDate'
+import { useDatedList } from '@/composables/useDatedList'
 import { Core } from '@/core/Core'
 import { ref } from 'vue'
 
@@ -89,6 +109,17 @@ const notificationService = Core.Services.Notification
 const notificationStore = notificationService.Store()
 
 const currentTab = ref(0)
+
+const readNotificationsDatedList = useDatedList(
+  () => notificationStore.notifications,
+  'createdAt',
+  { precision: 'day' }
+)
+const unreadNotificationsDatedList = useDatedList(
+  () => notificationStore.newNotifications,
+  'createdAt',
+  { precision: 'day' }
+)
 </script>
 
 <style scoped lang="sass">
@@ -143,6 +174,15 @@ const currentTab = ref(0)
   &__list
     height: 100%
     padding: 1em
+    padding-top: 0
+
+    &__date-item
+      display: block
+      color: var(--text-light)
+      font-size: 0.8em
+      margin-top: 1em
+      margin-bottom: 0.5em
+      text-transform: capitalize
 
     &__empty
       color: var(--text-light)

@@ -7,15 +7,14 @@
             type="text"
             v-model="notificationModel.title"
             label="Заголовок"
-            :validators="[($v: string) => !!$v || 'Заголовок обязателен']"
+            :validators="[($v) => !!$v || 'Заголовок обязателен']"
           />
         </div>
       </div>
       <div class="col-lg-6">
-        <select-input
+        <notification-type-select
           label="Тип"
           v-model="notificationModel.type"
-          :options="notificationTypes"
         />
       </div>
     </div>
@@ -59,7 +58,7 @@
         >
           <user-role-select
             label="Выберите роль"
-            v-model="roleSelectorValueModel"
+            v-model="roleSelectorValueModel!"
           />
         </div>
         <div
@@ -83,6 +82,10 @@
       </common-button>
     </div>
   </div>
+  <pre>
+		{{ sendOptionsModel }}
+	</pre
+  >
 </template>
 
 <script setup lang="ts">
@@ -102,7 +105,9 @@ interface Emits {
 
 const emits = defineEmits<Emits>()
 
-const notificationModel = ref<Omit<Notification, 'id' | 'userId' | 'status'>>({
+const notificationModel = ref<
+  Omit<Notification, 'id' | 'userId' | 'status' | 'createdAt'>
+>({
   title: '',
   message: '',
   type: 'other',
@@ -142,16 +147,6 @@ function createNotification() {
     sendOptionsModel.value
   )
 }
-
-const notificationTypes: {
-  value: Notification['type']
-  label: string
-}[] = [
-  { value: 'other', label: 'Другое' },
-  { value: 'announcement', label: 'Объявление' },
-  { value: 'maintenance', label: 'Технические работы' },
-  { value: 'new-feature', label: 'Новая функция' }
-]
 
 const selectorOptions: {
   value: NotificationSendOptions['selector']

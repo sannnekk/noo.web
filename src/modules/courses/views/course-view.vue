@@ -33,6 +33,18 @@
               Редактировать курс
             </router-link>
           </div>
+          <div class="index-materials-view__tree__send-notification">
+            <span
+              v-if="Core.Context.roleIs(['teacher', 'admin'])"
+              @click="sendNotificationModalOpened = true"
+            >
+              <inline-icon
+                name="notifications"
+                class="index-materials-view__tree__send-notification__icon"
+              />
+              Уведомление ученикам
+            </span>
+          </div>
           <div
             class="index-materials-view__tree__subject"
             v-if="courseStore.course.subject"
@@ -70,14 +82,20 @@
       </template>
     </the-sidebar-layout>
   </div>
+  <send-notification-modal
+    v-model:visible="sendNotificationModalOpened"
+    :course="courseStore.course!"
+    @send-notification="courseStore.sendNotification($event)"
+  />
 </template>
 
 <script lang="ts" setup>
+import sendNotificationModal from '../components/send-notification-modal.vue'
 import MaterialsTree from '../components/materials-tree.vue'
 import { useCourseStore } from '../stores/course'
 import { Core } from '@/core/Core'
 import { setPageTitle } from '@/core/utils/setPageTitle'
-import { watch } from 'vue'
+import { ref, watch } from 'vue'
 
 const courseStore = useCourseStore()
 
@@ -86,6 +104,7 @@ courseStore.fetchCourse()
 if (courseStore.course?.name) {
   setPageTitle(courseStore.course.name)
 }
+
 watch(
   () => courseStore.course,
   () => {
@@ -95,6 +114,8 @@ watch(
   },
   { deep: true, immediate: true }
 )
+
+const sendNotificationModalOpened = ref(false)
 </script>
 
 <style lang="sass" scoped>
@@ -109,7 +130,7 @@ watch(
       a
         cursor: pointer
         display: block
-        margin-bottom: 1rem
+        margin-bottom: 0.5rem
         font-size: 0.8em
         color: var(--text-light)
         text-decoration: none
@@ -125,6 +146,24 @@ watch(
         top: 0.2em
 
       a
+        cursor: pointer
+        display: block
+        margin-bottom: 0.5rem
+        font-size: 0.8em
+        color: var(--text-light)
+        text-decoration: none
+
+        &:hover
+          color: var(--secondary)
+
+    &__send-notification
+      &__icon
+        font-size: 1.3em
+        margin-left: 0.1em
+        position: relative
+        top: 0.2em
+
+      span
         cursor: pointer
         display: block
         margin-bottom: 1rem

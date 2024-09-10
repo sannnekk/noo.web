@@ -25,6 +25,18 @@
       />
     </div>
     <br />
+    <div
+      class="task-view__comment"
+      v-if="assignedWorkStore.mode !== 'solve'"
+    >
+      <task-comment-container
+        v-model="assignedWorkStore.assignedWork"
+        :task="assignedWorkStore.task"
+        :readonly="assignedWorkStore.mode !== 'check'"
+        :mode="assignedWorkStore.mode"
+        :snippets="snippetStore.snippets"
+      />
+    </div>
     <div class="taks-view__right-answer">
       <div class="row">
         <div class="col-md-6">
@@ -58,6 +70,7 @@
     <div
       class="task-view__hint"
       v-if="
+        assignedWorkStore.settings.showSolveHints &&
         assignedWorkStore.task.solveHint &&
         !isDeltaEmptyOrWhitespace(assignedWorkStore.task.solveHint)
       "
@@ -68,6 +81,7 @@
     <div
       class="task-view__hint"
       v-if="
+        assignedWorkStore.settings.showCheckHints &&
         assignedWorkStore.task.checkHint &&
         ['check', 'read'].includes(assignedWorkStore.mode) &&
         !isDeltaEmptyOrWhitespace(assignedWorkStore.task.checkHint)
@@ -75,18 +89,6 @@
     >
       <h4 class="task-view__hint__title">Пояснение:</h4>
       <rich-text-container :content="assignedWorkStore.task.checkHint" />
-    </div>
-    <div
-      class="task-view__comment"
-      v-if="assignedWorkStore.mode !== 'solve'"
-    >
-      <task-comment-container
-        v-model="assignedWorkStore.assignedWork"
-        :task="assignedWorkStore.task"
-        :readonly="assignedWorkStore.mode !== 'check'"
-        :mode="assignedWorkStore.mode"
-        :snippets="snippetStore.snippets"
-      />
     </div>
     <div class="task-view__action-buttons">
       <common-button

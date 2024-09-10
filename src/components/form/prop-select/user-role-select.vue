@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import type { VisibleRole } from '@/core/services/api/UserService'
-import { computed } from 'vue'
+import { ref, watch } from 'vue'
 
 interface Props {
   label: string
@@ -22,10 +22,16 @@ interface Emits {
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
-const roleModel = computed<VisibleRole>({
-  get: () => props.modelValue,
-  set: (value) => emits('update:modelValue', value)
-})
+const roleModel = ref<string>(props.modelValue.value)
+
+watch(
+  () => roleModel.value,
+  () =>
+    emits(
+      'update:modelValue',
+      roleOptions.find((o) => o.value === roleModel.value)! as VisibleRole
+    )
+)
 
 const roleOptions = [
   {

@@ -87,7 +87,9 @@ async function onNotificationDelete() {
   } catch (error: any) {
     uiService.openErrorModal('Не удалось удалить уведомление', error.message)
   } finally {
-    isLoading.value = false
+    setTimeout(() => {
+      isLoading.value = false
+    }, 500)
   }
 }
 </script>
@@ -113,6 +115,11 @@ async function onNotificationDelete() {
 		&__title
 			margin: 0
 			font-weight: 500
+
+			&__time
+				font-size: 0.8em
+				color: var(--text-light)
+				margin-left: 0.5em
 
 		&__message
 			margin: 0

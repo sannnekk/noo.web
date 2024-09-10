@@ -105,6 +105,7 @@ declare module 'vue' {
     NothingFoundImage: typeof import('./src/components/decorations/nothing-found-image.vue')['default']
     NotificationsIcon: typeof import('./src/components/decorations/icons/notifications-icon.vue')['default']
     NotificationsWidget: typeof import('./src/components/widgets/notifications-widget.vue')['default']
+    NotificationTypeSelect: typeof import('./src/components/form/prop-select/notification-type-select.vue')['default']
     OnlineStatus: typeof import('./src/components/common/user/online-status.vue')['default']
     OverlayHint: typeof import('./src/components/common/overlay-hint.vue')['default']
     PasswordCriteria: typeof import('./src/components/computed/password-criteria.vue')['default']

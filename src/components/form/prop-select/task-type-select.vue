@@ -35,6 +35,10 @@ const taskTypeOptions = [
   {
     label: 'Открытый вопрос',
     value: 'text'
+  },
+  {
+    label: 'Сочинение',
+    value: 'essay'
   }
 ]
 </script>

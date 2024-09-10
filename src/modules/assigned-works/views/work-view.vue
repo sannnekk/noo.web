@@ -21,6 +21,9 @@
           <div class="work-view__sidebar__autosave">
             <autosave-block />
           </div>
+          <div class="work-view__sidebar__settings">
+            <settings-block />
+          </div>
           <div class="work-view__sidebar__people">
             <work-people />
           </div>
@@ -60,6 +63,7 @@ import { setPageTitle } from '@/core/utils/setPageTitle'
 import { onUnmounted, watch } from 'vue'
 import { HOT_KEYS } from '../utils/hotkeys'
 import { registerHotkeys } from '@/core/device/Hotkeys'
+import SettingsBlock from '../components/single-work/settings-block.vue'
 
 const assignedWorkStore = useAssignedWorkStore()
 
