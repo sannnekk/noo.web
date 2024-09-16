@@ -2,7 +2,7 @@
   <entity-select-input
     :label="label"
     :fetch-function="fetchCourses"
-    :label-keys="['name']"
+    :label-keys="['subject.name', 'name']"
     :max-count="1"
     v-model="courseModel"
   />

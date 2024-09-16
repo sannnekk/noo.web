@@ -117,11 +117,6 @@ const cols: ColType[] = [
     title: 'E-mail',
     type: 'text',
     value: (user: User) => user.email
-  },
-  {
-    title: 'Количество курсов',
-    type: 'text',
-    value: (user: User) => (user.courseAsStudentIds || []).length.toString()
   }
 ]
 

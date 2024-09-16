@@ -50,9 +50,13 @@ export const useWorksStore = defineStore('works-module', () => {
   /**
    * Delete work
    */
-  async function deleteWork(workSlug: Work['slug']) {
+  async function deleteWork(work: Work | null) {
+    if (!work) {
+      return
+    }
+
     try {
-      await workService.deleteWork(workSlug, { showLoader: true })
+      await workService.deleteWork(work.id, { showLoader: true })
 
       // trigger reload
       trigger()

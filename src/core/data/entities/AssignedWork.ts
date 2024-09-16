@@ -32,7 +32,9 @@ export interface AssignedWork extends Entity {
     | 'checked-after-deadline'
     | 'checked-automatically'
   solveDeadlineAt: Date | null
+  solveDeadlineShifted: boolean
   checkDeadlineAt: Date | null
+  checkDeadlineShifted: boolean
   solvedAt: Date | null
   checkedAt: Date | null
   answers: Answer[]

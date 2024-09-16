@@ -4,8 +4,8 @@ import type { Task } from './Task'
 
 export interface Answer extends Entity {
   slug: string
-  content?: DeltaContentType
-  word?: string
+  content: DeltaContentType | null
+  word: string | null
   task?: Task
   taskId: Task['id']
   createdAt: Date

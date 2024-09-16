@@ -62,7 +62,7 @@ function onFileSelect(current: Media | ExtendedMedia) {
 }
 
 function getExtension(mimeType: string) {
-  return mimeType.split('/').at(1)! as 'png' | 'jpeg' | 'pdf'
+  return (mimeType?.split('/')?.at(1) || 'pdf') as 'png' | 'jpeg' | 'pdf'
 }
 </script>
 

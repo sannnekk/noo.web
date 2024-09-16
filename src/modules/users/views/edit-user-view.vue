@@ -207,7 +207,7 @@ const currentTab = ref(0)
 
 .edit-user-view
   &__statistics
-    padding: 0.5em
+    padding: 1em
 
   &__credentials
     text-align: center

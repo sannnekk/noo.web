@@ -53,11 +53,7 @@ const cols = reactive<ColType[]>([
       const name = user.name
 
       if (user.verificationToken) {
-        return `<span title="Пользователь не подтвержден">⛔</span> ${name}`
-      }
-
-      if (user.mentor && user.role === 'student') {
-        return `${name}<br><small>Куратор: ${user.mentor.name}</small>`
+        return `<span title="Пользователь не подтвержден">❌</span> ${name}`
       }
 
       return name
@@ -108,7 +104,15 @@ const cols = reactive<ColType[]>([
 ])
 
 function userInCourse(userId: User['id']) {
-  return courseStudentsStore.course!.studentIds!.some((id) => id === userId)
+  if (!courseStudentsStore.course) {
+    return false
+  }
+
+  return (
+    (courseStudentsStore.course.studentAssignments || []).findIndex(
+      (assignment) => assignment.studentId === userId
+    ) !== -1
+  )
 }
 </script>
 

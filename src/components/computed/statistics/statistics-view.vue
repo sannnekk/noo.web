@@ -40,29 +40,11 @@
       class="statistics-view__content"
       v-if="statistics && !isLoading"
     >
-      <div class="statistics-view__content__plots">
-        <div
-          class="statistics-view__content__plots_plot"
-          v-for="plot in statistics.plots"
-          :key="plot.name"
-        >
-          <statistics-plot-card :plot="plot" />
-        </div>
-      </div>
-      <div class="statistics-view__content__entries">
-        <div class="row">
-          <div
-            class="col-6 col-md-6 col-lg-3"
-            v-for="entry in statistics.entries"
-            :key="entry.name"
-          >
-            <statistics-number-card
-              :name="entry.name"
-              :value="entry.value"
-            />
-          </div>
-        </div>
-      </div>
+      <statistics-section
+        v-for="section in statistics.sections"
+        :key="section.name"
+        :section="section"
+      />
     </div>
     <div
       class="statistics-view__content--loading"
@@ -128,6 +110,10 @@ watch(
 )
 
 async function fetchUserStatistics() {
+  if (!statisticsBoundaries.from || !statisticsBoundaries.to) {
+    return
+  }
+
   try {
     const response = await statisticsService.getStatistics(
       props.username,
@@ -135,6 +121,10 @@ async function fetchUserStatistics() {
       statisticsBoundaries.from,
       statisticsBoundaries.type
     )
+
+    if (!response.data) {
+      throw new Error('Нет данных')
+    }
 
     statistics.value = response.data as Statistics
   } catch (error: any) {
@@ -151,13 +141,11 @@ function getDateRange() {
   const today = new Date()
 
   let toDate = new Date()
-  toDate.setDate(17)
+  let fromDate = new Date()
 
-  let fromDate = new Date(new Date().setMonth(new Date().getMonth() - 1))
   fromDate.setDate(17)
 
-  if (today.getDate() < 17) {
-    toDate.setMonth(toDate.getMonth() - 1)
+  if (today.getDate() <= 17) {
     fromDate.setMonth(fromDate.getMonth() - 1)
   }
 

@@ -241,7 +241,10 @@ export class AssignedWorkService extends ApiService {
     assignedWorkId: AssignedWork['id'],
     options: ServiceOptions = {}
   ) {
-    await this.httpPatch(
+    return this.httpPatch<{
+      newSolveDeadlineAt: Date
+      newCheckDeadlineAt: Date
+    }>(
       `${this._route}/${assignedWorkId}/shift-deadline`,
       undefined,
       undefined,

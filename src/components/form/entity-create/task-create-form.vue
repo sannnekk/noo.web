@@ -18,6 +18,7 @@
           v-model="model.highestScore"
           label="Максимальный балл"
           type="number"
+          :readonly="predefinedMaxScore(model.type) !== null"
         />
       </div>
       <div
@@ -70,7 +71,7 @@
 <script setup lang="ts">
 import type { Task } from '@/core/data/entities/Task'
 import { entityFactory } from '@/core/utils/entityFactory'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 interface Props {
   modelValue: Task | null
@@ -87,6 +88,26 @@ const model = computed<Task>({
   get: () => props.modelValue || entityFactory<Task>('task'),
   set: (value: Task) => emit('update:modelValue', value)
 })
+
+watch(
+  () => model.value.type,
+  () => {
+    model.value.highestScore =
+      predefinedMaxScore(model.value.type) ?? model.value.highestScore
+  }
+)
+
+function predefinedMaxScore(type: Task['type']): number | null {
+  switch (type) {
+    case 'word':
+    case 'text':
+      return null
+    case 'essay':
+      return 22
+    case 'final-essay':
+      return 5
+  }
+}
 </script>
 
 <style scoped lang="sass">

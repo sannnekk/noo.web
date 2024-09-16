@@ -10,18 +10,32 @@
       </p>
     </div>
     <div class="task-view__answer">
-      <task-answer-text-container
+      <answer-text-container
         v-if="assignedWorkStore.task.type === 'text'"
         v-model="assignedWorkStore.assignedWork"
-        :task="assignedWorkStore.task"
+        :task-id="assignedWorkStore.task.id"
         :readonly="assignedWorkStore.mode !== 'solve'"
         :commentable="assignedWorkStore.mode === 'check'"
       />
-      <task-answer-word-container
+      <answer-word-container
         v-else-if="assignedWorkStore.task.type === 'word'"
         v-model="assignedWorkStore.assignedWork"
-        :task="assignedWorkStore.task"
+        :task-id="assignedWorkStore.task.id"
         :readonly="assignedWorkStore.mode !== 'solve'"
+      />
+      <answer-essay-container
+        v-else-if="assignedWorkStore.task.type === 'essay'"
+        v-model="assignedWorkStore.assignedWork"
+        :task-id="assignedWorkStore.task.id"
+        :readonly="assignedWorkStore.mode !== 'solve'"
+        :commentable="assignedWorkStore.mode === 'check'"
+      />
+      <answer-final-essay-container
+        v-else-if="assignedWorkStore.task.type === 'final-essay'"
+        v-model="assignedWorkStore.assignedWork"
+        :task-id="assignedWorkStore.task.id"
+        :readonly="assignedWorkStore.mode !== 'solve'"
+        :commentable="assignedWorkStore.mode === 'check'"
       />
     </div>
     <br />
@@ -29,7 +43,7 @@
       class="task-view__comment"
       v-if="assignedWorkStore.mode !== 'solve'"
     >
-      <task-comment-container
+      <comment-container
         v-model="assignedWorkStore.assignedWork"
         :task="assignedWorkStore.task"
         :readonly="assignedWorkStore.mode !== 'check'"
@@ -37,28 +51,30 @@
         :snippets="snippetStore.snippets"
       />
     </div>
-    <div class="taks-view__right-answer">
+    <div
+      class="task-view__criteria"
+      v-if="hasCriteria(assignedWorkStore.task.type)"
+    >
+      <criteria-container
+        v-model="assignedWorkStore.assignedWork"
+        :task="assignedWorkStore.task"
+        :mode="assignedWorkStore.mode"
+      />
+    </div>
+    <div class="taks-view__right-answer-and-score">
       <div class="row">
         <div class="col-md-6">
-          <form-input
+          <right-answer-container
             v-if="
               assignedWorkStore.mode === 'read' &&
-              assignedWorkStore.task?.type === 'word'
+              assignedWorkStore.task?.type === 'word' &&
+              assignedWorkStore.task?.rightAnswer
             "
-            readonly
-            :label="
-              assignedWorkStore.task?.rightAnswer!.split('|').length > 1
-                ? 'Правильные ответы'
-                : 'Правильный ответ'
-            "
-            :model-value="
-              assignedWorkStore.task?.rightAnswer!.split('|').join(', ') || ''
-            "
-            type="text"
+            :right-answer="assignedWorkStore.task.rightAnswer"
           />
         </div>
         <div class="col-md-6">
-          <task-score-container
+          <score-container
             v-if="assignedWorkStore.mode !== 'solve'"
             v-model="assignedWorkStore.assignedWork"
             :task="assignedWorkStore.task"
@@ -67,28 +83,32 @@
         </div>
       </div>
     </div>
-    <div
-      class="task-view__hint"
-      v-if="
-        assignedWorkStore.settings.showSolveHints &&
-        assignedWorkStore.task.solveHint &&
-        !isDeltaEmptyOrWhitespace(assignedWorkStore.task.solveHint)
-      "
-    >
-      <h4 class="task-view__hint__title">Подсказка:</h4>
-      <rich-text-container :content="assignedWorkStore.task.solveHint" />
+    <div class="task-view__hint">
+      <div
+        class="task-view__hint__container"
+        v-if="
+          assignedWorkStore.settings.showSolveHints &&
+          assignedWorkStore.task.solveHint &&
+          !isDeltaEmptyOrWhitespace(assignedWorkStore.task.solveHint)
+        "
+      >
+        <h4 class="task-view__hint__title">Подсказка:</h4>
+        <rich-text-container :content="assignedWorkStore.task.solveHint" />
+      </div>
     </div>
-    <div
-      class="task-view__hint"
-      v-if="
-        assignedWorkStore.settings.showCheckHints &&
-        assignedWorkStore.task.checkHint &&
-        ['check', 'read'].includes(assignedWorkStore.mode) &&
-        !isDeltaEmptyOrWhitespace(assignedWorkStore.task.checkHint)
-      "
-    >
-      <h4 class="task-view__hint__title">Пояснение:</h4>
-      <rich-text-container :content="assignedWorkStore.task.checkHint" />
+    <div class="task-view__hint">
+      <div
+        class="task-view__hint__container"
+        v-if="
+          assignedWorkStore.settings.showCheckHints &&
+          assignedWorkStore.task.checkHint &&
+          ['check', 'read'].includes(assignedWorkStore.mode) &&
+          !isDeltaEmptyOrWhitespace(assignedWorkStore.task.checkHint)
+        "
+      >
+        <h4 class="task-view__hint__title">Пояснение:</h4>
+        <rich-text-container :content="assignedWorkStore.task.checkHint" />
+      </div>
     </div>
     <div class="task-view__action-buttons">
       <common-button
@@ -120,25 +140,24 @@
       </common-button>
     </div>
   </div>
-  <div
-    class="task-view__not-chosen"
-    v-else
-  >
-    <p class="task-view__task-not-found">Выберите задание</p>
-  </div>
-  <answer-modal
+  <right-answer-modal
     v-model:visible="answerModalData.visible"
     :right-answer="answerModalData.answer"
   />
 </template>
 
 <script setup lang="ts">
-import AnswerModal from '../components/single-work/answer-modal.vue'
+import criteriaContainer from '../components/single-work/criteria/criteria-container.vue'
+import RightAnswerContainer from '../components/single-work/comment/right-answer-container.vue'
+import AnswerTextContainer from '../components/single-work/answer/answer-text-container.vue'
+import AnswerWordContainer from '../components/single-work/answer/answer-word-container.vue'
+import AnswerEssayContainer from '../components/single-work/answer/answer-essay-container.vue'
+import AnswerFinalEssayContainer from '../components/single-work/answer/answer-final-essay-container.vue'
+import CommentContainer from '../components/single-work/comment/comment-container.vue'
+import ScoreContainer from '../components/single-work/comment/score-container.vue'
+import RightAnswerModal from '../components/single-work/answer/right-answer-modal.vue'
+import { hasCriteria } from '../utils/task'
 import { useAssignedWorkStore } from '../stores/assigned-work'
-import taskAnswerTextContainer from '../components/single-work/task-answer-text-container.vue'
-import taskAnswerWordContainer from '../components/single-work/task-answer-word-container.vue'
-import taskCommentContainer from '../components/single-work/task-comment-container.vue'
-import taskScoreContainer from '../components/single-work/task-score-container.vue'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
 import { ref } from 'vue'
 import { useSnippetStore } from '../stores/snippet'
@@ -185,7 +204,6 @@ function openAnswerModal() {
 
     &__title
       font-weight: 700
-      font-size: 1.5em
       margin-bottom: 0.5em
       margin-left: 0.3em
 

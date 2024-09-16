@@ -16,6 +16,7 @@
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import { Core } from '@/core/Core'
 import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
+import { useDate } from '@/composables/useDate'
 
 interface Props {
   works: AssignedWork[]
@@ -54,18 +55,28 @@ const cols: ColType[] = [
   },
   {
     title: 'Дедлайн сдачи/сдано',
-    type: 'date',
+    type: 'text',
     joinType: 'br',
     value: (a: AssignedWork) => {
-      return [a.solveDeadlineAt, a.solvedAt]
+      return [
+        a.solveDeadlineShifted
+          ? `➡️📃 ${textifyDate(a.solveDeadlineAt)}`
+          : textifyDate(a.solveDeadlineAt),
+        textifyDate(a.solvedAt)
+      ]
     }
   },
   {
     title: 'Дедлайн проверки/проверено',
-    type: 'date',
+    type: 'text',
     joinType: 'br',
     value: (a: AssignedWork) => {
-      return [a.checkDeadlineAt, a.checkedAt]
+      return [
+        a.checkDeadlineShifted
+          ? `➡️📃 ${textifyDate(a.solveDeadlineAt)}`
+          : textifyDate(a.solveDeadlineAt),
+        textifyDate(a.checkedAt)
+      ]
     }
   },
   {
@@ -231,6 +242,10 @@ function getUserAction(assignedWork: AssignedWork): UserAction {
     link: `/assigned-works/${assignedWork.id}/read`,
     icon: 'check-green'
   }
+}
+
+function textifyDate(date: Date | null): string {
+  return date ? useDate(date, { precision: 'day' }).toBeautiful() : '-'
 }
 
 function onSelect(ids: string[]) {

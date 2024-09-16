@@ -2,7 +2,7 @@ import Inline from 'quill/blots/inline'
 
 export interface ImageComment {
   content: string
-  type: 'fact-error' | 'logic-error'
+  type: string
   // all the positions are relative to the image, from 0 to 1
   x: number
   y: number

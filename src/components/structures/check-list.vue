@@ -59,10 +59,25 @@ function onSelect(key: string) {
   emits('update:modelValue', value)
 }
 
+function getValue(key: string, item: any) {
+  if (key.includes('.')) {
+    const keys = key.split('.')
+    let value = item
+
+    for (const key of keys) {
+      value = value[key]
+    }
+
+    return value
+  }
+
+  return item[key] || ''
+}
+
 function getLabel(item: Record<string, any>) {
   return props.itemLabelKey
     .split(',')
-    .map((key) => item[key] || '—')
+    .map((key) => getValue(key, item))
     .join(', ')
 }
 </script>

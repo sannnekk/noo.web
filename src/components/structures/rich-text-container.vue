@@ -4,7 +4,10 @@
       :model-value="content"
       :readonly="true"
       :commentable="commentable"
-      @commented="emits('commented', $event)"
+      :comment-types="commentTypes"
+      @commented="$emit('commented', $event)"
+      @custom-commented="$emit('custom-commented', $event)"
+      @custom-comment-deleted="$emit('custom-comment-deleted', $event)"
     />
   </div>
 </template>
@@ -15,12 +18,15 @@ import type { DeltaContentType } from '@/types/composed/DeltaContentType'
 interface Props {
   content: DeltaContentType
   commentable?: boolean
+  commentTypes?: string[]
 }
 
 interface Emits {
   (e: 'commented', value: DeltaContentType): void
+  (e: 'custom-commented', value: string): void
+  (e: 'custom-comment-deleted', value: string): void
 }
 
 defineProps<Props>()
-const emits = defineEmits<Emits>()
+defineEmits<Emits>()
 </script>

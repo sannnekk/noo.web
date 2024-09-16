@@ -1,6 +1,11 @@
 import type { Context } from '@/core/context/Context'
+import type { Statistics } from '@/core/data/Statistics'
 import type { Work } from '@/core/data/entities/Work'
-import { ApiService, type ServiceOptions } from '@/core/services/ApiService'
+import {
+  ApiService,
+  type ApiResponse,
+  type ServiceOptions
+} from '@/core/services/ApiService'
 
 /**
  * Statistics service
@@ -24,8 +29,8 @@ export class StatisticsService extends ApiService {
     from: Date,
     type?: Work['type'],
     options: ServiceOptions = {}
-  ) {
-    return this.httpPost(
+  ): Promise<ApiResponse<Statistics | null>> {
+    return this.httpPost<Statistics>(
       `${this._route}/${username}`,
       {
         to,

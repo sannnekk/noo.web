@@ -1,6 +1,9 @@
 <template>
   <div class="entity-table-container">
-    <table class="entity-table">
+    <table
+      class="entity-table"
+      v-if="data && data.length"
+    >
       <thead>
         <tr>
           <th
@@ -81,9 +84,20 @@
       v-else-if="!data || !data.length"
       class="entity-table__empty-text"
     >
-      <nothing-found-image class="entity-table__empty-text__img" />
-      <b>Контент не найден.</b> <br />
-      Попробуйте изменить параметры поиска или перезагрузить страницу.
+      <div
+        class="entity-table__empty-text__custom"
+        v-if="emptyText"
+      >
+        {{ emptyText }}
+      </div>
+      <div
+        class="entity-table__empty-text__default"
+        v-else
+      >
+        <nothing-found-image class="entity-table__empty-text__img" />
+        <b>Контент не найден.</b> <br />
+        Попробуйте изменить параметры поиска или перезагрузить страницу.
+      </div>
     </div>
   </div>
 </template>
@@ -129,6 +143,7 @@ export interface EntityTableProps {
 
 interface Props extends EntityTableProps {
   editable?: boolean
+  emptyText?: string
 }
 
 interface Emits {

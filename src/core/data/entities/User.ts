@@ -1,5 +1,6 @@
 import type { Entity } from '../Entity'
 import type { Course } from './Course'
+import type { CourseAssignment } from './CourseAssignment'
 import type { MentorAssignment } from './MentorAssignment'
 import type { UserAvatar } from './UserAvatar'
 
@@ -12,8 +13,9 @@ export interface User extends Entity {
   newEmail?: string
   avatar?: UserAvatar
   courses?: Course[]
-  coursesAsStudent?: Course[]
-  courseAsStudentIds?: Course['id'][]
+  courseAssignments?: CourseAssignment[]
+  courseAssignmentIds?: CourseAssignment['id'][]
+  courseAssignmentsAsAssigner?: CourseAssignment[]
   mentorAssignmentsAsMentor?: MentorAssignment[]
   mentorAssignmentsAsStudent?: MentorAssignment[]
   telegramUsername?: string

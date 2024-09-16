@@ -23,6 +23,7 @@
         :loading="worksStore.isListLoading"
         @copy-work="worksStore.copyWork($event)"
         @delete-work="onWorkDelete($event)"
+        @show-related-materials="onShowRelatedMaterials($event)"
       />
     </div>
     <div class="index-works-view__pagination">
@@ -33,18 +34,15 @@
       />
     </div>
   </div>
-  <sure-modal
-    v-model:visible="deleteWorkModal.visible"
-    @confirm="worksStore.deleteWork(deleteWorkModal.workId)"
+  <sure-delete-modal
+    v-model:visible="deleteWorkModalData.visible"
+    @confirm="worksStore.deleteWork(deleteWorkModalData.work)"
   >
     <template #title> Удаление работы </template>
     <template #text>
       Вы уверены, что хотите удалить работу <br />
       <b>
-        {{
-          worksStore.results.find((work) => work.id === deleteWorkModal.workId)
-            ?.name
-        }}
+        {{ deleteWorkModalData.work?.name }}
       </b>
       ?
       <br />
@@ -54,29 +52,45 @@
         Сохранится только статус, дедлайн и общий балл.
       </warning-block>
     </template>
-  </sure-modal>
+  </sure-delete-modal>
+  <related-materials-modal
+    v-model:visible="relatedMaterialsModalData.visible"
+    :work="relatedMaterialsModalData.work"
+  />
 </template>
 
 <script setup lang="ts">
+import relatedMaterialsModal from '../components/related-materials-modal.vue'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useWorksStore } from '../stores/works'
 import worksTable from '../components/works-table.vue'
 import { reactive, ref } from 'vue'
 import type { SearchFilter } from '@/components/search/filters/SearchFilter'
 import { subjectFilter } from '@/core/filters/subject-filter'
+import type { Work } from '@/core/data/entities/Work'
 
 setPageTitle('Работы')
 
 const worksStore = useWorksStore()
 
-const deleteWorkModal = reactive({
+const deleteWorkModalData = reactive({
   visible: false,
-  workId: ''
+  work: null as Work | null
 })
 
-function onWorkDelete(workId: string) {
-  deleteWorkModal.workId = workId
-  deleteWorkModal.visible = true
+const relatedMaterialsModalData = reactive({
+  visible: false,
+  work: null as Work | null
+})
+
+function onWorkDelete(work: Work) {
+  deleteWorkModalData.work = work
+  deleteWorkModalData.visible = true
+}
+
+async function onShowRelatedMaterials(work: Work) {
+  relatedMaterialsModalData.work = work
+  relatedMaterialsModalData.visible = true
 }
 
 const filters = ref<SearchFilter[]>([

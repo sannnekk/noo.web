@@ -34,6 +34,7 @@
               placeholder="Введите пароль"
               type="password"
               required
+              @enter-press="onLogin()"
             />
           </div>
           <br />
@@ -99,7 +100,9 @@ async function onLogin() {
     })
 
     Core.Services.UI.closeModal()
-    Core.Services.UI.openSuccessModal('Вы снова в системе!')
+    Core.Services.UI.openSuccessModal(
+      'Вы снова в системе! Возможно, что-то не отображается, тогда нужно перезагрузить страницу'
+    )
     emits('update:modelValue', { ...model.value, isOpen: false })
   } catch (e) {
     error.value = 'Неверный логин или пароль'

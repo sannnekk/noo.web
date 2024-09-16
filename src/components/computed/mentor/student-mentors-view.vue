@@ -1,7 +1,4 @@
 <template>
-  <div class="student-mentors-view__header">
-    <h3>Кураторы</h3>
-  </div>
   <div
     class="student-mentors-view"
     v-if="subjectsToSHow.length > 0"

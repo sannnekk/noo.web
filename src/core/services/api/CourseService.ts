@@ -4,6 +4,7 @@ import type { Course } from '@/core/data/entities/Course'
 import type { Pagination } from '@/core/data/Pagination'
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { User } from '@/core/data/entities/User'
+import type { CourseAssignment } from '@/core/data/entities/CourseAssignment'
 
 type Deadlines = { checkDeadline?: Date; solveDeadline?: Date }
 
@@ -55,9 +56,39 @@ export class CourseService extends ApiService {
     pagination?: Pagination,
     options: ServiceOptions = {}
   ) {
-    return await this.httpGet<Course[]>(
+    return await this.httpGet<CourseAssignment[]>(
       `${this._route}/student/${studentId}`,
       pagination,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * archive course assignment
+   */
+  public async archiveAssignment(
+    assignmentId: CourseAssignment['id'],
+    options: ServiceOptions = {}
+  ) {
+    await this.httpPatch(
+      `${this._route}/${assignmentId}/archive`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * unarchive course assignment
+   */
+  public async unarchiveAssignment(
+    assignmentId: CourseAssignment['id'],
+    options: ServiceOptions = {}
+  ) {
+    await this.httpPatch(
+      `${this._route}/${assignmentId}/unarchive`,
+      undefined,
       undefined,
       options
     )

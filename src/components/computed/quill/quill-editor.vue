@@ -26,10 +26,12 @@
     </div>
     <quill-comment-popup
       v-model="comment"
+      :comment-types="commentTypes"
       @submit="onCommentSubmit()"
     />
     <quill-comment-popup
       v-model="imageComment"
+      :comment-types="commentTypes"
       @submit="onImageCommentSubmit()"
     />
     <quill-comment-modal
@@ -65,6 +67,7 @@ interface Props {
   modelValue: DeltaContentType
   readonly?: boolean
   commentable?: boolean
+  commentTypes?: string[]
 }
 
 interface Emits {
@@ -163,6 +166,7 @@ function onCommentSubmit() {
 
   comment.value.visible.popup = false
   comment.value.content = ''
+
   emits('commented', quill!.getContents())
 }
 
@@ -671,13 +675,16 @@ function syncImageSelections() {
         padding: 0.1em 0.5em
         display: inline-block
         cursor: pointer
-        border: 2px dashed transparent
+        border: 2px dashed var(--lila)
 
         &[data-type='fact-error']
           border-color: var(--danger) !important
 
         &[data-type='logic-error']
           border-color: var(--warning) !important
+
+        &[data-type='...']
+          border-color: var(--text-light) !important
 
         &:hover
           border-color: var(--border-color) !important

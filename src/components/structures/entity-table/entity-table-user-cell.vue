@@ -6,7 +6,11 @@
     </p>
     <div
       class="user-cell__mentors"
-      v-if="value && value?.role === 'student'"
+      v-if="
+        value &&
+        value?.role === 'student' &&
+        value.mentorAssignmentsAsStudent?.length
+      "
     >
       <div class="user-cell__mentors__mentor">
         <small> Кураторы: </small>

@@ -9,7 +9,7 @@
       </h3>
       <p>
         Всего учеников:
-        <b>{{ courseStudentsStore.course.studentIds?.length ?? 0 }}</b>
+        <b>{{ courseStudentsStore.course.studentAssignments?.length ?? 0 }}</b>
       </p>
     </div>
     <div class="index-view__tabs">
@@ -18,7 +18,7 @@
         :titles="[
           'Добавить/убрать учеников',
           'Синхронизация через email',
-          'Удаление к курса по email'
+          'Удаление с курса по email'
         ]"
       >
         <template #tab-0>

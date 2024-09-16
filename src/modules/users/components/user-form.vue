@@ -36,21 +36,22 @@
     <div class="row">
       <div class="col-12">
         <div
-          class="fomr-group__course-list"
+          class="form-group__course-list"
           v-if="model.role === 'teacher'"
         >
           <teacher-form :courses="model.courses" />
         </div>
         <div
-          class="fomr-group__student-list"
+          class="form-group__student-list"
           v-else-if="model.role === 'mentor'"
         >
           <mentor-form :students="studentsWithSubjects" />
         </div>
         <div
-          class="fomr-group__student-mentors-list"
+          class="form-group__student-mentors-list"
           v-else-if="model?.role === 'student'"
         >
+          <h3 class="form-group__student-mentors-list__title">Кураторы</h3>
           <student-mentors-view
             :mentor-assignments="(model as any).mentorAssignmentsAsStudent"
             :student="model"
@@ -58,7 +59,7 @@
           />
         </div>
         <div
-          class="fomr-group__student-mentors-list"
+          class="form-group__student-mentors-list"
           v-if="model.role === 'student'"
         >
           <student-courses-view :user-id="model.id" />

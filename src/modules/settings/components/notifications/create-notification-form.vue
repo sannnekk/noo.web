@@ -1,5 +1,8 @@
 <template>
-  <div class="create-notification-form">
+  <div
+    class="create-notification-form"
+    v-auto-animate
+  >
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group">
@@ -73,6 +76,14 @@
         </div>
       </div>
     </div>
+    <div
+      class="form-errors"
+      v-if="errors.length"
+    >
+      <error-block>
+        {{ errors.join(', ') }}
+      </error-block>
+    </div>
     <div class="form-actions">
       <common-button
         alignment="right"
@@ -82,10 +93,6 @@
       </common-button>
     </div>
   </div>
-  <pre>
-		{{ sendOptionsModel }}
-	</pre
-  >
 </template>
 
 <script setup lang="ts">
@@ -129,6 +136,8 @@ watch(
 
 const courseSelectorValueModel = ref<Course | null>(null)
 
+const errors = ref<string[]>([])
+
 watch(
   courseSelectorValueModel,
   () =>
@@ -141,6 +150,29 @@ watch(
 )
 
 function createNotification() {
+  errors.value = []
+
+  if (!notificationModel.value.title) {
+    errors.value.push('Заголовок обязателен')
+    return
+  }
+
+  if (
+    sendOptionsModel.value.selector === 'role' &&
+    !roleSelectorValueModel.value
+  ) {
+    errors.value.push('Выберите роль')
+    return
+  }
+
+  if (
+    sendOptionsModel.value.selector === 'course' &&
+    !courseSelectorValueModel.value
+  ) {
+    errors.value.push('Выберите курс')
+    return
+  }
+
   emits(
     'create',
     notificationModel.value as Notification,

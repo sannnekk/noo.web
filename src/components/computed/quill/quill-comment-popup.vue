@@ -22,7 +22,13 @@
         />
       </div>
       <div class="comment-popup__toggle">
+        <horizontal-selection
+          v-if="commentTypes"
+          :options="commentTypes"
+          v-model="model.type"
+        />
         <form-toggle
+          v-else
           v-model="model.type"
           :values="types"
         />
@@ -46,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import type { Comment } from './CommentBlot'
 import type { ImageComment } from './ImageCommentBlot'
 
@@ -63,6 +69,7 @@ interface Props {
       y: number
     }
   }
+  commentTypes?: string[]
 }
 
 interface Emits {
@@ -97,6 +104,19 @@ const model = computed({
   get: () => props.modelValue,
   set: (value) => emits('update:modelValue', value)
 })
+
+watch(
+  model,
+  () => {
+    if (
+      props.commentTypes?.length &&
+      !props.commentTypes.includes(model.value.type)
+    ) {
+      model.value.type = props.commentTypes[0]
+    }
+  },
+  { deep: true, immediate: true }
+)
 
 function onSubmit() {
   model.value.visible.popup = false
@@ -138,6 +158,7 @@ function onSubmit() {
 
   &__toggle
     font-size: 0.8em
+    margin-bottom: 0.5em
 
   &__actions
     display: flex

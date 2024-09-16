@@ -14,9 +14,21 @@
         </h3>
         <h3
           class="comment-modal__title--warning"
-          v-else
+          v-else-if="comment.type === 'logic-error'"
         >
           Логическая ошибка
+        </h3>
+        <h3
+          class="comment-modal__title--other"
+          v-else-if="comment.type === '...'"
+        >
+          Комментарий
+        </h3>
+        <h3
+          class="comment-modal__title--custom"
+          v-else
+        >
+          Критерий {{ comment.type }}
         </h3>
       </div>
       <div class="comment-modal__text">
@@ -92,6 +104,12 @@ function onDelete() {
 
     &--warning
       color: var(--warning)
+
+    &--other
+      color: var(--text-light)
+
+    &--custom
+      color: var(--lila)
 
   &__text
     margin-bottom: 1em

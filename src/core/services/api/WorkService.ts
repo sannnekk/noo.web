@@ -6,6 +6,7 @@ import {
   type ApiResponse,
   type ServiceOptions
 } from '@/core/services/ApiService'
+import type { Material } from '@/core/data/entities/Material'
 
 /**
  * Work service
@@ -70,6 +71,22 @@ export class WorkService extends ApiService {
     await this.httpPost(
       `${this._route}/copy/${workSlug}`,
       undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * get related materials
+   */
+  public async getRelatedMaterials(
+    workId: Work['id'],
+    pagination: Pagination,
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<Material[]>> {
+    return await this.httpGet<Material[]>(
+      `${this._route}/${workId}/related-materials`,
+      pagination,
       undefined,
       options
     )

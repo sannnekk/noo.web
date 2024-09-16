@@ -36,12 +36,20 @@ import { useRouter } from 'vue-router'
 import { computed, reactive } from 'vue'
 import type { MenuItem } from '../widgets/more-widget.vue'
 import type { Course } from '@/core/data/entities/Course'
+import type { CourseAssignment } from '@/core/data/entities/CourseAssignment'
 
 interface Props {
   course: Course
+  assignment?: CourseAssignment
+}
+
+interface Emits {
+  (event: 'archive', assignment: CourseAssignment): void
+  (event: 'unarchive', assignment: CourseAssignment): void
 }
 
 const props = defineProps<Props>()
+const emits = defineEmits<Emits>()
 
 const actions = reactive<MenuItem[]>([
   {
@@ -65,7 +73,29 @@ const actions = reactive<MenuItem[]>([
     icon: 'copy',
     stayOpened: true,
     action: function (selfRef: any) {
-      copyAction(selfRef)
+      copyCourseLink(selfRef)
+    }
+  },
+  {
+    title: 'Архивировать',
+    icon: 'delete',
+    if:
+      Core.Context.roleIs(['student']) &&
+      props.assignment &&
+      !props.assignment?.isArchived,
+    action: () => {
+      archiveCourse()
+    }
+  },
+  {
+    title: 'Разархивировать',
+    icon: 'check-green',
+    if:
+      Core.Context.roleIs(['student']) &&
+      props.assignment &&
+      props.assignment?.isArchived,
+    action: () => {
+      unarchiveCourse()
     }
   }
 ])
@@ -74,7 +104,7 @@ const router = useRouter()
 
 const link = computed(() => `/courses/${props.course.slug}`)
 
-function copyAction(thisRef: any) {
+function copyCourseLink(thisRef: any) {
   copyText(`${Core.Constants.APP_URL}${link.value}`)
 
   thisRef.icon = 'check-green'
@@ -84,6 +114,22 @@ function copyAction(thisRef: any) {
     thisRef.icon = 'copy'
     thisRef.title = 'Скопировать ссылку'
   }, 1000)
+}
+
+async function archiveCourse() {
+  if (!props.assignment) {
+    return
+  }
+
+  emits('archive', props.assignment)
+}
+
+async function unarchiveCourse() {
+  if (!props.assignment) {
+    return
+  }
+
+  emits('unarchive', props.assignment)
 }
 </script>
 

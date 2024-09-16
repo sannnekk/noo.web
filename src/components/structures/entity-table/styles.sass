@@ -18,13 +18,18 @@
       display: inline-block
 
   &__empty-text
-    text-align: center
-    color: var(--text-light)
-    display: flex
-    flex-direction: column
-    align-items: center
-    gap: 1em
-    margin: 1em 0
+    &__default
+      text-align: center
+      color: var(--text-light)
+      display: flex
+      flex-direction: column
+      align-items: center
+      gap: 1em
+      margin: 1em 0
+
+    &__custom
+      text-align: left
+      color: var(--text-light)
 
     &__img
       width: min(90%, 500px)

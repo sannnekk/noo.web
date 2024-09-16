@@ -8,9 +8,13 @@
       alignment="stretch"
       @click="assignedWorkStore.submitWork()"
       v-if="['check', 'solve'].includes(assignedWorkStore.mode)"
+      :disabled="assignedWorkStore.autoSave.loading"
+      :loading="assignedWorkStore.autoSave.loading"
     >
       {{
-        assignedWorkStore.mode === 'check'
+        assignedWorkStore.autoSave.loading
+          ? 'Сохранение...'
+          : assignedWorkStore.mode === 'check'
           ? 'Завершить проверку'
           : 'Завершить работу'
       }}
@@ -34,8 +38,13 @@
       design="inline"
       @click="assignedWorkStore.saveProgress()"
       v-if="['check', 'solve'].includes(assignedWorkStore.mode)"
+      :disabled="assignedWorkStore.autoSave.loading"
     >
-      Сохранить без сдачи
+      {{
+        assignedWorkStore.autoSave.loading
+          ? 'Сохранение...'
+          : 'Сохранить прогресс'
+      }}
     </common-button>
     <common-button
       class="work-actions__secondary"

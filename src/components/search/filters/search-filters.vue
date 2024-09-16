@@ -4,10 +4,7 @@
     v-auto-animate
   >
     <div class="search-filters__header">
-      <h4 @click="collpased = !collpased">
-        Фильтры
-        <beta-tag />
-      </h4>
+      <h4 @click="collpased = !collpased">Фильтры</h4>
       <div
         class="search-filters__header__collapse-button"
         @click="collpased = !collpased"

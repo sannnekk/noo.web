@@ -21,6 +21,7 @@
           class="index-profile-view__mentor"
           v-if="Core.Context.roleIs(['student'])"
         >
+          <h2 class="index-profile-view__mentor__header">Мои кураторы</h2>
           <student-mentors-view
             :mentor-assignments="profileStore.user.mentorAssignmentsAsStudent!"
             :student="Core.Context.User!"
@@ -33,7 +34,7 @@
             Core.Context.roleIs(['teacher', 'mentor', 'student'])
           "
         >
-          <h3 class="index-profile-view__charts__header">Моя статистика</h3>
+          <h2 class="index-profile-view__charts__header">Моя статистика</h2>
           <statistics-view
             v-once
             :username="Core.Context.User?.username"
@@ -82,14 +83,4 @@ const changeEmailModalVisible = ref(false)
 
   &__mentor
     margin-bottom: 2em
-
-  &__google-docs-integrations
-    margin-top: 2em
-
-    a
-      color: var(--lila)
-      text-decoration: none
-
-      &:hover
-        text-decoration: underline
 </style>

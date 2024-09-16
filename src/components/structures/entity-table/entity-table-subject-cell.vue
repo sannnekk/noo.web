@@ -1,6 +1,10 @@
 <template>
   <span>
-    <subject-name :subject="value" />
+    <subject-name
+      v-if="value"
+      :subject="value"
+    />
+    <span v-else>-</span>
   </span>
 </template>
 
@@ -8,7 +12,7 @@
 import type { Subject } from '@/core/data/entities/Subject'
 
 interface Props {
-  value?: Subject
+  value?: Subject | null
 }
 
 defineProps<Props>()

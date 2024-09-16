@@ -12,7 +12,7 @@ import { ref, watch } from 'vue'
 
 interface Props {
   label: string
-  modelValue: VisibleRole
+  modelValue: VisibleRole | null
 }
 
 interface Emits {
@@ -22,18 +22,7 @@ interface Emits {
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
-const roleModel = ref<string>(props.modelValue.value)
-
-watch(
-  () => roleModel.value,
-  () =>
-    emits(
-      'update:modelValue',
-      roleOptions.find((o) => o.value === roleModel.value)! as VisibleRole
-    )
-)
-
-const roleOptions = [
+const roleOptions: VisibleRole[] = [
   {
     label: 'Администратор',
     value: 'admin'
@@ -51,4 +40,16 @@ const roleOptions = [
     value: 'student'
   }
 ]
+
+const roleModel = ref<string>(props.modelValue?.value || roleOptions[0].value)
+
+watch(
+  () => roleModel.value,
+  () =>
+    emits(
+      'update:modelValue',
+      roleOptions.find((o) => o.value === roleModel.value) || roleOptions[0]
+    ),
+  { immediate: true }
+)
 </script>

@@ -22,7 +22,8 @@ interface Props {
 
 interface Emits {
   (e: 'copy-work', workSlug: Work['slug']): void
-  (e: 'delete-work', workId: Work['id']): void
+  (e: 'delete-work', work: Work): void
+  (e: 'show-related-materials', work: Work): void
 }
 
 defineProps<Props>()
@@ -87,10 +88,17 @@ function actions(row: Work): MenuItem[] {
       }
     },
     {
+      title: 'Посмотреть привязанные материалы',
+      icon: 'eye',
+      action: () => {
+        emits('show-related-materials', row)
+      }
+    },
+    {
       title: 'Удалить',
       icon: 'delete',
       action: () => {
-        emits('delete-work', row.id)
+        emits('delete-work', row)
       }
     }
   ]

@@ -1,13 +1,14 @@
+import { emptyDelta } from './deltaHelpers'
+import { v4 as uuid } from 'uuid'
 import type { Answer } from '@/core/data/entities/Answer'
 import type { Comment } from '@/core/data/entities/Comment'
 import type { Chapter } from '@/core/data/entities/Chapter'
-import { v4 as uuid } from 'uuid'
 import type { Material } from '../data/entities/Material'
-import { emptyDelta } from './deltaHelpers'
 import type { Course } from '../data/entities/Course'
 import type { Subject } from '../data/entities/Subject'
 import type { Poll } from '../data/entities/Poll'
 import type { Task } from '../data/entities/Task'
+import type { CourseAssignment } from '../data/entities/CourseAssignment'
 
 type EntityName =
   | 'answer'
@@ -18,6 +19,7 @@ type EntityName =
   | 'subject'
   | 'poll'
   | 'task'
+  | 'course-assignment'
 
 type Entity =
   | Answer
@@ -28,6 +30,7 @@ type Entity =
   | Subject
   | Poll
   | Task
+  | CourseAssignment
 
 export function entityFactory<T extends Entity>(name: EntityName): T {
   switch (name) {
@@ -47,6 +50,8 @@ export function entityFactory<T extends Entity>(name: EntityName): T {
       return pollConstructor() as T
     case 'task':
       return taskConstructor() as T
+    case 'course-assignment':
+      return courseAssignmentConstructor() as T
     default:
       return {} as T
   }
@@ -56,6 +61,7 @@ function answerConstructor(): Omit<Answer, 'id'> {
   return {
     slug: uuid(),
     content: emptyDelta(),
+    word: '',
     taskId: '',
     createdAt: new Date(),
     updatedAt: new Date()
@@ -145,5 +151,15 @@ function taskConstructor(): Omit<Task, 'id' | 'createdAt' | 'updatedAt'> {
     highestScore: 0,
     type: 'word',
     isAnswerVisibleBeforeCheck: false
+  }
+}
+
+function courseAssignmentConstructor(): Omit<CourseAssignment, 'id'> {
+  return {
+    courseId: '',
+    studentId: '',
+    assignerId: '',
+    isArchived: false,
+    createdAt: new Date()
   }
 }

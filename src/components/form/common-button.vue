@@ -101,6 +101,9 @@ defineEmits<Emits>()
     color: var(--form-text-color)
     border: 1px solid var(--primary)
 
+    &:disabled
+      opacity: 0.5
+
     &__icon
       display: block
       font-size: 20px

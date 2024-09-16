@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AccordionList: typeof import('./src/components/structures/accordion-list.vue')['default']
     AddIcon: typeof import('./src/components/decorations/icons/add-icon.vue')['default']
     AlignCenterIcon: typeof import('./src/components/decorations/icons/text-format-icons/align-center-icon.vue')['default']
     AlignJustifyIcon: typeof import('./src/components/decorations/icons/text-format-icons/align-justify-icon.vue')['default']
@@ -57,6 +58,7 @@ declare module 'vue' {
     EntityTableTextCell: typeof import('./src/components/structures/entity-table/entity-table-text-cell.vue')['default']
     EntityTableUserCell: typeof import('./src/components/structures/entity-table/entity-table-user-cell.vue')['default']
     ErrorBlock: typeof import('./src/components/common/error-block.vue')['default']
+    ExplanationTooltip: typeof import('./src/components/common/explanation-tooltip.vue')['default']
     EyeIcon: typeof import('./src/components/decorations/icons/eye-icon.vue')['default']
     FileCard: typeof import('./src/components/files/file-card.vue')['default']
     FileInput: typeof import('./src/components/files/file-input.vue')['default']
@@ -76,6 +78,7 @@ declare module 'vue' {
     HelpIcon: typeof import('./src/components/decorations/icons/help-icon.vue')['default']
     HelpWidget: typeof import('./src/components/widgets/help-widget.vue')['default']
     HomeIcon: typeof import('./src/components/decorations/icons/home-icon.vue')['default']
+    HorizontalSelection: typeof import('./src/components/form/horizontal-selection.vue')['default']
     HotkeyWidget: typeof import('./src/components/widgets/hotkey-widget.vue')['default']
     ImageIcon: typeof import('./src/components/decorations/icons/text-format-icons/image-icon.vue')['default']
     InfoBlock: typeof import('./src/components/common/info-block.vue')['default']
@@ -116,6 +119,7 @@ declare module 'vue' {
     PollSelect: typeof import('./src/components/form/entity-select/poll-select.vue')['default']
     ProfileWidget: typeof import('./src/components/widgets/profile-widget.vue')['default']
     ProgressBar: typeof import('./src/components/computed/progress-bar.vue')['default']
+    QuestionIcon: typeof import('./src/components/decorations/icons/question-icon.vue')['default']
     QuillCommentModal: typeof import('./src/components/computed/quill/quill-comment-modal.vue')['default']
     QuillCommentPopup: typeof import('./src/components/computed/quill/quill-comment-popup.vue')['default']
     QuillEditor: typeof import('./src/components/computed/quill/quill-editor.vue')['default']
@@ -139,8 +143,9 @@ declare module 'vue' {
     SearchTagsFilter: typeof import('./src/components/search/filters/search-tags-filter.vue')['default']
     SelectInput: typeof import('./src/components/form/select-input.vue')['default']
     SettingsIcon: typeof import('./src/components/decorations/icons/settings-icon.vue')['default']
-    StatisticsNumberCard: typeof import('./src/components/computed/statistics/statistics-number-card.vue')['default']
+    StatisticsEntryCard: typeof import('./src/components/computed/statistics/statistics-entry-card.vue')['default']
     StatisticsPlotCard: typeof import('./src/components/computed/statistics/statistics-plot-card.vue')['default']
+    StatisticsSection: typeof import('./src/components/computed/statistics/statistics-section.vue')['default']
     StatisticsView: typeof import('./src/components/computed/statistics/statistics-view.vue')['default']
     StatusTag: typeof import('./src/components/common/status-tag.vue')['default']
     StrikeIcon: typeof import('./src/components/decorations/icons/text-format-icons/strike-icon.vue')['default']
@@ -194,6 +199,7 @@ declare module 'vue' {
     VideoIcon: typeof import('./src/components/decorations/icons/text-format-icons/video-icon.vue')['default']
     WarningBlock: typeof import('./src/components/common/warning-block.vue')['default']
     WelcomeIcon: typeof import('./src/components/decorations/icons/welcome-icon.vue')['default']
+    WordCounter: typeof import('./src/components/entities/utils/word-counter.vue')['default']
     WorkTypeSelect: typeof import('./src/components/form/prop-select/work-type-select.vue')['default']
   }
 }

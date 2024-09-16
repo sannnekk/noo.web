@@ -18,6 +18,7 @@
         :min="min"
         :max="max"
         :step="step"
+        @keypress.enter="$emit('enter-press')"
       />
       <div
         v-if="copyButton"
@@ -62,6 +63,7 @@ interface Props {
 
 interface Emits {
   (e: 'update:modelValue', value: string | number | Date): void
+  (e: 'enter-press'): void
 }
 
 const props = defineProps<Props>()

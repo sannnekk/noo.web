@@ -31,12 +31,12 @@ interface Props {
     label: string
     value: string | number | undefined
   }[]
-  modelValue: string
+  modelValue: string | number
   readonly?: boolean
 }
 
 interface Emits {
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:modelValue', value: string | number): void
 }
 
 const props = defineProps<Props>()

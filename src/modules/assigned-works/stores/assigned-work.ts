@@ -9,6 +9,7 @@ import type { ModalAction } from '@/core/services/store/UIStore'
 import { debounce } from '@/core/utils/debounce'
 import type { ReadableWorkScore } from '../types/ReadableWorkScore'
 import type { AssignedWorkViewMode } from '../types/AssignedWorkViewMode'
+import { getTaskScoreStatus } from '../utils/task'
 
 export const useAssignedWorkStore = defineStore(
   'assigned-works-module:assigned-work',
@@ -228,7 +229,8 @@ export const useAssignedWorkStore = defineStore(
           return !!(answer.word && answer.word.trim().length > 0)
         case 'text':
         case 'essay':
-          return !isDeltaEmptyOrWhitespace(answer.content)
+        case 'final-essay':
+          return !!(answer.content && !isDeltaEmptyOrWhitespace(answer.content))
       }
     }
 
@@ -238,45 +240,11 @@ export const useAssignedWorkStore = defineStore(
     function taskScoreStatus(
       task: Task
     ): 'success' | 'warning' | 'error' | null {
-      if (
-        mode.value === 'solve' ||
-        assignedWork.value?.solveStatus === 'not-started' ||
-        assignedWork.value?.solveStatus === 'in-progress' ||
-        (Core.Context.roleIs(['admin', 'teacher', 'student']) &&
-          (assignedWork.value?.checkStatus === 'not-checked' ||
-            assignedWork.value?.checkStatus === 'in-progress'))
-      ) {
+      if (!assignedWork.value) {
         return null
       }
 
-      const comment = assignedWork.value?.comments.find(
-        (comment) => comment.taskId === task.id
-      )
-
-      if (!comment) {
-        if (task.type !== 'text') {
-          return 'error'
-        }
-
-        return null
-      }
-
-      if (
-        (assignedWork.value?.checkStatus === 'not-checked' ||
-          assignedWork.value?.checkStatus === 'in-progress') &&
-        Core.Context.roleIs(['admin', 'teacher', 'student'])
-      ) {
-        return null
-      }
-
-      if (comment.score === 0) {
-        return 'error'
-      }
-      if (comment.score === task.highestScore) {
-        return 'success'
-      }
-
-      return 'warning'
+      return getTaskScoreStatus(task, assignedWork.value!, mode.value)
     }
 
     /**
@@ -442,11 +410,14 @@ export const useAssignedWorkStore = defineStore(
       }
 
       try {
-        await assignedWorkService.shiftAssignedWorkDeadline(
+        const response = await assignedWorkService.shiftAssignedWorkDeadline(
           assignedWork.value.id,
           { showLoader: true }
         )
         uiService.openSuccessModal('Дедлайн успешно сдвинут!')
+
+        assignedWork.value.solvedAt = response.data!.newSolveDeadlineAt
+        assignedWork.value.checkedAt = response.data!.newCheckDeadlineAt
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при сдвиге дедлайна', e.message)
       }
@@ -480,6 +451,12 @@ export const useAssignedWorkStore = defineStore(
             }
           }
         ])
+
+        if (Core.Context.roleIs(['student'])) {
+          assignedWork.value.solveStatus = 'in-progress'
+        } else if (Core.Context.roleIs(['mentor'])) {
+          assignedWork.value.checkStatus = 'in-progress'
+        }
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при сохранении прогресса', e.message)
       }

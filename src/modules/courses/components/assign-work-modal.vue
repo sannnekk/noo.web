@@ -31,7 +31,7 @@
           <check-list
             v-model="assignWorkStore.selectedWorkId"
             :items="assignWorkStore.results"
-            item-label-key="name"
+            item-label-key="subject.name,name"
             item-key="id"
           />
           <list-pagination

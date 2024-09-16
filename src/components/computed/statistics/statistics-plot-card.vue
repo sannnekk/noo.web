@@ -1,13 +1,16 @@
 <template>
   <div class="statistics-plot-card">
-    <div class="statistics-plot-card__title">
-      <h3>{{ plot.name }}</h3>
-    </div>
     <div
       class="statistics-plot-card__plot"
       v-if="plot.data.length"
     >
       <line-chart :plot="plot" />
+    </div>
+    <div
+      class="statistics-plot-card__title"
+      v-if="plot.data.length"
+    >
+      <h3>{{ plot.name }}</h3>
     </div>
     <div
       class="statistics-plot-card__no-data"
@@ -40,9 +43,10 @@ defineProps<Props>()
   margin-bottom: 1.5em
 
   &__title
-    font-size: 18px
-    font-weight: 700
-    margin: 0
+    font-size: 14px
+
+    h3
+      font-weight: 500
 
   &__plot
     margin-top: 1em

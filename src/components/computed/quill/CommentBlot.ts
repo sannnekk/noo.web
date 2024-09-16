@@ -3,7 +3,7 @@ import type { ImageComment } from './ImageCommentBlot'
 
 export type Comment = {
   content: string
-  type: 'fact-error' | 'logic-error'
+  type: string
 }
 
 export class CommentBlot extends Inline {

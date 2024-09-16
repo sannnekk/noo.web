@@ -12,7 +12,8 @@
     >
       <entity-table
         :cols="cols"
-        :data="courses"
+        :data="courseAssignments"
+        empty-text="Ученик не записан ни на один курс"
       />
       <common-button
         alignment="right"
@@ -55,6 +56,7 @@ import addStudentToCoursesModal from './add-student-to-courses-modal.vue'
 import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 import { Core } from '@/core/Core'
 import type { Course } from '@/core/data/entities/Course'
+import type { CourseAssignment } from '@/core/data/entities/CourseAssignment'
 import type { User } from '@/core/data/entities/User'
 import { computed, ref, watch } from 'vue'
 
@@ -67,8 +69,10 @@ const props = defineProps<Props>()
 const courseService = Core.Services.Course
 const uiService = Core.Services.UI
 
-const courses = ref<Course[]>([])
-const courseSlugs = computed(() => courses.value.map((course) => course.slug))
+const courseAssignments = ref<CourseAssignment[]>([])
+const courseSlugs = computed(() =>
+  courseAssignments.value.map((assignment) => assignment.course!.slug)
+)
 const isLoading = ref(false)
 const addToCourseModalVisible = ref(false)
 const removeFromCourseModal = ref({
@@ -80,12 +84,23 @@ const cols: ColType[] = [
   {
     title: '',
     type: 'image',
-    value: (course: Course) => course.images?.at(0) || null
+    value: (assignment: CourseAssignment) =>
+      assignment.course!.images?.at(0) || null
   },
   {
     title: 'Название курса',
     type: 'text',
-    value: (course: Course) => course.name
+    value: (assignment: CourseAssignment) => assignment.course!.name
+  },
+  {
+    title: 'Добавил(а)',
+    type: 'text',
+    value: (assignment: CourseAssignment) => assignment.assigner!.name
+  },
+  {
+    title: 'Дата добавления',
+    type: 'date',
+    value: (assignment: CourseAssignment) => assignment.createdAt
   },
   {
     title: '',
@@ -93,7 +108,8 @@ const cols: ColType[] = [
     value: () => 'Убрать с курса',
     design: 'danger',
     alignment: 'right',
-    action: (course: Course) => openRemoveCourseModal(course)
+    action: (assignment: CourseAssignment) =>
+      openRemoveCourseModal(assignment.course!)
   }
 ]
 
@@ -102,7 +118,7 @@ async function fetchStudentCourses() {
 
   try {
     const response = await courseService.getStudentCourses(props.userId)
-    courses.value = response.data
+    courseAssignments.value = response.data
   } catch (e: any) {
     uiService.openErrorModal(
       'Ошибка при загрузке курсов',

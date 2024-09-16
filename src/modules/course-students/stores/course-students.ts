@@ -2,7 +2,9 @@ import { useSearch } from '@/composables/useSearch'
 import { Core } from '@/core/Core'
 import type { Pagination } from '@/core/data/Pagination'
 import type { Course } from '@/core/data/entities/Course'
+import type { CourseAssignment } from '@/core/data/entities/CourseAssignment'
 import type { User } from '@/core/data/entities/User'
+import { entityFactory } from '@/core/utils/entityFactory'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -54,11 +56,16 @@ export const useCourseStudentsStore = defineStore(
       try {
         await courseService.addStudentsToCourse(courseSlug.value, [id])
 
-        if (!course.value.studentIds) {
-          course.value.studentIds = []
+        if (!course.value.studentAssignments) {
+          course.value.studentAssignments = []
         }
 
-        course.value.studentIds.push(id)
+        const assignment = entityFactory<CourseAssignment>('course-assignment')
+        assignment.studentId = id
+        assignment.assignerId = Core.Context.User!.id
+        assignment.courseId = course.value.id
+
+        course.value.studentAssignments.push(assignment)
 
         return true
       } catch (error: any) {
@@ -74,14 +81,16 @@ export const useCourseStudentsStore = defineStore(
       try {
         await courseService.removeStudentsFromCourse(courseSlug.value, [id])
 
-        if (!course.value.studentIds) {
+        if (!course.value.studentAssignments) {
           return true
         }
 
-        const index = course.value.studentIds.indexOf(id)
+        const index = course.value.studentAssignments.findIndex(
+          (assignment) => assignment.studentId === id
+        )
 
         if (index !== -1) {
-          course.value.studentIds.splice(index, 1)
+          course.value.studentAssignments.splice(index, 1)
         }
 
         return true
