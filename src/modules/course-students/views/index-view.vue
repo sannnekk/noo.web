@@ -9,7 +9,7 @@
       </h3>
       <p>
         Всего учеников:
-        <b>{{ courseStudentsStore.course.studentAssignments?.length ?? 0 }}</b>
+        <b>{{ courseStudentsStore.course.studentCount ?? 0 }}</b>
       </p>
     </div>
     <div class="index-view__tabs">

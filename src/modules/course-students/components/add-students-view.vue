@@ -58,7 +58,8 @@ const cols = reactive<ColType[]>([
 
       return name
     },
-    type: 'text'
+    type: 'text',
+    linkTo: (user: User) => `/users/edit/${user.username}`
   },
   {
     title: 'Никнейм',
@@ -75,11 +76,11 @@ const cols = reactive<ColType[]>([
     width: '200px',
     alignment: 'stretch',
     value: (user: User) => {
-      return userInCourse(user.id) ? 'Добавлен' : 'Не на курсе'
+      return userInCourse(user) ? 'Добавлен' : 'Не на курсе'
     },
     type: 'button',
     design: (user: User) => {
-      return userInCourse(user.id) ? 'primary' : 'secondary'
+      return userInCourse(user) ? 'primary' : 'secondary'
     },
     isLoading: (user: User) => {
       return (
@@ -88,31 +89,27 @@ const cols = reactive<ColType[]>([
       )
     },
     action: async (user: User) => {
-      if (userInCourse(user.id)) {
+      if (userInCourse(user)) {
         nowRemovingList.value.push(user.id)
-        await courseStudentsStore.removeStudent(user.id)
+        await courseStudentsStore.removeStudent(user)
         nowRemovingList.value = nowRemovingList.value.filter(
           (id) => id !== user.id
         )
       } else {
         nowAddingList.value.push(user.id)
-        await courseStudentsStore.addStudent(user.id)
+        await courseStudentsStore.addStudent(user)
         nowAddingList.value = nowAddingList.value.filter((id) => id !== user.id)
       }
     }
   }
 ])
 
-function userInCourse(userId: User['id']) {
+function userInCourse(user: User) {
   if (!courseStudentsStore.course) {
     return false
   }
 
-  return (
-    (courseStudentsStore.course.studentAssignments || []).findIndex(
-      (assignment) => assignment.studentId === userId
-    ) !== -1
-  )
+  return !!user.courseAssignments?.length
 }
 </script>
 

@@ -65,6 +65,24 @@ export class CourseService extends ApiService {
   }
 
   /**
+   * Get student list with current course assignment if available
+   *
+   * !NOTE: In pagination are only `limit`, `page` and `search` properties supported
+   */
+  public async getStudentListWithAssignments(
+    courseId: Course['id'],
+    pagination?: Pagination,
+    options: ServiceOptions = {}
+  ) {
+    return await this.httpGet<User[]>(
+      `${this._route}/${courseId}/student-list`,
+      pagination,
+      undefined,
+      options
+    )
+  }
+
+  /**
    * archive course assignment
    */
   public async archiveAssignment(

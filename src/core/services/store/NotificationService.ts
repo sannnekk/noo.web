@@ -18,7 +18,7 @@ export class NotificationService extends ApiService {
   /**
    * Ticker threshold (in ms)
    */
-  private tickerThreshold = 60 * 1000
+  private tickerThreshold = 15 * 60 * 1000
 
   /**
    * useStore reference

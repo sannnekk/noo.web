@@ -20,13 +20,13 @@
             />
           </div>
         </div>
-        <div class="index-works-view__filters">
+        <!-- <div class="index-works-view__filters">
           <search-filters
             v-model:pagination="assignedWorksStore.allSearch.pagination"
             :filters="allSearchFilters"
             :is-loading="assignedWorksStore.allSearch.isListLoading"
           />
-        </div>
+        </div> -->
         <div class="index-works-view__selected-actions">
           <actions-with-selected
             :selected-assigned-works="assignedWorksStore.allSearchSelectedWorks"
@@ -165,14 +165,14 @@ import { useAssignedWorksStore } from '../stores/assigned-works'
 import worksTable from '../components/works-table.vue'
 import actionsWithSelected from '../components/actions-with-selected.vue'
 import actionsWithArchivedSelected from '../components/actions-with-archived-selected.vue'
-import type { SearchFilter } from '@/components/search/filters/SearchFilter'
-import { subjectFilter } from '@/core/filters/subject-filter'
+//import type { SearchFilter } from '@/components/search/filters/SearchFilter'
+//import { subjectFilter } from '@/core/filters/subject-filter'
 
 const assignedWorksStore = useAssignedWorksStore()
 
 setPageTitle('Мои работы')
 
-const allSearchFilters: SearchFilter[] = [
+/* const allSearchFilters: SearchFilter[] = [
   {
     name: 'Тип работы',
     type: 'arr',
@@ -214,7 +214,7 @@ const allSearchFilters: SearchFilter[] = [
     rangeType: 'date',
     rangeValues: [new Date(), new Date()]
   }
-]
+] */
 </script>
 
 <style lang="sass" scoped>

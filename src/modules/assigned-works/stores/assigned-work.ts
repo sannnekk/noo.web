@@ -416,8 +416,8 @@ export const useAssignedWorkStore = defineStore(
         )
         uiService.openSuccessModal('Дедлайн успешно сдвинут!')
 
-        assignedWork.value.solvedAt = response.data!.newSolveDeadlineAt
-        assignedWork.value.checkedAt = response.data!.newCheckDeadlineAt
+        assignedWork.value.solveDeadlineAt = response.data!.newSolveDeadlineAt
+        assignedWork.value.checkDeadlineAt = response.data!.newCheckDeadlineAt
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при сдвиге дедлайна', e.message)
       }

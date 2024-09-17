@@ -28,14 +28,14 @@
       <div class="task-answer-container__answer-box__word-count__min">
         <span>
           Минимум:
-          <b :class="{ error: wordCount < 250 }">250</b>
+          <b :class="{ error: wordCount < 150 }">250</b>
           слов
         </span>
       </div>
       <div class="task-answer-container__answer-box__word-count__max">
         <span>
           Максимум:
-          <b :class="{ error: wordCount > 1500 }">1500</b>
+          <b :class="{ error: wordCount > 1000 }">1500</b>
           слов
         </span>
       </div>

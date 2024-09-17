@@ -13,16 +13,13 @@ export const useCourseStudentsStore = defineStore(
   'course-students-module:course-students',
   () => {
     const courseService = Core.Services.Course
-    const userService = Core.Services.User
     const uiService = Core.Services.UI
     const route = useRoute()
 
     const courseSlug = computed(() => route.params.courseSlug as string)
     const course = ref<Course | null>(null)
 
-    const studentSearch = useSearch(fetchStudents, {
-      immediate: true
-    })
+    const studentSearch = useSearch(fetchStudents)
 
     async function fetchCourse() {
       try {
@@ -31,41 +28,47 @@ export const useCourseStudentsStore = defineStore(
         })
 
         course.value = response.data
+        studentSearch.trigger()
       } catch (error: any) {
         uiService.openErrorModal('', error.message)
       }
     }
 
     async function fetchStudents(pagination: Pagination) {
-      if (Core.Context.roleIs(['admin', 'student', 'mentor'])) {
+      if (Core.Context.roleIs(['student', 'mentor']) || !course.value) {
         return
       }
 
       try {
-        return await userService.getStudents(pagination)
-      } catch (error) {
-        uiService.openErrorModal('Произошла ошибка при загрузке студентов')
+        return await courseService.getStudentListWithAssignments(
+          course.value.id,
+          pagination
+        )
+      } catch (error: any) {
+        uiService.openErrorModal(
+          'Произошла ошибка при загрузке студентов',
+          error.message
+        )
       }
     }
 
-    async function addStudent(id: User['id']): Promise<true | string> {
+    async function addStudent(user: User): Promise<true | string> {
       if (!course.value) {
         return 'Курс не найден'
       }
 
       try {
-        await courseService.addStudentsToCourse(courseSlug.value, [id])
+        await courseService.addStudentsToCourse(courseSlug.value, [user.id])
 
-        if (!course.value.studentAssignments) {
-          course.value.studentAssignments = []
+        course.value.studentCount = (course.value.studentCount || 0) + 1
+
+        if (!user.courseAssignments?.length) {
+          user.courseAssignments = []
         }
 
-        const assignment = entityFactory<CourseAssignment>('course-assignment')
-        assignment.studentId = id
-        assignment.assignerId = Core.Context.User!.id
-        assignment.courseId = course.value.id
-
-        course.value.studentAssignments.push(assignment)
+        user.courseAssignments = [
+          entityFactory<CourseAssignment>('course-assignment')
+        ]
 
         return true
       } catch (error: any) {
@@ -73,25 +76,22 @@ export const useCourseStudentsStore = defineStore(
       }
     }
 
-    async function removeStudent(id: User['id']): Promise<true | string> {
+    async function removeStudent(user: User): Promise<true | string> {
       if (!course.value) {
         return 'Курс не найден'
       }
 
       try {
-        await courseService.removeStudentsFromCourse(courseSlug.value, [id])
+        await courseService.removeStudentsFromCourse(courseSlug.value, [
+          user.id
+        ])
 
-        if (!course.value.studentAssignments) {
-          return true
-        }
+        user.courseAssignments = []
 
-        const index = course.value.studentAssignments.findIndex(
-          (assignment) => assignment.studentId === id
-        )
-
-        if (index !== -1) {
-          course.value.studentAssignments.splice(index, 1)
-        }
+        course.value.studentCount =
+          (course.value.studentCount || 0) > 0
+            ? (course.value.studentCount || 0) - 1
+            : 0
 
         return true
       } catch (error: any) {
@@ -110,7 +110,6 @@ export const useCourseStudentsStore = defineStore(
         })
 
         await fetchCourse()
-        await studentSearch.trigger()
 
         uiService.openSuccessModal('Ученики успешно добавлены через имейлы')
       } catch (error: any) {
@@ -132,7 +131,6 @@ export const useCourseStudentsStore = defineStore(
         })
 
         await fetchCourse()
-        await studentSearch.trigger()
 
         uiService.openSuccessModal('Ученики успешно удалены через имейлы')
       } catch (error: any) {

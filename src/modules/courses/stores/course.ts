@@ -20,11 +20,6 @@ export const useCourseStore = defineStore('courses-module:course', () => {
    * The current course
    */
   const course = ref<Course | null>(null)
-
-  if (course.value === null) {
-    fetchCourse()
-  }
-
   /**
    * The current material
    */

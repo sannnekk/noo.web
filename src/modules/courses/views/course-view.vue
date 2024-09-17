@@ -18,9 +18,7 @@
                 name="user"
                 class="index-materials-view__tree__students__icon"
               />
-              Ученики курса ({{
-                courseStore.course.studentAssignments?.length || 0
-              }})
+              Ученики курса ({{ courseStore.course.studentCount || 0 }})
             </router-link>
           </div>
           <div class="index-materials-view__tree__edit-course">

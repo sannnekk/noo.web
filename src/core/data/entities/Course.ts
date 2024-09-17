@@ -19,4 +19,5 @@ export interface Course extends Entity {
   updatedAt: Date
   studentAssignments?: CourseAssignment[]
   studentAssignmentIds?: CourseAssignment['id'][]
+  studentCount?: number
 }

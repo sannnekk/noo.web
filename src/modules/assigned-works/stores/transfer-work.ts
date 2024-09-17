@@ -45,7 +45,7 @@ export const useTransferWorkStore = defineStore(
      */
     async function transfer(workId: AssignedWork['id']) {
       if (!selectedMentorId.value) {
-        uiService.openWarningModal('Выберите ментора')
+        uiService.openWarningModal('Выберите куратора')
         return
       }
 
@@ -55,7 +55,7 @@ export const useTransferWorkStore = defineStore(
           selectedMentorId.value,
           { showLoader: true }
         )
-        uiService.openSuccessModal('Работа успешно передана другому ментору')
+        uiService.openSuccessModal('Работа успешно передана другому куратору')
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при передаче работы', e.message)
       }
@@ -65,22 +65,17 @@ export const useTransferWorkStore = defineStore(
      * Transfer works to mentor
      */
     async function transferWorks(works: AssignedWork[]) {
-      uiService.setLoading(true)
-
       try {
-        await Promise.all(
-          works.map((work) =>
-            assignedWorkService.transferAssignedWork(
-              work.id,
-              selectedMentorId.value
-            )
+        for (const work of works) {
+          await assignedWorkService.transferAssignedWork(
+            work.id,
+            selectedMentorId.value,
+            { showLoader: true }
           )
-        )
+        }
         uiService.openSuccessModal('Работы успешно переданы другому ментору')
       } catch (error: any) {
         uiService.openErrorModal('Ошибка при передаче работ', error.message)
-      } finally {
-        uiService.setLoading(false)
       }
     }
 
