@@ -73,8 +73,8 @@ const cols: ColType[] = [
     value: (a: AssignedWork) => {
       return [
         a.checkDeadlineShifted
-          ? `➡️📃 ${textifyDate(a.solveDeadlineAt)}`
-          : textifyDate(a.solveDeadlineAt),
+          ? `➡️📃 ${textifyDate(a.checkDeadlineAt)}`
+          : textifyDate(a.checkDeadlineAt),
         textifyDate(a.checkedAt)
       ]
     }

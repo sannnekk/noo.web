@@ -34,7 +34,7 @@ const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 const model = ref(getWordAnswer())
-watch(model, insertWordAnswer)
+watch(model, insertWordAnswer, { immediate: true })
 
 function insertWordAnswer(value: string) {
   let answer = props.modelValue.answers.find(
