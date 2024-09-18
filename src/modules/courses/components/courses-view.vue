@@ -19,6 +19,12 @@
         </common-button>
       </div>
     </div>
+    <div class="courses-view__filters">
+      <search-filters
+        :filters="filters"
+        v-model:pagination="coursesStore.pagination"
+      />
+    </div>
     <div
       class="row"
       v-if="coursesStore.resultsMeta.total > 0 && !coursesStore.isListLoading"
@@ -67,8 +73,12 @@
 <script lang="ts" setup>
 import { Core } from '@/core/Core'
 import { useCoursesStore } from '../stores/courses'
+import type { SearchFilter } from '@/components/search/filters/SearchFilter'
+import { subjectFilter } from '@/core/filters/subject-filter'
 
 const coursesStore = useCoursesStore()
+
+const filters: SearchFilter[] = [subjectFilter()]
 </script>
 
 <style scoped lang="sass">
@@ -119,4 +129,7 @@ const coursesStore = useCoursesStore()
       @media screen and (max-width: 768px)
         margin-bottom: 1em
         font-size: 12px
+
+  &__filters
+    margin-bottom: 1em
 </style>
