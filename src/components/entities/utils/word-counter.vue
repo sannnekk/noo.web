@@ -65,13 +65,21 @@ watch(
  * - do not count punctuation
  */
 function wordCounter(value: DeltaContentType) {
-  const text = value.ops
-    .map((op) => op.insert)
-    .join(' ')
+  const text = toText(value.ops)
     .replace('\n', ' ')
     .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
   const words = text.split(' ').filter((word) => isNaN(Number(word)))
   return words.length
+}
+
+function toText(ops: DeltaContentType['ops']): string {
+  let result = ''
+
+  for (const op of ops) {
+    result += op.insert
+  }
+
+  return result
 }
 </script>
 

@@ -144,8 +144,8 @@ function getCommentCounts() {
   // apply this to detailed score
   for (const [key, value] of Object.entries(counts)) {
     if (model.value[key] !== undefined) {
-      model.value[key] =
-        model.value[key] - value > 0 ? model.value[key] - value : 0
+      const newScore = model.value[key] - value
+      model.value[key] = newScore < 0 ? 0 : newScore
     }
   }
 

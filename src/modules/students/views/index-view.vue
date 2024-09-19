@@ -2,7 +2,6 @@
   <div class="index-students-view">
     <div class="index-students-view__search">
       <search-field
-        v-if="typeof studentsStore.pagination.search !== 'undefined'"
         v-model="studentsStore.pagination.search"
         :is-loading="studentsStore.isListLoading"
       />

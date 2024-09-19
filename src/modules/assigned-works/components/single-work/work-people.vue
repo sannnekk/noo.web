@@ -5,18 +5,22 @@
   >
     <div class="work-people__student">
       <label>Ученик: </label>
-      <user-card :user="assignedWorkStore.assignedWork.student!" />
+      <div class="work-people__student__user">
+        <user-card :user="assignedWorkStore.assignedWork.student!" />
+      </div>
     </div>
     <div
       class="work-people__mentors"
       v-if="assignedWorkStore.assignedWork.work?.type !== 'test'"
     >
       <label>Проверяющие кураторы: </label>
-      <user-card
+      <div
+        class="work-people__mentors__mentor"
         v-for="mentor in assignedWorkStore.assignedWork.mentors"
-        :user="mentor"
         :key="mentor.id"
-      />
+      >
+        <user-card :user="mentor" />
+      </div>
     </div>
   </div>
 </template>
@@ -38,6 +42,12 @@ const assignedWorkStore = useAssignedWorkStore()
 		margin-bottom: 1em
 		font-size: 0.8em
 
+		&__user
+			margin-top: 0.5em
+
 	&__mentors
 		font-size: 0.8em
+
+		&__mentor
+			margin-top: 0.5em
 </style>

@@ -23,7 +23,7 @@ export default {
       children: [
         {
           path: ':mode',
-          name: 'Комментари',
+          name: 'Комментарии к работе',
           component: WorkCommentsView
         },
         {
