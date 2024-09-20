@@ -17,13 +17,14 @@ export const HOT_KEYS: HotKeyDefinition[] = [
     shortcut: ['Ctrl', 'l'],
     handler: () => {
       const assignedWorkStore = useCreateCourseStore()
+      assignedWorkStore.newChapterName = 'Новая глава'
       assignedWorkStore.addChapter()
     }
   },
   {
-    keys: ['Ctrl', 'k'],
+    keys: ['Ctrl', 'u'],
     description: 'Добавить материал',
-    shortcut: ['Ctrl', 'k'],
+    shortcut: ['Ctrl', 'u'],
     handler: () => {
       const assignedWorkStore = useCreateCourseStore()
       assignedWorkStore.addMaterial()

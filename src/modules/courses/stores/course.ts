@@ -2,7 +2,7 @@ import { Core } from '@/core/Core'
 import { defineStore } from 'pinia'
 import { type Course } from '@/core/data/entities/Course'
 import type { Material } from '@/core/data/entities/Material'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { NotificationSendOptions } from '@/core/services/store/NotificationService'
 import type { Notification } from '@/core/data/entities/Notification'
@@ -16,18 +16,27 @@ export const useCourseStore = defineStore('courses-module:course', () => {
   const _route = useRoute()
   const _router = useRouter()
 
+  const materialSlug = computed(() => _route.params.slug as string)
+
   /**
    * The current course
    */
   const course = ref<Course | null>(null)
+
   /**
    * The current material
    */
-  const material = computed<Material | undefined>(() => {
-    if (!_route.params.slug) return undefined
+  const material = ref<Material | undefined>(
+    getMaterialBySlug(_route.params.slug as string)
+  )
 
-    return getMaterialBySlug(_route.params.slug as string)
-  })
+  watch(
+    [materialSlug, course],
+    ([slug]) => (material.value = getMaterialBySlug(slug)),
+    {
+      immediate: true
+    }
+  )
 
   /**
    * The materials tree
@@ -66,7 +75,7 @@ export const useCourseStore = defineStore('courses-module:course', () => {
    * Get the material by its slug
    */
   function getMaterialBySlug(slug: string): Material | undefined {
-    if (!course.value || !course.value?.chapters) return undefined
+    if (!course.value?.chapters?.length) return undefined
 
     const materials = course.value.chapters.flatMap(
       (chapter) => chapter!.materials

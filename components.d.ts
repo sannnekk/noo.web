@@ -102,6 +102,7 @@ declare module 'vue' {
     LoaderIcon: typeof import('./src/components/common/loader-icon.vue')['default']
     LogoutButton: typeof import('./src/components/actions/logout-button.vue')['default']
     MainLogo: typeof import('./src/components/common/main-logo.vue')['default']
+    MaterialForm: typeof import('./src/components/form/entity-create/material-form.vue')['default']
     MoonIcon: typeof import('./src/components/decorations/icons/moon-icon.vue')['default']
     MoreIcon: typeof import('./src/components/decorations/icons/more-icon.vue')['default']
     MoreWidget: typeof import('./src/components/widgets/more-widget.vue')['default']
@@ -200,6 +201,7 @@ declare module 'vue' {
     WarningBlock: typeof import('./src/components/common/warning-block.vue')['default']
     WelcomeIcon: typeof import('./src/components/decorations/icons/welcome-icon.vue')['default']
     WordCounter: typeof import('./src/components/entities/utils/word-counter.vue')['default']
+    WorkSelect: typeof import('./src/components/form/entity-select/work-select.vue')['default']
     WorkTypeSelect: typeof import('./src/components/form/prop-select/work-type-select.vue')['default']
   }
 }

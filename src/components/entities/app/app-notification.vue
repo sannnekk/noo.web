@@ -60,7 +60,7 @@ const icon = computed<IconName>(() => {
     case 'new-feature':
       return 'add'
     case 'announcement':
-      return 'danger'
+      return 'attention-yellow'
     case 'mentor-assigned':
       return 'heart'
     case 'mentor-removed':

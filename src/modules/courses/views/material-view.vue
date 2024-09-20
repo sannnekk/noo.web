@@ -8,31 +8,61 @@
       <div class="material-view__header__title">
         <h1>{{ courseStore.material.name }}</h1>
       </div>
-      <div
-        class="material-view__header__work-widget"
-        v-if="courseStore.material.workId && Core.Context.roleIs(['student'])"
-      >
-        <div class="material-view__header__work-widget__progress">
-          <assigned-work-progress :workId="courseStore.material.workId" />
-        </div>
-        <div class="material-view__header__work-widget__link">
-          <common-button
-            @click="courseStore.assignMeWork()"
-            alignment="right"
-          >
-            К работе
-          </common-button>
-        </div>
-      </div>
-      <div
-        class="material-view__header__work-link"
-        v-if="Core.Context.roleIs(['teacher'])"
-      >
+    </div>
+    <div
+      class="material-view__change-assigned-work"
+      v-if="Core.Context.roleIs(['teacher', 'admin'])"
+    >
+      <p v-if="courseStore.material.work">
+        Присвоенная работа:
+        <router-link :to="`/create-work${courseStore.material.work.slug}`">
+          {{ courseStore.material.work.name }}
+        </router-link>
+        <br />
+        <span v-if="courseStore.material.workSolveDeadline">
+          Дедлайн сдачи:
+          <b>{{
+            useDate(courseStore.material.workSolveDeadline, {
+              precision: 'day'
+            }).toBeautiful()
+          }}</b>
+        </span>
+        <span v-if="courseStore.material.workCheckDeadline">
+          <br />
+          Дедлайн проверки:
+          <b>{{
+            useDate(courseStore.material.workCheckDeadline, {
+              precision: 'day'
+            }).toBeautiful()
+          }}</b>
+        </span>
+      </p>
+      <p v-else>Работа не присвоена</p>
+      <div class="material-view__change-assigned-work__actions">
         <common-button @click="assignWorkStore.modalVisible = true">
           {{
             courseStore.material.work ? 'Поменять работу' : 'Присвоить работу'
           }}
         </common-button>
+        <common-button
+          @click="assignWorkStore.unassignModalVisible = true"
+          design="secondary"
+        >
+          Открепить работу
+        </common-button>
+      </div>
+    </div>
+    <div
+      class="material-view__assigned-work"
+      v-if="courseStore.material.workId && Core.Context.roleIs(['student'])"
+    >
+      <div class="material-view__assigned-work__link">
+        <common-button @click="courseStore.assignMeWork()">
+          К работе
+        </common-button>
+      </div>
+      <div class="material-view__assigned-work__progress">
+        <assigned-work-progress :workId="courseStore.material.workId" />
       </div>
     </div>
     <div
@@ -41,10 +71,6 @@
     >
       <div v-html="courseStore.material.description"></div>
     </div>
-    <div
-      v-else
-      class="material-view__separator"
-    ></div>
     <div class="material-view__content">
       <rich-text-container :content="courseStore.material.content" />
     </div>
@@ -53,6 +79,11 @@
       v-if="courseStore.material.pollId"
     >
       <h3>К этому материалу прикреплен опрос</h3>
+      <p v-if="courseStore.material.poll">
+        {{ courseStore.material.poll.title }}
+        <br />
+        {{ courseStore.material.poll.description }}
+      </p>
       <common-button
         design="primary"
         :to="`/poll/${courseStore.material.pollId}`"
@@ -78,10 +109,13 @@
     Выберите материал из дерева слева
   </p>
   <assign-work-modal />
+  <unassign-work-modal />
 </template>
 
 <script setup lang="ts">
+import UnassignWorkModal from '../components/unassign-work-modal.vue'
 import AssignWorkModal from '../components/assign-work-modal.vue'
+import { useDate } from '@/composables/useDate'
 import { Core } from '@/core/Core'
 import { useCourseStore } from '../stores/course'
 import { useAssignWorkToMaterialStore } from '../stores/assign-work'
@@ -92,63 +126,36 @@ const assignWorkStore = useAssignWorkToMaterialStore()
 
 <style scoped lang="sass">
 .material-view
-  &__i-dont-see-works
-    font-size: 1.1em
-    color: var(--warning)
-    margin: 0
-    cursor: pointer
+  &__change-assigned-work
+    margin-bottom: 1em
 
-    &:hover
-      text-decoration: underline
-
-    &__i-see-works
-      cursor: pointer
-      color: var(--secondary)
-      font-weight: bold
+    a
+      color: var(--lila)
+      text-decoration: none
 
       &:hover
         text-decoration: underline
 
-  &__header
-    width: 100%
+    &__actions
+      display: flex
+      gap: 1em
+      margin-top: 1em
+
+      &:deep() > div
+        width: fit-content
+
+  &__assigned-work
     display: flex
-    justify-content: space-between
-
-    @media screen and (max-width: 768px)
-      flex-direction: column
-
-    &__title
-      flex: 1
-      margin-top: 0.6em
-
-    &__work-widget
-      max-width: 300px
-      text-align: right
-
-      @media screen and (max-width: 768px)
-        margin-bottom: 1em
-
-      &__link
-        .v-button:deep()
-          button
-            font-size: 1.05em
-
-      &__progress
-        margin-bottom: 0.5em
-        text-align: center
+    gap: 1em
+    align-items: center
+    margin-bottom: 1em
 
   &__description
-    padding: 1rem
-    margin-right: 1rem
+    padding: 1em
+    margin: 1em 0
     border-radius: var(--border-radius)
     border: 1px solid var(--secondary)
     background: var(--secondary)
-    margin-bottom: 1rem
-
-  &__separator
-    height: 1px
-    background-color: var(--border-color)
-    margin-top: 1em
     margin-bottom: 1rem
 
   &__content:deep()
@@ -163,19 +170,4 @@ const assignWorkStore = useAssignWorkToMaterialStore()
     margin-top: 1em
     padding-top: 1em
     border-top: 1px solid var(--border-color)
-
-.assign-work-to-material-modal
-  &__current-work-link
-    text-decoration: none
-    color: var(--dark)
-    font-weight: bold
-
-    &:hover
-      text-decoration: underline
-
-  &__deadlines
-    display: flex
-    justify-content: space-between
-    gap: 1em
 </style>
-../stores/courses

@@ -19,8 +19,8 @@ export interface Material extends Entity {
   files: Media[]
   createdAt: Date
   updatedAt: Date
-  workSolveDeadline?: Date
-  workCheckDeadline?: Date
+  workSolveDeadline: Date | null
+  workCheckDeadline: Date | null
   poll?: Poll
   pollId?: Poll['id']
 }

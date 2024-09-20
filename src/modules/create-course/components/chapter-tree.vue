@@ -7,40 +7,50 @@
     <template v-slot="chapter">
       <div class="chapter-tree__item">
         <div class="chapter-tree__item__title">
-          <span class="chapter-tree__item__title__dragger handle-chapters">
-            ::
-          </span>
           <span class="chapter-tree__item__title__text">
+            <span class="chapter-tree__item__title__dragger handle-chapters">
+              ::
+            </span>
             {{ chapter.item.name }}
           </span>
-          <div class="chapter-tree__item__title__is-active">
-            <inline-icon
-              :key="chapter.item.isActive"
-              :name="chapter.item.isActive ? 'check-green' : 'cross-red'"
-              :title="
-                chapter.item.isActive ? 'Глава активна' : 'Глава не активна'
-              "
-              @click="onToggleChapterIsActive(chapter.item)"
-            />
+          <div class="chapter-tree__item__title__actions">
+            <div
+              class="chapter-tree__item__title__is-active"
+              title="Активировать/деактивировать главу"
+            >
+              <inline-icon
+                :key="chapter.item.isActive"
+                :name="chapter.item.isActive ? 'check-green' : 'cross-red'"
+                :title="
+                  chapter.item.isActive ? 'Глава активна' : 'Глава не активна'
+                "
+                @click="onToggleChapterIsActive(chapter.item)"
+              />
+            </div>
+            <div
+              class="chapter-tree__item__title__edit"
+              @click="onChapterCopy(chapter.item)"
+              title="Копировать главу"
+            >
+              <inline-icon name="copy" />
+            </div>
+            <div
+              class="chapter-tree__item__title__edit"
+              @click="onChapterNameChange(chapter.item.slug, chapter.item.name)"
+              title="Изменить название главы"
+            >
+              <inline-icon name="edit" />
+            </div>
+            <span
+              class="chapter-tree__item__title__remove"
+              title="Удалить главу"
+            >
+              <inline-icon
+                name="delete"
+                @click="onChapterRemove(chapter.item.slug)"
+              />
+            </span>
           </div>
-          <div
-            class="chapter-tree__item__title__edit"
-            @click="onChapterCopy(chapter.item)"
-          >
-            <inline-icon name="copy" />
-          </div>
-          <div
-            class="chapter-tree__item__title__edit"
-            @click="onChapterNameChange(chapter.item.slug, chapter.item.name)"
-          >
-            <inline-icon name="edit" />
-          </div>
-          <span class="chapter-tree__item__title__remove">
-            <inline-icon
-              name="delete"
-              @click="onChapterRemove(chapter.item.slug)"
-            />
-          </span>
         </div>
         <ul class="chapter-tree__item__materials">
           <draggable-list
@@ -78,6 +88,7 @@
                   <inline-icon
                     name="delete"
                     @click="onMaterialRemove(chapter.item.slug, item.slug)"
+                    title="Удалить материал"
                   />
                 </span>
               </li>
@@ -290,10 +301,15 @@ function addChapter() {
 
     &__title
       display: flex
-      align-items: center
+      flex-direction: column
       font-size: 1em
       font-weight: bold
       gap: 0.5em
+
+      &__actions
+        display: flex
+        gap: 0.5em
+        justify-content: flex-end
 
       &__dragger
         cursor: move
@@ -302,6 +318,7 @@ function addChapter() {
 
       &__text
         flex: 1
+        font-size: 0.8em
 
       &__is-active
         cursor: pointer

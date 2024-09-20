@@ -152,6 +152,18 @@ export class CourseService extends ApiService {
     )
   }
 
+  public async unassignWorkFromMaterial(
+    materialSlug: string,
+    options: ServiceOptions = {}
+  ) {
+    await this.httpPatch(
+      `${this._route}/${materialSlug}/unassign-work`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
   /**
    * Assign students to course
    */

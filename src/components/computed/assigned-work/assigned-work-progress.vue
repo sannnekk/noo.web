@@ -117,8 +117,6 @@ watch(() => props.workId, fetchProgress, { immediate: true })
 
 <style scoped lang="sass">
 .assigned-work-progress
-	text-align: right
-
 	&__text
 		display: inline-block
 		line-height: 1.1em

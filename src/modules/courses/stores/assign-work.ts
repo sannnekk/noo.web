@@ -6,6 +6,7 @@ import { useCourseStore } from './course'
 import { Core } from '@/core/Core'
 import type { Pagination } from '@/core/data/Pagination'
 import { useSearch } from '@/composables/useSearch'
+import Date from '@/core/utils/date'
 
 export const useAssignWorkToMaterialStore = defineStore(
   'courses-module:assign-work',
@@ -36,6 +37,21 @@ export const useAssignWorkToMaterialStore = defineStore(
       courseStore.getMaterialBySlug(materialSlug.value)?.workId
     ])
 
+    /**
+     * Check deadline
+     */
+    const checkDeadline = ref<Date | undefined>(Date.inDays(3))
+
+    /**
+     * Solve deadline
+     */
+    const solveDeadline = ref<Date | undefined>(Date.inDays(0))
+
+    /**
+     * Deadlines visibility
+     */
+    const deadlinesAvailable = ref(false)
+
     watch(
       materialSlug,
       () => {
@@ -50,8 +66,8 @@ export const useAssignWorkToMaterialStore = defineStore(
         }
 
         selectedWorkId.value = [material.workId]
-        checkDeadline.value = material.workCheckDeadline || dateInThreeDays
-        solveDeadline.value = material.workSolveDeadline || new Date()
+        checkDeadline.value = material.workCheckDeadline || Date.inDays(3)
+        solveDeadline.value = material.workSolveDeadline || Date.inDays(0)
 
         deadlinesAvailable.value =
           !!material.workCheckDeadline || !!material.workSolveDeadline
@@ -60,26 +76,10 @@ export const useAssignWorkToMaterialStore = defineStore(
     )
 
     /**
-     * Check deadline
-     */
-    const dateInThreeDays = new Date()
-    dateInThreeDays.setDate(dateInThreeDays.getDate() + 3)
-    const checkDeadline = ref<Date | undefined>(dateInThreeDays)
-
-    /**
-     * Solve deadline
-     */
-    const solveDeadline = ref<Date | undefined>(new Date())
-
-    /**
-     * Deadlines visibility
-     */
-    const deadlinesAvailable = ref(false)
-
-    /**
      * Current modal visibility
      */
     const modalVisible = ref(false)
+    const unassignModalVisible = ref(false)
 
     /**
      * Watch for search query and load works
@@ -103,7 +103,7 @@ export const useAssignWorkToMaterialStore = defineStore(
      * Submit work to material
      */
     async function assign() {
-      if (Core.Context.roleIs(['admin', 'student', 'mentor'])) {
+      if (Core.Context.roleIs(['student', 'mentor'])) {
         return
       }
 
@@ -137,13 +137,50 @@ export const useAssignWorkToMaterialStore = defineStore(
       }
     }
 
+    /**
+     * Unassign work from material
+     */
+    async function unassign() {
+      if (Core.Context.roleIs(['student', 'mentor'])) {
+        return
+      }
+
+      if (!courseStore.getMaterialBySlug(materialSlug.value)?.workId) {
+        uiService.openWarningModal('Материал не содержит работы')
+        return
+      }
+
+      try {
+        await courseService.unassignWorkFromMaterial(materialSlug.value, {
+          showLoader: true
+        })
+
+        uiService.openSuccessModal('Работа успешно удалена из материала')
+        unassignModalVisible.value = false
+
+        if (courseStore.material) {
+          courseStore.material.work = undefined
+          courseStore.material.workId = undefined
+          courseStore.material.workCheckDeadline = null
+          courseStore.material.workSolveDeadline = null
+        }
+      } catch (error: any) {
+        uiService.openErrorModal(
+          'Произошла ошибка при удалении работы из материала',
+          error.message
+        )
+      }
+    }
+
     return {
       pagination,
       results,
       resultsMeta,
       isListLoading,
       assign,
+      unassign,
       modalVisible,
+      unassignModalVisible,
       selectedWorkId,
       checkDeadline,
       solveDeadline,

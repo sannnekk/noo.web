@@ -1,15 +1,23 @@
 <template>
-  <div
-    class="search-array-filter"
-    v-if="filter.arrayOptions && model"
-  >
-    <check-list
-      item-label-key="label"
-      item-key="value"
-      :items="options"
-      v-model="(model as any)"
-      multiple
-    />
+  <div class="search-array-filter">
+    <div
+      class="search-array-filter__body"
+      v-if="filter.arrayOptions && model && !isLoading"
+    >
+      <check-list
+        item-label-key="label"
+        item-key="value"
+        :items="options"
+        v-model="(model as any)"
+        multiple
+      />
+    </div>
+    <div
+      class="search-array-filter__loading"
+      v-else
+    >
+      <loader-icon contrast />
+    </div>
   </div>
 </template>
 
@@ -35,16 +43,22 @@ const model = computed({
   set: (value) => emits('update:modelValue', value)
 })
 
+const isLoading = ref(false)
+
 const options = ref<{ label: string; value: any }[]>([])
 
 watch(
   () => props.filter.arrayOptions,
   async (arrayOptions) => {
+    isLoading.value = true
+
     if (typeof arrayOptions === 'function') {
       options.value = await arrayOptions()
     } else {
       options.value = arrayOptions!
     }
+
+    isLoading.value = false
   },
   { immediate: true }
 )

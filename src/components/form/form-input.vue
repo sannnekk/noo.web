@@ -78,7 +78,7 @@ const model = computed({
     }
 
     if (props.type && props.type === 'date') {
-      return new Date(props.modelValue).toISOString().slice(0, 10)
+      return new Date(props.modelValue || new Date()).toISOString().slice(0, 10)
     } else if (props.type && props.type === 'datetime-local') {
       const date = new Date(props.modelValue)
       return new Date(date.getTime() - date.getTimezoneOffset() * 60000)

@@ -114,7 +114,7 @@ watch(
       &:not(&.router-link-active):hover
         color: var(--secondary)
 
-        &__icon
-          font-size: 1.5em
-          transform: translateY(0.5em)
+      &__icon
+        font-size: 1.5em
+        transform: translateY(0.3em)
 </style>

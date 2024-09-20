@@ -15,7 +15,7 @@
         v-for="(entity, index) in model"
         :key="index"
       >
-        <span>
+        <span :title="getLabel(entity)">
           {{ getLabel(entity) }}
         </span>
         <b
@@ -239,6 +239,9 @@ label
       font-size: 0.9em
       white-space: nowrap
       font-weight: 500
+      display: block
+      text-overflow: ellipsis
+      overflow: hidden
 
       &__remove
         margin-left: 0.5rem
