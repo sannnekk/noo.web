@@ -11,7 +11,10 @@
       :action="prompt.action"
       v-model:visible="prompt.visible"
     />
-    <div class="quill-editor__content">
+    <div
+      class="quill-editor__content"
+      :class="{ 'quill-editor__content--readonly': readonly }"
+    >
       <div
         ref="container"
         @beforeinput="
@@ -25,7 +28,7 @@
       ></div>
     </div>
     <quill-comment-popup
-      v-model="comment"
+      v-model="comment as PositionedComment & PositionedImageComment"
       :comment-types="commentTypes"
       @submit="onCommentSubmit()"
     />
@@ -523,6 +526,17 @@ function handleEditorClick(event: MouseEvent) {
     return
   }
 
+  if (classNames.includes('delete-button')) {
+    const src = target.parentNode?.querySelector('img')?.src
+
+    if (!src) {
+      return
+    }
+
+    quill?.deleteImage(src)
+    return
+  }
+
   if (classNames.includes('ql-image-comment-selection')) {
     const height = target.dataset.height ? parseInt(target.dataset.height) : 0
     const width = target.dataset.width ? parseInt(target.dataset.width) : 0
@@ -634,6 +648,35 @@ function syncImageSelections() {
     padding: 0.5em
     transition: height 0.3s ease
 
+    &:not(&--readonly)
+      :deep()
+        .ql-image
+          .delete-button
+            display: none !important
+            justify-content: center
+            align-items: center
+            position: absolute
+            top: 20px
+            right: 10px
+            color: white
+            width: 30px
+            height: 30px
+            border-radius: 50%
+            font-size: 32px
+            line-height: 1
+            text-align: center
+            transform: rotate(45deg)
+            cursor: pointer
+            border: none
+            background-color: var(--text-light)
+
+            &:hover
+              background-color: var(--dark)
+
+          &:hover
+            .delete-button
+              display: flex !important
+
     :deep()
       .ql-editor
         outline: none
@@ -653,6 +696,9 @@ function syncImageSelections() {
 
       .ql-image
         position: relative
+
+        .delete-button
+          display: none !important
 
       a
         color: var(--lila)

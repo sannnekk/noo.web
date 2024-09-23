@@ -45,6 +45,7 @@
           }}
         </common-button>
         <common-button
+          v-if="courseStore.material.work"
           @click="assignWorkStore.unassignModalVisible = true"
           design="secondary"
         >

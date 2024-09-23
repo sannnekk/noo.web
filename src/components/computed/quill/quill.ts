@@ -235,6 +235,37 @@ export class CustomQuill extends Quill {
     }
   }
 
+  public deleteImage(src: string) {
+    const contents = this.getContents()
+    const currentOpIndex = contents.ops.findIndex((op) => {
+      return (
+        op.insert &&
+        (op.insert as any).image &&
+        (op.insert as any).image === src
+      )
+    })
+
+    let index = contents.ops.reduce((acc, op, i) => {
+      if (i > currentOpIndex) return acc
+      if (op.insert && typeof op.insert === 'string') {
+        return acc + op.insert.length
+      }
+      return acc + 1
+    }, 0)
+
+    if (currentOpIndex !== -1) {
+      this.focus()
+
+      if (this.getContents(index, 1).ops[0].insert !== '*') {
+        index = index - 1
+      }
+
+      this.setSelection(index, 1, 'silent')
+      this.deleteText(index, 1, 'silent')
+      this.setSelection(0, 0, 'silent')
+    }
+  }
+
   public async promptFile(): Promise<File | null> {
     return new Promise((resolve) => {
       const input = document.createElement('input')

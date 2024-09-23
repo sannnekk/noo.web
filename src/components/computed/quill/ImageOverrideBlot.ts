@@ -12,7 +12,13 @@ export class ImageOverrideBlot extends Embed {
     const image = document.createElement('img') as HTMLElement
     image.setAttribute('src', value)
 
+    const deleteButton = document.createElement('button') as HTMLElement
+    deleteButton.innerHTML = '+'
+    deleteButton.classList.add('delete-button')
+
     node.appendChild(image)
+    node.appendChild(deleteButton)
+
     return node
   }
 

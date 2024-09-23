@@ -303,7 +303,7 @@ export const useAssignedWorkStore = defineStore(
           )
           uiService.openSuccessModal(
             'Работа успешно сдана!',
-            '',
+            'Если работа без открытых вопросов, она будет проверена автоматически и Вы можете просмотреть результат сразу. В случае работ с хотя б одним открытым вопросом требуется проверка куратора',
             onSolvedActions
           )
         } else if (mode.value === 'check') {
@@ -317,19 +317,15 @@ export const useAssignedWorkStore = defineStore(
             },
             { showLoader: true }
           )
-          uiService.openSuccessModal(
-            'Работа успешно проверена!',
-            'Если работа без открытых вопросов, она будет проверена автоматически и Вы можете просмотреть результат сразу. В случае работ с хотя б одним открытым вопросом требуется проверка куратора',
-            [
-              {
-                label: 'Вернуться к списку работ',
-                design: 'primary',
-                handler: () => {
-                  window.location.href = '/assigned-works'
-                }
+          uiService.openSuccessModal('Работа успешно проверена!', '', [
+            {
+              label: 'Вернуться к списку работ',
+              design: 'primary',
+              handler: () => {
+                window.location.href = '/assigned-works'
               }
-            ]
-          )
+            }
+          ])
         }
       } catch (e: any) {
         uiService.openErrorModal('Ошибка при отправке работы', e.message)
