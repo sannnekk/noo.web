@@ -73,8 +73,8 @@ const cols: ColType[] = [
     type: 'date',
     joinType: '/',
     value: (material: Material) => [
-      material.workCheckDeadline,
-      material.workSolveDeadline
+      material.workSolveDeadline,
+      material.workCheckDeadline
     ]
   }
 ]

@@ -6,7 +6,7 @@
         :to="link"
       >
         <uploaded-image
-          :src="course.images?.at(0)?.src"
+          :src="courseImage"
           alt="Card title"
         />
       </router-link>
@@ -103,6 +103,10 @@ const actions = reactive<MenuItem[]>([
 const router = useRouter()
 
 const link = computed(() => `/courses/${props.course.slug}`)
+
+const courseImage = computed(() => {
+  return props.course.images?.at(0)?.src || undefined
+})
 
 function copyCourseLink(thisRef: any) {
   copyText(`${Core.Constants.APP_URL}${link.value}`)

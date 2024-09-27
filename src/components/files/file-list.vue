@@ -62,7 +62,21 @@ function onFileSelect(current: Media | ExtendedMedia) {
 }
 
 function getExtension(mimeType: string) {
-  return (mimeType?.split('/')?.at(1) || 'pdf') as 'png' | 'jpeg' | 'pdf'
+  if (!mimeType || !mimeType.includes('/')) {
+    return 'pdf'
+  }
+
+  switch (mimeType.split('/')[1]) {
+    case 'pdf':
+      return 'pdf'
+    case 'jpeg':
+    case 'jpg':
+      return 'jpeg'
+    case 'png':
+      return 'png'
+    default:
+      return 'pdf'
+  }
 }
 </script>
 
