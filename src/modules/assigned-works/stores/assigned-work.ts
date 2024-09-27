@@ -9,7 +9,7 @@ import type { ModalAction } from '@/core/services/store/UIStore'
 import { debounce } from '@/core/utils/debounce'
 import type { ReadableWorkScore } from '../types/ReadableWorkScore'
 import type { AssignedWorkViewMode } from '../types/AssignedWorkViewMode'
-import { getTaskScoreStatus } from '../utils/task'
+import { getTaskScoreStatus, isCheckedAutomatically } from '../utils/task'
 
 export const useAssignedWorkStore = defineStore(
   'assigned-works-module:assigned-work',
@@ -280,7 +280,9 @@ export const useAssignedWorkStore = defineStore(
       ]
 
       if (
-        assignedWork.value.work?.tasks.every((task) => task.type !== 'text')
+        assignedWork.value.work?.tasks.every((task) =>
+          isCheckedAutomatically(task.type)
+        )
       ) {
         onSolvedActions.unshift({
           label: 'Посмотреть результат',
@@ -303,7 +305,7 @@ export const useAssignedWorkStore = defineStore(
           )
           uiService.openSuccessModal(
             'Работа успешно сдана!',
-            'Если работа без открытых вопросов, она будет проверена автоматически и Вы можете просмотреть результат сразу. В случае работ с хотя б одним открытым вопросом требуется проверка куратора',
+            'Если работа без открытых вопросов, она будет проверена автоматически и Вы можете просмотреть результат сразу. В случае работ с хотя бы одним открытым вопросом требуется проверка куратора',
             onSolvedActions
           )
         } else if (mode.value === 'check') {

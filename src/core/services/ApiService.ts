@@ -102,12 +102,23 @@ export class ApiService extends Service {
   /**
    * Upload files request
    */
-  protected uploadFiles(files: File[], progress: (progress: number) => void) {
+  protected uploadFiles(
+    files: File[],
+    progress: (progress: number) => void,
+    serviceOptions: ServiceOptions = {}
+  ) {
     return new Promise<ApiResponse<Media[]>>((resolve, reject) => {
       const formData = new FormData()
 
       for (const file of files) {
         formData.append('files', file)
+      }
+
+      this.onProgress(0)
+
+      if (serviceOptions.showLoader) {
+        this.uiService.setLoading(true)
+        this.onProgress(5)
       }
 
       const request = new XMLHttpRequest()
@@ -116,10 +127,10 @@ export class ApiService extends Service {
 
       request.upload.addEventListener('progress', (event) => {
         if (event.lengthComputable) {
-          progress.call(
-            undefined,
-            Math.round((event.loaded / event.total) * 100)
-          )
+          const percentage = Math.round((event.loaded / event.total) * 100)
+
+          progress.call(undefined, percentage)
+          this.onProgress(percentage)
         }
       })
 
@@ -135,6 +146,11 @@ export class ApiService extends Service {
       })
 
       request.addEventListener('load', () => {
+        if (serviceOptions.showLoader) {
+          this.onProgress(100)
+          this.uiService.setLoading(false)
+        }
+
         if (request.status < 400) {
           try {
             resolve(JSON.parse(request.responseText))

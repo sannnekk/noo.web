@@ -282,11 +282,13 @@ export class CustomQuill extends Quill {
   }
 
   private async uploadFile(file: File) {
-    Core.Services.UI.setLoading(true)
-
     try {
       if (file.size > this.MAX_FILE_SIZE) {
-        throw new Error('Файл слишком большой, максимальный размер файла 3 МБ')
+        throw new Error(
+          `Файл слишком большой, максимальный размер файла ${Math.floor(
+            this.MAX_FILE_SIZE / 1024 / 1024
+          )} МБ`
+        )
       }
 
       if (!this.ALLOWED_MIME_TYPES.includes(file.type as any)) {
@@ -296,7 +298,13 @@ export class CustomQuill extends Quill {
         )
       }
 
-      const { data: mediaFiles } = await Core.Services.Media.upload([file])
+      const { data: mediaFiles } = await Core.Services.Media.upload(
+        [file],
+        undefined,
+        {
+          showLoader: true
+        }
+      )
 
       if (!mediaFiles) {
         throw new Error('Не удалось загрузить файл')
@@ -309,8 +317,6 @@ export class CustomQuill extends Quill {
       return Core.Constants.MEDIA_URL + '/' + mediaFiles[0].src
     } catch (e: any) {
       Core.Services.UI.openErrorModal('Ошибка загрузки файла', e.message)
-    } finally {
-      Core.Services.UI.setLoading(false)
     }
   }
 

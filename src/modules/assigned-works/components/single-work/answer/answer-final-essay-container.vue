@@ -74,7 +74,7 @@ const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 const model = ref<DeltaContentType>(getTextAnswer())
-watch(model, insertTextAnswer, { deep: true })
+watch(model, insertTextAnswer, { deep: true, immediate: true })
 
 const criteria = ref<CriteriaItem[]>([])
 setCriteria()

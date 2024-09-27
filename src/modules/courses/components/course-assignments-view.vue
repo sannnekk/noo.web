@@ -45,7 +45,7 @@
         />
       </div>
       <p class="course-assignments-view__nothing-found__text">
-        Курсы не найдены. Попробуйте перезагрузить страинцу
+        Курсы не найдены. Попробуйте перезагрузить страницу
       </p>
     </div>
     <div class="course-assignments-view__pagination">

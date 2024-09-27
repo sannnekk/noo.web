@@ -40,7 +40,7 @@
       <telegram-auth-button @authenticated="onAuthenticated($event)" />
     </div>
     <info-block>
-      Платформа получит доступ только к тем данным, которые досутпны всем
+      Платформа получит доступ только к тем данным, которые доступны всем
       пользователям Telegram.
     </info-block>
   </div>

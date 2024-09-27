@@ -79,6 +79,8 @@ watch(
   list-style: none
   margin: 0
   margin-top: 1em
+  max-height: 80vh
+  overflow-y: auto
 
   &:not(.lvl-0):not(.lvl-1)
     margin-left: 0.5rem
