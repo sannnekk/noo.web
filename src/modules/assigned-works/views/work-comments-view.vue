@@ -1,6 +1,7 @@
 <template>
   <div
     class="work-comments-view"
+    :key="assignedWorkStore.assignedWork?.id"
     v-if="assignedWorkStore.assignedWork"
   >
     <work-comment

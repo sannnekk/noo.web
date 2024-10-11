@@ -23,4 +23,6 @@ export interface Material extends Entity {
   workCheckDeadline: Date | null
   poll?: Poll
   pollId?: Poll['id']
+  reactionCounts?: Record<string, number>
+  myReaction?: string
 }

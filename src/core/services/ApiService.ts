@@ -9,6 +9,7 @@ type ApiRoute = `/${string}`
 
 export interface ServiceOptions {
   showLoader?: boolean
+  timeout?: number
 }
 
 export interface ApiResponse<T> {
@@ -219,7 +220,11 @@ export class ApiService extends Service {
     }
 
     try {
-      return (await this.xhrRequest(url, options)) as any
+      return (await this.xhrRequest(
+        url,
+        options,
+        serviceOptions.timeout
+      )) as any
     } catch (error: any) {
       if (error.status === 401) {
         if (this._context.isInitialized()) {
@@ -237,9 +242,17 @@ export class ApiService extends Service {
     }
   }
 
-  private async xhrRequest(url: string, options: RequestInit) {
+  private async xhrRequest(
+    url: string,
+    options: RequestInit,
+    timeout?: number
+  ) {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
+
+      if (timeout) {
+        xhr.timeout = timeout
+      }
 
       xhr.open(options.method || 'GET', url)
 

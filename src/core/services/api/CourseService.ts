@@ -5,6 +5,7 @@ import type { Pagination } from '@/core/data/Pagination'
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { User } from '@/core/data/entities/User'
 import type { CourseAssignment } from '@/core/data/entities/CourseAssignment'
+import type { Material } from '@/core/data/entities/Material'
 
 type Deadlines = { checkDeadline?: Date; solveDeadline?: Date }
 
@@ -59,6 +60,22 @@ export class CourseService extends ApiService {
     return await this.httpGet<CourseAssignment[]>(
       `${this._route}/student/${studentId}`,
       pagination,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Get course materials
+   */
+  public async toggleReaction(
+    id: Material['id'],
+    reaction: string,
+    options: ServiceOptions = {}
+  ) {
+    return await this.httpPatch<Material['reactionCounts']>(
+      `${this._route}/material/${id}/react/${reaction}`,
+      undefined,
       undefined,
       options
     )
@@ -152,6 +169,9 @@ export class CourseService extends ApiService {
     )
   }
 
+  /**
+   * Unassign work from material
+   */
   public async unassignWorkFromMaterial(
     materialSlug: string,
     options: ServiceOptions = {}

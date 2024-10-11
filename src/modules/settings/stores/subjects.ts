@@ -53,7 +53,6 @@ export const useSubjectsStore = defineStore('settings-module:subjects', () => {
   }
 
   async function deleteSubject(subject: Subject) {
-    console.log('deleteSubject', subject)
     try {
       await subjectService.deleteSubject(subject.id, {
         showLoader: true

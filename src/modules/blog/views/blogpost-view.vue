@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="blogpost-view__reactions">
-      <blogpost-reactions
+      <user-reactions
         :reactions="postStore.post.reactionCounts"
         :myReaction="postStore.post.myReaction"
         :loading="blogStore.isReactionLoading"
@@ -61,20 +61,18 @@
     >
       <file-list
         label="Прикрепленные файлы"
-        :files="postStore.post.files as any as FileItem[]"
+        :files="postStore.post.files"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import blogpostReactions from '../components/blogpost-reactions.vue'
 import { useDate } from '@/composables/useDate'
 import { usePostStore } from '../stores/post'
 import { useBlogStore } from '../stores/blog'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { Core } from '@/core/Core'
-import type { FileItem } from '@/types/composed/FileItem'
 
 const postStore = usePostStore()
 const blogStore = useBlogStore()

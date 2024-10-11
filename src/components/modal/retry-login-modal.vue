@@ -116,11 +116,6 @@ watch(
   () => props.modelValue.isOpen,
   (isOpen) => {
     if (isOpen) {
-      console.log('retry-login-modal: opened')
-      console.log(
-        'retry-login-modal: usernameOrEmail',
-        Core.Context.User!.username
-      )
       model.value.usernameOrEmail = Core.Context.User!.username
     }
   },

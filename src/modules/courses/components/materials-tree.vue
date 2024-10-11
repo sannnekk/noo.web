@@ -5,34 +5,37 @@
   >
     <li
       class="materials-tree__item"
-      :class="{ 'materials-tree__item--opened': subject.opened }"
-      v-for="subject in dataModel"
-      :key="subject.id"
+      :class="{ 'materials-tree__item--opened': item.opened }"
+      v-for="item in dataModel"
+      :key="item.id"
       v-auto-animate
     >
       <list-opener-arrow
-        v-if="subject.children && !!subject.children.length"
-        :opened="subject.opened"
-        @click="subject.opened = !subject.opened"
+        v-if="item.children && !!item.children.length"
+        :opened="item.opened"
+        @click="item.opened = !item.opened"
       />
       <component
-        :is="
-          subject.children && subject.children.length ? 'span' : 'router-link'
-        "
-        @click="subject.opened = !subject.opened"
+        :is="item.children && item.children.length ? 'span' : 'router-link'"
+        @click="item.opened = !item.opened"
         class="materials-tree__item__name"
-        :to="`/courses/${$route.params.courseSlug}/${subject.slug}`"
+        :to="`/courses/${$route.params.courseSlug}/${item.slug}`"
       >
         <inline-icon
           class="materials-tree__item__name__icon"
           name="uni-cap"
-          v-if="subject.workId"
+          v-if="item.workId"
         />
-        {{ subject.name }}
+        {{ item.name }}
+        <inline-emoji
+          class="materials-tree__item__name__reaction"
+          v-if="item.myReaction && Core.Context.roleIs(['student'])"
+          :name="item.myReaction"
+        />
       </component>
       <materials-tree
-        v-if="subject.children && subject.children.length && subject.opened"
-        :data="subject.children"
+        v-if="item.children && item.children.length && item.opened"
+        :data="item.children"
         :nesting-level="nestingLevel + 1"
       />
     </li>
@@ -40,13 +43,17 @@
 </template>
 
 <script setup lang="ts">
+import { Core } from '@/core/Core'
+import type { Chapter } from '@/core/data/entities/Chapter'
 import type { Course } from '@/core/data/entities/Course'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 interface Props {
   data: (Pick<Course, 'id' | 'name' | 'slug'> & {
     children?: Pick<Course, 'id' | 'name' | 'slug'>[]
     workId?: string
+    myReaction?: string
   })[]
   nestingLevel?: number
 }
@@ -55,9 +62,12 @@ const props = withDefaults(defineProps<Props>(), {
   nestingLevel: 0
 })
 
+const route = useRoute()
+const materialSlug = computed(() => route.params.slug)
+
 const dataModel = ref(
-  props.data.map((subject) => ({
-    ...subject,
+  props.data.map((chapter) => ({
+    ...chapter,
     opened: false
   }))
 )
@@ -65,12 +75,21 @@ const dataModel = ref(
 watch(
   () => props.data,
   (data) => {
-    dataModel.value = data.map((subject) => ({
-      ...subject,
-      opened: false
+    dataModel.value = data.map((chapter) => ({
+      ...chapter,
+      opened: chapterIsOpened(chapter as Chapter)
     }))
-  }
+  },
+  { deep: true, immediate: true }
 )
+
+function chapterIsOpened(chapter: any) {
+  const opened = chapter.children?.some(
+    (child: any) => materialSlug.value === child.slug
+  )
+
+  return opened === undefined ? false : opened
+}
 </script>
 
 <style scoped lang="sass">
@@ -119,4 +138,7 @@ watch(
       &__icon
         font-size: 1.5em
         transform: translateY(0.3em)
+
+      &__reaction
+        font-size: 1em
 </style>

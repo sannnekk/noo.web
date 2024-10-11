@@ -51,7 +51,7 @@
         <inline-user-card :user="post.author" />
       </div>
       <div class="blogpost-card__footer__reactions">
-        <blogpost-reactions
+        <user-reactions
           :my-reaction="post.myReaction"
           :reactions="post.reactionCounts"
           :loading="isReactionLoading"
@@ -64,7 +64,6 @@
 
 <script lang="ts" setup>
 import { Core } from '@/core/Core'
-import blogpostReactions from './blogpost-reactions.vue'
 import { useDate } from '@/composables/useDate'
 import type { BlogPost, Reaction } from '@/core/data/entities/BlogPost'
 import type { DeltaContentType } from '@/types/composed/DeltaContentType'

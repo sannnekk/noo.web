@@ -764,6 +764,8 @@ function syncImageSelections() {
         cursor: pointer
         z-index: 999
         transition: opacity 0.3s ease
+        min-width: 15px
+        min-height: 15px
 
         &:hover
           opacity: 0.8

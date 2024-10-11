@@ -194,6 +194,7 @@ declare module 'vue' {
     UserInfoModal: typeof import('./src/components/modal/user-info-modal.vue')['default']
     UserLink: typeof import('./src/components/common/user/user-link.vue')['default']
     UsernameValidation: typeof import('./src/components/actions/username-validation.vue')['default']
+    UserReactions: typeof import('./src/components/entities/app/user-reactions.vue')['default']
     UserRoleSelect: typeof import('./src/components/form/prop-select/user-role-select.vue')['default']
     UserSelect: typeof import('./src/components/form/entity-select/user-select.vue')['default']
     UsersIcon: typeof import('./src/components/decorations/icons/users-icon.vue')['default']

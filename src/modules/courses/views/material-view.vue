@@ -76,6 +76,27 @@
       <rich-text-container :content="courseStore.material.content" />
     </div>
     <div
+      class="material-view__reactions"
+      v-if="Core.Context.roleIs(['student'])"
+    >
+      <user-reactions
+        :reactions="{
+          check: 0,
+          thinking: 0
+        }"
+        :loading="courseStore.reactionLoading"
+        :my-reaction="courseStore.material.myReaction"
+        @react="courseStore.reactToMaterial(courseStore.material.id, $event)"
+        hide-numbers
+      />
+      <p class="material-view__reactions__hint">
+        ✅ - тема пройдена, 🤔 - стоит вернуться
+        <br />
+        Эти реакции видны только вам. Они помогают Вам понять, что вы уже
+        прошли, а к чему еще стоит вернуться.
+      </p>
+    </div>
+    <div
       class="material-view__poll"
       v-if="courseStore.material.pollId"
     >
@@ -107,7 +128,25 @@
     class="no-material-selected"
     v-else
   >
-    Выберите материал из дерева слева
+    Выберите материал из списка
+    <!-- <span v-if="lastNotUnderstoodLink">или</span>
+    <common-button
+      v-if="lastNotUnderstoodLink"
+      class="no-material-selected__action"
+      design="inline"
+      :to="lastNotUnderstoodLink"
+    >
+      Перейти на последний непонятый материал
+    </common-button>
+    <span v-if="lastUnderstoodLink">или</span>
+    <common-button
+      v-if="lastUnderstoodLink"
+      class="no-material-selected__action"
+      design="inline"
+      :to="lastUnderstoodLink"
+    >
+      Перейти на последний пройденный материал
+    </common-button> -->
   </p>
   <assign-work-modal />
   <unassign-work-modal />
@@ -126,6 +165,10 @@ const assignWorkStore = useAssignWorkToMaterialStore()
 </script>
 
 <style scoped lang="sass">
+.no-material-selected
+  &__action
+    margin: 0.5em 0
+
 .material-view
   &__change-assigned-work
     margin-bottom: 1em
@@ -159,16 +202,34 @@ const assignWorkStore = useAssignWorkToMaterialStore()
     background: var(--secondary)
     margin-bottom: 1rem
 
-  &__content:deep()
-    padding-right: 1em
+  &__content
+    &:deep()
+      padding-right: 1em
+
+      .quill-editor__content
+        padding: 0
 
     iframe
       width: 100%
       aspect-ratio: 16 / 9
       border-radius: var(--border-radius)
 
+  &__reactions
+    margin-top: 1em
+    margin-bottom: 0.5em
+
+    &__hint
+      font-size: 0.8em
+      color: var(--text-light)
+      margin-top: 0.5em
+
   &__files
     margin-top: 1em
     padding-top: 1em
     border-top: 1px solid var(--border-color)
+
+    &:deep()
+      .file-list__body
+        padding-left: 0
+        padding-right: 0
 </style>

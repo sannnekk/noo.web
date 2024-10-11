@@ -20,6 +20,8 @@ const emojis = [
   { emoji: '👎', name: 'dislike', unicode: '1f44e', html: '&#128078;' },
   { emoji: '😢', name: 'sad', unicode: '1f622', html: '&#128546;' },
   { emoji: '🤯', name: 'mindblowing', unicode: '1f92f', html: '&#129327;' },
-  { emoji: '😀', name: 'happy', unicode: '1f600', html: '&#128512;' }
+  { emoji: '😀', name: 'happy', unicode: '1f600', html: '&#128512;' },
+  { emoji: '✅', name: 'check', unicode: '2705', html: '&#9989;' },
+  { emoji: '🤔', name: 'thinking', unicode: '1f914', html: '&#129300;' }
 ]
 </script>

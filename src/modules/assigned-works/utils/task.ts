@@ -12,7 +12,7 @@ export function scoreFromDetailedScore(detailedScore: Record<string, number>) {
 }
 
 export function isCheckedAutomatically(taskType: Task['type']) {
-  return taskType === 'final-essay'
+  return taskType === 'word'
 }
 
 export function getTaskScoreStatus(

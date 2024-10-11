@@ -144,6 +144,28 @@ export const useCourseStore = defineStore('courses-module:course', () => {
     }
   }
 
+  /**
+   * React to material
+   */
+  const reactionLoading = ref(false)
+
+  async function reactToMaterial(materialId: string, reaction: string) {
+    if (!material.value) {
+      return
+    }
+
+    try {
+      await courseService.toggleReaction(materialId, reaction)
+      material.value.myReaction =
+        material.value.myReaction === reaction ? undefined : reaction
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при отправке реакции',
+        error.message
+      )
+    }
+  }
+
   return {
     course,
     material,
@@ -151,6 +173,8 @@ export const useCourseStore = defineStore('courses-module:course', () => {
     assignMeWork,
     fetchCourse,
     getMaterialBySlug,
-    sendNotification
+    sendNotification,
+    reactionLoading,
+    reactToMaterial
   }
 })

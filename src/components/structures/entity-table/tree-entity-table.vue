@@ -107,7 +107,6 @@ export interface TreeEntityTableProps extends EntityTableProps {
 const props = defineProps<TreeEntityTableProps>()
 
 const treeDataToShow = computed(() => {
-  console.log(treeData.value)
   return treeData.value.filter((item: any) => !item.collapsed)
 })
 

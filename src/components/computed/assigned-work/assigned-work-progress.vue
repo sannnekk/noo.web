@@ -52,9 +52,10 @@ const progress = computed<{
   }
 
   const checkStatus = progressData.value.checkStatus
-  const percent = `${
-    (progressData.value.score! / progressData.value.maxScore) * 100
-  }%`
+  const percent = `${(
+    (progressData.value.score! / progressData.value.maxScore) *
+    100
+  ).toFixed(2)}%`
 
   if (
     checkStatus === 'checked-after-deadline' ||
@@ -104,7 +105,6 @@ async function fetchProgress() {
       props.workId
     )
     progressData.value = response.data
-    console.log(response.data)
   } catch (error: any) {
     progressData.value = error
   } finally {
