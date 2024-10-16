@@ -23,5 +23,6 @@ export interface Notification extends Entity {
   link: string | null
   status: 'read' | 'unread'
   type: NotificationType
+  isBanner: boolean
   createdAt: Date
 }

@@ -3,6 +3,9 @@
   <div class="pane-layout">
     <div class="container">
       <div class="pane-layout__content">
+        <div class="pane-layout__banners">
+          <the-banner-container />
+        </div>
         <div class="pane-layout__header">
           <the-header />
         </div>

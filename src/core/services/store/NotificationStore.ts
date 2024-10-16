@@ -2,11 +2,6 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { Notification } from '@/core/data/entities/Notification'
 
-export type BannerNotification = Notification & {
-  visible: boolean
-  visibilityThreshold: number
-}
-
 /**
  * Installs Notifications store
  */
@@ -40,7 +35,12 @@ export function installNotificationStore() {
     /**
      * Notifications to show
      */
-    const newNotifications = ref<BannerNotification[]>([])
+    const newNotifications = ref<Notification[]>([])
+
+    /**
+     * Banners (notifications that are shown on top of the page)
+     */
+    const banners = ref<Notification[]>([])
 
     /**
      * Show notifications one by one
@@ -62,6 +62,7 @@ export function installNotificationStore() {
       loadingError,
       notifications,
       newNotifications,
+      banners,
       showOneByOne
     }
   })

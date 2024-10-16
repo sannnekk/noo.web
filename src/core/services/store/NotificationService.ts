@@ -96,9 +96,9 @@ export class NotificationService extends ApiService {
       await this.getUnreadCount()
       await this.getReadNotifications()
 
-      this._store.showOneByOne(newNotifications.data)
+      this._store.showOneByOne(newNotifications)
     } catch (error) {
-      //
+      console.log(error)
     }
   }
 
@@ -112,6 +112,7 @@ export class NotificationService extends ApiService {
     try {
       if (value === false) {
         const thisRef = this
+
         setTimeout(() => {
           thisRef.markAllAsRead().then(() => thisRef.updateState())
         }, 300)
@@ -132,7 +133,14 @@ export class NotificationService extends ApiService {
    * Get unread notifications
    */
   private async getUnreadNotifications() {
-    return this.httpGet<Notification[]>(`${this._route}/unread`)
+    const response = await this.httpGet<Notification[]>(`${this._route}/unread`)
+
+    const notifications = response.data.filter((n) => !n.isBanner)
+    const banners = response.data.filter((n) => n.isBanner)
+
+    this._store.banners = banners
+
+    return notifications
   }
 
   /**
@@ -149,7 +157,11 @@ export class NotificationService extends ApiService {
       options
     )
 
-    this._store.notifications = response.data
+    const banners = response.data.filter((n) => n.isBanner)
+    const notifications = response.data.filter((n) => !n.isBanner)
+
+    this._store.notifications = notifications
+    this._store.banners = banners
   }
 
   /**

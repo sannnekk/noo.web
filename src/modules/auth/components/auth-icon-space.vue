@@ -1,7 +1,7 @@
 <template>
   <div class="auth-icon-space">
     <div class="auth-icon-space__logo">
-      <logo />
+      <main-logo />
     </div>
     <div class="auth-icon-space__text">
       <typing-text

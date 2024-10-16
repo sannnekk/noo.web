@@ -17,9 +17,10 @@
       <h4 class="app-notification__info__title">
         {{ notification.title }}
       </h4>
-      <p class="app-notification__info__message">
-        {{ notification.message }}
-      </p>
+      <p
+        class="app-notification__info__message"
+        v-html="message"
+      ></p>
     </div>
     <div class="app-notification__actions">
       <div
@@ -40,6 +41,7 @@ import { Core } from '@/core/Core'
 
 interface Props {
   notification: Notification
+  preserveLineWraps?: boolean
 }
 
 const props = defineProps<Props>()
@@ -79,11 +81,19 @@ const icon = computed<IconName>(() => {
   }
 })
 
+const message = computed<string>(() => {
+  if (props.preserveLineWraps) {
+    return props.notification.message?.replaceAll('\n', '<br>') || ''
+  }
+
+  return props.notification.message?.replaceAll(/\n/g, ' ') || ''
+})
+
 async function onNotificationDelete() {
   isLoading.value = true
 
   try {
-    notificationService.deleteNotification(props.notification.id)
+    await notificationService.deleteNotification(props.notification.id)
   } catch (error: any) {
     uiService.openErrorModal('Не удалось удалить уведомление', error.message)
   } finally {

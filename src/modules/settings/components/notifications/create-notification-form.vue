@@ -40,6 +40,14 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-12">
+        <form-checkbox
+          label="Создать как баннер"
+          v-model="notificationModel.isBanner"
+        />
+      </div>
+    </div>
     <h4>Кому отправить</h4>
     <div class="row">
       <div class="col-lg-6">
@@ -118,7 +126,8 @@ const notificationModel = ref<
   title: '',
   message: '',
   type: 'other',
-  link: ''
+  link: '',
+  isBanner: false
 })
 
 const sendOptionsModel = ref<NotificationSendOptions>({

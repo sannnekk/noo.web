@@ -175,6 +175,7 @@ declare module 'vue' {
     TextArea: typeof import('./src/components/form/text-area.vue')['default']
     TextFormatIcon: typeof import('./src/components/decorations/text-format-icon.vue')['default']
     TextInput: typeof import('./src/components/form/text-input.vue')['default']
+    TheBannerContainer: typeof import('./src/components/layout/the-banner-container.vue')['default']
     TheFooter: typeof import('./src/components/layout/the-footer.vue')['default']
     TheHeader: typeof import('./src/components/layout/the-header.vue')['default']
     TheLoaderOverlay: typeof import('./src/components/layout/the-loader-overlay.vue')['default']

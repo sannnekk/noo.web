@@ -38,10 +38,15 @@
             type="url"
           />
         </div>
+        <div class="send-notification__form__group">
+          <form-checkbox
+            label="Отправить как баннер"
+            v-model="notificationModel.isBanner"
+          />
+        </div>
         <div class="send-notification__form__warning">
-          <warning-block v-if="(course.studentIds?.length || 0) > 500">
-            На этом курсе
-            {{ course.studentIds?.length }} учеников. Возможно, отправка
+          <warning-block v-if="(course.studentCount || 0) > 500">
+            На этом курсе {{ course.studentCount }} учеников. Возможно, отправка
             уведомления займет некоторое время из-за большого количества
             адресатов.
           </warning-block>
@@ -80,7 +85,8 @@ const notificationModel = ref<
   title: '',
   message: '',
   type: 'other',
-  link: ''
+  link: '',
+  isBanner: false
 })
 
 const errors = ref<string[]>([])
@@ -107,6 +113,9 @@ function onConfirm() {
 <style scoped lang="sass">
 .send-notification
 	&__form
+		&__group
+			margin-bottom: 0.3em
+
 		&__warning
 			margin-top: 1em
 			font-size: 0.8em
