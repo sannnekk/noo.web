@@ -48,6 +48,7 @@
       </div>
     </div>
   </footer>
+  <br />
 </template>
 
 <script setup lang="ts"></script>
@@ -55,6 +56,12 @@
 <style scoped lang="sass">
 .the-footer
   margin-top: 1em
+  padding-bottom: 1em
+  border-radius: var(--border-radius)
+  background-color: var(--light-background-color)
+
+  > .container
+    padding-top: 0.5em
 
   &__logo
     margin: 0

@@ -17,6 +17,7 @@ import { SubjectService } from './api/SubjectService'
 import { UserService } from './api/UserService'
 import { WorkService } from './api/WorkService'
 import { UIService } from './store/UIService'
+import { UserSettingsService } from './store/UserSettingsService'
 
 export type ServiceName =
   | 'Auth'
@@ -56,6 +57,7 @@ export type Services = {
 
   Notification: NotificationService
   UI: UIService
+  UserSettings: UserSettingsService
 }
 
 /**
@@ -83,9 +85,11 @@ export class ServiceFactory {
     Platform: PlatformService,
     Snippet: SnippetService,
     FAQ: FAQService,
+
     // storage
     Notification: NotificationService,
-    UI: UIService
+    UI: UIService,
+    UserSettings: UserSettingsService
   }
 
   /**

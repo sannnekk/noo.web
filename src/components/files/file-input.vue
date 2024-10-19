@@ -11,7 +11,7 @@
     />
     <label class="file-input__label">{{ label }}</label>
     <div
-      v-if="!props.readonly"
+      v-if="!props.readonly && modelValue.length < props.maxCount"
       class="file-input__area"
       :class="{ 'file-input__area--drag': isDragActive }"
       @click=";($refs.fileInput as HTMLInputElement).click()"

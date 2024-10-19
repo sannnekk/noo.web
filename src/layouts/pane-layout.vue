@@ -1,6 +1,9 @@
 <template>
   <the-pane />
-  <div class="pane-layout">
+  <div
+    class="pane-layout"
+    :style="styles"
+  >
     <div class="container">
       <div class="pane-layout__content">
         <div class="pane-layout__banners">
@@ -21,9 +24,33 @@
   <the-notifications-pane />
 </template>
 
+<script lang="ts" setup>
+import { Core } from '@/core/Core'
+import { ref } from 'vue'
+
+const styles = ref<any>({})
+
+Core.onInit((core) => {
+  console.log('Core on init')
+  const userSettingsService = core.Services.UserSettings
+  const userSettingsStore = userSettingsService.Store()
+
+  userSettingsService.reload().then(() => {
+    console.log('User settings reloaded')
+    styles.value.backgroundImage = userSettingsStore.backgroundImage
+      ? `url(${core.Constants.MEDIA_URL}/${userSettingsStore.backgroundImage.src})`
+      : ''
+  })
+})
+</script>
+
 <style lang="sass" scoped>
 .pane-layout
-  padding-bottom: 1em
+  margin-bottom: 1em
+  background-size: cover
+  background-position: center
+  background-repeat: no-repeat
+  background-attachment: fixed
 
   &__slot
     background-color: var(--lightest)

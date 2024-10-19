@@ -9,6 +9,7 @@ import type { Subject } from '../data/entities/Subject'
 import type { Poll } from '../data/entities/Poll'
 import type { Task } from '../data/entities/Task'
 import type { CourseAssignment } from '../data/entities/CourseAssignment'
+import type { UserSettings } from '../data/entities/UserSettings'
 
 type EntityName =
   | 'answer'
@@ -20,6 +21,7 @@ type EntityName =
   | 'poll'
   | 'task'
   | 'course-assignment'
+  | 'user-settings'
 
 type Entity =
   | Answer
@@ -31,6 +33,7 @@ type Entity =
   | Poll
   | Task
   | CourseAssignment
+  | UserSettings
 
 export function entityFactory<T extends Entity>(name: EntityName): T {
   switch (name) {
@@ -52,6 +55,8 @@ export function entityFactory<T extends Entity>(name: EntityName): T {
       return taskConstructor() as T
     case 'course-assignment':
       return courseAssignmentConstructor() as T
+    case 'user-settings':
+      return userSettingsConstructor() as T
     default:
       return {} as T
   }
@@ -74,6 +79,7 @@ function commentConstructor(): Omit<Comment, 'id'> {
     content: emptyDelta(),
     score: 0,
     taskId: '',
+    detailedScore: {},
     createdAt: new Date(),
     updatedAt: new Date()
   }
@@ -101,6 +107,8 @@ function materialConstructor(): Omit<Material, 'id'> {
     order: 0,
     files: [],
     isActive: false,
+    workSolveDeadline: null,
+    workCheckDeadline: null,
     createdAt: new Date(),
     updatedAt: new Date()
   }
@@ -161,5 +169,11 @@ function courseAssignmentConstructor(): Omit<CourseAssignment, 'id'> {
     assignerId: '',
     isArchived: false,
     createdAt: new Date()
+  }
+}
+
+function userSettingsConstructor(): Omit<UserSettings, 'id'> {
+  return {
+    backgroundImage: null
   }
 }

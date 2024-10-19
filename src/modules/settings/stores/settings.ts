@@ -20,6 +20,13 @@ export const useSettingsStore = defineStore('settings-module:settings', () => {
       for: ['student', 'mentor', 'teacher', 'admin']
     },
     {
+      title: 'Персонализация',
+      description: 'Настройка фона',
+      icon: 'brush',
+      route: '/settings/personalization',
+      for: ['student', 'mentor', 'teacher', 'admin']
+    },
+    {
       title: 'Google Sheets',
       description: 'Интеграции с Google Sheets и Google Drive',
       icon: 'google-sheets',

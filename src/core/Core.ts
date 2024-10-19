@@ -82,6 +82,20 @@ class CoreClass {
   }
 
   /**
+   * onInit event
+   */
+  public onInit(callback: (self: typeof this) => void) {
+    if (this._itialized) {
+      callback.call(this, this)
+      return
+    }
+
+    this._context.Events.on('global:init', () => {
+      callback.call(this, this)
+    })
+  }
+
+  /**
    * Throw if core is not initialized
    */
   private throwIfNotInitialized() {

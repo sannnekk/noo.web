@@ -14,22 +14,27 @@ export default {
       children: [
         {
           path: 'account',
-          name: 'Настройки: Аккаунт',
+          name: 'Аккаунт',
           component: () => import('./views/account-view.vue')
         },
         {
           path: 'telegram',
-          name: 'Настройки: Telegram',
+          name: 'Telegram',
           component: () => import('./views/telegram-view.vue')
         },
         {
+          path: 'personalization',
+          name: 'Персонализация',
+          component: () => import('./views/personalization-view.vue')
+        },
+        {
           path: 'google-sheets',
-          name: 'Настройки: Google Sheets',
+          name: 'Google Sheets',
           component: () => import('./views/google-sheets-view.vue')
         },
         {
           path: 'mentor-snippets',
-          name: 'Настройки: Сниппеты',
+          name: 'Сниппеты',
           component: () => import('./views/snippets-view.vue')
         },
         {

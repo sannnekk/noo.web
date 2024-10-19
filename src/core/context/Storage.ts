@@ -1,11 +1,11 @@
 import Cookie from 'js-cookie'
 
 /**
- * Local Storage wrapper
+ * Cookie storage wrapper
  */
 export class Storage {
   /**
-   * Aliases  of storage
+   * Aliases of storage
    */
   private static _aliases = {
     user: 'noo.context.user',

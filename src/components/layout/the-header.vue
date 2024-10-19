@@ -36,9 +36,10 @@ const route = useRoute()
 
 <style scoped lang="sass">
 .header
+  padding-top: 1em
+
   &__inner
     box-shadow: 0px 0px 10px #00000011
-    margin-top: 1em
     background-color: var(--lightest)
     border-radius: var(--border-radius)
     padding: 0.5em 1em
