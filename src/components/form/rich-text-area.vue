@@ -2,7 +2,10 @@
   <div class="rich-text-area">
     <label>{{ label }}</label>
     <div class="rich-text-area__inner">
-      <quill-editor v-model="model" />
+      <quill-editor
+        v-model="model"
+        :font-size="userSettingsStore.fontSize"
+      />
     </div>
   </div>
 </template>
@@ -10,6 +13,7 @@
 <script setup lang="ts">
 import type { DeltaContentType } from '@/types/composed/DeltaContentType'
 import { computed } from 'vue'
+import { Core } from '@/core/Core'
 
 interface Props {
   modelValue: DeltaContentType
@@ -22,6 +26,9 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+const userSettingsService = Core.Services.UserSettings
+const userSettingsStore = userSettingsService.Store()
 
 const model = computed({
   get() {

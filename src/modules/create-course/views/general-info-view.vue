@@ -11,10 +11,11 @@
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
-          <user-select
-            label="Автор курса"
-            v-model="createCourseStore.course.author"
+          <users-select
+            label="Автор(ы) курса (до 10)"
+            v-model="createCourseStore.course.authors"
             role="teacher"
+            :max-count="10"
           />
         </div>
       </div>

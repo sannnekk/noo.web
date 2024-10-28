@@ -14,12 +14,24 @@
 import { useRoute } from 'vue-router'
 import { useCreateCourseStore } from '../stores/create-course'
 import type { Material } from '@/core/data/entities/Material'
+import { computed, ref, watch } from 'vue'
 
 const route = useRoute()
 const createCourseStore = useCreateCourseStore()
 
-const currentMaterial = createCourseStore.getMaterial(
-  route.params.chapterSlug as string,
-  route.params.materialSlug as string
-) as Material | undefined
+const chapterSlug = computed(() => route.params.chapterSlug as string)
+const materialSlug = computed(() => route.params.materialSlug as string)
+
+const currentMaterial = ref<Material>()
+
+watch(
+  () => createCourseStore.course?.id,
+  async () => {
+    currentMaterial.value = (await createCourseStore.getMaterial(
+      chapterSlug.value,
+      materialSlug.value
+    )) as Material
+  },
+  { immediate: true }
+)
 </script>

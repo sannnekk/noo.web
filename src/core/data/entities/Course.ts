@@ -9,7 +9,7 @@ export interface Course extends Entity {
   slug: string
   name: string
   images: Media[]
-  author: User | null
+  authors: User[]
   authorId?: User['id']
   description: string
   chapters: Chapter[]

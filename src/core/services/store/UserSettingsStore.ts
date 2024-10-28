@@ -17,9 +17,15 @@ export function installUserSettingsStore() {
      */
     const backgroundImage = computed(() => userSettings.value?.backgroundImage)
 
+    /**
+     * Font size
+     */
+    const fontSize = computed(() => userSettings.value?.fontSize)
+
     return {
       userSettings,
-      backgroundImage
+      backgroundImage,
+      fontSize
     }
   })
 }

@@ -5,6 +5,8 @@
       :readonly="true"
       :commentable="commentable"
       :comment-types="commentTypes"
+      :allow-image-rotation="false"
+      :font-size="fontSize || userSettingsStore.fontSize"
       @commented="$emit('commented', $event)"
       @custom-commented="$emit('custom-commented', $event)"
       @custom-comment-deleted="$emit('custom-comment-deleted', $event)"
@@ -14,11 +16,14 @@
 
 <script setup lang="ts">
 import type { DeltaContentType } from '@/types/composed/DeltaContentType'
+import { Core } from '@/core/Core'
 
 interface Props {
   content: DeltaContentType
   commentable?: boolean
   commentTypes?: string[]
+  //allowImageRotation?: boolean
+  fontSize?: UserSettings['fontSize']
 }
 
 interface Emits {
@@ -29,4 +34,7 @@ interface Emits {
 
 defineProps<Props>()
 defineEmits<Emits>()
+
+const userSettingsService = Core.Services.UserSettings
+const userSettingsStore = userSettingsService.Store()
 </script>

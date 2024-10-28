@@ -55,10 +55,15 @@
             <h2>{{ courseStore.course.name }}</h2>
           </div>
           <div
-            class="index-materials-view__tree__author"
-            v-if="courseStore.course.author"
+            class="index-materials-view__tree__authors"
+            v-if="courseStore.course.authors"
           >
-            <inline-user-card :user="courseStore.course.author" />
+            <inline-user-card-list :users="courseStore.course.authors">
+              <template #more-button="{ isOpened }">
+                {{ isOpened ? 'Скрыть' : 'Показать всех авторов' }}
+              </template>
+              <template #empty>Авторы не указаны</template>
+            </inline-user-card-list>
           </div>
           <materials-tree :data="courseStore.materialsTree" />
           <div
@@ -179,6 +184,9 @@ const sendNotificationModalOpened = ref(false)
         font-size: 1.3rem
         font-weight: bold
         margin-bottom: 0.5em
+
+    &__authors
+      margin: 1em 0
 
     &__course-id
       margin-top: 1em

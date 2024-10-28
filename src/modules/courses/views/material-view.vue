@@ -57,13 +57,19 @@
       class="material-view__assigned-work"
       v-if="courseStore.material.workId && Core.Context.roleIs(['student'])"
     >
-      <div class="material-view__assigned-work__link">
+      <div
+        class="material-view__assigned-work__link"
+        v-if="courseStore.material.isWorkAvailable"
+      >
         <common-button @click="courseStore.assignMeWork()">
           К работе
         </common-button>
       </div>
       <div class="material-view__assigned-work__progress">
-        <assigned-work-progress :workId="courseStore.material.workId" />
+        <assigned-work-progress
+          :workId="courseStore.material.workId"
+          :hide-not-started="!courseStore.material.isWorkAvailable"
+        />
       </div>
     </div>
     <div
@@ -129,24 +135,6 @@
     v-else
   >
     Выберите материал из списка
-    <!-- <span v-if="lastNotUnderstoodLink">или</span>
-    <common-button
-      v-if="lastNotUnderstoodLink"
-      class="no-material-selected__action"
-      design="inline"
-      :to="lastNotUnderstoodLink"
-    >
-      Перейти на последний непонятый материал
-    </common-button>
-    <span v-if="lastUnderstoodLink">или</span>
-    <common-button
-      v-if="lastUnderstoodLink"
-      class="no-material-selected__action"
-      design="inline"
-      :to="lastUnderstoodLink"
-    >
-      Перейти на последний пройденный материал
-    </common-button> -->
   </p>
   <assign-work-modal />
   <unassign-work-modal />
@@ -193,6 +181,10 @@ const assignWorkStore = useAssignWorkToMaterialStore()
     gap: 1em
     align-items: center
     margin-bottom: 1em
+
+    &__link
+      &__inactive
+        color: var(--warning)
 
   &__description
     padding: 1em

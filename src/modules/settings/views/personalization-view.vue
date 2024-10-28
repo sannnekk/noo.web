@@ -9,7 +9,7 @@
     <settings-section>
       <template #title>Размер шрифта</template>
       <template #content>
-        <feature-block version="3.3" />
+        <change-fontsize-form />
       </template>
     </settings-section>
   </div>
@@ -18,6 +18,7 @@
 <script lang="ts" setup>
 import { Core } from '@/core/Core'
 import ChangeBackgroundForm from '../components/personalization/change-background-form.vue'
+import ChangeFontsizeForm from '../components/personalization/change-fontsize-form.vue'
 import SettingsSection from '../components/settings-section.vue'
 
 const userSettingsService = Core.Services.UserSettings

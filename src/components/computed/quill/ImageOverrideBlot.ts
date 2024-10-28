@@ -12,12 +12,26 @@ export class ImageOverrideBlot extends Embed {
     const image = document.createElement('img') as HTMLElement
     image.setAttribute('src', value)
 
+    const actionsContainer = document.createElement('div') as HTMLElement
+    actionsContainer.classList.add('actions')
+
     const deleteButton = document.createElement('button') as HTMLElement
     deleteButton.innerHTML = '+'
     deleteButton.classList.add('delete-button')
+    actionsContainer.appendChild(deleteButton)
+
+    const rotateLeftButton = document.createElement('button') as HTMLElement
+    rotateLeftButton.innerHTML = '↺'
+    rotateLeftButton.classList.add('rotate-left-button')
+    actionsContainer.appendChild(rotateLeftButton)
+
+    const rotateRightButton = document.createElement('button') as HTMLElement
+    rotateRightButton.innerHTML = '↻'
+    rotateRightButton.classList.add('rotate-right-button')
+    actionsContainer.appendChild(rotateRightButton)
 
     node.appendChild(image)
-    node.appendChild(deleteButton)
+    node.appendChild(actionsContainer)
 
     return node
   }

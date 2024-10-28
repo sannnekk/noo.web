@@ -28,6 +28,32 @@
         v-model="model.poll!"
       />
     </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group dimmed-checkbox">
+          <form-checkbox
+            label="Запланировать публикацию"
+            v-model="isSchedulingEnabled"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div
+          class="form-group dimmed-checkbox"
+          v-auto-animate
+        >
+          <form-input
+            v-if="model.activateAt"
+            type="datetime-local"
+            label="Дата публикации (МСК)"
+            v-model="model.activateAt"
+          />
+          <warning-block class="test-functionality">
+            Функционал находится в режиме тестирования разработчиками
+          </warning-block>
+        </div>
+      </div>
+    </div>
     <div class="form-group">
       <file-input
         label="Файлы, прикрепленные к материалу"
@@ -50,11 +76,23 @@
           v-model="model.work!"
         />
       </div>
-      <div class="form-group are-deadlines-set">
-        <form-checkbox
-          label="Установить дедлайны"
-          v-model="areDeadlinesSet"
-        />
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group dimmed-checkbox">
+            <form-checkbox
+              label="Установить дедлайны"
+              v-model="areDeadlinesSet"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group dimmed-checkbox">
+            <form-checkbox
+              label="Работа доступна для сдачи"
+              v-model="model.isWorkAvailable"
+            />
+          </div>
+        </div>
       </div>
       <div
         class="row"
@@ -114,6 +152,18 @@ const model = computed({
   set: (value: Material) => emit('update:modelValue', value)
 })
 
+const isSchedulingEnabled = computed({
+  get: () => !!model.value.activateAt,
+  set: (value: boolean) => {
+    if (!value) {
+      model.value.activateAt = null
+    } else if (!model.value.activateAt) {
+      model.value.activateAt = Date.tomorrow()
+      model.value.isActive = false
+    }
+  }
+})
+
 const areDeadlinesSet = ref(false)
 watch(areDeadlinesSet, setDeadlines)
 
@@ -136,11 +186,23 @@ function setDeadlines(value: boolean) {
 .form-group
 	margin: 0.7em 0
 
-	&.are-deadlines-set
+	&.dimmed-checkbox
 		&:deep()
 			*
 				color: var(--text-light)
 
 			> *
 				font-size: 0.9em
+
+.test-functionality
+	margin-top: 0.5em
+	padding: 0.7em
+
+	:deep()
+		.warning-block__icon
+			font-size: 2em
+
+		.warning-block__text
+			font-size: 0.9em
+			color: var(--warning)
 </style>

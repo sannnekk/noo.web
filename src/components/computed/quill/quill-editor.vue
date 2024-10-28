@@ -13,7 +13,11 @@
     />
     <div
       class="quill-editor__content"
-      :class="{ 'quill-editor__content--readonly': readonly }"
+      :class="{
+        'quill-editor__content--readonly': readonly,
+        'quill-editor__content--allow-image-rotation': allowImageRotation
+      }"
+      :style="{ fontSize }"
     >
       <div
         ref="container"
@@ -58,19 +62,29 @@
 
 <script setup lang="ts">
 import type { DeltaContentType } from '@/types/composed/DeltaContentType'
-import { onBeforeUnmount, onMounted, onUpdated, reactive, ref } from 'vue'
+import {
+  onBeforeUnmount,
+  onMounted,
+  onUpdated,
+  reactive,
+  ref,
+  computed
+} from 'vue'
 import { v4 as uuid } from 'uuid'
 import { CustomQuill, type Toolbar } from './quill'
 import { Range as QuillRange } from 'quill/core/selection'
 import { CommentBlot, type Comment } from './CommentBlot'
 import { ImageCommentBlot, type ImageComment } from './ImageCommentBlot'
 import * as ImageSelection from './ImageSelection'
+import type { UserSettings } from '@/core/data/entities/UserSettings'
 
 interface Props {
   modelValue: DeltaContentType
   readonly?: boolean
   commentable?: boolean
   commentTypes?: string[]
+  allowImageRotation?: boolean
+  fontSize?: UserSettings['fontSize']
 }
 
 interface Emits {
@@ -117,6 +131,17 @@ const mode = props.commentable
   : props.readonly
   ? 'readonly'
   : 'full'
+
+const fontSize = computed(() => {
+  switch (props.fontSize) {
+    case 'small':
+      return '0.8em'
+    case 'large':
+      return '1.2em'
+    default:
+      return '1em'
+  }
+})
 
 const comment = ref<PositionedComment>({
   content: '',
@@ -527,7 +552,7 @@ function handleEditorClick(event: MouseEvent) {
   }
 
   if (classNames.includes('delete-button')) {
-    const src = target.parentNode?.querySelector('img')?.src
+    const src = target.parentNode?.parentNode?.querySelector('img')?.src
 
     if (!src) {
       return
@@ -648,6 +673,37 @@ function syncImageSelections() {
     padding: 0.5em
     transition: height 0.3s ease
 
+    &:not(&--allow-image-rotation)
+      :deep()
+        .ql-image
+          .rotate-left-button,
+          .rotate-right-button
+            display: none !important
+
+    :deep()
+      .ql-image
+        .actions
+          position: absolute
+          top: 20px
+          right: 10px
+          display: flex
+          gap: 5px
+          flex-direction: column
+          align-items: center
+
+          .rotate-left-button,
+          .rotate-right-button
+            display: block
+            cursor: pointer
+            background: var(--form-background)
+            color: var(--form-text-color)
+            border-radius: var(--border-radius)
+            border: none
+
+            &:hover
+              background: var(--light)
+
+
     &:not(&--readonly)
       :deep()
         .ql-image
@@ -655,9 +711,6 @@ function syncImageSelections() {
             display: none !important
             justify-content: center
             align-items: center
-            position: absolute
-            top: 20px
-            right: 10px
             color: white
             width: 30px
             height: 30px

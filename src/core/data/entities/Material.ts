@@ -15,7 +15,9 @@ export interface Material extends Entity {
   chapter?: Chapter
   workId?: string
   isActive: boolean
+  activateAt: Date | null
   work?: Work
+  isWorkAvailable: boolean
   files: Media[]
   createdAt: Date
   updatedAt: Date

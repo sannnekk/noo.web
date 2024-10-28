@@ -13,17 +13,20 @@ The structure is as follows:
 ├── stores
 │   ├── store1.ts
 │   └── ...
+├── types
+│   ├── type1.ts
+│   └── ...
 ├── views
-│   ├── index.vue
+│   ├── index-view.vue
 │   ├── another-view-1.vue
 │   ├── another-view.vue
 │   └── ...
 ├── index.ts
-├── module.vue
+├── module-root.vue
 └── router.ts
 ```
 
-Every store must have id in the following format: `[your-module-name]:[store-name]`
+Every store must have id in the following format: `[your-module-name]-module:[store-name]`
 
 Every module consists of `index.ts` file. Its the main module's file and exports all the module parts to register them in your app automatically, no need to import it anywhere. It has the following structure:
 
@@ -59,7 +62,7 @@ export default {
 }
 ```
 
-And the module.vue file. Its a wrapper for your `router-view` to display the nested routes:
+And the `module-root.vue` file. Its a wrapper for your `router-view` to display the nested routes:
 
 ```vue
 <template>

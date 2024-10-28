@@ -1,5 +1,8 @@
 <template>
-  <div class="assigned-work-progress">
+  <div
+    class="assigned-work-progress"
+    v-if="visible"
+  >
     <span
       class="assigned-work-progress__text"
       :style="{ color: progress.color }"
@@ -16,6 +19,7 @@ import { computed, ref, watch } from 'vue'
 
 interface Props {
   workId: string
+  hideNotStarted?: boolean
 }
 
 const props = defineProps<Props>()
@@ -29,9 +33,11 @@ const progressData = ref<AssignedWorkProgress | Error | null>(null)
 const progress = computed<{
   color: string
   text: string
+  id: string
 }>(() => {
   if (isLoading.value) {
     return {
+      id: 'loading',
       color: 'var(--text-light)',
       text: 'Загрузка...'
     }
@@ -39,6 +45,7 @@ const progress = computed<{
 
   if (progressData.value instanceof Error) {
     return {
+      id: 'error',
       color: 'var(--danger)',
       text: 'Ошибка загрузки прогресса'
     }
@@ -46,6 +53,7 @@ const progress = computed<{
 
   if (progressData.value === null) {
     return {
+      id: 'not-started',
       color: 'var(--text-light)',
       text: 'Работа не начата'
     }
@@ -63,6 +71,7 @@ const progress = computed<{
     checkStatus === 'checked-in-deadline'
   ) {
     return {
+      id: 'checked',
       color: 'var(--success)',
       text: `Работа проверена, результат: ${percent}`
     }
@@ -72,6 +81,7 @@ const progress = computed<{
 
   if (solveStatus === 'in-progress') {
     return {
+      id: 'in-progress',
       color: 'var(--warning)',
       text: 'Работа в процессе'
     }
@@ -79,6 +89,7 @@ const progress = computed<{
 
   if (solveStatus === 'made-in-deadline') {
     return {
+      id: 'made-in-deadline',
       color: 'var(--success)',
       text: 'Работа сдана в дедлайн'
     }
@@ -86,15 +97,25 @@ const progress = computed<{
 
   if (solveStatus === 'made-after-deadline') {
     return {
+      id: 'made-after-deadline',
       color: 'var(--warning)',
       text: 'Работа сдана после дедлайна'
     }
   }
 
   return {
+    id: 'not-started',
     color: 'var(--text-light)',
     text: 'Работа не начата'
   }
+})
+
+const visible = computed(() => {
+  if (props.hideNotStarted && progress.value.id === 'not-started') {
+    return false
+  }
+
+  return true
 })
 
 async function fetchProgress() {

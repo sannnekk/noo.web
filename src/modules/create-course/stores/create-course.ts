@@ -149,9 +149,11 @@ export const useCreateCourseStore = defineStore(
           ]
         },
         order: 0,
-        workSolveDeadline: undefined,
         isActive: true,
-        workCheckDeadline: undefined
+        activateAt: null,
+        isWorkAvailable: true,
+        workSolveDeadline: null,
+        workCheckDeadline: null
       } as Omit<Material, 'id' | 'chapterId' | 'createdAt' | 'updatedAt'>
     }
 
