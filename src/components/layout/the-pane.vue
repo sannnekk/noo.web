@@ -40,10 +40,13 @@
       </div>
       <div class="pane__help">
         <p>
-          Нашел ошибку в работе платформы?
-          <br />
-          Сообщи через Telegram-бота
-          <a href="https://t.me/noo_support_bot">@noo_support_bot</a>
+          Есть проблема? Напишите нам в
+          <a
+            href="https://t.me/noo_support_chat"
+            target="_blank"
+          >
+            @noo_support_chat
+          </a>
         </p>
       </div>
     </div>
@@ -134,7 +137,7 @@ watch(
 
   &__nav
     flex: 1
-    max-height: 80%
+    max-height: 90%
     overflow-y: auto
 
     nav

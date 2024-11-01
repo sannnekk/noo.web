@@ -18,6 +18,12 @@
         :actions="Core.Services.UI.Store().globalModal.actions"
         v-model:visible="Core.Services.UI.Store().globalModal.isOpen"
       />
+      <banner-modal
+        v-if="Core.Services.Notification.Store().bannerModal.banner"
+        v-model:visible="Core.Services.Notification.Store().bannerModal.isOpen"
+        :banner="Core.Services.Notification.Store().bannerModal.banner!"
+        :on-close="Core.Services.Notification.Store().bannerModal.onClose"
+      />
       <retry-login-modal
         v-if="Core.Services.UI.Store().retryLoginModal.isOpen"
         v-model="Core.Services.UI.Store().retryLoginModal"

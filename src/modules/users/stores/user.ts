@@ -83,6 +83,7 @@ export const useUserStore = defineStore('users-module:user', () => {
     try {
       await userService.confirmUser(user.value.username, { showLoader: true })
       uiService.openSuccessModal('Пользователь подтвержден')
+      user.value.verificationToken = undefined
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при подтверждении пользователя',

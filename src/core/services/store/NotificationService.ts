@@ -18,7 +18,7 @@ export class NotificationService extends ApiService {
   /**
    * Ticker threshold (in ms)
    */
-  private tickerThreshold = 15 * 60 * 1000
+  private tickerThreshold = 5 * 60 * 1000
 
   /**
    * useStore reference
@@ -123,6 +123,18 @@ export class NotificationService extends ApiService {
   }
 
   /**
+   * Mark notification as read
+   */
+  public async markAsRead(id: string) {
+    await this.httpPatch(`${this._route}/${id}/mark-as-read`)
+
+    this._store.unreadCount = this._store.unreadCount - 1
+    this._store.newNotifications = this._store.newNotifications.filter(
+      (n) => n.id !== id
+    )
+  }
+
+  /**
    * Mark all notifications as read
    */
   private async markAllAsRead() {
@@ -138,7 +150,7 @@ export class NotificationService extends ApiService {
     const notifications = response.data.filter((n) => !n.isBanner)
     const banners = response.data.filter((n) => n.isBanner)
 
-    this._store.banners = banners
+    this._store.showBannersOneByOne(banners)
 
     return notifications
   }
@@ -191,5 +203,6 @@ export class NotificationService extends ApiService {
     this._store.notifications = this._store.notifications.filter(
       (n) => n.id !== id
     )
+    this._store.banners = this._store.banners.filter((n) => n.id !== id)
   }
 }

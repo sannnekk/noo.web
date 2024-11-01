@@ -64,7 +64,7 @@
 import CreateWorkTaskList from '../components/create-work-task-list.vue'
 import { useCreateWorkStore } from '../stores/create-work'
 import { useRoute } from 'vue-router'
-import { computed, onUnmounted } from 'vue'
+import { computed, onUnmounted, watch } from 'vue'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { registerHotkeys } from '@/core/device/Hotkeys'
 import { HOT_KEYS } from '../utils/hotkeys'
@@ -74,7 +74,13 @@ const route = useRoute()
 
 const taskId = computed(() => route.params.taskId as string)
 
-createWorkStore.fetchWork()
+watch(
+  () => route.params.workSlug,
+  () => {
+    createWorkStore.fetchWork()
+  },
+  { immediate: true }
+)
 
 setPageTitle('Создание/редактирование работы')
 

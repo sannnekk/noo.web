@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import type { Notification } from '@/core/data/entities/Notification'
 
 /**
@@ -43,6 +43,25 @@ export function installNotificationStore() {
     const banners = ref<Notification[]>([])
 
     /**
+     * Banner modal state
+     */
+    const bannerModal = reactive({
+      isOpen: false,
+      banner: null as Notification | null,
+      banners: [] as Notification[],
+      onClose: () => {
+        bannerModal.isOpen = false
+        bannerModal.banner = null
+        bannerModal.banners.shift()
+
+        if (bannerModal.banners.length > 0) {
+          bannerModal.banner = bannerModal.banners[0]
+          bannerModal.isOpen = true
+        }
+      }
+    })
+
+    /**
      * Show notifications one by one
      */
     function showOneByOne(notifications: Notification[]) {
@@ -55,6 +74,18 @@ export function installNotificationStore() {
       })
     }
 
+    /**
+     * Show banners one by one
+     */
+    function showBannersOneByOne(banners: Notification[]) {
+      bannerModal.banners = banners
+
+      if (banners.length > 0) {
+        bannerModal.banner = banners[0]
+        bannerModal.isOpen = true
+      }
+    }
+
     return {
       isLoading,
       isPaneOpen,
@@ -63,7 +94,9 @@ export function installNotificationStore() {
       notifications,
       newNotifications,
       banners,
-      showOneByOne
+      bannerModal,
+      showOneByOne,
+      showBannersOneByOne
     }
   })
 }

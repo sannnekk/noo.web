@@ -19,6 +19,7 @@ declare module 'vue' {
     AssignedWorkSolveStatus: typeof import('./src/components/computed/assigned-work/assigned-work-solve-status.vue')['default']
     AttentionYellowIcon: typeof import('./src/components/decorations/icons/attention-yellow-icon.vue')['default']
     BackButton: typeof import('./src/components/actions/back-button.vue')['default']
+    BannerModal: typeof import('./src/components/modal/banner-modal.vue')['default']
     BarsIcon: typeof import('./src/components/decorations/icons/bars-icon.vue')['default']
     BaseModal: typeof import('./src/components/modal/base-modal.vue')['default']
     BetaTag: typeof import('./src/components/decorations/beta-tag.vue')['default']

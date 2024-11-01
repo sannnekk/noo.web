@@ -3,7 +3,17 @@
     сlass="form-input"
     v-auto-animate
   >
-    <span class="form-input__label">{{ label }}</span>
+    <span class="form-input__label">
+      {{ label }}
+      <explanation-tooltip
+        v-if="$slots.explanation"
+        title="Пояснение"
+      >
+        <p class="form-input__explanation-tooltip">
+          {{ entry.description }}
+        </p>
+      </explanation-tooltip>
+    </span>
     <div class="form-input__input-container">
       <input
         class="form-input__input"
@@ -122,6 +132,10 @@ function onCopy() {
   &__label
     font-size: 0.8rem
     color: var(--text-light)
+
+  &__explanation-tooltip
+    color: var(--text-light)
+    margin-bottom: 1em
 
   &__input-container
     position: relative

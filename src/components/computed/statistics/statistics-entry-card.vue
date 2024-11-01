@@ -15,7 +15,17 @@
           {{ entry.percentage }}%
         </span>
       </h1>
-      <p class="statistics-entry-card__title">{{ entry.name }}</p>
+      <p class="statistics-entry-card__title">
+        {{ entry.name }}
+        <explanation-tooltip
+          v-if="entry.description"
+          :title="entry.name"
+        >
+          <p class="statistics-entry-card__modal-inner">
+            {{ entry.description }}
+          </p>
+        </explanation-tooltip>
+      </p>
       <div class="statistics-entry-card__sub-entries">
         <div
           class="statistics-entry-card__sub-entries__item"
@@ -73,6 +83,10 @@ function beautifyNumber(value: number): string {
     border-radius: var(--border-radius)
     background-color: var(--color-background)
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
+
+  &__modal-inner
+    color: var(--text-light)
+    padding-bottom: 1em
 
   &__value
     font-size: 2em

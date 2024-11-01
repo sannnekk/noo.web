@@ -136,6 +136,7 @@ export const useCourseStore = defineStore('courses-module:course', () => {
       await notificationService.createNotification(notification, sendOptions, {
         showLoader: true
       })
+      uiService.openSuccessModal('Уведомление успешно отправлено')
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при отправке уведомления',

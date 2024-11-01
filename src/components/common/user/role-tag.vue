@@ -22,7 +22,7 @@ const userRole = computed(() => {
     case 'admin':
       return 'Администратор'
     case 'teacher':
-      return 'Учитель'
+      return 'Преподаватель'
     case 'mentor':
       return 'Куратор'
     case 'student':
