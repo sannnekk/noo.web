@@ -6,6 +6,8 @@ import type {
 } from '@/core/data/entities/AssignedWork'
 import type { Pagination } from '@/core/data/Pagination'
 import type { Work } from '@/core/data/entities/Work'
+import type { FavouriteTask } from '@/core/data/entities/FavouriteTask'
+import type { Subject } from '@/core/data/entities/Subject'
 
 /**
  * AssignedWork service
@@ -261,6 +263,79 @@ export class AssignedWorkService extends ApiService {
   ) {
     await this.httpPatch(
       `${this._route}/${assignedWorkId}/send-to-revision`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Add the task to favourites
+   */
+  public async addTaskToFavourites(
+    taskId: string,
+    options: ServiceOptions = {}
+  ) {
+    return await this.httpPost(
+      `${this._route}/task/${taskId}/add-to-favourites`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Remove the task from favourites
+   */
+  public async removeTaskFromFavourites(
+    taskId: string,
+    options: ServiceOptions = {}
+  ) {
+    return await this.httpDelete(
+      `${this._route}/task/${taskId}/remove-from-favourites`,
+      undefined,
+      options
+    )
+  }
+
+  public async removeTasksFromFavourites(
+    taskIds: string[],
+    options: ServiceOptions = {}
+  ) {
+    return await this.httpPost(
+      `${this._route}/task/bulk/favourites/remove`,
+      {
+        ids: taskIds
+      },
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Check if the task is favourite
+   */
+  public async isTaskFavourite(taskId: string, options: ServiceOptions = {}) {
+    return await this.httpGet<boolean>(
+      `${this._route}/task/${taskId}/is-favourite`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Get favourite tasks
+   */
+  public async getFavoriteTasks(
+    params: {
+      limit: number
+      subjectId: Subject['id']
+    },
+    options: ServiceOptions = {}
+  ) {
+    return await this.httpGet<FavouriteTask[]>(
+      `${this._route}/task/favourites/${params.subjectId}/${params.limit}`,
       undefined,
       undefined,
       options

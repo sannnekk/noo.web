@@ -6,7 +6,9 @@
         'Нерешенные',
         'Непроверенные',
         'Проверенные',
-        'Архивированные'
+        'Архивированные',
+        // TODO: refactor
+        '[new]Карточки заданий'
       ]"
       v-model:tab-index="assignedWorksStore.currentTabIndex"
     >
@@ -20,13 +22,13 @@
             />
           </div>
         </div>
-        <!-- <div class="index-works-view__filters">
+        <div class="index-works-view__filters">
           <search-filters
             v-model:pagination="assignedWorksStore.allSearch.pagination"
             :filters="allSearchFilters"
             :is-loading="assignedWorksStore.allSearch.isListLoading"
           />
-        </div> -->
+        </div>
         <div class="index-works-view__selected-actions">
           <actions-with-selected
             :selected-assigned-works="assignedWorksStore.allSearchSelectedWorks"
@@ -155,6 +157,9 @@
           />
         </div>
       </template>
+      <template #tab-5>
+        <favourite-task-view />
+      </template>
     </tabs-view>
   </div>
 </template>
@@ -165,14 +170,15 @@ import { useAssignedWorksStore } from '../stores/assigned-works'
 import worksTable from '../components/works-table.vue'
 import actionsWithSelected from '../components/actions-with-selected.vue'
 import actionsWithArchivedSelected from '../components/actions-with-archived-selected.vue'
-//import type { SearchFilter } from '@/components/search/filters/SearchFilter'
-//import { subjectFilter } from '@/core/filters/subject-filter'
+import favouriteTaskView from '../components/favourite-task/favourite-task-view.vue'
+import type { SearchFilter } from '@/components/search/filters/SearchFilter'
+import { subjectFilter } from '@/core/filters/subject-filter'
 
 const assignedWorksStore = useAssignedWorksStore()
 
 setPageTitle('Мои работы')
 
-/* const allSearchFilters: SearchFilter[] = [
+const allSearchFilters: SearchFilter[] = [
   {
     name: 'Тип работы',
     type: 'arr',
@@ -185,36 +191,8 @@ setPageTitle('Мои работы')
       { label: 'Фраза', value: 'phrase' }
     ]
   },
-  subjectFilter('work'),
-  {
-    name: 'Дата сдачи',
-    type: 'range',
-    key: 'solvedAt',
-    rangeType: 'date',
-    rangeValues: [new Date(), new Date()]
-  },
-  {
-    name: 'Дедлайн сдачи',
-    type: 'range',
-    key: 'solveDeadlineAt',
-    rangeType: 'date',
-    rangeValues: [new Date(), new Date()]
-  },
-  {
-    name: 'Дата проверки',
-    type: 'range',
-    key: 'checkedAt',
-    rangeType: 'date',
-    rangeValues: [new Date(), new Date()]
-  },
-  {
-    name: 'Дедлайн проверки',
-    type: 'range',
-    key: 'checkDeadlineAt',
-    rangeType: 'date',
-    rangeValues: [new Date(), new Date()]
-  }
-] */
+  subjectFilter('work')
+]
 </script>
 
 <style lang="sass" scoped>

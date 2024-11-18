@@ -8,7 +8,8 @@
         :key="`${title}-title`"
         @click="onTabChange(index)"
       >
-        {{ title }}
+        {{ title.replace('[new]', '') }}
+        <new-tag v-if="title.startsWith('[new]')" />
       </div>
     </div>
     <div class="tabs-view__tabs">

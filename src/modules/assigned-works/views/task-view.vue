@@ -5,9 +5,17 @@
   >
     <div class="task-view__question">
       <rich-text-container :content="assignedWorkStore.task.content" />
-      <p class="task-view__question__max-score">
-        Максимальный балл: {{ assignedWorkStore.task.highestScore }}
-      </p>
+      <div class="task-view__question__info">
+        <p class="task-view__question__max-score">
+          Максимальный балл: <b>{{ assignedWorkStore.task.highestScore }}</b>
+        </p>
+        <div
+          class="task-view__question__add-to-favourites"
+          v-if="isCheckedAutomatically(assignedWorkStore.task.type)"
+        >
+          <favourite-task-button :task-id="assignedWorkStore.task.id" />
+        </div>
+      </div>
     </div>
     <div class="task-view__answer">
       <answer-text-container
@@ -147,6 +155,7 @@
 </template>
 
 <script setup lang="ts">
+import favouriteTaskButton from '../components/single-work/favourite-task-button.vue'
 import criteriaContainer from '../components/single-work/criteria/criteria-container.vue'
 import RightAnswerContainer from '../components/single-work/comment/right-answer-container.vue'
 import AnswerTextContainer from '../components/single-work/answer/answer-text-container.vue'
@@ -156,7 +165,7 @@ import AnswerFinalEssayContainer from '../components/single-work/answer/answer-f
 import CommentContainer from '../components/single-work/comment/comment-container.vue'
 import ScoreContainer from '../components/single-work/comment/score-container.vue'
 import RightAnswerModal from '../components/single-work/answer/right-answer-modal.vue'
-import { hasCriteria } from '../utils/task'
+import { hasCriteria, isCheckedAutomatically } from '../utils/task'
 import { useAssignedWorkStore } from '../stores/assigned-work'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
 import { ref } from 'vue'
@@ -185,12 +194,25 @@ function openAnswerModal() {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
     border-radius: var(--border-radius)
 
-    &__max-score
+    &__info
       margin-top: 1em
       padding-top: 1em
       margin-bottom: 0
       border-top: 1px solid var(--border-color)
       font-weight: 500
+      display: flex
+      justify-content: space-between
+      align-items: center
+
+      @media (max-width: 996px)
+        flex-direction: column
+
+    &__max-score
+      margin: 0
+      font-weight: 500
+
+    &__add-to-favourites
+      margin-top: 0
 
   &__answer
     margin-top: 1em

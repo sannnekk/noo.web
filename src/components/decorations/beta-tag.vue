@@ -12,6 +12,7 @@
   display: inline-block
   font-size: 0.5em
   padding: 0.1em 0.5em
+  vertical-align: middle
 
   &__text
     text-transform: uppercase

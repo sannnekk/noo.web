@@ -539,7 +539,7 @@ const toolbar = reactive<Toolbar>([
 ])
 
 /**
- * Handle clock events inside the editor
+ * Handle click events inside the editor
  */
 function handleEditorClick(event: MouseEvent) {
   const target = event.target as HTMLElement
@@ -559,6 +559,8 @@ function handleEditorClick(event: MouseEvent) {
     }
 
     quill?.deleteImage(src)
+
+    emits('update:modelValue', quill!.getContents())
     return
   }
 

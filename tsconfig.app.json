@@ -13,7 +13,7 @@
     "baseUrl": ".",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "lib": ["ES2021", "dom", "dom.iterable", "scripthost"],
     "paths": {
       "@/*": ["./src/*"]
     },

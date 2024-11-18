@@ -62,6 +62,16 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
    * send login request
    */
   async function login() {
+    if (!loginCredentials.usernameOrEmail) {
+      error.value = 'Имя пользователя или имейл не может быть пустым'
+      return
+    }
+
+    if (!loginCredentials.password) {
+      error.value = 'Пароль не может быть пустым'
+      return
+    }
+
     isLoading.value = true
 
     try {
