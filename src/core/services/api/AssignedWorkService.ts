@@ -298,6 +298,9 @@ export class AssignedWorkService extends ApiService {
     )
   }
 
+  /**
+   * Bulk remove tasks from favourites
+   */
   public async removeTasksFromFavourites(
     taskIds: string[],
     options: ServiceOptions = {}

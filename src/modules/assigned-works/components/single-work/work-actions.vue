@@ -83,6 +83,16 @@
     >
       Перепроверить автоматически
     </common-button>
+    <resolve-files-button
+      class="work-actions__secondary"
+      v-model:answers="assignedWorkStore.assignedWork.answers"
+      :assigned-work-id="assignedWorkStore.assignedWork.id"
+      v-if="
+        assignedWorkStore.mode === 'read' &&
+        Core.Context.roleIs(['teacher']) &&
+        isWorkChecked(assignedWorkStore.assignedWork)
+      "
+    />
     <common-button
       :to="
         Core.Context.roleIs(['teacher', 'admin']) ? '/works' : '/assigned-works'
@@ -159,8 +169,10 @@
 </template>
 
 <script setup lang="ts">
+import ResolveFilesButton from './resolve-files-button.vue'
 import { Core } from '@/core/Core'
 import { useAssignedWorkStore } from '../../stores/assigned-work'
+import { isWorkChecked } from '../../utils/task'
 
 const assignedWorkStore = useAssignedWorkStore()
 </script>
