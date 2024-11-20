@@ -88,9 +88,7 @@
       v-model:answers="assignedWorkStore.assignedWork.answers"
       :assigned-work-id="assignedWorkStore.assignedWork.id"
       v-if="
-        assignedWorkStore.mode === 'read' &&
-        Core.Context.roleIs(['teacher']) &&
-        isWorkChecked(assignedWorkStore.assignedWork)
+        assignedWorkStore.mode === 'read' && Core.Context.roleIs(['teacher'])
       "
     />
     <common-button
