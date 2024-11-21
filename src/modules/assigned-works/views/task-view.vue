@@ -11,7 +11,10 @@
         </p>
         <div
           class="task-view__question__add-to-favourites"
-          v-if="isCheckedAutomatically(assignedWorkStore.task.type)"
+          v-if="
+            isCheckedAutomatically(assignedWorkStore.task.type) &&
+            isWorkChecked(assignedWorkStore.assignedWork)
+          "
         >
           <favourite-task-button :task-id="assignedWorkStore.task.id" />
         </div>
@@ -165,7 +168,11 @@ import AnswerFinalEssayContainer from '../components/single-work/answer/answer-f
 import CommentContainer from '../components/single-work/comment/comment-container.vue'
 import ScoreContainer from '../components/single-work/comment/score-container.vue'
 import RightAnswerModal from '../components/single-work/answer/right-answer-modal.vue'
-import { hasCriteria, isCheckedAutomatically } from '../utils/task'
+import {
+  hasCriteria,
+  isCheckedAutomatically,
+  isWorkChecked
+} from '../utils/task'
 import { useAssignedWorkStore } from '../stores/assigned-work'
 import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
 import { ref } from 'vue'
