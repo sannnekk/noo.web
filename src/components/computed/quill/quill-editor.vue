@@ -424,6 +424,10 @@ const toolbar = reactive<Toolbar>([
         prompt.value.label = 'Введите URL видео'
         prompt.value.visible = true
         prompt.value.action = (value: string) => {
+          if (!value?.length) {
+            return Promise.resolve()
+          }
+
           quill?.insertEmbed(index, 'video', value)
           return Promise.resolve()
         }
