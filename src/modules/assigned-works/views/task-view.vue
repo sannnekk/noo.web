@@ -12,6 +12,7 @@
         <div
           class="task-view__question__add-to-favourites"
           v-if="
+            Core.Context.roleIs(['student']) &&
             isCheckedAutomatically(assignedWorkStore.task.type) &&
             isWorkChecked(assignedWorkStore.assignedWork)
           "
@@ -158,6 +159,7 @@
 </template>
 
 <script setup lang="ts">
+import { Core } from '@/core/Core'
 import favouriteTaskButton from '../components/single-work/favourite-task-button.vue'
 import criteriaContainer from '../components/single-work/criteria/criteria-container.vue'
 import RightAnswerContainer from '../components/single-work/comment/right-answer-container.vue'

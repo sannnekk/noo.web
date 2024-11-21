@@ -86,9 +86,11 @@
     <resolve-files-button
       class="work-actions__secondary"
       v-model:answers="assignedWorkStore.assignedWork.answers"
+      v-model:student-comment="assignedWorkStore.assignedWork.studentComment"
       :assigned-work-id="assignedWorkStore.assignedWork.id"
       v-if="
-        assignedWorkStore.mode === 'read' && Core.Context.roleIs(['teacher'])
+        assignedWorkStore.mode === 'read' &&
+        Core.Context.roleIs(['teacher', 'mentor'])
       "
     />
     <common-button

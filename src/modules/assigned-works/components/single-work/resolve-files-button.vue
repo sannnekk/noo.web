@@ -17,11 +17,13 @@ import type { DeltaContentType } from '@/types/composed/DeltaContentType'
 
 interface Props {
   answers: (Answer | undefined | null)[]
+  studentComment?: DeltaContentType | null
   assignedWorkId: AssignedWork['id']
 }
 
 interface Emits {
   (event: 'update:answers', value: (Answer | undefined | null)[]): void
+  (event: 'update:studentComment', value: DeltaContentType | null): void
 }
 
 type FileItems = Record<string, { dataUrl: string; file: File; url?: string }[]>
@@ -60,6 +62,20 @@ async function resolveFiles() {
   const files = Object.values(fileItems).flatMap((items) =>
     items.map((item) => item.file)
   )
+
+  if (props.studentComment) {
+    const dataUrls = getDataUrlsFromDelta(props.studentComment)
+
+    if (dataUrls.length) {
+      const data = dataUrls.map((dataUrl) => ({
+        dataUrl,
+        file: dataUrlToFile(dataUrl)
+      }))
+
+      fileItems['studentComment'] = data
+      files.push(...data.map((item) => item.file))
+    }
+  }
 
   if (!files.length) {
     uiService.setLoading(false)
@@ -102,10 +118,15 @@ async function resolveFiles() {
   }
 
   const resolvedAnswers = replaceDataUrlsWithUrls(props.answers, fileItems)
+  const resolvedStudentComment = replaceDataUrlsWithUrlsInComment(
+    props.studentComment || null,
+    fileItems
+  )
 
   try {
     await assignedWorkService.saveAssignedWorkProgress(props.assignedWorkId, {
-      answers: resolvedAnswers
+      answers: resolvedAnswers,
+      studentComment: resolvedStudentComment
     })
   } catch (error: any) {
     uiService.openErrorModal('Не удалось сохранить ответы', error.message)
@@ -113,6 +134,10 @@ async function resolveFiles() {
   }
 
   emits('update:answers', resolvedAnswers)
+
+  if (resolvedStudentComment) {
+    emits('update:studentComment', resolvedStudentComment)
+  }
 
   uiService.openSuccessModal('Файлы успешно конвертированы')
   uiService.setLoading(false)
@@ -184,6 +209,36 @@ function replaceDataUrlsWithUrls(
       return { ...answer, content }
     })
     .filter(Boolean) as Answer[]
+}
+
+function replaceDataUrlsWithUrlsInComment(
+  comment: DeltaContentType | null,
+  fileItems: FileItems
+): DeltaContentType | null {
+  if (!comment) return null
+
+  const content = { ...comment }
+
+  for (const op of content.ops) {
+    if (!isDataUrl(op.insert)) {
+      continue
+    }
+
+    const dataUrl = op.insert.image
+    const fileItem = Object.values(fileItems).find((items) =>
+      items.some((item) => item.dataUrl === dataUrl)
+    )
+
+    if (fileItem) {
+      const url = fileItem.find((item) => item.dataUrl === dataUrl)?.url
+
+      if (url) {
+        op.insert.image = url
+      }
+    }
+  }
+
+  return content
 }
 
 function isDataUrl(insert: any): insert is { image: string } {
