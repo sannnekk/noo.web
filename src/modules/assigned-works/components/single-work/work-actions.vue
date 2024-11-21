@@ -89,7 +89,8 @@
       v-model:student-comment="assignedWorkStore.assignedWork.studentComment"
       :assigned-work-id="assignedWorkStore.assignedWork.id"
       v-if="
-        assignedWorkStore.mode === 'read' &&
+        (assignedWorkStore.mode === 'read' ||
+          assignedWorkStore.mode === 'check') &&
         Core.Context.roleIs(['teacher', 'mentor'])
       "
     />
