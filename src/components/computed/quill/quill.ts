@@ -53,10 +53,12 @@ export class CustomQuill extends Quill {
     toolbar?: Toolbar
   ) {
     super(selector.value, {
-      readOnly: mode === 'readonly'
+      readOnly: mode === 'readonly',
+      debug: false
     })
 
     this.registerBlots()
+    this.initUploader()
 
     this.toolbar = toolbar
 
@@ -70,15 +72,32 @@ export class CustomQuill extends Quill {
   }
 
   private registerBlots() {
-    Quill.register(CommentBlot)
-    Quill.register(ImageCommentBlot)
-    Quill.register(ImageOverrideBlot)
+    if (Quill.imports['formats/image'] !== ImageOverrideBlot) {
+      Quill.register(ImageOverrideBlot, true)
+    }
+
+    if (!Quill.imports['formats/comment']) {
+      Quill.register(CommentBlot)
+    }
+
+    if (!Quill.imports['formats/image-comment']) {
+      Quill.register(ImageCommentBlot)
+    }
   }
 
   private initHandlers() {
     this.on('selection-change', this.onSelectionChange.bind(this))
-    this.container.addEventListener('drop', this.onDrop.bind(this))
-    this.container.addEventListener('paste', this.onPaste.bind(this))
+  }
+
+  private initUploader() {
+    const uploader = this.getModule('uploader') as any
+
+    uploader.options.handler = async (range: Range, files: File[]) => {
+      const urls = await Promise.all(files.map((file) => this.uploadFile(file)))
+      urls.forEach((url, i) => {
+        this.insertImg(range.index + i, url)
+      })
+    }
   }
 
   public rerenderToolbar() {
@@ -324,95 +343,6 @@ export class CustomQuill extends Quill {
     if (this.hasFocus()) {
       this.rerenderToolbar()
     }
-  }
-
-  private onDrop(event: DragEvent) {
-    const files = event.dataTransfer?.files
-    const index = this.getSelection()?.index || 0
-
-    if (!files || !files.length) return
-
-    event.stopPropagation()
-    event.preventDefault()
-
-    setTimeout(async () => {
-      const errors = []
-
-      for (const file of Array.from(files)) {
-        if (!this.ALLOWED_MIME_TYPES.includes(file.type as any)) {
-          errors.push(
-            `Файл ${file.name} не был загружен, т.к. его тип ${file.type} не поддерживается`
-          )
-          this.insertImgAndRemoveDataUrl(index, undefined)
-          continue
-        }
-
-        if (file.size > this.MAX_FILE_SIZE) {
-          errors.push(
-            `Файл ${file.name} не был загружен, т.к. его размер ${
-              file.size / 1024 / 1024
-            } превышает 3 МБ`
-          )
-          this.insertImgAndRemoveDataUrl(index, undefined)
-          continue
-        }
-
-        const url = await this.uploadFile(file)
-        this.insertImgAndRemoveDataUrl(index, url)
-      }
-
-      if (errors.length) {
-        Core.Services.UI.openErrorModal(
-          'Ошибка загрузки файлов',
-          errors.join('\n')
-        )
-      }
-    }, 0)
-  }
-
-  private onPaste(event: ClipboardEvent) {
-    const index = this.getSelection()?.index || 0
-    const clipboard = event.clipboardData || (window as any).clipboardData
-
-    // IE 11 is .files other browsers are .items
-    if (!clipboard && !(clipboard.items || clipboard.files)) {
-      return
-    }
-
-    const items = clipboard.items || clipboard.files
-
-    for (const item of items) {
-      if (!this.ALLOWED_MIME_TYPES.includes(item.type)) {
-        return
-      }
-
-      const file = item.getAsFile ? item.getAsFile() : item
-
-      if (!file) {
-        return
-      }
-
-      this.focus()
-      event.preventDefault()
-
-      setTimeout(async () => {
-        this.focus()
-        const url = await this.uploadFile(file)
-
-        this.insertImgAndRemoveDataUrl(index || 0, url)
-      }, 0)
-    }
-  }
-
-  private insertImgAndRemoveDataUrl(index: number, url?: string) {
-    setTimeout(() => {
-      this.focus()
-      this.deleteText(index, 1)
-
-      if (url) {
-        this.insertEmbed(index, 'image', url, 'user')
-      }
-    }, 50)
   }
 
   private insertImg(index: number, url?: string) {

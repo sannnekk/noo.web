@@ -688,6 +688,29 @@ function syncImageSelections() {
 
     :deep()
       .ql-image
+        z-index: 1
+        position: relative
+
+        img
+          border: 1px solid var(--border-color)
+          border-radius: var(--border-radius)
+          display: block
+
+        &::after
+          z-index: -1
+          content: ''
+          position: absolute
+          display: block
+          top: 50%
+          left: 50%
+          width: 40px
+          height: 40px
+          margin: -20px 0 0 -20px
+          border: 4px solid var(--lila)
+          border-top: 4px solid transparent
+          border-radius: 50%
+          animation: spin 1s linear infinite
+
         .actions
           position: absolute
           top: 20px
@@ -835,4 +858,11 @@ function syncImageSelections() {
           width: 1em
           border-radius: 50%
           background-color: var(--lila)
+
+
+@keyframes spin
+  from
+    transform: rotate(0deg)
+  to
+    transform: rotate(360deg)
 </style>

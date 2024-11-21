@@ -20,15 +20,15 @@ export class ImageOverrideBlot extends Embed {
     deleteButton.classList.add('delete-button')
     actionsContainer.appendChild(deleteButton)
 
-    const rotateLeftButton = document.createElement('button') as HTMLElement
+    /* const rotateLeftButton = document.createElement('button') as HTMLElement
     rotateLeftButton.innerHTML = '↺'
     rotateLeftButton.classList.add('rotate-left-button')
-    actionsContainer.appendChild(rotateLeftButton)
+    actionsContainer.appendChild(rotateLeftButton) */
 
-    const rotateRightButton = document.createElement('button') as HTMLElement
+    /* const rotateRightButton = document.createElement('button') as HTMLElement
     rotateRightButton.innerHTML = '↻'
     rotateRightButton.classList.add('rotate-right-button')
-    actionsContainer.appendChild(rotateRightButton)
+    actionsContainer.appendChild(rotateRightButton) */
 
     node.appendChild(image)
     node.appendChild(actionsContainer)
