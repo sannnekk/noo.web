@@ -690,6 +690,7 @@ function syncImageSelections() {
       .ql-image
         z-index: 1
         position: relative
+        width: fit-content
 
         img
           border: 1px solid var(--border-color)
