@@ -45,6 +45,12 @@ export function installUIStore() {
      */
     const navEntries = ref<NavEntry[]>([
       {
+        title: 'НОО.Tube',
+        icon: 'nootube',
+        route: '/nootube',
+        for: ['teacher']
+      },
+      {
         title: 'Опросы',
         icon: 'home',
         route: '/blog',

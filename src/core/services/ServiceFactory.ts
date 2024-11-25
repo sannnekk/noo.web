@@ -18,6 +18,7 @@ import { UserService } from './api/UserService'
 import { WorkService } from './api/WorkService'
 import { UIService } from './store/UIService'
 import { UserSettingsService } from './store/UserSettingsService'
+import { VideoService } from './api/VideoService'
 
 export type ServiceName =
   | 'Auth'
@@ -36,6 +37,10 @@ export type ServiceName =
   | 'GoogleSheetsBinding'
   | 'Subject'
   | 'Platform'
+  | 'Snippet'
+  | 'FAQ'
+  | 'Video'
+  | 'UserSettings'
 
 export type Services = {
   Auth: AuthService
@@ -54,6 +59,7 @@ export type Services = {
   Platform: PlatformService
   Snippet: SnippetService
   FAQ: FAQService
+  Video: VideoService
 
   Notification: NotificationService
   UI: UIService
@@ -85,6 +91,7 @@ export class ServiceFactory {
     Platform: PlatformService,
     Snippet: SnippetService,
     FAQ: FAQService,
+    Video: VideoService,
 
     // storage
     Notification: NotificationService,

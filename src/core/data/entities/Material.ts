@@ -3,6 +3,7 @@ import type { Entity } from '../Entity'
 import type { Chapter } from './Chapter'
 import type { Media } from './Media'
 import type { Poll } from './Poll'
+import type { Video } from './Video'
 import type { Work } from './Work'
 
 export interface Material extends Entity {
@@ -25,6 +26,7 @@ export interface Material extends Entity {
   workCheckDeadline: Date | null
   poll?: Poll
   pollId?: Poll['id']
+  videos: Video[]
   reactionCounts?: Record<string, number>
   myReaction?: string
 }

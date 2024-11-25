@@ -82,6 +82,19 @@
       <rich-text-container :content="courseStore.material.content" />
     </div>
     <div
+      class="material-view__video"
+      v-if="courseStore.material.videos?.length"
+    >
+      <h3>НОО.Tube <new-tag /></h3>
+      <div
+        class="material-view__video__item"
+        v-for="video in courseStore.material.videos"
+        :key="video.id"
+      >
+        <video-block :video="video" />
+      </div>
+    </div>
+    <div
       class="material-view__reactions"
       v-if="Core.Context.roleIs(['student'])"
     >

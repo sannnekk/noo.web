@@ -55,6 +55,7 @@ export type IconName =
   | 'question'
   | 'brush'
   | 'star'
+  | 'nootube'
 
 interface Props {
   name: IconName
