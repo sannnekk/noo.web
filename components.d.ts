@@ -71,6 +71,7 @@ declare module 'vue' {
     FormToggle: typeof import('./src/components/form/form-toggle.vue')['default']
     GoogleAuthButton: typeof import('./src/components/actions/google-auth-button.vue')['default']
     GoogleSheetsIcon: typeof import('./src/components/decorations/icons/google-sheets-icon.vue')['default']
+    GoogleTranslateWarner: typeof import('./src/components/virtual/google-translate-warner.vue')['default']
     Header2Icon: typeof import('./src/components/decorations/icons/text-format-icons/header-2-icon.vue')['default']
     Header3Icon: typeof import('./src/components/decorations/icons/text-format-icons/header-3-icon.vue')['default']
     Header4Icon: typeof import('./src/components/decorations/icons/text-format-icons/header-4-icon.vue')['default']

@@ -1,1 +1,0 @@
-import{_ as n,a as s,i as c,g as e,j as t,a2 as a,a3 as i}from"./index-29c74012.js";const d={},l={class:"info-block"},r={class:"info-block__icon"},f={class:"info-block__text"};function p(o,u){const _=i;return s(),c("div",l,[e("div",r,[t(_,{name:"info"})]),e("div",f,[a(o.$slots,"default",{},void 0,!0)])])}const k=n(d,[["render",p],["__scopeId","data-v-18f8825e"]]);export{k as _};

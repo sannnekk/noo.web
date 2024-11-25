@@ -1,5 +1,6 @@
 <template>
   <header class="header">
+    <google-translate-warner />
     <div class="header__inner">
       <div class="header__pane-toggler">
         <the-pane-toggler />
