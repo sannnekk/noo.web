@@ -270,6 +270,21 @@ export class AssignedWorkService extends ApiService {
   }
 
   /**
+   * Send the assigned work for recheck
+   */
+  public async sendToRecheck(
+    assignedWorkId: AssignedWork['id'],
+    options: ServiceOptions = {}
+  ) {
+    await this.httpPatch(
+      `${this._route}/${assignedWorkId}/send-to-recheck`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
    * Add the task to favourites
    */
   public async addTaskToFavourites(

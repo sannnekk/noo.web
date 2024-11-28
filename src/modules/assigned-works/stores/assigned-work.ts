@@ -524,6 +524,34 @@ export const useAssignedWorkStore = defineStore(
       }
     }
 
+    /**
+     * Send to recheck
+     */
+    async function sendToRecheck() {
+      if (!assignedWork.value) {
+        return
+      }
+
+      try {
+        await assignedWorkService.sendToRecheck(assignedWork.value.id, {
+          showLoader: true
+        })
+
+        await fetchAssignedWork()
+
+        uiService.openSuccessModal('Работа успешно отправлена на перепроверку')
+
+        if (Core.Context.roleIs(['mentor'])) {
+          _router.push(`/assigned-works/${assignedWorkId.value}/check`)
+        }
+      } catch (error: any) {
+        uiService.openErrorModal(
+          'Ошибка при отправке на перепроверку',
+          error.message
+        )
+      }
+    }
+
     return {
       assignedWorkId,
       assignedWork,
@@ -545,6 +573,7 @@ export const useAssignedWorkStore = defineStore(
       workScore,
       saveProgress,
       recheckAutomatically,
+      sendToRecheck,
       remakeWork,
       remakeModal,
       _router,
