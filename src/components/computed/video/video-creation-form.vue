@@ -12,7 +12,7 @@
       />
     </div>
     <div class="form-group">
-      <rich-text-editor
+      <rich-text-area
         title="Описание"
         v-model="video.description"
       />
@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="form-group">
-      <video-upload-button
+      <yandex-video-upload-button
         :service-type="video.serviceType"
         :upload-url="video.uploadUrl"
         :state="video.state"

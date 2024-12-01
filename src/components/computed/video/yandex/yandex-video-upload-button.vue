@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import tus, { Upload } from 'tus-js-client'
+import { Upload, type UploadOptions } from 'tus-js-client'
 import type { Video } from '@/core/data/entities/Video'
 
 interface Props {
@@ -101,7 +101,7 @@ function startUpload(): void {
 
   uploading.value = true
 
-  const options: tus.UploadOptions = {
+  const options: UploadOptions = {
     uploadUrl: props.uploadUrl || undefined,
     chunkSize: config.chunkSize,
     metadata: {
@@ -122,8 +122,8 @@ function startUpload(): void {
     retryDelays: [0, 1000, 3000, 5000] // Retry delays in milliseconds
   }
 
-  upload.value = new tus.Upload(fileRef.value, options)
-  upload.value.start()
+  upload.value = new Upload(fileRef.value, options)
+  upload.value?.start()
 }
 
 function pauseUpload(): void {

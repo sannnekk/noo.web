@@ -1,10 +1,20 @@
 <template>
   <div class="video-list-view">
     <div class="video-list-view__search">
-      <search-field
-        v-model="nootubeStore.videoSearch.pagination.search"
-        :is-loading="nootubeStore.videoSearch.isListLoading"
-      />
+      <div class="video-list-view__search__field">
+        <search-field
+          v-model="nootubeStore.videoSearch.pagination.search"
+          :is-loading="nootubeStore.videoSearch.isListLoading"
+        />
+      </div>
+      <div
+        class="video-list-view__search__actions"
+        v-if="Core.Context.roleIs(['mentor', 'teacher'])"
+      >
+        <common-button to="/nootube/upload-video">
+          Загрузить видео
+        </common-button>
+      </div>
     </div>
     <div class="video-list-view__list">
       <video-card
@@ -12,14 +22,15 @@
         :key="video.id"
         :video="video"
       />
-      <video-card
-        :video="{
+      <div class="video-list-view__list__item">
+        <video-card
+          :video="{
 				id: '1',
 				title: 'Разбор нового материала о селекции',
 				uploadedBy: Core.Context.User!,
 				thumbnail: {
 					id: '1',
-					src: 'https://via.placeholder.com/300/200/1',
+					src: '/img/placeholder.svg',
 					mimeType: 'image/jpeg',
 					name: 'thumbnail.jpg',
 					createdAt: new Date(),
@@ -42,7 +53,8 @@
 				uploadUrl: 'https://www.youtube.com/watch?v=6n3pFFPSlW4',
 				publishedAt: new Date(),
 			}"
-      />
+        />
+      </div>
     </div>
     <div class="video-list-view__pagination">
       <list-pagination
@@ -61,4 +73,22 @@ import { useNooTubeStore } from '../stores/nootube'
 const nootubeStore = useNooTubeStore()
 </script>
 
-<style scoped></style>
+<style scoped lang="sass">
+.video-list-view
+	&__search
+		display: flex
+		gap: 1em
+
+		@media (max-width: 768px)
+			flex-direction: column
+
+		&__field
+			flex: 1
+
+		&__actions
+			font-size: 1.15em
+
+	&__list
+		&__item
+			padding: 1em 0
+</style>

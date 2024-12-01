@@ -1,10 +1,23 @@
 <template>
   <div class="video-card">
-    <div class="video-card__image">
-      <uploaded-image :src="video.thumbnail.src" />
-    </div>
+    <router-link
+      class="video-card__preview"
+      :to="link"
+    >
+      <div class="video-card__preview__view-button">
+        <inline-icon name="play" />
+      </div>
+      <div class="video-card__preview__image">
+        <uploaded-image :src="video.thumbnail.src" />
+      </div>
+      <div class="video-card__preview__length">
+        {{ length }}
+      </div>
+    </router-link>
     <div class="video-card__info">
-      <h3 class="video-card__info__title">{{ video.title }}</h3>
+      <h3 class="video-card__info__title">
+        <router-link :to="link">{{ video.title }}</router-link>
+      </h3>
       <div class="video-card__info__author">
         <inline-user-card :user="video.uploadedBy" />
       </div>
@@ -20,12 +33,22 @@
 
 <script setup lang="ts">
 import type { Video } from '@/core/data/entities/Video'
+import { computed } from 'vue'
 
 interface Props {
   video: Video
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const link = computed(() => `/nootube/video/${props.video.id}`)
+const length = computed(() => stringifyLength(props.video.length))
+
+function stringifyLength(length: number) {
+  const minutes = Math.floor(length / 60)
+  const seconds = length % 60
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`
+}
 </script>
 
 <style scoped lang="sass">
@@ -33,27 +56,71 @@ defineProps<Props>()
 	display: flex
 	gap: 1em
 
-	&__image
-		width: 100%
-		max-width: 300px
-		padding: 1em
-		overflow: hidden
-		border-radius: var(--border-radius)
+	&__preview
+		position: relative
+		cursor: pointer
+		display: block
+		text-decoration: none
+		color: inherit
+		width: min(100%, 300px)
+
+		&:hover
+			.video-card__preview__view-button
+				transform: translate(-50%, -50%) scale(1.1)
+
+		&__image
+			width: 100%
+			height: 100%
+			overflow: hidden
+			border-radius: var(--border-radius)
+
+			img
+				width: 100%
+				height: 100%
+				object-fit: cover
+
+		&__length
+			position: absolute
+			bottom: 0
+			right: 0
+			background: rgba(0, 0, 0, 0.5)
+			color: white
+			padding: 0em 0.5em
+			border-radius: var(--border-radius)
+
+		&__view-button
+			position: absolute
+			top: 50%
+			left: 50%
+			transform: translate(-50%, -50%)
+			font-size: 4em
+			color: white
+			cursor: pointer
+			transition: 0.2s ease all
 
 	&__info
 		flex: 1
 		padding: 1em
+		display: flex
+		flex-direction: column
+		justify-content: center
 
 		&__title
 			font-size: 1.5em
 			margin: 0
-			margin-top: 0.5em
+
+			a
+				color: inherit
+				text-decoration: none
+
+				&:hover
+					color: var(--lila)
 
 		&__author
 			margin-top: 0em
 
 		&__description
-			margin-top: 1em
+			margin-top: 0.3em
 			font-size: 0.9em
 			color: #666
 

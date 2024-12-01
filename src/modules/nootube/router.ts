@@ -11,6 +11,16 @@ export default {
       path: '',
       name: 'НОО.Tube',
       component: IndexView
+    },
+    {
+      path: 'video/:id',
+      name: 'Видео',
+      component: () => import('./views/video-view.vue')
+    },
+    {
+      path: 'upload-video',
+      name: 'Загрузка видео',
+      component: () => import('./views/upload-video-view.vue')
     }
   ]
 }
