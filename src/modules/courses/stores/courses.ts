@@ -11,15 +11,19 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
   const uiService = Core.Services.UI
 
   /**
-   * search
+   * All courses search
    */
-  const {
-    pagination,
-    results,
-    resultsMeta,
-    isListLoading,
-    trigger: triggerSearch
-  } = useSearch<Course>(fetchCourses, {
+  const allSearch = useSearch<Course>(fetchCourses, {
+    initialPagination: {
+      limit: 9
+    },
+    immediate: true
+  })
+
+  /**
+   * Own courses search
+   */
+  const ownSearch = useSearch<Course>(fetchOwnCourses, {
     initialPagination: {
       limit: 9
     },
@@ -41,6 +45,24 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
 
     try {
       return await courseService.getCourses(pagination)
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при загрузке курсов',
+        error.message
+      )
+    }
+  }
+
+  /**
+   * Fetch the own courses
+   */
+  async function fetchOwnCourses(pagination: Pagination) {
+    if (Core.Context.roleIs(['student', 'mentor'])) {
+      return
+    }
+
+    try {
+      return await courseService.getOwnCourses(pagination)
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при загрузке курсов',
@@ -103,11 +125,8 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
   }
 
   return {
-    pagination,
-    results,
-    resultsMeta,
-    isListLoading,
-    triggerSearch,
+    allSearch,
+    ownSearch,
     currentTabIndex,
     fetchAssignments,
     archiveAssignment,
