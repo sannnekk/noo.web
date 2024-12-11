@@ -50,7 +50,7 @@ export class CourseService extends ApiService {
   }
 
   /**
-   * Get own courses
+   * Get own courses (for teachers)
    */
   public async getOwnCourses(
     pagination?: Pagination,

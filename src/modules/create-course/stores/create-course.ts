@@ -267,7 +267,8 @@ export const useCreateCourseStore = defineStore(
               label: 'Вернуться к списку курсов',
               design: 'primary',
               handler: () => {
-                coursesStore.triggerSearch()
+                coursesStore.allSearch.trigger()
+                coursesStore.ownSearch.trigger()
                 _router.push('/courses')
               }
             }
@@ -288,7 +289,8 @@ export const useCreateCourseStore = defineStore(
               label: 'Вернуться к списку курсов',
               design: 'primary',
               handler: () => {
-                coursesStore.triggerSearch()
+                coursesStore.allSearch.trigger()
+                coursesStore.ownSearch.trigger()
                 _router.push('/courses')
               }
             }
@@ -318,7 +320,8 @@ export const useCreateCourseStore = defineStore(
             label: 'Вернуться к списку курсов',
             design: 'primary',
             handler: () => {
-              coursesStore.triggerSearch()
+              coursesStore.allSearch.trigger()
+              coursesStore.ownSearch.trigger()
               _router.push('/courses')
             }
           }
