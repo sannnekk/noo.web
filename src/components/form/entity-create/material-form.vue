@@ -59,7 +59,7 @@
         label="Файлы, прикрепленные к материалу"
         :max-count="20"
         :allowed-mime-types="['application/pdf', 'image/jpeg', 'image/png']"
-        :max-file-size="50 * 1024 * 1024"
+        :max-file-size="80 * 1024 * 1024"
         v-model="model.files"
       />
     </div>
