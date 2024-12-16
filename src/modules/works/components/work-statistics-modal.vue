@@ -62,7 +62,7 @@
             <div
               class="work-statistics-modal__content__hardest-tasks__item__score"
             >
-              Средний балл: {{ task.averageScore.toFixed(2) }}
+              Средний балл: {{ task.averageScore.toFixed(2) }} %
             </div>
             <div
               class="work-statistics-modal__content__hardest-tasks__item__link"
@@ -199,6 +199,11 @@ async function loadStatistics() {
 				font-size: 14px
 				margin: 0
 
+		&__title
+			font-weight: 500
+			font-size: 18px
+			margin-bottom: 1em
+
 		&__hardest-tasks
 			display: flex
 			flex-direction: column
@@ -233,8 +238,9 @@ async function loadStatistics() {
 				color: var(--text-light)
 
 	&__loader
-		align-items: center
 		display: flex
-		height: 100%
+		align-items: center
 		justify-content: center
+		padding: 2em 0
+		font-size: 3em
 </style>
