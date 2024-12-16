@@ -55,6 +55,7 @@ export type IconName =
   | 'question'
   | 'brush'
   | 'star'
+  | 'statistics'
 
 interface Props {
   name: IconName

@@ -152,6 +152,7 @@ declare module 'vue' {
     SettingsIcon: typeof import('./src/components/decorations/icons/settings-icon.vue')['default']
     StarIcon: typeof import('./src/components/decorations/icons/star-icon.vue')['default']
     StatisticsEntryCard: typeof import('./src/components/computed/statistics/statistics-entry-card.vue')['default']
+    StatisticsIcon: typeof import('./src/components/decorations/icons/statistics-icon.vue')['default']
     StatisticsPlotCard: typeof import('./src/components/computed/statistics/statistics-plot-card.vue')['default']
     StatisticsSection: typeof import('./src/components/computed/statistics/statistics-section.vue')['default']
     StatisticsView: typeof import('./src/components/computed/statistics/statistics-view.vue')['default']

@@ -24,6 +24,7 @@
         @copy-work="worksStore.copyWork($event)"
         @delete-work="onWorkDelete($event)"
         @show-related-materials="onShowRelatedMaterials($event)"
+        @show-work-statistics="onShowWorkStatistics($event)"
       />
     </div>
     <div class="index-works-view__pagination">
@@ -57,9 +58,14 @@
     v-model:visible="relatedMaterialsModalData.visible"
     :work="relatedMaterialsModalData.work"
   />
+  <work-statistics-modal
+    v-model:visible="workStatisticsModalData.visible"
+    :work="workStatisticsModalData.work"
+  />
 </template>
 
 <script setup lang="ts">
+import workStatisticsModal from '../components/work-statistics-modal.vue'
 import relatedMaterialsModal from '../components/related-materials-modal.vue'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useWorksStore } from '../stores/works'
@@ -83,14 +89,24 @@ const relatedMaterialsModalData = reactive({
   work: null as Work | null
 })
 
+const workStatisticsModalData = reactive({
+  visible: false,
+  work: null as Work | null
+})
+
 function onWorkDelete(work: Work) {
   deleteWorkModalData.work = work
   deleteWorkModalData.visible = true
 }
 
-async function onShowRelatedMaterials(work: Work) {
+function onShowRelatedMaterials(work: Work) {
   relatedMaterialsModalData.work = work
   relatedMaterialsModalData.visible = true
+}
+
+function onShowWorkStatistics(work: Work) {
+  workStatisticsModalData.work = work
+  workStatisticsModalData.visible = true
 }
 
 const filters = ref<SearchFilter[]>([

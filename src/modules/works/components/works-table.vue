@@ -24,6 +24,7 @@ interface Emits {
   (e: 'copy-work', workSlug: Work['slug']): void
   (e: 'delete-work', work: Work): void
   (e: 'show-related-materials', work: Work): void
+  (e: 'show-work-statistics', work: Work): void
 }
 
 defineProps<Props>()
@@ -92,6 +93,13 @@ function actions(row: Work): MenuItem[] {
       icon: 'eye',
       action: () => {
         emits('show-related-materials', row)
+      }
+    },
+    {
+      title: 'Посмотреть статистику',
+      icon: 'statistics',
+      action: () => {
+        emits('show-work-statistics', row)
       }
     },
     {
