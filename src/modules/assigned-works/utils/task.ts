@@ -23,7 +23,7 @@ export function getTaskScoreStatus(
   if (
     mode === 'solve' ||
     !isWorkMade(assignedWork) ||
-    (Core.Context.roleIs(['admin', 'teacher', 'student']) &&
+    (Core.Context.roleIs(['admin', 'teacher', 'student', 'assistant']) &&
       !isWorkChecked(assignedWork))
   ) {
     return null
@@ -43,7 +43,7 @@ export function getTaskScoreStatus(
 
   if (
     !isWorkChecked(assignedWork) &&
-    Core.Context.roleIs(['admin', 'teacher', 'student'])
+    Core.Context.roleIs(['admin', 'teacher', 'student', 'assistant'])
   ) {
     return null
   }

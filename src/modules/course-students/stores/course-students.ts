@@ -35,7 +35,10 @@ export const useCourseStudentsStore = defineStore(
     }
 
     async function fetchStudents(pagination: Pagination) {
-      if (Core.Context.roleIs(['student', 'mentor']) || !course.value) {
+      if (
+        Core.Context.roleIs(['student', 'mentor', 'assistant']) ||
+        !course.value
+      ) {
         return
       }
 

@@ -50,21 +50,21 @@ const actions = reactive<Action[]>([
     label: 'Назначить куратора',
     icon: 'add',
     action: () => emits('assign-mentor'),
-    roles: ['admin', 'teacher'],
+    roles: ['admin', 'teacher', 'assistant'],
     visible: (id) => !id
   },
   {
     label: 'Сменить куратора',
     icon: 'edit',
     action: () => emits('assign-mentor'),
-    roles: ['admin', 'teacher'],
+    roles: ['admin', 'teacher', 'assistant'],
     visible: (id) => !!id
   },
   {
     label: 'Открепить куратора',
     icon: 'cross-red',
     action: () => emits('remove-mentor'),
-    roles: ['admin', 'teacher'],
+    roles: ['admin', 'teacher', 'assistant'],
     visible: (id) => !!id
   },
   {

@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 interface Props {
-  type?: 'success' | 'warning' | 'danger' | 'info' | 'tag'
+  type?: 'success' | 'warning' | 'danger' | 'info' | 'lila' | 'tag'
   mode?: 'default' | 'background'
 }
 
@@ -46,6 +46,10 @@ withDefaults(defineProps<Props>(), {
 
     &.info
       background: var(--dark)
+      color: var(--white) !important
+
+    &.lila
+      background: var(--lila)
       color: var(--white) !important
 
     &.tag

@@ -100,7 +100,7 @@ async function fetchEvents(newDate: Date, oldDate?: Date) {
 
 async function onEventRemove(id: string) {
   try {
-    await calenderService.deleteEvent(id, { showLoading: true })
+    await calenderService.deleteEvent(id, { showLoader: true })
     events.value = events.value.filter((event) => event.id !== id)
   } catch (error: any) {
     uiService.openErrorModal('Ошибка при удалении события', error.message)
@@ -114,7 +114,7 @@ async function onEventSubmit() {
         ...newEvent.value,
         id: undefined
       } as any,
-      { showLoading: true }
+      { showLoader: true }
     )
 
     if (!response.data) {
@@ -182,7 +182,7 @@ const allVisibilityOptions: {
     label: 'Мой куратор'
   },
   {
-    for: ['admin', 'teacher', 'mentor', 'student'],
+    for: ['admin', 'teacher', 'mentor', 'student', 'assistant'],
     value: 'private',
     label: 'Только я'
   }

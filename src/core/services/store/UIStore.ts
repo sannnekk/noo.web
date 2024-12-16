@@ -12,7 +12,7 @@ export type NavEntry = {
   title: string
   icon: IconName
   route: string
-  for: ('admin' | 'teacher' | 'mentor' | 'student')[]
+  for: ('admin' | 'teacher' | 'mentor' | 'student' | 'assistant')[]
 }
 
 /**
@@ -48,13 +48,13 @@ export function installUIStore() {
         title: 'Опросы',
         icon: 'home',
         route: '/blog',
-        for: ['admin', 'teacher', 'mentor', 'student']
+        for: ['admin', 'teacher', 'mentor', 'student', 'assistant']
       },
       {
         title: 'Курсы',
         icon: 'uni-cap',
         route: '/courses',
-        for: ['admin', 'teacher', 'mentor', 'student']
+        for: ['admin', 'teacher', 'mentor', 'student', 'assistant']
       },
       {
         title: 'Работы',
@@ -78,31 +78,31 @@ export function installUIStore() {
         title: 'Пользователи',
         icon: 'users',
         route: '/users',
-        for: ['admin', 'teacher', 'mentor']
+        for: ['admin', 'teacher', 'mentor', 'assistant']
       },
       {
         title: 'Календарь',
         icon: 'calender',
         route: '/calender',
-        for: ['admin', 'student', 'teacher', 'mentor']
+        for: ['admin', 'student', 'teacher', 'mentor', 'assistant']
       },
       {
         title: 'Профиль',
         icon: 'user',
         route: '/profile',
-        for: ['admin', 'student', 'teacher', 'mentor']
+        for: ['admin', 'student', 'teacher', 'mentor', 'assistant']
       },
       {
         title: 'Настройки',
         icon: 'settings',
         route: '/settings',
-        for: ['admin', 'student', 'teacher', 'mentor']
+        for: ['admin', 'student', 'teacher', 'mentor', 'assistant']
       },
       {
         title: 'Помощь',
         icon: 'help',
         route: '/help',
-        for: ['admin', 'student', 'teacher', 'mentor']
+        for: ['admin', 'student', 'teacher', 'mentor', 'assistant']
       }
     ])
 

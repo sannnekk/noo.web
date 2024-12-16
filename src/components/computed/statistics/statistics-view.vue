@@ -1,7 +1,7 @@
 <template>
   <div
     class="statistics-view"
-    v-if="Core.Context.roleIs(['student', 'teacher', 'mentor'])"
+    v-if="Core.Context.roleIs(['student', 'teacher', 'mentor', 'assistant'])"
     v-auto-animate
   >
     <div class="statistics-view__header">

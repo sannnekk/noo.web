@@ -55,7 +55,7 @@ export const useAssignWorkToMaterialStore = defineStore(
     watch(
       materialSlug,
       () => {
-        if (Core.Context.roleIs(['admin', 'student', 'mentor'])) {
+        if (Core.Context.roleIs(['admin', 'student', 'mentor', 'assistant'])) {
           return
         }
 
@@ -85,7 +85,7 @@ export const useAssignWorkToMaterialStore = defineStore(
      * Watch for search query and load works
      */
     async function fetchWorks(pagination: Pagination) {
-      if (Core.Context.roleIs(['admin', 'student', 'mentor'])) {
+      if (Core.Context.roleIs(['admin', 'student', 'mentor', 'assistant'])) {
         return
       }
 
@@ -103,7 +103,7 @@ export const useAssignWorkToMaterialStore = defineStore(
      * Submit work to material
      */
     async function assign() {
-      if (Core.Context.roleIs(['student', 'mentor'])) {
+      if (Core.Context.roleIs(['student', 'mentor', 'assistant'])) {
         return
       }
 
@@ -141,7 +141,7 @@ export const useAssignWorkToMaterialStore = defineStore(
      * Unassign work from material
      */
     async function unassign() {
-      if (Core.Context.roleIs(['student', 'mentor'])) {
+      if (Core.Context.roleIs(['student', 'mentor', 'assistant'])) {
         return
       }
 

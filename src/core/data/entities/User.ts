@@ -6,7 +6,7 @@ import type { UserAvatar } from './UserAvatar'
 
 export interface User extends Entity {
   slug: string
-  role: 'admin' | 'teacher' | 'mentor' | 'student'
+  role: 'admin' | 'teacher' | 'mentor' | 'student' | 'assistant'
   name: string
   username: string
   email: string

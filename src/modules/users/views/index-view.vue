@@ -61,7 +61,8 @@ const filters: SearchFilter[] = [
       { label: 'Администратор', value: 'admin' },
       { label: 'Преподаватель', value: 'teacher' },
       { label: 'Куратор', value: 'mentor' },
-      { label: 'Ученик', value: 'student' }
+      { label: 'Ученик', value: 'student' },
+      { label: 'Ассистент', value: 'assistant' }
     ]
   },
   {
@@ -102,6 +103,8 @@ const cols: ColType[] = [
           return "<span style='color: var(--success)'>Преподаватель</span>"
         case 'mentor':
           return "<span style='color: var(--warning)'>Куратор</span>"
+        case 'assistant':
+          return "<span style='color: var(--lila)'>Ассистент</span>"
         case 'student':
         default:
           return "<span style='color: var(--text-light)'>Ученик</span>"
@@ -123,24 +126,12 @@ const cols: ColType[] = [
 function actions(row: User): MenuItem[] {
   return [
     {
-      title: 'Редактировать',
+      title: 'Просмотреть/Редактировать',
       icon: 'edit',
       action: () => {
         router.push(`/users/edit/${row.username}`)
       }
     },
-    /* {
-      title: 'Присвоить/изменить куратора',
-      icon: 'user',
-      if: row.role === 'student',
-      action: () => {
-        assignMentorModalData.value = {
-          visible: true,
-          mentor: row.mentor || null,
-          user: row
-        }
-      }
-    }, */
     {
       title: 'Телеграм',
       icon: 'telegram-blue',

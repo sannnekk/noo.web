@@ -77,7 +77,7 @@
       @click="assignedWorkStore.recheckAutomatically()"
       v-if="
         assignedWorkStore.mode === 'read' &&
-        Core.Context.roleIs(['teacher', 'admin', 'mentor']) &&
+        Core.Context.roleIs(['teacher', 'admin', 'mentor', 'assistant']) &&
         assignedWorkStore.assignedWork?.checkStatus == 'checked-automatically'
       "
     >
@@ -90,7 +90,7 @@
       @click="assignedWorkStore.sendToRecheck()"
       v-if="
         assignedWorkStore.mode === 'read' &&
-        Core.Context.roleIs(['mentor', 'teacher']) &&
+        Core.Context.roleIs(['mentor', 'teacher', 'assistant']) &&
         isWorkChecked(assignedWorkStore.assignedWork) &&
         assignedWorkStore.assignedWork.checkStatus !== 'checked-automatically'
       "
@@ -105,7 +105,7 @@
       v-if="
         (assignedWorkStore.mode === 'read' ||
           assignedWorkStore.mode === 'check') &&
-        Core.Context.roleIs(['teacher', 'mentor'])
+        Core.Context.roleIs(['teacher', 'mentor', 'assistant'])
       "
     />
     <common-button

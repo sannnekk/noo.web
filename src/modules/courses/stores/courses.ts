@@ -57,7 +57,7 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
    * Fetch the own courses
    */
   async function fetchOwnCourses(pagination: Pagination) {
-    if (Core.Context.roleIs(['student', 'mentor'])) {
+    if (Core.Context.roleIs(['student', 'mentor', 'assistant'])) {
       return
     }
 
@@ -75,7 +75,7 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
    * Fetch the course assignments
    */
   async function fetchAssignments(pagination: Pagination) {
-    if (Core.Context.roleIs(['admin', 'teacher', 'mentor'])) {
+    if (Core.Context.roleIs(['admin', 'teacher', 'mentor', 'assistant'])) {
       return
     }
 

@@ -21,6 +21,11 @@ export const useUserStore = defineStore('users-module:user', () => {
   const studentsWithSubjects = ref<UserWithSubject[]>([])
 
   /**
+   * Current tab index for student view
+   */
+  const currentTab = ref(0)
+
+  /**
    * Fetch user by username
    */
   async function fetchUser() {
@@ -100,7 +105,7 @@ export const useUserStore = defineStore('users-module:user', () => {
       return
     }
 
-    if (Core.Context.roleIs(['mentor', 'student'])) {
+    if (Core.Context.roleIs(['mentor', 'student', 'assistant'])) {
       uiService.openErrorModal('Недостаточно прав для изменения пароля')
       return
     }
@@ -179,6 +184,7 @@ export const useUserStore = defineStore('users-module:user', () => {
 
   return {
     user,
+    currentTab,
     studentsWithSubjects,
     fetchUser,
     saveUser,

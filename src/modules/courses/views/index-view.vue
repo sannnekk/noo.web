@@ -5,7 +5,7 @@
   >
     <div
       class="index-view__courses"
-      v-if="Core.Context.roleIs(['admin', 'teacher', 'mentor'])"
+      v-if="Core.Context.roleIs(['admin', 'teacher', 'mentor', 'assistant'])"
     >
       <courses-view />
     </div>

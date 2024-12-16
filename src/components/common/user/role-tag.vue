@@ -25,6 +25,8 @@ const userRole = computed(() => {
       return 'Преподаватель'
     case 'mentor':
       return 'Куратор'
+    case 'assistant':
+      return 'Ассистент'
     case 'student':
     default:
       return 'Ученик'
@@ -39,6 +41,8 @@ const userType = computed(() => {
       return 'warning'
     case 'mentor':
       return 'success'
+    case 'assistant':
+      return 'lila'
     case 'student':
     default:
       return 'info'
