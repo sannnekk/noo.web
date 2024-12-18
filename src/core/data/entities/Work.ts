@@ -6,6 +6,7 @@ export interface Work extends Entity {
   slug: string
   type: 'trial-work' | 'mini-test' | 'test' | 'second-part' | 'phrase'
   name: string
+  checkOneByOneEnabled: boolean
   description: string
   subject: Subject
   subjectId: Subject['id']

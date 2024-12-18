@@ -35,6 +35,10 @@
       </div>
       <span class="form-checkbox__text">
         {{ label }}
+        <beta-tag
+          class="form-checkbox__text__beta"
+          v-if="beta"
+        />
       </span>
     </label>
   </div>
@@ -47,6 +51,7 @@ interface Props {
   modelValue: boolean
   label: string
   readonly?: boolean
+  beta?: boolean
 }
 
 interface Emits {

@@ -23,6 +23,22 @@
         />
       </div>
     </div>
+    <div
+      class="form-group checkbox"
+      v-auto-animate
+    >
+      <form-checkbox
+        label="Проверка по одному заданию"
+        v-model="createWorkStore.work.checkOneByOneEnabled"
+        beta
+      />
+      <warning-block
+        class="beta-warning"
+        v-if="createWorkStore.work.checkOneByOneEnabled"
+      >
+        Функционал находится в режиме тестирования разработчиками
+      </warning-block>
+    </div>
     <div class="form-group">
       <label class="general-info-view__work-description">
         Описание работы
@@ -46,4 +62,16 @@ const createWorkStore = useCreateWorkStore()
   &__work-description
     font-size: 0.8em
     color: var(--text-light)
+
+  .form-group
+    .beta-warning
+      font-size: 0.8em
+      margin-top: 0.5em
+
+    &.checkbox
+      padding: 1em 0
+
+      &:deep()
+        span
+          color: var(--text-light)
 </style>
