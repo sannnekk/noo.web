@@ -183,12 +183,11 @@ async function loadStatistics() {
 <style scoped lang="sass">
 .work-statistics-modal
 	&__content
-		padding-bottom: 1em
-
 		&__card
 			border-radius: var(--border-radius)
 			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
 			padding: 1em
+			margin-bottom: 1em
 
 			&__number
 				margin-bottom: 0.3em

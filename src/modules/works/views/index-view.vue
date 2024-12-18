@@ -74,6 +74,7 @@ import { reactive, ref } from 'vue'
 import type { SearchFilter } from '@/components/search/filters/SearchFilter'
 import { subjectFilter } from '@/core/filters/subject-filter'
 import type { Work } from '@/core/data/entities/Work'
+import { workTypeFilter } from '@/core/filters/work-type-filter'
 
 setPageTitle('Работы')
 
@@ -110,18 +111,7 @@ function onShowWorkStatistics(work: Work) {
 }
 
 const filters = ref<SearchFilter[]>([
-  {
-    name: 'Тип',
-    type: 'arr',
-    key: 'type',
-    arrayOptions: [
-      { label: 'Тест', value: 'test' },
-      { label: 'Мини-зачет', value: 'mini-test' },
-      { label: 'Вторая часть', value: 'second-part' },
-      { label: 'Пробник', value: 'trial-work' },
-      { label: 'Фраза', value: 'phrase' }
-    ]
-  },
+  workTypeFilter(),
   {
     name: 'Дата создания',
     type: 'range',

@@ -45,6 +45,7 @@ export interface AssignedWork extends Entity {
   maxScore: number
   isArchivedByStudent: boolean
   isArchivedByMentors: boolean
+  isArchivedByAssistants: boolean
   studentComment: DeltaContentType | null
   mentorComment: DeltaContentType | null
   createdAt: Date

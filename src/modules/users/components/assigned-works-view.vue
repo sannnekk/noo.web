@@ -30,6 +30,7 @@
         <common-button
           design="danger"
           @click="openArchiveWorksModal(selectedWorks)"
+          v-if="Core.Context.roleIs(['assistant'])"
         >
           Архивировать
         </common-button>
@@ -41,8 +42,8 @@
         :cols="cols"
         :actions="actions"
         :is-loading="search.isListLoading.value"
-        editable
         @select="onSelect($event)"
+        editable
       />
     </div>
     <div
@@ -123,6 +124,9 @@ import type { User } from '@/core/data/entities/User'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { subjectFilter } from '@/core/filters/subject-filter'
+import { solveStatusFilter } from '@/core/filters/solve-status-filter'
+import { checkStatusFilter } from '@/core/filters/check-status-filter'
+import { workTypeFilter } from '@/core/filters/work-type-filter'
 
 interface Props {
   user: User
@@ -134,12 +138,14 @@ const router = useRouter()
 
 const search = useSearch(fetchAssignedWorks, {
   immediate: true,
-  initialPagination: {
-    'filter[isArchivedByMentors]': {
-      type: 'boolean',
-      value: false
-    }
-  }
+  initialPagination: Core.Context.roleIs(['assistant'])
+    ? {
+        'filter[isArchivedByAssistants]': {
+          type: 'boolean',
+          value: false
+        }
+      }
+    : undefined
 })
 
 const changeMentorModalData = ref<{
@@ -183,48 +189,10 @@ async function fetchAssignedWorks(pagination?: Pagination) {
 }
 
 const filters: SearchFilter[] = [
-  {
-    name: 'Тип работы',
-    type: 'arr',
-    key: 'work.type',
-    arrayOptions: [
-      { label: 'Тест', value: 'test' },
-      { label: 'Мини-зачет', value: 'mini-test' },
-      { label: 'Вторая часть', value: 'second-part' },
-      { label: 'Пробник', value: 'trial-work' },
-      { label: 'Фраза', value: 'phrase' }
-    ]
-  },
+  workTypeFilter('work'),
   subjectFilter('work'),
-  {
-    name: 'Статус решения',
-    type: 'arr',
-    key: 'solveStatus',
-    arrayOptions: [
-      { label: 'Не начато', value: 'not-started' },
-      { label: 'В процессе', value: 'in-progress' },
-      { label: 'Сдано в дедлайн', value: 'made-in-deadline' },
-      { label: 'Сдано после дедлайна', value: 'made-after-deadline' }
-    ]
-  },
-  {
-    name: 'Статус проверки',
-    type: 'arr',
-    key: 'checkStatus',
-    arrayOptions: [
-      { label: 'Не проверено', value: 'not-checked' },
-      { label: 'В процессе', value: 'in-progress' },
-      { label: 'Проверено в дедлайн', value: 'checked-in-deadline' },
-      { label: 'Проверено после дедлайна', value: 'checked-after-deadline' },
-      { label: 'Проверено автоматически', value: 'checked-automatically' }
-    ]
-  },
-  {
-    name: 'Архивированные',
-    type: 'boolean',
-    key: 'isArchivedByMentors',
-    booleanLabels: ['Нет', 'Да']
-  },
+  solveStatusFilter(),
+  checkStatusFilter(),
   {
     name: 'Ученик сдвинул дедлайн',
     type: 'boolean',
@@ -241,6 +209,14 @@ const filters: SearchFilter[] = [
     name: 'Пересдача',
     type: 'boolean',
     key: 'isNewAttempt',
+    booleanLabels: ['Нет', 'Да']
+  },
+  {
+    name: Core.Context.roleIs(['assistant'])
+      ? 'Архивированные'
+      : 'Архивировано ассистентами',
+    type: 'boolean',
+    key: 'isArchivedByAssistants',
     booleanLabels: ['Нет', 'Да']
   }
 ]
@@ -323,13 +299,17 @@ function actions(assignedWork: AssignedWork): MenuItem[] {
     {
       title: 'Архивировать',
       icon: 'delete',
-      if: !assignedWork.isArchivedByMentors,
+      if:
+        Core.Context.roleIs(['assistant']) &&
+        !assignedWork.isArchivedByAssistants,
       action: () => openArchiveWorksModal([assignedWork])
     },
     {
       title: 'Разархивировать',
       icon: 'check-green',
-      if: assignedWork.isArchivedByMentors,
+      if:
+        Core.Context.roleIs(['assistant']) &&
+        assignedWork.isArchivedByAssistants,
       action: () => openUnarchiveWorksModal([assignedWork])
     }
   ]
