@@ -29,10 +29,34 @@
           v-model="model.checkingStrategy"
           label="Способ проверки"
         />
-        <div class="task-create-form__checkbox">
+      </div>
+    </div>
+    <div class="row">
+      <div
+        class="col-lg-4 col-12"
+        v-auto-animate
+      >
+        <div
+          class="task-create-form__checkbox"
+          v-if="model.type === 'word'"
+        >
           <form-checkbox
             v-model="model.isAnswerVisibleBeforeCheck"
             label="Показывать ответ до проверки"
+          />
+        </div>
+      </div>
+      <div
+        class="col-lg-4 col-12"
+        v-auto-animate
+      >
+        <div
+          class="task-create-form__checkbox"
+          v-if="model.type === 'word'"
+        >
+          <form-checkbox
+            v-model="model.isCheckOneByOneEnabled"
+            label="Проверка сразу"
           />
         </div>
       </div>
@@ -92,8 +116,23 @@ const model = computed<Task>({
 watch(
   () => model.value.type,
   () => {
+    // change max score if it is predefined
     model.value.highestScore =
       predefinedMaxScore(model.value.type) ?? model.value.highestScore
+
+    // reset right answer if it is not needed
+    if (model.value.type !== 'word') {
+      model.value.rightAnswer = null
+    } else {
+      model.value.rightAnswer = ''
+    }
+
+    // reset checking strategy if it is not needed
+    if (model.value.type !== 'word') {
+      model.value.checkingStrategy = null
+    } else {
+      model.value.checkingStrategy = 'type1'
+    }
   }
 )
 

@@ -187,7 +187,7 @@
 import ResolveFilesButton from './resolve-files-button.vue'
 import { Core } from '@/core/Core'
 import { useAssignedWorkStore } from '../../stores/assigned-work'
-import { isCheckedAutomatically, isWorkChecked } from '../../utils/task'
+import { isWorkChecked } from '../../utils/task'
 
 const assignedWorkStore = useAssignedWorkStore()
 </script>

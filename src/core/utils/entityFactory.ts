@@ -109,6 +109,8 @@ function materialConstructor(): Omit<Material, 'id'> {
     isActive: false,
     workSolveDeadline: null,
     workCheckDeadline: null,
+    activateAt: null,
+    isWorkAvailable: true,
     createdAt: new Date(),
     updatedAt: new Date()
   }
@@ -121,7 +123,7 @@ function courseConstructor(): Omit<Course, 'id'> {
     description: '',
     images: [],
     subject: null as unknown as Subject,
-    author: null,
+    authors: [],
     chapters: [],
     createdAt: new Date(),
     updatedAt: new Date()
@@ -158,7 +160,9 @@ function taskConstructor(): Omit<Task, 'id' | 'createdAt' | 'updatedAt'> {
     content: emptyDelta(),
     highestScore: 0,
     type: 'word',
-    isAnswerVisibleBeforeCheck: false
+    isAnswerVisibleBeforeCheck: false,
+    isCheckOneByOneEnabled: false,
+    checkingStrategy: 'type1'
   }
 }
 
@@ -174,6 +178,7 @@ function courseAssignmentConstructor(): Omit<CourseAssignment, 'id'> {
 
 function userSettingsConstructor(): Omit<UserSettings, 'id'> {
   return {
-    backgroundImage: null
+    backgroundImage: null,
+    fontSize: 'medium'
   }
 }

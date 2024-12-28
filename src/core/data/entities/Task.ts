@@ -10,11 +10,12 @@ export interface Task extends Entity {
   type: 'word' | 'text' | 'essay' | 'final-essay'
   workId?: Work['id']
   work?: Work
-  rightAnswer?: string
+  rightAnswer: string | null
   solveHint?: DeltaContentType
   checkHint?: DeltaContentType
-  checkingStrategy?: 'type1' | 'type2' | 'type3' | 'type4'
+  checkingStrategy: 'type1' | 'type2' | 'type3' | 'type4' | null
   isAnswerVisibleBeforeCheck: boolean
+  isCheckOneByOneEnabled: boolean
   createdAt: Date
   updatedAt: Date
 }

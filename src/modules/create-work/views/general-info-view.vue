@@ -23,22 +23,6 @@
         />
       </div>
     </div>
-    <div
-      class="form-group checkbox"
-      v-auto-animate
-    >
-      <form-checkbox
-        label="Проверка по одному заданию"
-        v-model="createWorkStore.work.checkOneByOneEnabled"
-        beta
-      />
-      <warning-block
-        class="beta-warning"
-        v-if="createWorkStore.work.checkOneByOneEnabled"
-      >
-        Функционал находится в режиме тестирования разработчиками
-      </warning-block>
-    </div>
     <div class="form-group">
       <label class="general-info-view__work-description">
         Описание работы
