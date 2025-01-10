@@ -788,6 +788,10 @@ function syncImageSelections() {
         background-color: transparent !important
         text-decoration: underline
 
+      iframe.ql-video
+        width: 100%
+        aspect-ratio: 1.5
+
       .ql-align-center
         text-align: center
 

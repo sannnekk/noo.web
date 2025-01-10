@@ -2,7 +2,7 @@
   <tabs-view
     v-if="Core.Context.roleIs(['teacher'])"
     :titles="['Мои курсы', 'Все курсы']"
-    v-model:tab-index="tabIndex"
+    v-model:tab-index="coursesStore.teacherTabIndex"
   >
     <template #tab-0>
       <div class="courses-view">
@@ -215,13 +215,10 @@ import { Core } from '@/core/Core'
 import { useCoursesStore } from '../stores/courses'
 import type { SearchFilter } from '@/components/search/filters/SearchFilter'
 import { subjectFilter } from '@/core/filters/subject-filter'
-import { ref } from 'vue'
 
 const coursesStore = useCoursesStore()
 
 const filters: SearchFilter[] = [subjectFilter()]
-
-const tabIndex = ref(0)
 </script>
 
 <style scoped lang="sass">

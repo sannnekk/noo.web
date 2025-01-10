@@ -36,6 +36,11 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
   const currentTabIndex = ref(0)
 
   /**
+   * Teacher tab index
+   */
+  const teacherTabIndex = ref(0)
+
+  /**
    * Fetch the courses
    */
   async function fetchCourses(pagination: Pagination) {
@@ -128,6 +133,7 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
     allSearch,
     ownSearch,
     currentTabIndex,
+    teacherTabIndex,
     fetchAssignments,
     archiveAssignment,
     unarchiveAssignment
