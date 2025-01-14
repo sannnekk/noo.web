@@ -19,6 +19,9 @@
           label="Максимальный балл"
           type="number"
           :readonly="predefinedMaxScore(model.type) !== null"
+          :validators="[
+						(value: any) => value > 0 || 'Максимальный балл должен быть больше 0'
+					]"
         />
       </div>
       <div

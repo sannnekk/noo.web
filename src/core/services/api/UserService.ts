@@ -309,6 +309,21 @@ export class UserService extends ApiService {
   }
 
   /**
+   * Cancel change email
+   */
+  public async cancelChangeEmail(
+    userId: User['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpPatch(
+      `${this._route}/${userId}/cancel-email-change`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
    * delete user
    */
   public async deleteUser(

@@ -158,7 +158,7 @@ function taskConstructor(): Omit<Task, 'id' | 'createdAt' | 'updatedAt'> {
     order: 0,
     rightAnswer: '',
     content: emptyDelta(),
-    highestScore: 0,
+    highestScore: 1,
     type: 'word',
     isAnswerVisibleBeforeCheck: false,
     isCheckOneByOneEnabled: false,

@@ -26,7 +26,12 @@
           <div class="col-md-4">
             <div class="work-statistics-modal__content__card">
               <h1 class="work-statistics-modal__content__card__number">
-                {{ workStatistics?.averageWorkScore || '-' }}
+                {{ workStatistics?.averageWorkScore.absolute || '-' }}
+                <span
+                  class="work-statistics-modal__content__card__number__percentage"
+                >
+                  {{ workStatistics?.averageWorkScore.percentage || '-' }}%
+                </span>
               </h1>
               <p class="work-statistics-modal__content__card__title">
                 Средний балл
@@ -36,7 +41,12 @@
           <div class="col-md-4">
             <div class="work-statistics-modal__content__card">
               <h1 class="work-statistics-modal__content__card__number">
-                {{ workStatistics?.medianWorkScore || '-' }}
+                {{ workStatistics?.medianWorkScore.absolute || '-' }}
+                <span
+                  class="work-statistics-modal__content__card__number__percentage"
+                >
+                  {{ workStatistics?.medianWorkScore.percentage || '-' }}%
+                </span>
               </h1>
               <p class="work-statistics-modal__content__card__title">
                 Медианный балл
@@ -193,6 +203,12 @@ async function loadStatistics() {
 				margin-bottom: 0.3em
 				margin-top: 0
 
+				&__percentage
+					color: var(--text-light)
+					font-size: 16px
+					font-weight: normal
+					margin-left: 0.5em
+
 			&__title
 				color: var(--text-light)
 				font-size: 14px
@@ -207,6 +223,7 @@ async function loadStatistics() {
 			display: flex
 			flex-direction: column
 			gap: 1em
+			margin-bottom: 1em
 
 			&__item
 				padding: 1em

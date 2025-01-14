@@ -6,9 +6,9 @@
     <div class="work-info__section subject">
       <subject-name :subject="assignedWorkStore.assignedWork.work.subject" />
     </div>
-    <div class="work-info__section type">
+    <div class="work-info__section name">
       <h2>
-        {{ readableWorkType(assignedWorkStore.assignedWork.work!.type) }}
+        {{ assignedWorkStore.assignedWork.work?.name }}
       </h2>
     </div>
     <div class="work-info__section solve-status">
@@ -77,13 +77,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Work } from '@/core/data/entities/Work'
 import { useAssignedWorkStore } from '../../stores/assigned-work'
 import { useDate } from '@/composables/useDate'
 
 const assignedWorkStore = useAssignedWorkStore()
 
-function readableWorkType(type: Work['type']) {
+/* function readableWorkType(type: Work['type']) {
   switch (type) {
     case 'trial-work':
       return 'Пробник'
@@ -98,7 +97,7 @@ function readableWorkType(type: Work['type']) {
     default:
       return '-'
   }
-}
+} */
 </script>
 
 <style scoped lang="sass">
@@ -108,9 +107,9 @@ function readableWorkType(type: Work['type']) {
 		color: var(--text-light)
 		font-size: 0.9em
 
-		&.type
+		&.name
 			color: var(--form-text-color)
-			font-size: 1em
+			font-size: 0.8em
 
 		&.subject
 			color: var(--form-text-color)

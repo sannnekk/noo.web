@@ -494,13 +494,6 @@ const toolbar = reactive<Toolbar>([
       title: 'Нумерованный список',
       icon: 'list-ordered',
       active: false
-    },
-    {
-      type: 'list',
-      value: 'bullet',
-      title: 'Список',
-      icon: 'list-bullet',
-      active: false
     }
   ],
   [
@@ -764,6 +757,7 @@ function syncImageSelections() {
       .ql-editor
         outline: none
         white-space: pre-wrap
+        overflow-wrap: break-word
 
         p, b, i, strong, em, u, strike, sub, sup, blockquote, ul, ol, li, h1, h2, h3, h4, h5, h6
           background-color: transparent !important

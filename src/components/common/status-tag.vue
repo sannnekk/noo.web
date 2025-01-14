@@ -27,6 +27,9 @@ withDefaults(defineProps<Props>(), {
   vertical-align: baseline
   user-select: none
   font-weight: normal
+  max-width: 100%
+  text-overflow: ellipsis
+  overflow: hidden
 
   &.background
     padding: 0.3em 1em

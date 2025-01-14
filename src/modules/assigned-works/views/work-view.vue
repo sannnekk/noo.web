@@ -34,9 +34,9 @@
           class="work-view__content"
           v-if="assignedWorkStore.assignedWork"
         >
-          <h2 class="task-view__title">
+          <!--<h2 class="task-view__title">
             {{ assignedWorkStore.assignedWork?.work?.name }}
-          </h2>
+          </h2>-->
           <router-view :key="$route.fullPath" />
         </div>
         <div
