@@ -124,6 +124,7 @@ function courseConstructor(): Omit<Course, 'id'> {
     images: [],
     subject: null as unknown as Subject,
     authors: [],
+    editors: [],
     chapters: [],
     createdAt: new Date(),
     updatedAt: new Date()
