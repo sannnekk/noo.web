@@ -9,7 +9,7 @@
       />
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <div class="form-group">
           <users-select
             label="Автор(ы) курса (до 10)"
@@ -19,7 +19,17 @@
           />
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-12">
+        <div class="form-group">
+          <users-select
+            label="Редакторы курса(ы) курса (до 10)"
+            v-model="createCourseStore.course.editors"
+            role="teacher"
+            :max-count="10"
+          />
+        </div>
+      </div>
+      <div class="col-md-12">
         <div class="form-group">
           <subject-select
             label="Предмет"
