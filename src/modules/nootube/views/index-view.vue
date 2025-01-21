@@ -3,7 +3,7 @@
     <div class="index-view__banner-image">
       <nootube-image />
     </div>
-    <tabs-view :titles="['Видео', 'Стримы']">
+    <tabs-view :titles="['Видео', 'Стримы (coming soon)']">
       <template #tab-0>
         <div class="index-view__greeting">
           <div class="index-view__greeting__text-block">
@@ -15,8 +15,23 @@
             </p>
           </div>
         </div>
-        <div class="index-view__video-list">
-          <video-list-view />
+        <div class="index-view__videos">
+          <div class="index-view__videos__head">
+            <div class="index-view__videos__head__search">
+              <search-field />
+            </div>
+            <div class="index-view__videos__head__actions">
+              <common-button to="/nootube/upload-video">
+                Загрузить видео
+              </common-button>
+            </div>
+          </div>
+          <div class="index-view__videos__items">
+            <video-list-view :videos="[]" />
+          </div>
+          <div class="index-view__videos__pagination">
+            <list-pagination />
+          </div>
         </div>
       </template>
       <template #tab-1>
@@ -27,7 +42,10 @@
 </template>
 
 <script setup lang="ts">
+import { setPageTitle } from '@/core/utils/setPageTitle'
 import videoListView from '../components/video-list-view.vue'
+
+setPageTitle('НОО.Tube')
 </script>
 
 <style scoped lang="sass">
@@ -60,7 +78,17 @@ import videoListView from '../components/video-list-view.vue'
 	&__banner-image
 		padding: 0
 
-	&__video-list
+	&__videos
 		padding: 1em
 		padding-top: 0
+
+		&__head
+			display: flex
+			gap: 1em
+
+			@media (max-width: 600px)
+				flex-direction: column
+
+			&__search
+				flex: 1
 </style>

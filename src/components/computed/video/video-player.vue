@@ -8,6 +8,7 @@
 <script setup lang="ts">
 import type { Video } from '@/core/data/entities/Video'
 import { computed } from 'vue'
+import YandexVideoPlayer from './yandex/yandex-video-player.vue'
 
 interface Props {
   video: Video
@@ -19,7 +20,7 @@ const component = computed(() => {
   switch (props.video.serviceType) {
     case 'yandex':
     default:
-      return import('./yandex/yandex-video-block.vue')
+      return YandexVideoPlayer
   }
 })
 </script>

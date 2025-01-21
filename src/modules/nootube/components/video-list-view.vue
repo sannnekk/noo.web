@@ -1,6 +1,9 @@
 <template>
   <div class="video-list-view">
-    <div class="video-list-view__search">
+    <div
+      class="video-list-view__search"
+      v-if="withSearch"
+    >
       <div class="video-list-view__search__field">
         <search-field
           v-model="nootubeStore.videoSearch.pagination.search"
@@ -69,6 +72,12 @@
 <script setup lang="ts">
 import { Core } from '@/core/Core'
 import { useNooTubeStore } from '../stores/nootube'
+
+interface Props {
+  withSearch?: boolean
+}
+
+defineProps<Props>()
 
 const nootubeStore = useNooTubeStore()
 </script>

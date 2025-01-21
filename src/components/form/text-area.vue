@@ -10,16 +10,25 @@
       :placeholder="placeholder"
       v-model="model"
     />
+    <span
+      class="text-area__error"
+      v-if="errors.length"
+    >
+      {{ errors[0] }}
+    </span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+
+type InputValidator = (value: string | number | Date) => true | string
 
 interface Props {
   label?: string
   modelValue: string
   placeholder?: string
+  validators?: InputValidator[]
 }
 
 interface Emits {
@@ -37,6 +46,8 @@ const model = computed({
     emits('update:modelValue', value)
   }
 })
+
+const errors = ref<string[]>([])
 </script>
 
 <style scoped lang="sass">

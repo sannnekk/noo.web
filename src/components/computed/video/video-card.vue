@@ -10,8 +10,8 @@
       <div class="video-card__preview__image">
         <uploaded-image :src="video.thumbnail.src" />
       </div>
-      <div class="video-card__preview__length">
-        {{ length }}
+      <div class="video-card__preview__duration">
+        {{ video.duration }}
       </div>
     </router-link>
     <div class="video-card__info">
@@ -34,6 +34,7 @@
 <script setup lang="ts">
 import type { Video } from '@/core/data/entities/Video'
 import { computed } from 'vue'
+import { stringifyDuration } from './utils'
 
 interface Props {
   video: Video
@@ -42,13 +43,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const link = computed(() => `/nootube/video/${props.video.id}`)
-const length = computed(() => stringifyLength(props.video.length))
-
-function stringifyLength(length: number) {
-  const minutes = Math.floor(length / 60)
-  const seconds = length % 60
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`
-}
+const duration = computed(() => stringifyDuration(props.video.duration))
 </script>
 
 <style scoped lang="sass">
@@ -66,7 +61,8 @@ function stringifyLength(length: number) {
 
 		&:hover
 			.video-card__preview__view-button
-				transform: translate(-50%, -50%) scale(1.1)
+				transform: translate(-50%, -50%) scale(1.2)
+				opacity: 1
 
 		&__image
 			width: 100%
@@ -79,10 +75,10 @@ function stringifyLength(length: number) {
 				height: 100%
 				object-fit: cover
 
-		&__length
+		&__duration
 			position: absolute
-			bottom: 0
-			right: 0
+			bottom: 5px
+			right: 5px
 			background: rgba(0, 0, 0, 0.5)
 			color: white
 			padding: 0em 0.5em
@@ -92,11 +88,15 @@ function stringifyLength(length: number) {
 			position: absolute
 			top: 50%
 			left: 50%
-			transform: translate(-50%, -50%)
+			transform: translate(-50%, -50%) scale(0.5)
 			font-size: 4em
 			color: white
 			cursor: pointer
 			transition: 0.2s ease all
+			opacity: 0
+
+			&:hover
+				transform: translate(-50%, -50%) scale(1.3) !important
 
 	&__info
 		flex: 1

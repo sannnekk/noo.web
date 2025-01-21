@@ -81,6 +81,16 @@ export class VideoService extends ApiService {
   }
 
   /**
+   * Create a comment
+   */
+  public async createComment(
+    videoId: Video['id'],
+    content: string
+  ): Promise<void> {
+    return this.httpPost<void>(`${this._route}/${videoId}/comment`, { content })
+  }
+
+  /**
    * delete a video
    */
   public async deleteVideo(

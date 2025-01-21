@@ -1,5 +1,8 @@
 <template>
-  <div class="rich-text-container">
+  <div
+    class="rich-text-container"
+    :class="{ 'no-padding': noPadding }"
+  >
     <quill-editor
       :model-value="content"
       :readonly="true"
@@ -17,6 +20,7 @@
 <script setup lang="ts">
 import type { DeltaContentType } from '@/types/composed/DeltaContentType'
 import { Core } from '@/core/Core'
+import type { UserSettings } from '@/core/data/entities/UserSettings'
 
 interface Props {
   content: DeltaContentType
@@ -24,6 +28,7 @@ interface Props {
   commentTypes?: string[]
   //allowImageRotation?: boolean
   fontSize?: UserSettings['fontSize']
+  noPadding?: boolean
 }
 
 interface Emits {
@@ -38,3 +43,11 @@ defineEmits<Emits>()
 const userSettingsService = Core.Services.UserSettings
 const userSettingsStore = userSettingsService.Store()
 </script>
+
+<style lang="sass" scoped>
+.rich-text-container
+	&.no-padding
+		&:deep()
+			.quill-editor__content
+				padding: 0
+</style>

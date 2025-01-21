@@ -21,3 +21,13 @@ function getQuicktimeDuration(file: File): number {
   // This is a fake implementation
   return 200
 }
+
+export function stringifyDuration(length: number) {
+  const hours = Math.floor(length / 3600)
+  const minutes = Math.floor((length % 3600) / 60)
+  const seconds = length % 60
+
+  return `${hours ? hours + ':' : ''}${minutes}:${seconds
+    .toString()
+    .padStart(2, '0')}`
+}

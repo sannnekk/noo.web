@@ -5,14 +5,6 @@
   >
     <span class="form-input__label">
       {{ label }}
-      <explanation-tooltip
-        v-if="$slots.explanation"
-        title="Пояснение"
-      >
-        <p class="form-input__explanation-tooltip">
-          {{ entry.description }}
-        </p>
-      </explanation-tooltip>
     </span>
     <div class="form-input__input-container">
       <input
