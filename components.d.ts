@@ -210,7 +210,6 @@ declare module 'vue' {
     UserSelect: typeof import('./src/components/form/entity-select/user-select.vue')['default']
     UsersIcon: typeof import('./src/components/decorations/icons/users-icon.vue')['default']
     UsersSelect: typeof import('./src/components/form/entity-select/users-select.vue')['default']
-    VideoBlock: typeof import('./src/components/computed/video/video-block.vue')['default']
     VideoCard: typeof import('./src/components/computed/video/video-card.vue')['default']
     VideoComment: typeof import('./src/components/computed/video/comment/video-comment.vue')['default']
     VideoCommentForm: typeof import('./src/components/computed/video/comment/video-comment-form.vue')['default']
@@ -224,7 +223,6 @@ declare module 'vue' {
     WordCounter: typeof import('./src/components/entities/utils/word-counter.vue')['default']
     WorkSelect: typeof import('./src/components/form/entity-select/work-select.vue')['default']
     WorkTypeSelect: typeof import('./src/components/form/prop-select/work-type-select.vue')['default']
-    YandexVideoBlock: typeof import('./src/components/computed/video/yandex/yandex-video-player.vue')['default']
     YandexVideoPlayer: typeof import('./src/components/computed/video/yandex/yandex-video-player.vue')['default']
     YandexVideoUploadButton: typeof import('./src/components/computed/video/yandex/yandex-video-upload-button.vue')['default']
   }

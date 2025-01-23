@@ -5,6 +5,7 @@ import {
   type ServiceOptions
 } from '../ApiService'
 import type { Pagination } from '@/core/data/Pagination'
+import type { VideoComment } from '@/core/data/entities/VideoComment'
 
 export class VideoService extends ApiService {
   private _route = '/video' as const
@@ -85,9 +86,29 @@ export class VideoService extends ApiService {
    */
   public async createComment(
     videoId: Video['id'],
-    content: string
+    text: string,
+    options: ServiceOptions = {}
   ): Promise<void> {
-    return this.httpPost<void>(`${this._route}/${videoId}/comment`, { content })
+    return this.httpPost<void>(
+      `${this._route}/${videoId}/comment`,
+      { text },
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Delete comment
+   */
+  public async deleteComment(
+    comentId: VideoComment['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpDelete(
+      `${this._route}/comment/${comentId}`,
+      undefined,
+      options
+    )
   }
 
   /**
