@@ -1,5 +1,9 @@
 import type { Context } from '@/core/context/Context'
-import { ApiService, type ServiceOptions } from '@/core/services/ApiService'
+import {
+  ApiService,
+  type ApiResponse,
+  type ServiceOptions
+} from '@/core/services/ApiService'
 import type {
   AssignedWork,
   AssignedWorkProgress
@@ -8,6 +12,8 @@ import type { Pagination } from '@/core/data/Pagination'
 import type { Work } from '@/core/data/entities/Work'
 import type { FavouriteTask } from '@/core/data/entities/FavouriteTask'
 import type { Subject } from '@/core/data/entities/Subject'
+import type { Comment } from '@/core/data/entities/Comment'
+import type { Answer } from '@/core/data/entities/Answer'
 
 /**
  * AssignedWork service
@@ -202,6 +208,54 @@ export class AssignedWorkService extends ApiService {
     options: ServiceOptions = {}
   ) {
     await this.httpPatch(`${this._route}/${id}/save`, data, undefined, options)
+  }
+
+  /**
+   * Save (upsert) assigned work comment
+   */
+  public async upsertComment(
+    assignedWorkId: AssignedWork['id'],
+    comment: Comment,
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<Comment['id'] | null>> {
+    return await this.httpPatch<Comment['id']>(
+      `${this._route}/${assignedWorkId}/save-comment`,
+      comment,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Save (upsert) assigned work answer
+   */
+  public async upsertAnswer(
+    assignedWorkId: AssignedWork['id'],
+    answer: Answer,
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<Answer['id'] | null>> {
+    return await this.httpPatch<Answer['id']>(
+      `${this._route}/${assignedWorkId}/save-answer`,
+      answer,
+      undefined,
+      options
+    )
+  }
+
+  public async saveWorkComments(
+    assignedWorkId: AssignedWork['id'],
+    data: {
+      studentComment?: AssignedWork['studentComment']
+      mentorComment?: AssignedWork['mentorComment']
+    },
+    options: ServiceOptions = {}
+  ) {
+    return await this.httpPatch(
+      `${this._route}/${assignedWorkId}/save-work-comments`,
+      data,
+      undefined,
+      options
+    )
   }
 
   /**

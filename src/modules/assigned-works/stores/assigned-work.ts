@@ -3,13 +3,24 @@ import { defineStore } from 'pinia'
 import { ref, computed, watch, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { Task } from '@/core/data/entities/Task'
-import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
+import {
+  deltasAreEqual,
+  isDeltaEmptyOrWhitespace
+} from '@/core/utils/deltaHelpers'
 import { Core } from '@/core/Core'
 import type { ModalAction } from '@/core/services/store/UIStore'
 import { debounce } from '@/core/utils/debounce'
 import type { ReadableWorkScore } from '../types/ReadableWorkScore'
 import type { AssignedWorkViewMode } from '../types/AssignedWorkViewMode'
-import { getTaskScoreStatus, isCheckedAutomatically } from '../utils/task'
+import {
+  getChangedAnswer,
+  getChangedComment,
+  getTaskScoreStatus,
+  isCheckedAutomatically
+} from '../utils/task'
+import type { DeltaContentType } from '@/types/composed/DeltaContentType'
+import type { Comment } from '@/core/data/entities/Comment'
+import type { Answer } from '@/core/data/entities/Answer'
 
 export const useAssignedWorkStore = defineStore(
   'assigned-works-module:assigned-work',
@@ -62,6 +73,7 @@ export const useAssignedWorkStore = defineStore(
             showLoader: true
           }
         )
+
         assignedWork.value = response.data
 
         if (
@@ -90,6 +102,30 @@ export const useAssignedWorkStore = defineStore(
         ) {
           throw new Error('Работа уже проверена и не может быть изменена')
         }
+
+        if (
+          mode.value !== 'read' &&
+          Core.Context.roleIs(['mentor', 'student'])
+        ) {
+          autoSave.lastSaved.mentorComment =
+            response.data?.mentorComment || null
+          autoSave.lastSaved.studentComment =
+            response.data?.studentComment || null
+
+          autoSave.lastSaved.answers =
+            response.data?.answers.reduce((acc, answer) => {
+              acc[answer.id] = structuredClone(answer)
+              return acc
+            }, {} as Record<Answer['id'], Answer>) || {}
+
+          autoSave.lastSaved.comments =
+            response.data?.comments.reduce((acc, comment) => {
+              acc[comment.id] = structuredClone(comment)
+              return acc
+            }, {} as Record<Comment['id'], Comment>) || {}
+
+          autoSave.enable()
+        }
       } catch (e: any) {
         uiService.openErrorModal(
           'Ошибка',
@@ -97,6 +133,7 @@ export const useAssignedWorkStore = defineStore(
             ? 'Работа не найдена. Возможно, работа была удалена и остался только этот экземпляр'
             : e.message
         )
+        autoSave.reset()
         assignedWork.value = null
       }
     }
@@ -341,13 +378,22 @@ export const useAssignedWorkStore = defineStore(
       enabled: false,
       state: 'unset' as 'unset' | 'error' | 'success',
       loading: false,
+      lastSaved: {
+        answers: {} as Record<string, Answer>,
+        comments: {} as Record<string, Comment>,
+        studentComment: null as DeltaContentType | null,
+        mentorComment: null as DeltaContentType | null
+      },
       reset() {
         autoSave.state = 'unset'
         autoSave.enabled = false
+      },
+      enable() {
+        autoSave.enabled = true
       }
     })
 
-    watch(assignedWork, debounce(triggerAutoSave, 5000), { deep: true })
+    watch(assignedWork, debounce(triggerAutoSave, 3000), { deep: true })
 
     async function triggerAutoSave() {
       if (
@@ -361,18 +407,75 @@ export const useAssignedWorkStore = defineStore(
 
       autoSave.loading = true
 
-      const payload = {
-        answers: assignedWork.value.answers,
-        comments: assignedWork.value.comments,
-        studentComment: assignedWork.value.studentComment || null,
-        mentorComment: assignedWork.value.mentorComment || null
-      }
-
       try {
-        await assignedWorkService.saveAssignedWorkProgress(
-          assignedWork.value.id,
-          payload
+        if (
+          !deltasAreEqual(
+            assignedWork.value.studentComment,
+            autoSave.lastSaved.studentComment
+          )
+        ) {
+          assignedWorkService.saveWorkComments(assignedWork.value.id, {
+            studentComment: assignedWork.value.studentComment
+          })
+
+          autoSave.lastSaved.studentComment = assignedWork.value.studentComment
+        }
+
+        if (
+          !deltasAreEqual(
+            assignedWork.value.mentorComment,
+            autoSave.lastSaved.mentorComment
+          )
+        ) {
+          assignedWorkService.saveWorkComments(assignedWork.value.id, {
+            mentorComment: assignedWork.value.mentorComment
+          })
+
+          autoSave.lastSaved.mentorComment = assignedWork.value.mentorComment
+        }
+
+        const changedComment = getChangedComment(
+          assignedWork.value.comments,
+          autoSave.lastSaved.comments
         )
+        const changedAnswer = getChangedAnswer(
+          assignedWork.value.answers,
+          autoSave.lastSaved.answers
+        )
+
+        if (changedAnswer) {
+          const response = await assignedWorkService.upsertAnswer(
+            assignedWork.value.id,
+            changedAnswer,
+            { showLoader: false }
+          )
+
+          const newAnswerId = response.data
+
+          if (newAnswerId) {
+            changedAnswer.id = newAnswerId
+            autoSave.lastSaved.answers[newAnswerId] = JSON.parse(
+              JSON.stringify(changedAnswer)
+            )
+          }
+        }
+
+        if (changedComment && Core.Context.roleIs(['mentor'])) {
+          const response = await assignedWorkService.upsertComment(
+            assignedWork.value.id,
+            changedComment,
+            { showLoader: false }
+          )
+
+          const newCommentId = response.data
+
+          if (newCommentId) {
+            changedComment.id = newCommentId
+            autoSave.lastSaved.comments[newCommentId] = JSON.parse(
+              JSON.stringify(changedComment)
+            )
+          }
+        }
 
         autoSave.state = 'success'
 
@@ -383,9 +486,9 @@ export const useAssignedWorkStore = defineStore(
         }
       } catch (e: any) {
         autoSave.state = 'error'
+      } finally {
+        autoSave.loading = false
       }
-
-      autoSave.loading = false
     }
 
     /**
@@ -438,7 +541,7 @@ export const useAssignedWorkStore = defineStore(
         await assignedWorkService.saveAssignedWorkProgress(
           assignedWork.value.id,
           payload,
-          { showLoader: true }
+          { showLoader: true, timeout: 5000 }
         )
         uiService.openSuccessModal('Прогресс успешно сохранен!', '', [
           {

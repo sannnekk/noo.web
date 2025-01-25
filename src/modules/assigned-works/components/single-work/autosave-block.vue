@@ -9,7 +9,10 @@
     <div class="autosave-block__title">
       <h4>Автосохранение</h4>
     </div>
-    <div class="autosave-block__content">
+    <div
+      class="autosave-block__content"
+      :key="`${assignedWorkStore.autoSave.enabled}`"
+    >
       <form-toggle
         v-model="assignedWorkStore.autoSave.enabled"
         :values="[

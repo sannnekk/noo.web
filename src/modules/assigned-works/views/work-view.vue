@@ -34,9 +34,6 @@
           class="work-view__content"
           v-if="assignedWorkStore.assignedWork"
         >
-          <!--<h2 class="task-view__title">
-            {{ assignedWorkStore.assignedWork?.work?.name }}
-          </h2>-->
           <router-view :key="$route.fullPath" />
         </div>
         <div
@@ -81,7 +78,9 @@ watch(
 )
 
 const unregister = registerHotkeys(HOT_KEYS)
+
 onUnmounted(() => {
+  assignedWorkStore.autoSave.reset()
   unregister()
 })
 </script>
