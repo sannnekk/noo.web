@@ -21,6 +21,7 @@ import {
 import type { DeltaContentType } from '@/types/composed/DeltaContentType'
 import type { Comment } from '@/core/data/entities/Comment'
 import type { Answer } from '@/core/data/entities/Answer'
+import { deepCopy } from '@/core/utils/object'
 
 export const useAssignedWorkStore = defineStore(
   'assigned-works-module:assigned-work',
@@ -114,13 +115,13 @@ export const useAssignedWorkStore = defineStore(
 
           autoSave.lastSaved.answers =
             response.data?.answers.reduce((acc, answer) => {
-              acc[answer.id] = structuredClone(answer)
+              acc[answer.id] = deepCopy(answer)
               return acc
             }, {} as Record<Answer['id'], Answer>) || {}
 
           autoSave.lastSaved.comments =
             response.data?.comments.reduce((acc, comment) => {
-              acc[comment.id] = structuredClone(comment)
+              acc[comment.id] = deepCopy(comment)
               return acc
             }, {} as Record<Comment['id'], Comment>) || {}
 
