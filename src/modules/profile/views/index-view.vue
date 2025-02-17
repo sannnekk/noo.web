@@ -11,6 +11,7 @@
               v-model="profileStore.user"
               @save="profileStore.updateCredentials()"
               @change-email="changeEmailModalVisible = true"
+              @cancel-email-change="profileStore.cancelChangeEmail()"
               @change-avatar="profileStore.changeAvatar($event)"
             />
           </div>

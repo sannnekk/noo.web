@@ -29,6 +29,14 @@
       >
         Куратор
       </common-button>
+      <common-button
+        alignment="stretch"
+        design="inline"
+        @click="openChangeRoleModal('assistant')"
+        class="change-role-form__actions__button"
+      >
+        Ассистент
+      </common-button>
     </div>
     <div
       class="change-role-form__not-available"
@@ -54,6 +62,11 @@
         Это действие нельзя отменить. <br />
         Вы уверены, что хотите продолжить?
       </danger-block>
+      <warning-block v-else-if="changeRoleModal.role === 'assistant'">
+        Пользователь получит доступ к работам и пользователям. <br />
+        Это действие нельзя отменить. <br />
+        Вы уверены, что хотите продолжить?
+      </warning-block>
       <warning-block v-else>
         Пользователь получит доступ к управлению учениками. <br />
         Это действие нельзя отменить. <br />

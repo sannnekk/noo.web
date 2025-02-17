@@ -46,4 +46,16 @@ const createWorkStore = useCreateWorkStore()
   &__work-description
     font-size: 0.8em
     color: var(--text-light)
+
+  .form-group
+    .beta-warning
+      font-size: 0.8em
+      margin-top: 0.5em
+
+    &.checkbox
+      padding: 1em 0
+
+      &:deep()
+        span
+          color: var(--text-light)
 </style>

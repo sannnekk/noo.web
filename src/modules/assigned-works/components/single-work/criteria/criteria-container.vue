@@ -137,7 +137,7 @@ function getCommentCounts() {
     return acc
   }, {} as Record<string, number>)
 
-  if (props.task.type === 'final-essay') {
+  if (props.task.type === 'final-essay' || props.mode === 'read') {
     return counts
   }
 

@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 interface Props {
-  type?: 'success' | 'warning' | 'danger' | 'info' | 'tag'
+  type?: 'success' | 'warning' | 'danger' | 'info' | 'lila' | 'tag'
   mode?: 'default' | 'background'
 }
 
@@ -27,6 +27,9 @@ withDefaults(defineProps<Props>(), {
   vertical-align: baseline
   user-select: none
   font-weight: normal
+  max-width: 100%
+  text-overflow: ellipsis
+  overflow: hidden
 
   &.background
     padding: 0.3em 1em
@@ -46,6 +49,10 @@ withDefaults(defineProps<Props>(), {
 
     &.info
       background: var(--dark)
+      color: var(--white) !important
+
+    &.lila
+      background: var(--lila)
       color: var(--white) !important
 
     &.tag

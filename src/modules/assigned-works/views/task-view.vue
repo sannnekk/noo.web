@@ -78,7 +78,8 @@
         <div class="col-md-6">
           <right-answer-container
             v-if="
-              assignedWorkStore.mode === 'read' &&
+              (isWorkChecked(assignedWorkStore.assignedWork) ||
+                Core.Context.roleIs(['mentor'])) &&
               assignedWorkStore.task?.type === 'word' &&
               assignedWorkStore.task?.rightAnswer
             "

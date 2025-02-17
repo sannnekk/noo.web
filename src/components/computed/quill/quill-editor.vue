@@ -494,13 +494,6 @@ const toolbar = reactive<Toolbar>([
       title: 'Нумерованный список',
       icon: 'list-ordered',
       active: false
-    },
-    {
-      type: 'list',
-      value: 'bullet',
-      title: 'Список',
-      icon: 'list-bullet',
-      active: false
     }
   ],
   [
@@ -690,6 +683,7 @@ function syncImageSelections() {
       .ql-image
         z-index: 1
         position: relative
+        width: fit-content
 
         img
           border: 1px solid var(--border-color)
@@ -763,6 +757,7 @@ function syncImageSelections() {
       .ql-editor
         outline: none
         white-space: pre-wrap
+        overflow-wrap: break-word
 
         p, b, i, strong, em, u, strike, sub, sup, blockquote, ul, ol, li, h1, h2, h3, h4, h5, h6
           background-color: transparent !important
@@ -786,6 +781,10 @@ function syncImageSelections() {
         color: var(--lila)
         background-color: transparent !important
         text-decoration: underline
+
+      iframe.ql-video
+        width: 100%
+        aspect-ratio: 1.5
 
       .ql-align-center
         text-align: center

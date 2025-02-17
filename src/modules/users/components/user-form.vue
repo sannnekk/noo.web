@@ -15,7 +15,10 @@
       <div class="col-lg-6">
         <div
           class="form-group is-blocked"
-          v-if="Core.Context.roleIs(['admin', 'teacher'])"
+          v-if="
+            Core.Context.roleIs(['admin', 'teacher']) &&
+            model.id !== Core.Context.User?.id
+          "
         >
           <form-toggle
             v-model="model.isBlocked"

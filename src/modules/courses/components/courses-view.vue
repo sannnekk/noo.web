@@ -1,71 +1,211 @@
 <template>
-  <div class="courses-view">
-    <div class="courses-view__header">
-      <div class="courses-view__header__search">
-        <search-field
-          v-model="coursesStore.pagination.search"
-          :is-loading="coursesStore.isListLoading"
+  <tabs-view
+    v-if="Core.Context.roleIs(['teacher'])"
+    :titles="['Мои курсы', 'Все курсы']"
+    v-model:tab-index="coursesStore.teacherTabIndex"
+  >
+    <template #tab-0>
+      <div class="courses-view">
+        <div class="courses-view__header">
+          <div class="courses-view__header__search">
+            <search-field
+              v-model="coursesStore.ownSearch.pagination.search"
+              :is-loading="coursesStore.ownSearch.isListLoading"
+            />
+          </div>
+          <div
+            class="courses-view__header__create"
+            v-if="Core.Context.roleIs(['teacher'])"
+          >
+            <common-button
+              to="/create-course"
+              design="primary"
+            >
+              Создать курс
+            </common-button>
+          </div>
+        </div>
+        <div
+          class="row"
+          v-if="
+            coursesStore.ownSearch.resultsMeta.total > 0 &&
+            !coursesStore.ownSearch.isListLoading
+          "
+          v-auto-animate
+        >
+          <div
+            class="col-md-6 col-lg-4"
+            v-for="course in coursesStore.ownSearch.results"
+            :key="course.id"
+          >
+            <course-card :course="course" />
+          </div>
+        </div>
+        <div
+          class="courses-view__loading"
+          v-else-if="coursesStore.ownSearch.isListLoading"
+        >
+          <loader-icon contrast />
+        </div>
+        <div
+          class="courses-view__nothing-found"
+          v-else
+        >
+          <div class="courses-view__nothing-found__image">
+            <nothing-found-image
+              class="courses-view__nothing-found__image__img"
+            />
+          </div>
+          <p class="courses-view__nothing-found__text">Курсы не найдены</p>
+        </div>
+        <div
+          class="courses-view__pagination"
+          v-if="
+            coursesStore.ownSearch.resultsMeta.total > 0 &&
+            coursesStore.ownSearch.pagination.page &&
+            coursesStore.ownSearch.pagination.limit
+          "
+        >
+          <list-pagination
+            v-model:page="coursesStore.ownSearch.pagination.page"
+            :total="coursesStore.ownSearch.resultsMeta.total"
+            :limit="coursesStore.ownSearch.pagination.limit"
+          />
+        </div>
+      </div>
+    </template>
+    <template #tab-1>
+      <div class="courses-view">
+        <div class="courses-view__header">
+          <div class="courses-view__header__search">
+            <search-field
+              v-model="coursesStore.allSearch.pagination.search"
+              :is-loading="coursesStore.allSearch.isListLoading"
+            />
+          </div>
+        </div>
+        <div class="courses-view__filters">
+          <search-filters
+            :filters="filters"
+            v-model:pagination="coursesStore.allSearch.pagination"
+          />
+        </div>
+        <div
+          class="row"
+          v-if="
+            coursesStore.allSearch.resultsMeta.total > 0 &&
+            !coursesStore.allSearch.isListLoading
+          "
+          v-auto-animate
+        >
+          <div
+            class="col-md-6 col-lg-4"
+            v-for="course in coursesStore.allSearch.results"
+            :key="course.id"
+          >
+            <course-card :course="course" />
+          </div>
+        </div>
+        <div
+          class="courses-view__loading"
+          v-else-if="coursesStore.allSearch.isListLoading"
+        >
+          <loader-icon contrast />
+        </div>
+        <div
+          class="courses-view__nothing-found"
+          v-else
+        >
+          <div class="courses-view__nothing-found__image">
+            <nothing-found-image
+              class="courses-view__nothing-found__image__img"
+            />
+          </div>
+          <p class="courses-view__nothing-found__text">Курсы не найдены</p>
+        </div>
+        <div
+          class="courses-view__pagination"
+          v-if="
+            coursesStore.allSearch.resultsMeta.total > 0 &&
+            coursesStore.allSearch.pagination.page &&
+            coursesStore.allSearch.pagination.limit
+          "
+        >
+          <list-pagination
+            v-model:page="coursesStore.allSearch.pagination.page"
+            :total="coursesStore.allSearch.resultsMeta.total"
+            :limit="coursesStore.allSearch.pagination.limit"
+          />
+        </div>
+      </div>
+    </template>
+  </tabs-view>
+  <div
+    class="courses-view-mentor"
+    v-else
+  >
+    <div class="courses-view">
+      <div class="courses-view__header">
+        <div class="courses-view__header__search">
+          <search-field
+            v-model="coursesStore.allSearch.pagination.search"
+            :is-loading="coursesStore.allSearch.isListLoading"
+          />
+        </div>
+      </div>
+      <div class="courses-view__filters">
+        <search-filters
+          :filters="filters"
+          v-model:pagination="coursesStore.allSearch.pagination"
         />
       </div>
       <div
-        class="courses-view__header__create"
-        v-if="Core.Context.roleIs(['teacher'])"
+        class="row"
+        v-if="
+          coursesStore.allSearch.resultsMeta.total > 0 &&
+          !coursesStore.allSearch.isListLoading
+        "
+        v-auto-animate
       >
-        <common-button
-          to="/create-course"
-          design="primary"
+        <div
+          class="col-md-6 col-lg-4"
+          v-for="course in coursesStore.allSearch.results"
+          :key="course.id"
         >
-          Создать курс
-        </common-button>
+          <course-card :course="course" />
+        </div>
       </div>
-    </div>
-    <div class="courses-view__filters">
-      <search-filters
-        :filters="filters"
-        v-model:pagination="coursesStore.pagination"
-      />
-    </div>
-    <div
-      class="row"
-      v-if="coursesStore.resultsMeta.total > 0 && !coursesStore.isListLoading"
-      v-auto-animate
-    >
       <div
-        class="col-md-6 col-lg-4"
-        v-for="course in coursesStore.results"
-        :key="course.id"
+        class="courses-view__loading"
+        v-else-if="coursesStore.allSearch.isListLoading"
       >
-        <course-card :course="course" />
+        <loader-icon contrast />
       </div>
-    </div>
-    <div
-      class="courses-view__loading"
-      v-else-if="coursesStore.isListLoading"
-    >
-      <loader-icon contrast />
-    </div>
-    <div
-      class="courses-view__nothing-found"
-      v-else
-    >
-      <div class="courses-view__nothing-found__image">
-        <nothing-found-image class="courses-view__nothing-found__image__img" />
+      <div
+        class="courses-view__nothing-found"
+        v-else
+      >
+        <div class="courses-view__nothing-found__image">
+          <nothing-found-image
+            class="courses-view__nothing-found__image__img"
+          />
+        </div>
+        <p class="courses-view__nothing-found__text">Курсы не найдены</p>
       </div>
-      <p class="courses-view__nothing-found__text">Курсы не найдены</p>
-    </div>
-    <div
-      class="courses-view__pagination"
-      v-if="
-        coursesStore.resultsMeta.total > 0 &&
-        coursesStore.pagination.page &&
-        coursesStore.pagination.limit
-      "
-    >
-      <list-pagination
-        v-model:page="coursesStore.pagination.page"
-        :total="coursesStore.resultsMeta.total"
-        :limit="coursesStore.pagination.limit"
-      />
+      <div
+        class="courses-view__pagination"
+        v-if="
+          coursesStore.allSearch.resultsMeta.total > 0 &&
+          coursesStore.allSearch.pagination.page &&
+          coursesStore.allSearch.pagination.limit
+        "
+      >
+        <list-pagination
+          v-model:page="coursesStore.allSearch.pagination.page"
+          :total="coursesStore.allSearch.resultsMeta.total"
+          :limit="coursesStore.allSearch.pagination.limit"
+        />
+      </div>
     </div>
   </div>
 </template>

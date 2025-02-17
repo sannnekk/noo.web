@@ -101,7 +101,7 @@ const subjectsToSHow = computed<SubjectToShow[]>(() => {
     }))
     .filter(
       (subject) =>
-        Core.Context.roleIs(['admin', 'teacher', 'mentor']) ||
+        Core.Context.roleIs(['admin', 'teacher', 'mentor', 'assistant']) ||
         subject.assignment
     )
 })

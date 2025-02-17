@@ -10,7 +10,7 @@ export interface Course extends Entity {
   name: string
   images: Media[]
   authors: User[]
-  authorId?: User['id']
+  editors: User[]
   description: string
   chapters: Chapter[]
   subject: Subject

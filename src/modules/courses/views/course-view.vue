@@ -68,7 +68,7 @@
           <materials-tree :data="courseStore.materialsTree" />
           <div
             class="index-materials-view__tree__course-id"
-            v-if="Core.Context.roleIs(['admin', 'teacher'])"
+            v-if="Core.Context.roleIs(['admin', 'teacher', 'assistant'])"
           >
             <form-input
               type="text"

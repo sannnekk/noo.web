@@ -37,7 +37,6 @@ declare module 'vue' {
     CheckRedIcon: typeof import('./src/components/decorations/icons/check-red-icon.vue')['default']
     CleanIcon: typeof import('./src/components/decorations/icons/text-format-icons/clean-icon.vue')['default']
     CommonButton: typeof import('./src/components/form/common-button.vue')['default']
-    copy: typeof import('./src/components/computed/video/creation/video-creation-info-form copy.vue')['default']
     CopyIcon: typeof import('./src/components/decorations/icons/copy-icon.vue')['default']
     CourseCard: typeof import('./src/components/common/course-card.vue')['default']
     CourseSelect: typeof import('./src/components/form/entity-select/course-select.vue')['default']
@@ -72,6 +71,7 @@ declare module 'vue' {
     FormToggle: typeof import('./src/components/form/form-toggle.vue')['default']
     GoogleAuthButton: typeof import('./src/components/actions/google-auth-button.vue')['default']
     GoogleSheetsIcon: typeof import('./src/components/decorations/icons/google-sheets-icon.vue')['default']
+    GoogleTranslateWarner: typeof import('./src/components/virtual/google-translate-warner.vue')['default']
     Header2Icon: typeof import('./src/components/decorations/icons/text-format-icons/header-2-icon.vue')['default']
     Header3Icon: typeof import('./src/components/decorations/icons/text-format-icons/header-3-icon.vue')['default']
     Header4Icon: typeof import('./src/components/decorations/icons/text-format-icons/header-4-icon.vue')['default']
@@ -155,6 +155,7 @@ declare module 'vue' {
     SettingsIcon: typeof import('./src/components/decorations/icons/settings-icon.vue')['default']
     StarIcon: typeof import('./src/components/decorations/icons/star-icon.vue')['default']
     StatisticsEntryCard: typeof import('./src/components/computed/statistics/statistics-entry-card.vue')['default']
+    StatisticsIcon: typeof import('./src/components/decorations/icons/statistics-icon.vue')['default']
     StatisticsPlotCard: typeof import('./src/components/computed/statistics/statistics-plot-card.vue')['default']
     StatisticsSection: typeof import('./src/components/computed/statistics/statistics-section.vue')['default']
     StatisticsView: typeof import('./src/components/computed/statistics/statistics-view.vue')['default']
@@ -227,7 +228,6 @@ declare module 'vue' {
     WorkSelect: typeof import('./src/components/form/entity-select/work-select.vue')['default']
     WorkTypeSelect: typeof import('./src/components/form/prop-select/work-type-select.vue')['default']
     YandexVideoPlayer: typeof import('./src/components/computed/video/yandex/yandex-video-player.vue')['default']
-    YandexVideoUploadButton: typeof import('./src/components/computed/video/yandex/yandex-video-upload-button.vue')['default']
     YandexVideoUploader: typeof import('./src/components/computed/video/yandex/yandex-video-uploader.vue')['default']
   }
 }

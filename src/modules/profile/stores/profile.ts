@@ -105,6 +105,24 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
   }
 
   /**
+   * cancel change email
+   */
+  async function cancelChangeEmail() {
+    try {
+      await userService.cancelChangeEmail(Core.Context.User!.id, {
+        showLoader: true
+      })
+      await fetchUser()
+      uiService.openSuccessModal('Запрос на изменение почты отменен')
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при отмене запроса на изменение почты',
+        error.message
+      )
+    }
+  }
+
+  /**
    * change avatar
    */
   async function changeAvatar(avatarData: AvatarData) {
@@ -134,6 +152,7 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
     updateCredentials,
     fetchUser,
     requestChangeEmail,
+    cancelChangeEmail,
     changeAvatar
   }
 })

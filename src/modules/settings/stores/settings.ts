@@ -10,21 +10,21 @@ export const useSettingsStore = defineStore('settings-module:settings', () => {
       description: 'Смена пароля, активные сессии, удаление аккаунта',
       icon: 'user',
       route: '/settings/account',
-      for: ['student', 'teacher', 'mentor', 'admin']
+      for: ['student', 'teacher', 'mentor', 'admin', 'assistant']
     },
     {
       title: 'Telegram',
       description: 'Привязка Telegram к профилю, уведомления',
       icon: 'telegram-blue',
       route: '/settings/telegram',
-      for: ['student', 'mentor', 'teacher', 'admin']
+      for: ['student', 'mentor', 'teacher', 'admin', 'assistant']
     },
     {
       title: 'Персонализация',
       description: 'Настройка фона',
       icon: 'brush',
       route: '/settings/personalization',
-      for: ['student', 'mentor', 'teacher', 'admin']
+      for: ['student', 'mentor', 'teacher', 'admin', 'assistant']
     },
     {
       title: 'Google Sheets',
@@ -45,7 +45,7 @@ export const useSettingsStore = defineStore('settings-module:settings', () => {
       description: 'Просмотр, создание и редактирование предметов',
       icon: 'subject',
       route: '/settings/subjects',
-      for: ['teacher', 'admin', 'mentor']
+      for: ['teacher', 'admin', 'mentor', 'assistant']
     },
     {
       title: 'Страница помощи',
@@ -66,7 +66,7 @@ export const useSettingsStore = defineStore('settings-module:settings', () => {
       description: 'Информация о платформе, версиях и changelog',
       icon: 'info',
       route: '/settings/platform-info',
-      for: ['teacher', 'admin', 'teacher', 'mentor']
+      for: ['teacher', 'admin', 'student', 'mentor']
     },
     {
       title: 'Опасная зона',

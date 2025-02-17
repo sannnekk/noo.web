@@ -65,7 +65,13 @@
           <p>
             На почту <b>{{ credentialsModel.newEmail }}</b> отправлено письмо с
             подтверждением смены почты. Пожалуйста, проверьте почту и
-            подтвердите новый адрес.
+            подтвердите новый адрес. <br />
+            <a
+              href="javascript:void(0)"
+              @click="$emit('cancel-email-change')"
+            >
+              Отменить смену почты
+            </a>
           </p>
         </warning-block>
       </div>
@@ -109,6 +115,7 @@ interface Emits {
   (e: 'add-telegram'): void
   (e: 'remove-telegram'): void
   (e: 'change-email'): void
+  (e: 'cancel-email-change'): void
   (e: 'change-avatar', data: AvatarData): void
 }
 
@@ -236,6 +243,15 @@ function onSomeInputChange() {
 
       > *
         padding: 0.2em 0.6em
+
+      a
+        color: currentColor
+        cursor: pointer
+        text-decoration: underline
+
+        &:hover
+          color: var(--text-light)
+          text-decoration: none
 
   &__telegram
     margin-top: 0.5em

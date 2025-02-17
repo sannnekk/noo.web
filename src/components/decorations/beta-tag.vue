@@ -17,5 +17,5 @@
   &__text
     text-transform: uppercase
     font-weight: bold
-    color: var(--lightest)
+    color: var(--lightest) !important
 </style>

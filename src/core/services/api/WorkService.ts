@@ -7,6 +7,7 @@ import {
   type ServiceOptions
 } from '@/core/services/ApiService'
 import type { Material } from '@/core/data/entities/Material'
+import type { WorkStatistics } from '@/core/data/entities/WorkStatistics'
 
 /**
  * Work service
@@ -30,6 +31,21 @@ export class WorkService extends ApiService {
   ): Promise<ApiResponse<Work | null>> {
     return await this.httpGet<Work>(
       `${this._route}/${slug}`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * get work statistics by id
+   */
+  public async getWorkStatistics(
+    id: Work['id'],
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<WorkStatistics | null>> {
+    return await this.httpGet<WorkStatistics>(
+      `${this._route}/${id}/statistics`,
       undefined,
       undefined,
       options

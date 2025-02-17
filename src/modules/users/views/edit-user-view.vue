@@ -1,7 +1,7 @@
 <template>
   <tabs-view
     :titles="['Данные', 'Календарь', 'Статистика', 'Работы']"
-    v-model:tab-index="currentTab"
+    v-model:tab-index="userStore.currentTab"
   >
     <template #tab-0>
       <div class="edit-user-view">
@@ -129,7 +129,7 @@
     <template #tab-1>
       <div class="edit-user-view__calender">
         <calender-view
-          v-if="userStore.user && currentTab === 1"
+          v-if="userStore.user && userStore.currentTab === 1"
           :username="userStore.user.username"
         />
       </div>
@@ -137,7 +137,7 @@
     <template #tab-2>
       <div class="edit-user-view__statistics">
         <statistics-view
-          v-if="userStore.user && currentTab === 2"
+          v-if="userStore.user && userStore.currentTab === 2"
           :username="userStore.user.username"
         />
       </div>
@@ -145,10 +145,10 @@
     <template #tab-3>
       <div
         class="edit-user-view__assigned-works"
-        v-if="['student', 'mentor'].includes(userStore.user?.role as any) && Core.Context.roleIs(['admin', 'teacher'])"
+        v-if="['student', 'mentor'].includes(userStore.user?.role as any) && Core.Context.roleIs(['admin', 'teacher', 'assistant'])"
       >
         <assigned-works-view
-          v-if="userStore.user && currentTab === 3"
+          v-if="userStore.user && userStore.currentTab === 3"
           :user="userStore.user"
         />
       </div>
@@ -195,8 +195,6 @@ watch(
   },
   { immediate: true, deep: true }
 )
-
-const currentTab = ref(0)
 </script>
 
 <style scoped lang="sass">

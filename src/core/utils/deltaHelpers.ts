@@ -1,6 +1,8 @@
 import type { DeltaContentType } from '@/types/composed/DeltaContentType'
 
-export function isDeltaEmptyOrWhitespace(delta: DeltaContentType | undefined) {
+export function isDeltaEmptyOrWhitespace(
+  delta: DeltaContentType | undefined | null
+) {
   if (!delta) {
     return true
   }
@@ -30,8 +32,28 @@ export function sliceTop(content: DeltaContentType, length = 5) {
   const sliced = content.ops
     .slice(0, length)
     .filter((op) => (op.insert as any)?.image === undefined)
+<<<<<<< HEAD
+=======
+  const image = content.ops.find((op) => (op.insert as any)?.image)
+
+  if (image) {
+    return {
+      ops: [image, ...sliced, { insert: '\n...' }]
+    }
+  }
+>>>>>>> main
 
   return {
     ops: [...sliced, { insert: '\n...' }]
   }
 }
+<<<<<<< HEAD
+=======
+
+export function deltasAreEqual(
+  a: DeltaContentType | null,
+  b: DeltaContentType | null
+) {
+  return JSON.stringify(a || {}) === JSON.stringify(b || {})
+}
+>>>>>>> main

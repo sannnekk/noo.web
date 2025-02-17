@@ -96,7 +96,7 @@ export const useCourseStore = defineStore('courses-module:course', () => {
       return
     }
 
-    if (Core.Context.roleIs(['teacher', 'admin', 'mentor'])) {
+    if (Core.Context.roleIs(['teacher', 'admin', 'mentor', 'assistant'])) {
       uiService.openErrorModal(
         'Не удалось запросить доступ к работам',
         'Только студенты могут запрашивать доступ к работе'

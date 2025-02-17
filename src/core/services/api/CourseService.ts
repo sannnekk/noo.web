@@ -50,6 +50,21 @@ export class CourseService extends ApiService {
   }
 
   /**
+   * Get own courses (for teachers)
+   */
+  public async getOwnCourses(
+    pagination?: Pagination,
+    options: ServiceOptions = {}
+  ) {
+    return await this.httpGet<Course[]>(
+      `${this._route}/own`,
+      pagination,
+      undefined,
+      options
+    )
+  }
+
+  /**
    * Get courses by student
    */
   public async getStudentCourses(

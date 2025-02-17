@@ -77,11 +77,25 @@
       @click="assignedWorkStore.recheckAutomatically()"
       v-if="
         assignedWorkStore.mode === 'read' &&
-        Core.Context.roleIs(['teacher', 'admin', 'mentor']) &&
+        Core.Context.roleIs(['teacher', 'admin', 'mentor', 'assistant']) &&
         assignedWorkStore.assignedWork?.checkStatus == 'checked-automatically'
       "
     >
       Перепроверить автоматически
+    </common-button>
+    <common-button
+      alignment="stretch"
+      class="work-actions__secondary"
+      design="inline"
+      @click="assignedWorkStore.sendToRecheck()"
+      v-if="
+        assignedWorkStore.mode === 'read' &&
+        Core.Context.roleIs(['mentor', 'teacher', 'assistant']) &&
+        isWorkChecked(assignedWorkStore.assignedWork) &&
+        assignedWorkStore.assignedWork.checkStatus !== 'checked-automatically'
+      "
+    >
+      Отправить на перепроверку
     </common-button>
     <resolve-files-button
       class="work-actions__secondary"
@@ -91,7 +105,7 @@
       v-if="
         (assignedWorkStore.mode === 'read' ||
           assignedWorkStore.mode === 'check') &&
-        Core.Context.roleIs(['teacher', 'mentor'])
+        Core.Context.roleIs(['teacher', 'mentor', 'assistant'])
       "
     />
     <common-button
@@ -173,6 +187,7 @@
 import ResolveFilesButton from './resolve-files-button.vue'
 import { Core } from '@/core/Core'
 import { useAssignedWorkStore } from '../../stores/assigned-work'
+import { isWorkChecked } from '../../utils/task'
 
 const assignedWorkStore = useAssignedWorkStore()
 </script>

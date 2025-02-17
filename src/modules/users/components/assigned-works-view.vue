@@ -6,6 +6,13 @@
     <div class="assigned-works-view__search">
       <search-field v-model="search.pagination.value.search" />
     </div>
+    <div class="assigned-works-view__filters">
+      <search-filters
+        v-model:pagination="search.pagination.value"
+        :is-loading="search.isListLoading.value"
+        :filters="filters"
+      />
+    </div>
     <div
       class="assigned-works-view__selection"
       v-if="selectedWorks.length"
@@ -20,6 +27,13 @@
         >
           Поменять куратора
         </common-button>
+        <common-button
+          design="danger"
+          @click="openArchiveWorksModal(selectedWorks)"
+          v-if="Core.Context.roleIs(['assistant'])"
+        >
+          Архивировать
+        </common-button>
       </div>
     </div>
     <div class="assigned-works-view__results">
@@ -28,8 +42,8 @@
         :cols="cols"
         :actions="actions"
         :is-loading="search.isListLoading.value"
-        editable
         @select="onSelect($event)"
+        editable
       />
     </div>
     <div
@@ -53,9 +67,52 @@
     :assigned-works="changeMentorModalData.assignedWorks"
     @confirm="onMentorChanged()"
   />
+  <sure-modal
+    v-model:visible="archiveWorksModalData.opened"
+    @confirm="onArchiveWorks()"
+  >
+    <template #title>
+      {{
+        archiveWorksModalData.assignedWorks.length > 1
+          ? 'Архивировать работы'
+          : 'Архивировать работу'
+      }}
+    </template>
+    <template #text>
+      <p>
+        {{
+          archiveWorksModalData.assignedWorks.length > 1
+            ? `Вы уверены, что хотите архивировать выбранные работы (${archiveWorksModalData.assignedWorks.length})?`
+            : `Вы уверены, что хотите архивировать работу "${archiveWorksModalData.assignedWorks[0]?.work?.name}"?`
+        }}
+      </p>
+    </template>
+  </sure-modal>
+  <sure-modal
+    v-model:visible="unarchiveWorksModalData.opened"
+    @confirm="onUnarchiveWorks()"
+  >
+    <template #title>
+      {{
+        unarchiveWorksModalData.assignedWorks.length > 1
+          ? 'Разархивировать работы'
+          : 'Разархивировать работу'
+      }}
+    </template>
+    <template #text>
+      <p>
+        {{
+          unarchiveWorksModalData.assignedWorks.length > 1
+            ? `Вы уверены, что хотите разархивировать выбранные работы (${unarchiveWorksModalData.assignedWorks.length})?`
+            : `Вы уверены, что хотите разархивировать работу "${unarchiveWorksModalData.assignedWorks[0]?.work?.name}"?`
+        }}
+      </p>
+    </template>
+  </sure-modal>
 </template>
 
 <script setup lang="ts">
+import type { SearchFilter } from '@/components/search/filters/SearchFilter'
 import ChangeMentorModal from './change-mentor-modal.vue'
 import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 import type { MenuItem } from '@/components/widgets/more-widget.vue'
@@ -66,6 +123,10 @@ import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { User } from '@/core/data/entities/User'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { subjectFilter } from '@/core/filters/subject-filter'
+import { solveStatusFilter } from '@/core/filters/solve-status-filter'
+import { checkStatusFilter } from '@/core/filters/check-status-filter'
+import { workTypeFilter } from '@/core/filters/work-type-filter'
 
 interface Props {
   user: User
@@ -76,7 +137,15 @@ const props = defineProps<Props>()
 const router = useRouter()
 
 const search = useSearch(fetchAssignedWorks, {
-  immediate: true
+  immediate: true,
+  initialPagination: Core.Context.roleIs(['assistant'])
+    ? {
+        'filter[isArchivedByAssistants]': {
+          type: 'boolean',
+          value: false
+        }
+      }
+    : undefined
 })
 
 const changeMentorModalData = ref<{
@@ -86,6 +155,22 @@ const changeMentorModalData = ref<{
 }>({
   opened: false,
   mentorId: null,
+  assignedWorks: []
+})
+
+const archiveWorksModalData = ref<{
+  opened: boolean
+  assignedWorks: AssignedWork[]
+}>({
+  opened: false,
+  assignedWorks: []
+})
+
+const unarchiveWorksModalData = ref<{
+  opened: boolean
+  assignedWorks: AssignedWork[]
+}>({
+  opened: false,
   assignedWorks: []
 })
 
@@ -103,6 +188,39 @@ async function fetchAssignedWorks(pagination?: Pagination) {
   }
 }
 
+const filters: SearchFilter[] = [
+  workTypeFilter('work'),
+  subjectFilter('work'),
+  solveStatusFilter(),
+  checkStatusFilter(),
+  {
+    name: 'Ученик сдвинул дедлайн',
+    type: 'boolean',
+    key: 'solveDeadlineShifted',
+    booleanLabels: ['Нет', 'Да']
+  },
+  {
+    name: 'Куратор сдвинул дедлайн',
+    type: 'boolean',
+    key: 'checkDeadlineShifted',
+    booleanLabels: ['Нет', 'Да']
+  },
+  {
+    name: 'Пересдача',
+    type: 'boolean',
+    key: 'isNewAttempt',
+    booleanLabels: ['Нет', 'Да']
+  },
+  {
+    name: Core.Context.roleIs(['assistant'])
+      ? 'Архивированные'
+      : 'Архивировано ассистентами',
+    type: 'boolean',
+    key: 'isArchivedByAssistants',
+    booleanLabels: ['Нет', 'Да']
+  }
+]
+
 const cols: ColType[] = [
   {
     title: '',
@@ -119,7 +237,11 @@ const cols: ColType[] = [
         `<small>${a.student?.name || '-'}</small>`,
         `<small>Кураторы: ${
           a.mentors?.map((m) => m.name).join(', ') || '-'
-        }</small>`
+        }</small> ${
+          a.isArchivedByMentors
+            ? '<span style="color: var(--text-light)">[Архивировано]</span>'
+            : ''
+        }`
       ]
     }
   },
@@ -173,6 +295,22 @@ function actions(assignedWork: AssignedWork): MenuItem[] {
         assignedWork.checkStatus === 'not-checked' ||
         assignedWork.checkStatus === 'in-progress',
       action: () => openChangeMentorModal([assignedWork])
+    },
+    {
+      title: 'Архивировать',
+      icon: 'delete',
+      if:
+        Core.Context.roleIs(['assistant']) &&
+        !assignedWork.isArchivedByAssistants,
+      action: () => openArchiveWorksModal([assignedWork])
+    },
+    {
+      title: 'Разархивировать',
+      icon: 'check-green',
+      if:
+        Core.Context.roleIs(['assistant']) &&
+        assignedWork.isArchivedByAssistants,
+      action: () => openUnarchiveWorksModal([assignedWork])
     }
   ]
 }
@@ -332,15 +470,76 @@ function openChangeMentorModal(assignedWorks: AssignedWork[]) {
   }
 }
 
+function openArchiveWorksModal(assignedWorks: AssignedWork[]) {
+  archiveWorksModalData.value = {
+    opened: true,
+    assignedWorks
+  }
+}
+
+function openUnarchiveWorksModal(assignedWorks: AssignedWork[]) {
+  unarchiveWorksModalData.value = {
+    opened: true,
+    assignedWorks
+  }
+}
+
 function onMentorChanged() {
   selectedWorks.value = []
   search.trigger()
+}
+
+async function onArchiveWorks() {
+  Core.Services.UI.setLoading(true)
+
+  try {
+    for (const work of archiveWorksModalData.value.assignedWorks) {
+      await Core.Services.AssignedWork.archiveAssignedWork(work.id)
+    }
+
+    Core.Services.UI.openSuccessModal('Работы успешно архивированы')
+
+    selectedWorks.value = []
+    search.trigger()
+  } catch (error: any) {
+    Core.Services.UI.openErrorModal(
+      'Произошла ошибка при архивировании работ',
+      error.message
+    )
+  } finally {
+    Core.Services.UI.setLoading(false)
+  }
+}
+
+async function onUnarchiveWorks() {
+  Core.Services.UI.setLoading(true)
+
+  try {
+    for (const work of unarchiveWorksModalData.value.assignedWorks) {
+      await Core.Services.AssignedWork.unarchiveAssignedWork(work.id)
+    }
+
+    Core.Services.UI.openSuccessModal('Работы успешно разархивированы')
+
+    selectedWorks.value = []
+    search.trigger()
+  } catch (error: any) {
+    Core.Services.UI.openErrorModal(
+      'Произошла ошибка при разархивировании работ',
+      error.message
+    )
+  } finally {
+    Core.Services.UI.setLoading(false)
+  }
 }
 </script>
 
 <style scoped lang="sass">
 .assigned-works-view
   &__search
+    padding: 1em
+
+  &__filters
     padding: 1em
 
   &__selection

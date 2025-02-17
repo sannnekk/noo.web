@@ -43,7 +43,9 @@ export interface AssignedWork extends Entity {
   commentIds: Comment['id'][]
   score: number | null
   maxScore: number
-  isArchived: boolean
+  isArchivedByStudent: boolean
+  isArchivedByMentors: boolean
+  isArchivedByAssistants: boolean
   studentComment: DeltaContentType | null
   mentorComment: DeltaContentType | null
   createdAt: Date

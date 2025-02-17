@@ -250,9 +250,7 @@ export class ApiService extends Service {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
 
-      if (timeout) {
-        xhr.timeout = timeout
-      }
+      xhr.timeout = timeout || 30000
 
       xhr.open(options.method || 'GET', url)
 
@@ -294,6 +292,13 @@ export class ApiService extends Service {
         reject({
           status: 400,
           message: 'Ошибка соединения. Проверьте интернет соединение'
+        })
+      }
+
+      xhr.ontimeout = () => {
+        reject({
+          status: 408,
+          message: 'Превышено время ожидания ответа от сервера'
         })
       }
 

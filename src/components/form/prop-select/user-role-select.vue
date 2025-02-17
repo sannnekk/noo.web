@@ -38,6 +38,10 @@ const roleOptions: VisibleRole[] = [
   {
     label: 'Ученик',
     value: 'student'
+  },
+  {
+    label: 'Ассистент',
+    value: 'assistant'
   }
 ]
 

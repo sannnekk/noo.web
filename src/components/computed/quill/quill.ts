@@ -39,11 +39,7 @@ export function registerModules(modules: Record<string, any>) {
 
 export class CustomQuill extends Quill {
   private toolbar?: Toolbar
-  private readonly ALLOWED_MIME_TYPES = [
-    'image/png',
-    'image/jpeg',
-    'image/jpg'
-  ] as const
+  private readonly ALLOWED_MIME_TYPES = ['image/png', 'image/jpeg'] as const
   private readonly MAX_FILE_SIZE = 10 * 1024 * 1024
 
   constructor(
@@ -288,14 +284,19 @@ export class CustomQuill extends Quill {
   public async promptFile(): Promise<File | null> {
     return new Promise((resolve) => {
       const input = document.createElement('input')
+
       input.type = 'file'
       input.multiple = false
-      input.accept = this.ALLOWED_MIME_TYPES.join(', ')
-      input.hidden = true
+      input.accept = this.ALLOWED_MIME_TYPES.join(',')
+
+      // to resolve a bug on iOS
+      input.value = ''
+
       input.onchange = () => {
         const file = input.files?.[0] || null
         resolve(file)
       }
+
       input.click()
     })
   }

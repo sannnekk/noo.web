@@ -11,15 +11,19 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
   const uiService = Core.Services.UI
 
   /**
-   * search
+   * All courses search
    */
-  const {
-    pagination,
-    results,
-    resultsMeta,
-    isListLoading,
-    trigger: triggerSearch
-  } = useSearch<Course>(fetchCourses, {
+  const allSearch = useSearch<Course>(fetchCourses, {
+    initialPagination: {
+      limit: 9
+    },
+    immediate: true
+  })
+
+  /**
+   * Own courses search
+   */
+  const ownSearch = useSearch<Course>(fetchOwnCourses, {
     initialPagination: {
       limit: 9
     },
@@ -30,6 +34,11 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
    * Current tab index for student view
    */
   const currentTabIndex = ref(0)
+
+  /**
+   * Teacher tab index
+   */
+  const teacherTabIndex = ref(0)
 
   /**
    * Fetch the courses
@@ -50,10 +59,28 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
   }
 
   /**
+   * Fetch the own courses
+   */
+  async function fetchOwnCourses(pagination: Pagination) {
+    if (Core.Context.roleIs(['student', 'mentor', 'assistant'])) {
+      return
+    }
+
+    try {
+      return await courseService.getOwnCourses(pagination)
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при загрузке курсов',
+        error.message
+      )
+    }
+  }
+
+  /**
    * Fetch the course assignments
    */
   async function fetchAssignments(pagination: Pagination) {
-    if (Core.Context.roleIs(['admin', 'teacher', 'mentor'])) {
+    if (Core.Context.roleIs(['admin', 'teacher', 'mentor', 'assistant'])) {
       return
     }
 
@@ -103,12 +130,10 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
   }
 
   return {
-    pagination,
-    results,
-    resultsMeta,
-    isListLoading,
-    triggerSearch,
+    allSearch,
+    ownSearch,
     currentTabIndex,
+    teacherTabIndex,
     fetchAssignments,
     archiveAssignment,
     unarchiveAssignment
