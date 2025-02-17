@@ -112,7 +112,8 @@ function materialConstructor(): Omit<Material, 'id'> {
     activateAt: null,
     isWorkAvailable: true,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    videos: []
   }
 }
 
@@ -142,8 +143,8 @@ function pollConstructor(): Omit<Poll, 'id' | 'votedCount' | 'votedUserIds'> {
   return {
     title: '',
     description: '',
-    canSeeResults: [],
-    canVote: [],
+    canSeeResults: ['teacher'],
+    canVote: ['student'],
     questions: [],
     requireAuth: true,
     stopAt: new Date(),

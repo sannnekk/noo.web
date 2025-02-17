@@ -39,8 +39,7 @@ const cols: ColType[] = [
     title: 'Telegram',
     type: 'button',
     design: 'telegram',
-    alignment: 'center',
-
+    alignment: 'left',
     value: (user: any) => user.username,
     linkTo: ({ username }: { username: string }) => `https://t.me/${username}`
   },

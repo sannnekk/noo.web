@@ -1,5 +1,6 @@
 <template>
   <common-button
+    v-if="value"
     :alignment="alignment"
     :design="design"
     :is-loading="isLoading"

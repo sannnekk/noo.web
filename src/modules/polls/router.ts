@@ -1,26 +1,37 @@
 import module from './module-root.vue'
-import index from './views/index-view.vue'
+import IndexView from './views/index-view.vue'
+import CreatePollView from './views/create-poll-view.vue'
+import pollView from './views/poll-view.vue'
 import ResultsView from './views/results-view.vue'
 import UserResultView from './views/user-result-view.vue'
 
 export default {
-  path: '/poll/:pollId',
+  path: '/polls',
   name: 'Polls',
-  component: module, // <-- necessary
+  component: module,
   children: [
-    // <-- your routes
     {
       path: '',
-      name: 'Опрос',
-      component: index
+      name: 'Опросы',
+      component: IndexView
     },
     {
-      path: 'results',
+      path: 'create-poll:pollId?',
+      name: 'Создание опроса',
+      component: CreatePollView
+    },
+    {
+      path: ':pollId',
+      name: 'Опрос',
+      component: pollView
+    },
+    {
+      path: ':pollId/results',
       name: 'Результаты опроса',
       component: ResultsView
     },
     {
-      path: 'results/:username',
+      path: ':pollId/results/:username',
       name: 'Результаты пользователя',
       component: UserResultView
     }

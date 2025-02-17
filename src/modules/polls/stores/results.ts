@@ -3,7 +3,7 @@ import { Core } from '@/core/Core'
 import type { Pagination } from '@/core/data/Pagination'
 import type { Poll } from '@/core/data/entities/Poll'
 import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 export const usePollResultsStore = defineStore('polls-module:results', () => {
@@ -26,6 +26,12 @@ export const usePollResultsStore = defineStore('polls-module:results', () => {
    */
   const currentTabIndex = ref(0)
 
+  watch(currentTabIndex, (index) => {
+    if (index === 1) {
+      unregisteredResultsSearch.triggerOnce()
+    }
+  })
+
   /**
    * Search who voted
    */
@@ -34,7 +40,9 @@ export const usePollResultsStore = defineStore('polls-module:results', () => {
   /**
    * Search who voted (unregistered users)
    */
-  const unregisteredResultsSearch = useSearch(fetchUnregisteredAnswers)
+  const unregisteredResultsSearch = useSearch(fetchUnregisteredAnswers, {
+    immediate: false
+  })
 
   /**
    * Fetch answers

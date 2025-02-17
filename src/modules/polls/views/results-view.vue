@@ -4,7 +4,7 @@
     v-if="resultsStore.poll"
   >
     <div class="results-view__head">
-      <back-button to="/blog"> Назад к блогу</back-button>
+      <back-button to="/polls"> Назад к опросам</back-button>
       <h1>{{ resultsStore.poll.title }}</h1>
     </div>
     <tabs-view

@@ -91,7 +91,7 @@
         v-for="video in courseStore.material.videos"
         :key="video.id"
       >
-        <video-block :video="video" />
+        <video-player :video="video" />
       </div>
     </div>
     <div
@@ -127,7 +127,7 @@
       </p>
       <common-button
         design="primary"
-        :to="`/poll/${courseStore.material.pollId}`"
+        :to="`/polls/${courseStore.material.pollId}`"
       >
         Пройти опрос
       </common-button>

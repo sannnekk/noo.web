@@ -19,27 +19,43 @@
       </template>
       <template #content>
         <div
-          class="index-profile-view__mentor"
-          v-if="Core.Context.roleIs(['student'])"
-        >
-          <h2 class="index-profile-view__mentor__header">Мои кураторы</h2>
-          <student-mentors-view
-            :mentor-assignments="profileStore.user.mentorAssignmentsAsStudent!"
-            :student="Core.Context.User!"
-          />
-        </div>
-        <div
-          class="index-profile-view__charts"
+          class="index-profile-view__content"
           v-if="
             Core.Context.User &&
             Core.Context.roleIs(['teacher', 'mentor', 'student'])
           "
         >
-          <h2 class="index-profile-view__charts__header">Моя статистика</h2>
-          <statistics-view
-            v-once
-            :username="Core.Context.User?.username"
-          />
+          <tabs-view
+            :titles="[
+              'Моя статистика',
+              Core.Context.roleIs(['student']) ? 'Мои кураторы' : '',
+              Core.Context.roleIs(['student', 'mentor']) ? 'Мои опросы' : ''
+            ]"
+            v-model:tab-index="profileStore.currentTab"
+          >
+            <template #tab-0>
+              <div class="index-profile-view__charts">
+                <statistics-view
+                  v-once
+                  :username="Core.Context.User?.username"
+                />
+              </div>
+            </template>
+            <template #tab-1>
+              <div
+                class="index-profile-view__mentor"
+                v-if="Core.Context.roleIs(['student'])"
+              >
+                <student-mentors-view
+                  :mentor-assignments="profileStore.user.mentorAssignmentsAsStudent!"
+                  :student="Core.Context.User!"
+                />
+              </div>
+            </template>
+            <template #tab-2>
+              <my-polls-view v-if="profileStore.currentTab === 2" />
+            </template>
+          </tabs-view>
         </div>
       </template>
     </the-sidebar-layout>
@@ -51,6 +67,7 @@
 </template>
 
 <script lang="ts" setup>
+import MyPollsView from '../components/my-polls-view.vue'
 import changeEmailModal from '../components/change-email-modal.vue'
 import ProfileCredentials from '../components/profile-credentials.vue'
 import { Core } from '@/core/Core'
@@ -84,4 +101,11 @@ const changeEmailModalVisible = ref(false)
 
   &__mentor
     margin-bottom: 2em
+    margin-top: 1em
+
+  &__charts
+    margin-top: 1em
+
+  &__polls
+    margin-top: 1em
 </style>

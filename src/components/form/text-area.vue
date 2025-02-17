@@ -7,9 +7,13 @@
     >
     <textarea
       class="text-area__textarea"
+      :class="{
+        'text-area__textarea--readonly': readonly,
+        'text-area__textarea--error': !!errors.length
+      }"
       :placeholder="placeholder"
       v-model="model"
-      :readonly="props.readonly"
+      :readonly="readonly"
     />
     <span
       class="text-area__error"
@@ -41,12 +45,8 @@ const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 const model = computed({
-  get() {
-    return props.modelValue
-  },
-  set(value) {
-    emits('update:modelValue', value)
-  }
+  get: () => props.modelValue,
+  set: (value) => emits('update:modelValue', value)
 })
 
 const errors = ref<string[]>([])
@@ -70,6 +70,13 @@ const errors = ref<string[]>([])
     min-height: 5em
     color: var(--form-text-color)
     background: var(--form-background)
+
+    &--readonly
+      background: var(--light-background-color)
+      color: var(--text-light)
+
+    &--error
+      border-color: var(--danger)
 
     &:focus
       outline: none

@@ -48,13 +48,7 @@ export function installUIStore() {
         title: 'НОО.Tube',
         icon: 'nootube',
         route: '/nootube',
-        for: ['admin', 'teacher', 'mentor', 'student']
-      },
-      {
-        title: 'Опросы',
-        icon: 'home',
-        route: '/blog',
-        for: ['admin', 'teacher', 'mentor', 'student', 'assistant']
+        for: ['admin', 'teacher' /*,  'mentor', 'student' */]
       },
       {
         title: 'Курсы',
@@ -85,6 +79,12 @@ export function installUIStore() {
         icon: 'users',
         route: '/users',
         for: ['admin', 'teacher', 'mentor', 'assistant']
+      },
+      {
+        title: 'Опросы',
+        icon: 'poll',
+        route: '/polls',
+        for: ['admin', 'teacher']
       },
       {
         title: 'Календарь',

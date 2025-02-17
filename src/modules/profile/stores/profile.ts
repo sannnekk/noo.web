@@ -15,6 +15,11 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
   const user = ref<UserWithOnlineStatus | null>()
 
   /*
+   * current tab
+   */
+  const currentTab = ref(0)
+
+  /*
    * fetch user
    */
   async function fetchUser() {
@@ -149,6 +154,7 @@ export const useProfileStore = defineStore('profile-module:profile', () => {
 
   return {
     user,
+    currentTab,
     updateCredentials,
     fetchUser,
     requestChangeEmail,

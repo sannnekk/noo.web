@@ -10,7 +10,16 @@
     <the-sidebar-layout>
       <template #sidebar>
         <div class="user-result-view__sidebar">
-          <back-button :to="`/poll/${resultStore.poll.id}/results`">
+          <back-button
+            to="/profile"
+            v-if="Core.Context.roleIs(['student', 'mentor'])"
+          >
+            Назад к профилю
+          </back-button>
+          <back-button
+            :to="`/polls/${resultStore.poll.id}/results`"
+            v-else
+          >
             Назад ко всем результатам
           </back-button>
           <h3>Опрос:</h3>
@@ -18,7 +27,7 @@
           <h3>Дата голосования:</h3>
           <p>
             {{
-              useDate(resultStore.answers.at(0)?.createdAt!, {
+              useDate(resultStore.answers[0]?.createdAt!, {
                 precision: 'day'
               }).toBeautiful()
             }}
@@ -66,6 +75,7 @@ import answerList from '../components/answer-list.vue'
 import { useUserResultStore } from '../stores/result'
 import { useDate } from '@/composables/useDate'
 import type { PollAnswer } from '@/core/data/entities/PollAnswer'
+import { Core } from '@/core/Core'
 
 const resultStore = useUserResultStore()
 const editAnswerModalVisible = ref(false)

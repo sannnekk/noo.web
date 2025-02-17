@@ -52,7 +52,7 @@ const cols: ColType[] = [
     value: () => 'Посмотреть',
     type: 'button',
     design: 'secondary',
-    linkTo: (user: User) => `/poll/${props.pollId}/results/${user.username}`
+    linkTo: (user: User) => `/polls/${props.pollId}/results/${user.username}`
   }
 ]
 </script>

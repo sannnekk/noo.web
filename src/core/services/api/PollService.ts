@@ -33,6 +33,30 @@ export class PollService extends ApiService {
     return await this.httpGet(this._route, pagination, undefined, options)
   }
 
+  /**
+   * Create poll
+   */
+  public async createPoll(
+    poll: Poll,
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<Poll | null>> {
+    return await this.httpPost(this._route, poll, undefined, options)
+  }
+
+  /**
+   * Update poll
+   */
+  public async updatePoll(
+    id: Poll['id'],
+    poll: Poll,
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpPatch(`${this._route}/${id}`, poll, undefined, options)
+  }
+
+  /**
+   * Get poll questions
+   */
   public async getPollQuestions(
     pagination?: Pagination,
     options: ServiceOptions = {}
@@ -153,5 +177,30 @@ export class PollService extends ApiService {
       undefined,
       options
     )
+  }
+
+  /**
+   * Get my polls
+   */
+  public async getMyPolls(
+    pagination?: Pagination,
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<Poll[]>> {
+    return await this.httpGet(
+      `${this._route}/my`,
+      pagination,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Delete poll
+   */
+  public async deletePoll(
+    pollId: Poll['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    await this.httpDelete(`${this._route}/${pollId}`, undefined, options)
   }
 }
