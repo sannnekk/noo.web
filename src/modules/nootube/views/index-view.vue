@@ -3,7 +3,9 @@
     <div class="index-view__banner-image">
       <nootube-image />
     </div>
-    <tabs-view :titles="['Видео', 'Стримы (coming soon)']">
+    <tabs-view
+      :titles="['Видео', 'Стримы (coming soon)', 'Избранное (coming soon)']"
+    >
       <template #tab-0>
         <div class="index-view__greeting">
           <div class="index-view__greeting__text-block">
@@ -16,26 +18,14 @@
           </div>
         </div>
         <div class="index-view__videos">
-          <div class="index-view__videos__head">
-            <div class="index-view__videos__head__search">
-              <search-field />
-            </div>
-            <div class="index-view__videos__head__actions">
-              <common-button to="/nootube/upload-video">
-                Загрузить видео
-              </common-button>
-            </div>
-          </div>
-          <div class="index-view__videos__items">
-            <video-list-view :videos="[]" />
-          </div>
-          <div class="index-view__videos__pagination">
-            <list-pagination />
-          </div>
+          <video-list-view />
         </div>
       </template>
       <template #tab-1>
         <stream-list-view />
+      </template>
+      <template #tab-2>
+        <favourites-list-view />
       </template>
     </tabs-view>
   </div>
@@ -81,14 +71,4 @@ setPageTitle('НОО.Tube')
 	&__videos
 		padding: 1em
 		padding-top: 0
-
-		&__head
-			display: flex
-			gap: 1em
-
-			@media (max-width: 600px)
-				flex-direction: column
-
-			&__search
-				flex: 1
 </style>

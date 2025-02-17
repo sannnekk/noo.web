@@ -1,129 +1,92 @@
 <template>
-  <div class="video-view">
+  <div
+    class="video-view"
+    v-if="videoStore.video"
+  >
     <div class="video-view__player">
-      <video-player :video="video" />
+      <video-player
+        :video="videoStore.video"
+        :key="videoStore.video.id"
+      />
     </div>
     <div class="video-view__comments">
       <div class="video-view__comments__list">
-        <video-comment-list :comments="video.comments" />
+        <video-comment-list
+          :comments="videoStore.comments.results"
+          @delete-comment="videoStore.deleteComment($event)"
+        />
       </div>
       <div class="video-view__comments__form">
-        <video-comment-form :video-id="video.id" />
+        <video-comment-form
+          :video-id="videoStore.video.id"
+          @comment-created="videoStore.comments.trigger()"
+        />
       </div>
     </div>
     <div class="video-view__info">
+      <div class="video-view__info__back-button">
+        <back-button to="/nootube"> Назад к списку видео </back-button>
+      </div>
       <h1 class="video-view__info__title">
-        {{ video.title }}
+        {{ videoStore.video.title }}
       </h1>
       <div class="video-view__info__author">
-        <inline-user-card :user="video.uploadedBy" />
+        <inline-user-card :user="videoStore.video.uploadedBy" />
+      </div>
+      <div
+        class="video-view__info__link"
+        v-if="Core.Context.roleIs(['admin', 'teacher'])"
+      >
+        <form-input
+          label="Ссылка на видео для вставки"
+          :model-value="videoStore.video.url!"
+          type="text"
+          readonly
+          copy-button
+        />
       </div>
       <div class="video-view__info__description">
         <rich-text-container
-          :content="video.description"
+          :content="videoStore.video.description"
           no-padding
         />
       </div>
     </div>
+    <!--
     <div class="video-view__other-videos">
       <h2 class="video-view__other-videos__title">Другие видео</h2>
-      <video-list-view />
+      <video-list :videos="videoStore.similarVideos.results" />
     </div>
+    -->
+  </div>
+  <div
+    class="video-view__not-found"
+    v-else
+  >
+    <nothing-found />
+    <h4>Видео не найдено</h4>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Core } from '@/core/Core'
-import videoListView from '../components/video-list-view.vue'
-import type { Video } from '@/core/data/entities/Video'
 import { setPageTitle } from '@/core/utils/setPageTitle'
-import { onMounted, ref } from 'vue'
+import { watch } from 'vue'
+import { useVideoStore } from '../stores/video'
+import { useRoute } from 'vue-router'
 
-const video = ref<Video>({
-  id: '1',
-  title: 'Video title',
-  description: {
-    ops: [
-      {
-        insert: 'Description\n'
-      }
-    ]
-  },
-  comments: [
-    {
-      id: '2',
-      text: 'Comment text',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      user: Core.Context.User!,
-      videoId: '1'
-    },
-    {
-      id: '2',
-      text: 'Comment text',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      user: Core.Context.User!,
-      videoId: '1'
-    },
-    {
-      id: '2',
-      text: 'Comment text',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      user: Core.Context.User!,
-      videoId: '1'
-    }
-  ],
-  duration: 100,
-  url: '',
-  sizeInBytes: 123,
-  serviceType: 'yandex',
-  state: 'uploaded',
-  uniqueIdentifier: '',
-  chapters: [],
-  uploadUrl: '',
-  publishedAt: new Date(),
-  accessType: 'everyone',
-  accessValue: null,
-  thumbnail: {
-    id: '1',
-    src: 'https://via.placeholder.com/300',
-    mimeType: 'image/jpeg',
-    name: 'thumbnail',
-    createdAt: new Date(),
-    order: 0
-  },
-  uploadedBy: {
-    id: '1',
-    name: 'Name',
-    username: 'sannnekk',
-    slug: 'sannnekk',
-    role: 'teacher',
-    email: 'nukleoid@outlook.com',
-    isBlocked: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    telegramNotificationsEnabled: false,
-    avatar: {
-      id: '1',
-      avatarType: 'custom',
-      telegramAvatarUrl: null,
-      media: {
-        id: '1',
-        src: 'https://via.placeholder.com/300',
-        mimeType: 'image/jpeg',
-        name: 'thumbnail',
-        createdAt: new Date(),
-        order: 0
-      }
-    }
-  }
-})
+const route = useRoute()
+const videoStore = useVideoStore()
 
-onMounted(() => {
-  setPageTitle(video.value.title)
-})
+watch(
+  () => route.params.id,
+  async () => {
+    await videoStore.fetchVideo(route.params.id as string)
+    await videoStore.comments.trigger()
+    setPageTitle(videoStore.video?.title || 'Видео')
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped lang="sass">
@@ -138,9 +101,15 @@ onMounted(() => {
 		grid-template-columns: 1fr
 		grid-template-areas: "player" "info" "comments" "other-videos"
 
+	&__not-found
+		height: 500px
+		display: flex
+		justify-content: center
+		align-items: center
+
 	&__player
 		grid-area: player
-		aspect-ratio: 1.5
+		min-height: 350px
 
 	&__comments
 		grid-area: comments
@@ -152,6 +121,8 @@ onMounted(() => {
 
 		&__list
 			flex: 1
+			overflow-y: auto
+			max-height: 80vh
 
 	&__info
 		grid-area: info
@@ -160,6 +131,9 @@ onMounted(() => {
 			margin-top: 0
 			margin-bottom: 0.5em
 			font-size: 1.3em
+
+		&__link
+			margin: 0.4em 0 1em 0
 
 	&__other-videos
 		margin-top: 1em

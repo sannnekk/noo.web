@@ -9,6 +9,7 @@
       class="text-area__textarea"
       :placeholder="placeholder"
       v-model="model"
+      :readonly="props.readonly"
     />
     <span
       class="text-area__error"
@@ -29,6 +30,7 @@ interface Props {
   modelValue: string
   placeholder?: string
   validators?: InputValidator[]
+  readonly?: boolean
 }
 
 interface Emits {

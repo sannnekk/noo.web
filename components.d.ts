@@ -37,6 +37,7 @@ declare module 'vue' {
     CheckRedIcon: typeof import('./src/components/decorations/icons/check-red-icon.vue')['default']
     CleanIcon: typeof import('./src/components/decorations/icons/text-format-icons/clean-icon.vue')['default']
     CommonButton: typeof import('./src/components/form/common-button.vue')['default']
+    copy: typeof import('./src/components/computed/video/creation/video-creation-info-form copy.vue')['default']
     CopyIcon: typeof import('./src/components/decorations/icons/copy-icon.vue')['default']
     CourseCard: typeof import('./src/components/common/course-card.vue')['default']
     CourseSelect: typeof import('./src/components/form/entity-select/course-select.vue')['default']
@@ -214,9 +215,11 @@ declare module 'vue' {
     VideoComment: typeof import('./src/components/computed/video/comment/video-comment.vue')['default']
     VideoCommentForm: typeof import('./src/components/computed/video/comment/video-comment-form.vue')['default']
     VideoCommentList: typeof import('./src/components/computed/video/comment/video-comment-list.vue')['default']
-    VideoCreationForm: typeof import('./src/components/computed/video/video-creation-form.vue')['default']
+    VideoCreationForm: typeof import('./src/components/computed/video/creation/video-creation-form.vue')['default']
+    VideoCreationInfoForm: typeof import('./src/components/computed/video/creation/video-creation-info-form.vue')['default']
+    VideoCreationUploadForm: typeof import('./src/components/computed/video/creation/video-creation-upload-form.vue')['default']
     VideoIcon: typeof import('./src/components/decorations/icons/text-format-icons/video-icon.vue')['default']
-    VideoListView: typeof import('./src/components/computed/video/list/video-list-view.vue')['default']
+    VideoList: typeof import('./src/components/computed/video/list/video-list.vue')['default']
     VideoPlayer: typeof import('./src/components/computed/video/video-player.vue')['default']
     WarningBlock: typeof import('./src/components/common/warning-block.vue')['default']
     WelcomeIcon: typeof import('./src/components/decorations/icons/welcome-icon.vue')['default']
@@ -225,5 +228,6 @@ declare module 'vue' {
     WorkTypeSelect: typeof import('./src/components/form/prop-select/work-type-select.vue')['default']
     YandexVideoPlayer: typeof import('./src/components/computed/video/yandex/yandex-video-player.vue')['default']
     YandexVideoUploadButton: typeof import('./src/components/computed/video/yandex/yandex-video-upload-button.vue')['default']
+    YandexVideoUploader: typeof import('./src/components/computed/video/yandex/yandex-video-uploader.vue')['default']
   }
 }

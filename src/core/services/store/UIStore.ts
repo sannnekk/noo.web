@@ -48,7 +48,7 @@ export function installUIStore() {
         title: 'НОО.Tube',
         icon: 'nootube',
         route: '/nootube',
-        for: ['teacher']
+        for: ['admin', 'teacher', 'mentor', 'student']
       },
       {
         title: 'Опросы',

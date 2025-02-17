@@ -55,7 +55,7 @@
           :my-reaction="post.myReaction"
           :reactions="post.reactionCounts"
           :loading="isReactionLoading"
-          @react="($event) => emits('react', $event)"
+          @react="($event) => emits('react', $event as Reaction)"
         />
       </div>
     </div>
@@ -66,9 +66,9 @@
 import { Core } from '@/core/Core'
 import { useDate } from '@/composables/useDate'
 import type { BlogPost, Reaction } from '@/core/data/entities/BlogPost'
-import type { DeltaContentType } from '@/types/composed/DeltaContentType'
 import { reactive } from 'vue'
 import { copyText } from '@/core/device/Clipboard'
+import { sliceTop } from '@/core/utils/deltaHelpers'
 import { useRouter } from 'vue-router'
 import type { MenuItem } from '@/components/widgets/more-widget.vue'
 
@@ -123,27 +123,6 @@ const actions = reactive<MenuItem[]>([
     }
   }
 ])
-
-function sliceTop(content: DeltaContentType, length = 5) {
-  if (content.ops.length <= length) {
-    return content
-  }
-
-  const sliced = content.ops
-    .slice(0, length)
-    .filter((op) => (op.insert as any)?.image === undefined)
-  const image = content.ops.find((op) => (op.insert as any)?.image)
-
-  if (image) {
-    return {
-      ops: [image, ...sliced, { insert: '\n...' }]
-    }
-  }
-
-  return {
-    ops: [...sliced, { insert: '\n...' }]
-  }
-}
 
 function onPostDelete() {
   emits('delete', props.post.id)

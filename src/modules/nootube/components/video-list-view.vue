@@ -1,9 +1,6 @@
 <template>
   <div class="video-list-view">
-    <div
-      class="video-list-view__search"
-      v-if="withSearch"
-    >
+    <div class="video-list-view__search">
       <div class="video-list-view__search__field">
         <search-field
           v-model="nootubeStore.videoSearch.pagination.search"
@@ -20,42 +17,11 @@
       </div>
     </div>
     <div class="video-list-view__list">
-      <video-card
-        v-for="video in nootubeStore.videoSearch.results"
-        :key="video.id"
-        :video="video"
-      />
       <div class="video-list-view__list__item">
-        <video-card
-          :video="{
-				id: '1',
-				title: 'Разбор нового материала о селекции',
-				uploadedBy: Core.Context.User!,
-				thumbnail: {
-					id: '1',
-					src: '/img/placeholder.svg',
-					mimeType: 'image/jpeg',
-					name: 'thumbnail.jpg',
-					createdAt: new Date(),
-					order: 1
-				},
-				description: {
-					ops: [
-						{
-							insert: 'В этом видео мы разберем новый материал о селекции, который был представлен на прошлой неделе. Все вопросы задавайте в комментариях!'
-						}
-					]
-				},
-				url: 'https://www.youtube.com/watch?v=6n3pFFPSlW4',
-				sizeInBytes: 0,
-				serviceType: 'yandex',
-				state: 'uploaded',
-				uniqueIdentifier: '1',
-				length: 1234,
-				chapters: [],
-				uploadUrl: 'https://www.youtube.com/watch?v=6n3pFFPSlW4',
-				publishedAt: new Date(),
-			}"
+        <video-list
+          :videos="nootubeStore.videoSearch.results"
+          :is-loading="nootubeStore.videoSearch.isListLoading"
+          @delete-video="nootubeStore.deleteVideo($event)"
         />
       </div>
     </div>
@@ -73,12 +39,6 @@
 import { Core } from '@/core/Core'
 import { useNooTubeStore } from '../stores/nootube'
 
-interface Props {
-  withSearch?: boolean
-}
-
-defineProps<Props>()
-
 const nootubeStore = useNooTubeStore()
 </script>
 
@@ -95,7 +55,10 @@ const nootubeStore = useNooTubeStore()
 			flex: 1
 
 		&__actions
-			font-size: 1.15em
+			font-size: 1em
+
+			@media (max-width: 768px)
+				font-size: 0.85em
 
 	&__list
 		&__item

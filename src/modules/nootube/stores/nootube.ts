@@ -1,6 +1,7 @@
 import { useSearch } from '@/composables/useSearch'
 import { Core } from '@/core/Core'
 import type { Pagination } from '@/core/data/Pagination'
+import type { Video } from '@/core/data/entities/Video'
 import { defineStore } from 'pinia'
 
 export const useNooTubeStore = defineStore('nootube-module:nootube', () => {
@@ -9,7 +10,7 @@ export const useNooTubeStore = defineStore('nootube-module:nootube', () => {
 
   const videoSearch = useSearch(fetchVideos)
 
-  async function fetchVideos(pagination: Pagination) {
+  async function fetchVideos(pagination?: Pagination) {
     try {
       return videoService.getVideos(pagination)
     } catch (error: any) {
@@ -17,7 +18,17 @@ export const useNooTubeStore = defineStore('nootube-module:nootube', () => {
     }
   }
 
+  async function deleteVideo(videoId: Video['id']) {
+    try {
+      await videoService.deleteVideo(videoId, { showLoader: true })
+      videoSearch.trigger()
+    } catch (error: any) {
+      uiService.openErrorModal('Ошибка при удалении видео', error.message)
+    }
+  }
+
   return {
-    videoSearch
+    videoSearch,
+    deleteVideo
   }
 })

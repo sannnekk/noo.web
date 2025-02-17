@@ -153,7 +153,8 @@ export const useCreateCourseStore = defineStore(
         activateAt: null,
         isWorkAvailable: true,
         workSolveDeadline: null,
-        workCheckDeadline: null
+        workCheckDeadline: null,
+        videos: []
       } as Omit<Material, 'id' | 'chapterId' | 'createdAt' | 'updatedAt'>
     }
 

@@ -8,48 +8,85 @@
         <inline-icon name="play" />
       </div>
       <div class="video-card__preview__image">
-        <uploaded-image :src="video.thumbnail.src" />
+        <uploaded-image :src="video.thumbnail?.src" />
       </div>
       <div class="video-card__preview__duration">
-        {{ video.duration }}
+        {{ duration }}
       </div>
     </router-link>
     <div class="video-card__info">
-      <h3 class="video-card__info__title">
-        <router-link :to="link">{{ video.title }}</router-link>
-      </h3>
+      <div class="video-card__info__header">
+        <h3 class="video-card__info__title">
+          <router-link :to="link">{{ video.title }}</router-link>
+        </h3>
+        <div class="video-card__info__actions">
+          <more-widget :items="actions" />
+        </div>
+      </div>
       <div class="video-card__info__author">
         <inline-user-card :user="video.uploadedBy" />
       </div>
-      <div
-        class="video-card__info__description"
-        v-if="video.description"
-      >
-        <rich-text-container :content="video.description" />
-      </div>
     </div>
   </div>
+  <sure-delete-modal
+    v-model:visible="deleteVideoModalVisible"
+    @confirm="$emit('delete-video', video.id)"
+  >
+    <template #title>Удаление видео</template>
+    <template #text>
+      Вы уверены, что хотите удалить видео "{{ video.title }}"?
+    </template>
+  </sure-delete-modal>
 </template>
 
 <script setup lang="ts">
 import type { Video } from '@/core/data/entities/Video'
-import { computed } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { stringifyDuration } from './utils'
+import type { MenuItem } from '../../widgets/more-widget.vue'
+import { Core } from '@/core/Core'
 
 interface Props {
   video: Video
 }
 
+interface Emits {
+  (event: 'delete-video', videoId: Video['id']): void
+}
+
 const props = defineProps<Props>()
+defineEmits<Emits>()
 
 const link = computed(() => `/nootube/video/${props.video.id}`)
 const duration = computed(() => stringifyDuration(props.video.duration))
+const deleteVideoModalVisible = ref(false)
+
+const actions = reactive<MenuItem[]>([
+  {
+    title: 'В избранное (coming soon)',
+    icon: 'heart',
+    action: () => {}
+  },
+  {
+    title: 'Удалить',
+    icon: 'delete',
+    if:
+      Core.Context.roleIs(['teacher', 'admin']) ||
+      Core.Context.User?.id === props.video.uploadedBy?.id,
+    action: () => {
+      deleteVideoModalVisible.value = true
+    }
+  }
+])
 </script>
 
 <style scoped lang="sass">
 .video-card
 	display: flex
 	gap: 1em
+
+	@media (max-width: 700px)
+		flex-direction: column
 
 	&__preview
 		position: relative
@@ -58,6 +95,9 @@ const duration = computed(() => stringifyDuration(props.video.duration))
 		text-decoration: none
 		color: inherit
 		width: min(100%, 300px)
+
+		@media (max-width: 700px)
+			width: 100%
 
 		&:hover
 			.video-card__preview__view-button
@@ -105,7 +145,13 @@ const duration = computed(() => stringifyDuration(props.video.duration))
 		flex-direction: column
 		justify-content: center
 
+		&__header
+			display: flex
+			justify-content: space-between
+			align-items: center
+
 		&__title
+			flex: 1
 			font-size: 1.5em
 			margin: 0
 

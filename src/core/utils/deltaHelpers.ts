@@ -21,3 +21,17 @@ export function isDeltaEmptyOrWhitespace(delta: DeltaContentType | undefined) {
 export function emptyDelta(): DeltaContentType {
   return { ops: [{ insert: '\n' }] }
 }
+
+export function sliceTop(content: DeltaContentType, length = 5) {
+  if (content.ops.length <= length) {
+    return content
+  }
+
+  const sliced = content.ops
+    .slice(0, length)
+    .filter((op) => (op.insert as any)?.image === undefined)
+
+  return {
+    ops: [...sliced, { insert: '\n...' }]
+  }
+}

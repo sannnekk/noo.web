@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import type { Video } from '@/core/data/entities/Video'
 
 interface Props {
@@ -18,6 +18,11 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const sourceLink = computed(
+  () =>
+    `https://runtime.video.cloud.yandex.net/player/video/${props.video.uniqueIdentifier}`
+)
+
 const playerRef = ref<HTMLElement | null>(null)
 let player: any = null
 
@@ -25,7 +30,7 @@ onMounted(() => {
   // @ts-ignore
   player = Ya.playerSdk.init({
     element: playerRef.value,
-    source: props.video.url,
+    source: sourceLink.value,
     autoplay: props.autoplay || false
   })
 })

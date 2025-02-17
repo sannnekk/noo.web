@@ -41,8 +41,8 @@ export class VideoService extends ApiService {
   public async createVideo(
     data: Omit<Video, 'id'>,
     options: ServiceOptions = {}
-  ): Promise<ApiResponse<{ uploadUrl: string } | null>> {
-    return this.httpPost<{ uploadUrl: string }>(
+  ): Promise<ApiResponse<{ uploadUrl: string; id: string } | null>> {
+    return this.httpPost<{ uploadUrl: string; id: string }>(
       this._route,
       data,
       undefined,
@@ -66,6 +66,21 @@ export class VideoService extends ApiService {
   }
 
   /**
+   * Publish video
+   */
+  public async publish(
+    videoId: Video['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    return this.httpPost<void>(
+      `${this._route}/${videoId}/publish`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
    * Update video
    */
   public async updateVideo(
@@ -76,6 +91,22 @@ export class VideoService extends ApiService {
     return this.httpPatch<void>(
       `${this._route}/${id}`,
       data,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Get video comments
+   */
+  public async getVideoComments(
+    videoId: Video['id'],
+    pagination?: Pagination,
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<VideoComment[]>> {
+    return this.httpGet<VideoComment[]>(
+      `${this._route}/${videoId}/comment`,
+      pagination,
       undefined,
       options
     )

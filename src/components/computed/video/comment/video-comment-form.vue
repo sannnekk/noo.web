@@ -8,6 +8,7 @@
 					(value: any) => !value || 'Комментарий не может быть пустым',
 					(value: any) => value.length <= maxLength || 'Комментарий слишком длинный'
 				]"
+        :readonly="isLoading"
       />
     </div>
     <div class="video-comment-form__actions">
@@ -15,6 +16,7 @@
         @click="onSubmit()"
         design="primary"
         alignment="right"
+        :loading="isLoading"
       >
         Отправить
       </common-button>
@@ -30,7 +32,12 @@ interface Props {
   videoId: string
 }
 
+interface Emits {
+  (event: 'comment-created'): void
+}
+
 const props = defineProps<Props>()
+const emits = defineEmits<Emits>()
 
 const videoService = Core.Services.Video
 const uiService = Core.Services.UI
@@ -40,14 +47,15 @@ const content = ref('')
 const trimmed = computed(() => content.value.trim())
 const isLoading = ref(false)
 
-function onSubmit() {
+async function onSubmit() {
   if (!trimmed.value || trimmed.value.length > maxLength) return
 
   isLoading.value = true
 
   try {
-    videoService.createComment(props.videoId, trimmed.value)
+    await videoService.createComment(props.videoId, trimmed.value)
     content.value = ''
+    emits('comment-created')
   } catch (error: any) {
     uiService.openErrorModal('Не удалось отправить комментарий', error.message)
   } finally {

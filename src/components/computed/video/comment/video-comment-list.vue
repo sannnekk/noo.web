@@ -3,11 +3,15 @@
     <div class="video-comment-list__title">
       <h3>Комментарии</h3>
     </div>
-    <div class="video-comment-list__items">
+    <div
+      class="video-comment-list__items"
+      v-auto-animate
+    >
       <video-comment
         v-for="comment in comments"
         :key="comment.id"
         :comment="comment"
+        @delete="$emit('delete-comment', $event)"
       />
     </div>
     <p
@@ -26,7 +30,12 @@ interface Props {
   comments: VideoComment[]
 }
 
+interface Emits {
+  (event: 'delete-comment', commentId: VideoComment['id']): void
+}
+
 defineProps<Props>()
+defineEmits<Emits>()
 </script>
 
 <style lang="sass" scoped>
