@@ -3,7 +3,7 @@ import IndexView from './views/index-view.vue'
 
 export default {
   path: '/nootube',
-  name: 'НОО.Tube',
+  name: 'nootube',
   component: module, // <-- necessary
   children: [
     // <-- your routes

@@ -4,7 +4,7 @@ import Index from './views/index-view.vue'
 
 export default {
   path: '/tables',
-  name: 'Таблицы',
+  name: 'tables',
   component: module, // <-- necessary
   children: [
     // <-- your routes
