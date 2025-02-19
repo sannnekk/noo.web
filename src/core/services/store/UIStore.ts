@@ -69,12 +69,6 @@ export function installUIStore() {
         for: ['teacher', 'admin']
       },
       {
-        title: 'Мои ученики',
-        icon: 'student',
-        route: '/students',
-        for: ['mentor']
-      },
-      {
         title: 'Пользователи',
         icon: 'users',
         route: '/users',
@@ -91,6 +85,12 @@ export function installUIStore() {
         icon: 'calender',
         route: '/calender',
         for: ['admin', 'student', 'teacher', 'mentor', 'assistant']
+      },
+      {
+        title: 'Таблицы',
+        icon: 'table',
+        route: '/tables',
+        for: ['mentor']
       },
       {
         title: 'Профиль',

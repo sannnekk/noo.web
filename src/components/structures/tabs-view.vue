@@ -3,7 +3,10 @@
     <div class="tabs-view__titles">
       <div
         class="tabs-view__titles__title"
-        :class="{ active: titles.indexOf(title) === activeTabIndex }"
+        :class="{
+          active: titles.indexOf(title) === activeTabIndex,
+          hidden: !title
+        }"
         v-for="(title, index) in titles"
         :key="`${title}-title`"
         @click="onTabChange(index)"
@@ -78,4 +81,7 @@ function onTabChange(index: number) {
       &.active
         color: var(--lila)
         font-weight: bold
+
+      &.hidden
+        display: none
 </style>

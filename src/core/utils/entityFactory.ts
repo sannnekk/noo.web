@@ -10,6 +10,8 @@ import type { Poll } from '../data/entities/Poll'
 import type { Task } from '../data/entities/Task'
 import type { CourseAssignment } from '../data/entities/CourseAssignment'
 import type { UserSettings } from '../data/entities/UserSettings'
+import type { Table } from '../data/entities/Table'
+import { emptyCell } from '@/components/structures/noo-table/utils'
 
 type EntityName =
   | 'answer'
@@ -22,6 +24,7 @@ type EntityName =
   | 'task'
   | 'course-assignment'
   | 'user-settings'
+  | 'table'
 
 type Entity =
   | Answer
@@ -34,6 +37,7 @@ type Entity =
   | Task
   | CourseAssignment
   | UserSettings
+  | Table
 
 export function entityFactory<T extends Entity>(name: EntityName): T {
   switch (name) {
@@ -57,6 +61,8 @@ export function entityFactory<T extends Entity>(name: EntityName): T {
       return courseAssignmentConstructor() as T
     case 'user-settings':
       return userSettingsConstructor() as T
+    case 'table':
+      return tableConstructor() as T
     default:
       return {} as T
   }
@@ -182,5 +188,12 @@ function userSettingsConstructor(): Omit<UserSettings, 'id'> {
   return {
     backgroundImage: null,
     fontSize: 'medium'
+  }
+}
+
+function tableConstructor(): Omit<Table, 'id'> {
+  return {
+    title: '',
+    cells: []
   }
 }

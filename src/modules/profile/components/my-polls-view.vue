@@ -28,8 +28,6 @@ import type { ColType } from '@/components/structures/entity-table/entity-table.
 import { useSearch } from '@/composables/useSearch'
 import { Core } from '@/core/Core'
 import type { Pagination } from '@/core/data/Pagination'
-import type { Poll } from '@/core/data/entities/Poll'
-import type { PollQuestion } from '@/core/data/entities/PollQuestion'
 
 const pollService = Core.Services.Poll
 const uiService = Core.Services.UI
@@ -50,14 +48,15 @@ const columns: ColType[] = [
     type: 'text',
     value: (poll) => poll.title
   },
-  {
+  /* {
     title: 'Количество проголосовавших',
     type: 'text',
     value: (poll) => poll.votedCount
-  },
+  }, */
   {
     title: '',
     type: 'button',
+    alignment: 'right',
     value: () => 'Посмотреть',
     linkTo: (poll) => `/polls/${poll.id}/results/${Core.Context.User?.username}`
   }

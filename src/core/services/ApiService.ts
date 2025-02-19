@@ -250,7 +250,7 @@ export class ApiService extends Service {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
 
-      xhr.timeout = timeout || 30000
+      xhr.timeout = timeout || 60000
 
       xhr.open(options.method || 'GET', url)
 

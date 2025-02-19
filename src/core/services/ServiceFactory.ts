@@ -19,6 +19,7 @@ import { WorkService } from './api/WorkService'
 import { UIService } from './store/UIService'
 import { UserSettingsService } from './store/UserSettingsService'
 import { VideoService } from './api/VideoService'
+import { TableService } from './api/TableService'
 
 export type ServiceName =
   | 'Auth'
@@ -41,6 +42,7 @@ export type ServiceName =
   | 'FAQ'
   | 'Video'
   | 'UserSettings'
+  | 'Table'
 
 export type Services = {
   Auth: AuthService
@@ -60,6 +62,7 @@ export type Services = {
   Snippet: SnippetService
   FAQ: FAQService
   Video: VideoService
+  Table: TableService
 
   Notification: NotificationService
   UI: UIService
@@ -92,6 +95,7 @@ export class ServiceFactory {
     Snippet: SnippetService,
     FAQ: FAQService,
     Video: VideoService,
+    Table: TableService,
 
     // storage
     Notification: NotificationService,

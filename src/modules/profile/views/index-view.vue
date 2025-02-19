@@ -53,7 +53,9 @@
               </div>
             </template>
             <template #tab-2>
-              <my-polls-view v-if="profileStore.currentTab === 2" />
+              <div class="index-profile-view__polls">
+                <my-polls-view v-if="profileStore.currentTab === 2" />
+              </div>
             </template>
           </tabs-view>
         </div>
@@ -102,10 +104,20 @@ const changeEmailModalVisible = ref(false)
   &__mentor
     margin-bottom: 2em
     margin-top: 1em
+    padding-top: 1em
+    border-top: 1px solid var(--border-color)
 
   &__charts
     margin-top: 1em
+    padding-top: 1em
+    border-top: 1px solid var(--border-color)
 
   &__polls
     margin-top: 1em
+    border-top: 1px solid var(--border-color)
+
+  &__statistics-table
+    margin-top: 1em
+    padding-top: 1em
+    border-top: 1px solid var(--border-color)
 </style>

@@ -1,5 +1,9 @@
-export function deepCopy(obj: any): any {
-  if (window.structuredClone && typeof window.structuredClone === 'function') {
+export function deepCopy(obj: any, optimized: boolean = true): any {
+  if (
+    optimized &&
+    window.structuredClone &&
+    typeof window.structuredClone === 'function'
+  ) {
     return window.structuredClone(obj || {})
   }
 
