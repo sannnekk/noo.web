@@ -3,7 +3,7 @@
     <div class="my-polls-view__search">
       <search-field
         v-model="myPollSearch.pagination.value.search"
-        :is-list-loading="myPollSearch.isListLoading.value"
+        :is-loading="myPollSearch.isListLoading.value"
       />
     </div>
     <div class="my-polls-view__results">

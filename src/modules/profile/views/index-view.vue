@@ -29,6 +29,7 @@
             :titles="[
               'Моя статистика',
               Core.Context.roleIs(['student']) ? 'Мои кураторы' : '',
+              Core.Context.roleIs(['mentor']) ? 'Мои ученики' : '',
               Core.Context.roleIs(['student', 'mentor']) ? 'Мои опросы' : ''
             ]"
             v-model:tab-index="profileStore.currentTab"
@@ -53,8 +54,16 @@
               </div>
             </template>
             <template #tab-2>
+              <div
+                class="index-profile-view__students"
+                v-if="profileStore.currentTab === 2"
+              >
+                <my-students-view />
+              </div>
+            </template>
+            <template #tab-3>
               <div class="index-profile-view__polls">
-                <my-polls-view v-if="profileStore.currentTab === 2" />
+                <my-polls-view v-if="profileStore.currentTab === 3" />
               </div>
             </template>
           </tabs-view>
@@ -69,6 +78,7 @@
 </template>
 
 <script lang="ts" setup>
+import myStudentsView from '../components/my-students-view.vue'
 import MyPollsView from '../components/my-polls-view.vue'
 import changeEmailModal from '../components/change-email-modal.vue'
 import ProfileCredentials from '../components/profile-credentials.vue'
@@ -113,6 +123,10 @@ const changeEmailModalVisible = ref(false)
     border-top: 1px solid var(--border-color)
 
   &__polls
+    margin-top: 1em
+    border-top: 1px solid var(--border-color)
+
+  &__students
     margin-top: 1em
     border-top: 1px solid var(--border-color)
 

@@ -49,7 +49,7 @@ const cols: ColType[] = [
     type: 'button',
     design: 'secondary',
     linkTo: ({ identifier }: { identifier: string }) =>
-      `/poll/${props.pollId}/results/${identifier}?unregistered`
+      `/polls/${props.pollId}/results/${identifier}?unregistered`
   }
 ]
 </script>
