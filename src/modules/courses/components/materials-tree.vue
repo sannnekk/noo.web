@@ -7,7 +7,7 @@
       class="materials-tree__item"
       :class="{ 'materials-tree__item--opened': item.opened }"
       v-for="item in dataModel"
-      v-show="item.isActive"
+      v-show="item.isActive || Core.Context.roleIs(['teacher'])"
       :key="item.id"
       v-auto-animate
     >
