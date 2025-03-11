@@ -11,7 +11,6 @@ import type { Task } from '../data/entities/Task'
 import type { CourseAssignment } from '../data/entities/CourseAssignment'
 import type { UserSettings } from '../data/entities/UserSettings'
 import type { Table } from '../data/entities/Table'
-import { emptyCell } from '@/components/structures/noo-table/utils'
 
 type EntityName =
   | 'answer'
@@ -97,7 +96,7 @@ function chapterConstructor(): Omit<Chapter, 'id'> {
     name: '',
     courseId: '',
     order: 0,
-    materials: [],
+    materials: [entityFactory<Material>('material')],
     isActive: false,
     createdAt: new Date(),
     updatedAt: new Date()

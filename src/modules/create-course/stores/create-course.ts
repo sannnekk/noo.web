@@ -8,6 +8,7 @@ import { Core } from '@/core/Core'
 import type { Chapter } from '@/core/data/entities/Chapter'
 import type { Pagination } from '@/core/data/Pagination'
 import { useCoursesStore } from '@/modules/courses/stores/courses'
+import { findChapter } from '../utils/helpers'
 
 export const useCreateCourseStore = defineStore(
   'create-course-module:create-course',
@@ -99,7 +100,7 @@ export const useCreateCourseStore = defineStore(
      * Change chapter name
      */
     function changeChapterName(chapterSlug: string, name: string) {
-      const chapter = getChapter(chapterSlug)
+      const chapter = findChapter(course.value.chapters, chapterSlug)
 
       if (!chapter) return
 
@@ -107,17 +108,10 @@ export const useCreateCourseStore = defineStore(
     }
 
     /**
-     * Get chapter by slug
-     */
-    function getChapter(slug: string) {
-      return course.value.chapters?.find((chapter) => chapter.slug === slug)
-    }
-
-    /**
      * Get material by chapter and material slug
      */
     function getMaterial(chapterSlug: string, materialSlug: string) {
-      const chapter = getChapter(chapterSlug)
+      const chapter = findChapter(course.value.chapters, chapterSlug)
 
       if (!chapter) return
 
@@ -163,7 +157,10 @@ export const useCreateCourseStore = defineStore(
      */
     function addMaterial(chapter?: Chapter) {
       if (!chapter) {
-        chapter = getChapter(_route.params.chapterSlug as string)
+        chapter = findChapter(
+          course.value.chapters,
+          _route.params.chapterSlug as string
+        )
       }
 
       if (!chapter) return
@@ -356,7 +353,6 @@ export const useCreateCourseStore = defineStore(
       removeCourse,
       newChapterName,
       emptyMaterial,
-      getChapter,
       getMaterial,
       removeChapter,
       removeMaterial,

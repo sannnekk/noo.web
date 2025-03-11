@@ -6,6 +6,7 @@ import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { User } from '@/core/data/entities/User'
 import type { CourseAssignment } from '@/core/data/entities/CourseAssignment'
 import type { Material } from '@/core/data/entities/Material'
+import type { Chapter } from '@/core/data/entities/Chapter'
 
 type Deadlines = { checkDeadline?: Date; solveDeadline?: Date }
 
@@ -26,12 +27,22 @@ export class CourseService extends ApiService {
    * Get course
    */
   public async getCourse(slug: string, options: ServiceOptions = {}) {
-    return await this.httpGet<Course>(
+    const response = await this.httpGet<Course>(
       `${this._route}/${slug}`,
       undefined,
       {},
       options
     )
+
+    if (!response.data) {
+      return
+    }
+
+    sortCourseChapters(response.data.chapters)
+    sortCourseMaterials(response.data.chapters)
+    sortFiles(response.data.chapters)
+
+    return response
   }
 
   /**
@@ -290,5 +301,35 @@ export class CourseService extends ApiService {
    */
   public async deleteCourse(slug: string, options: ServiceOptions = {}) {
     await this.httpDelete(`${this._route}/${slug}`, undefined, options)
+  }
+}
+
+function sortCourseChapters(chapters: Chapter[]) {
+  chapters?.sort((a, b) => a.order - b.order)
+
+  for (const chapter of chapters) {
+    sortCourseChapters(chapter.chapters || [])
+  }
+}
+
+function sortCourseMaterials(chapters: Chapter[]) {
+  for (const chapter of chapters) {
+    chapter.materials?.sort((a, b) => a.order - b.order)
+
+    if (chapter.chapters?.length) {
+      sortCourseMaterials(chapter.chapters)
+    }
+  }
+}
+
+function sortFiles(chapters: Chapter[]) {
+  for (const chapter of chapters) {
+    for (const material of chapter.materials || []) {
+      material.files?.sort((a, b) => a.order - b.order)
+    }
+
+    if (chapter.chapters?.length) {
+      sortFiles(chapter.chapters)
+    }
   }
 }

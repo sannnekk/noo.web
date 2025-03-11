@@ -52,6 +52,17 @@
             </span>
           </div>
         </div>
+        <div
+          class="chapter-tree__item__chapters"
+          v-if="chapter.item.chapters?.length"
+        >
+          <chapter-tree
+            :all-chapters="props.allChapters"
+            :chapters="chapter.item.chapters"
+            :course-slug="courseSlug"
+            :nesting-level="(props.nestingLevel || 0) + 1"
+          />
+        </div>
         <ul class="chapter-tree__item__materials">
           <draggable-list
             v-model="chapter.item.materials"
@@ -94,6 +105,14 @@
               </li>
             </template>
           </draggable-list>
+          <li v-if="!nestingLevel">
+            <span @click="addChapter(chapter.item.slug)">
+              <span class="chapter-tree__item__materials__add">
+                <inline-icon name="add" />
+                Добавить главу
+              </span>
+            </span>
+          </li>
           <li>
             <span @click="addMaterial(chapter.item.slug)">
               <span class="chapter-tree__item__materials__add">
@@ -106,7 +125,10 @@
       </div>
     </template>
   </draggable-list>
-  <div class="chapter-tree__add-chapter">
+  <div
+    class="chapter-tree__add-chapter"
+    v-if="!props.nestingLevel"
+  >
     <common-button
       design="inline"
       alignment="stretch"
@@ -137,10 +159,13 @@ import type { Chapter } from '@/core/data/entities/Chapter'
 import type { Material } from '@/core/data/entities/Material'
 import { entityFactory } from '@/core/utils/entityFactory'
 import { computed, reactive } from 'vue'
+import { findChapter, findParent } from '../utils/helpers'
 
 interface Props {
+  allChapters: Chapter[]
   chapters: Chapter[]
   courseSlug?: string
+  nestingLevel?: number
 }
 
 interface Emits {
@@ -222,65 +247,75 @@ function onChapterCopy(chapter: Chapter) {
     return newMaterial
   })
 
-  chaptersModel.value = [...props.chapters, newChapter]
+  newChapter.chapters = chapter.chapters?.map((c) => {
+    const newChapter = entityFactory<Chapter>('chapter')
+    newChapter.name = `${c.name} (копия)`
+    newChapter.isActive = c.isActive
+    return newChapter
+  })
+
+  const parent = findParent(props.allChapters, chapter.slug)
+
+  if (parent) {
+    parent.chapters = [...(parent.chapters || []), newChapter]
+  } else {
+    chaptersModel.value = [...props.chapters, newChapter]
+  }
 }
 
 // actions
 function removeChapter(chapterSlug: string) {
-  chaptersModel.value = props.chapters.filter(
-    (chapter) => chapter.slug !== chapterSlug
-  )
+  const parent = findParent(props.allChapters, chapterSlug)
+
+  if (parent) {
+    parent.chapters = parent.chapters?.filter((c) => c.slug !== chapterSlug)
+  } else {
+    chaptersModel.value = props.chapters.filter((c) => c.slug !== chapterSlug)
+  }
 }
 
 function changeChapterName(chapterSlug: string, newName: string) {
-  chaptersModel.value = props.chapters.map((chapter) => {
-    if (chapter.slug === chapterSlug) {
-      return {
-        ...chapter,
-        name: newName
-      }
-    }
+  const chapter = findChapter(props.chapters, chapterSlug)
 
-    return chapter
-  })
+  if (chapter) {
+    chapter.name = newName
+  }
 }
 
 function removeMaterial(chapterSlug: string, materialSlug: string) {
-  chaptersModel.value = props.chapters.map((chapter) => {
-    if (chapter.slug === chapterSlug) {
-      return {
-        ...chapter,
-        materials: chapter.materials!.filter(
-          (material) => material.slug !== materialSlug
-        )
-      }
-    }
+  const chapter = findChapter(props.chapters, chapterSlug)
 
-    return chapter
-  })
+  if (chapter) {
+    chapter.materials = chapter.materials?.filter(
+      (material) => material.slug !== materialSlug
+    )
+  }
 }
 
 function addMaterial(chapterSlug: string) {
   const newMaterial = entityFactory<Material>('material')
   newMaterial.name = 'Новый материал'
 
-  chaptersModel.value = props.chapters.map((chapter) => {
-    if (chapter.slug === chapterSlug) {
-      return {
-        ...chapter,
-        materials: [...chapter.materials!, newMaterial]
-      }
-    }
+  const chapter = findChapter(props.chapters, chapterSlug)
 
-    return chapter
-  })
+  if (chapter) {
+    chapter.materials = [...(chapter.materials || []), newMaterial]
+  }
 }
 
-function addChapter() {
+function addChapter(parentSlug?: string) {
   const newChapter = entityFactory<Chapter>('chapter')
   newChapter.name = 'Новая глава'
 
-  chaptersModel.value = [...props.chapters, newChapter]
+  if (parentSlug) {
+    const parentChapter = findChapter(props.chapters, parentSlug)
+
+    if (parentChapter) {
+      parentChapter.chapters = [...(parentChapter.chapters || []), newChapter]
+    }
+  } else {
+    chaptersModel.value = [...props.chapters, newChapter]
+  }
 }
 </script>
 

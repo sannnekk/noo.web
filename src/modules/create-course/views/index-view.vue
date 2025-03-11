@@ -25,6 +25,7 @@
           >
             <chapter-tree
               v-model:chapters="createCourseStore.course.chapters"
+              :all-chapters="createCourseStore.course.chapters"
               :course-slug="$route.params.courseSlug as string"
             />
           </div>

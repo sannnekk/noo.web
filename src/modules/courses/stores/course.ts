@@ -48,7 +48,18 @@ export const useCourseStore = defineStore('courses-module:course', () => {
       return {
         ...chapter,
         materials: undefined,
-        children: chapter.materials
+        children: [
+          ...(chapter.chapters
+            ?.map((subChapter) => {
+              return {
+                ...subChapter,
+                materials: undefined,
+                children: subChapter.materials || []
+              }
+            })
+            .filter(Boolean) as any[]),
+          ...(chapter.materials || [])
+        ]
       }
     })
   })
@@ -62,7 +73,7 @@ export const useCourseStore = defineStore('courses-module:course', () => {
         _route.params.courseSlug as string,
         { showLoader: true }
       )
-      course.value = response.data
+      course.value = response!.data
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при загрузке курса',
@@ -77,11 +88,23 @@ export const useCourseStore = defineStore('courses-module:course', () => {
   function getMaterialBySlug(slug: string): Material | undefined {
     if (!course.value?.chapters?.length) return undefined
 
-    const materials = course.value.chapters.flatMap(
-      (chapter) => chapter!.materials
-    )
+    for (const chapter of course.value.chapters) {
+      for (const material of chapter.materials || []) {
+        if (material.slug === slug) {
+          return material
+        }
+      }
 
-    return materials.find((material) => material?.slug === slug)
+      for (const subChapter of chapter.chapters || []) {
+        for (const material of subChapter.materials || []) {
+          if (material.slug === slug) {
+            return material
+          }
+        }
+      }
+    }
+
+    return undefined
   }
 
   /**

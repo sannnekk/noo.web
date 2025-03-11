@@ -13,16 +13,12 @@
             label="Название таблицы"
             v-model="tableStore.currentTable.title"
             type="text"
-            :readonly="Core.Context.roleIs(['mentor'])"
           />
         </div>
-        <div
-          class="table-view__info__head__actions"
-          v-if="Core.Context.roleIs(['teacher'])"
-        >
-          <common-button @click="tableStore.saveTable()"
-            >Сохранить</common-button
-          >
+        <div class="table-view__info__head__actions">
+          <common-button @click="tableStore.saveTable()">
+            Сохранить
+          </common-button>
         </div>
       </div>
     </div>
@@ -32,7 +28,7 @@
     >
       <noo-table
         v-model:data="tableStore.currentTable"
-        :editable="Core.Context.roleIs(['teacher'])"
+        editable
       />
     </div>
   </div>
@@ -42,7 +38,6 @@
 import { watch } from 'vue'
 import { useTableStore } from '../stores/table'
 import { useRoute } from 'vue-router'
-import { Core } from '@/core/Core'
 
 const route = useRoute()
 const tableStore = useTableStore()

@@ -7,6 +7,7 @@
       class="materials-tree__item"
       :class="{ 'materials-tree__item--opened': item.opened }"
       v-for="item in dataModel"
+      v-show="item.isActive"
       :key="item.id"
       v-auto-animate
     >
@@ -45,13 +46,13 @@
 <script setup lang="ts">
 import { Core } from '@/core/Core'
 import type { Chapter } from '@/core/data/entities/Chapter'
-import type { Course } from '@/core/data/entities/Course'
+import type { Material } from '@/core/data/entities/Material'
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 interface Props {
-  data: (Pick<Course, 'id' | 'name' | 'slug'> & {
-    children?: Pick<Course, 'id' | 'name' | 'slug'>[]
+  data: (Pick<Material, 'id' | 'name' | 'slug' | 'isActive'> & {
+    children?: Pick<Material, 'id' | 'name' | 'slug' | 'isActive'>[]
     workId?: string
     myReaction?: string
   })[]
