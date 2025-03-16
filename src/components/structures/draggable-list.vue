@@ -3,6 +3,7 @@
     v-model="model"
     item-key="id"
     :handle="handle"
+    :group="group"
   >
     <template #item="{ element }">
       <div><slot :item="element" /></div>
@@ -19,6 +20,7 @@ interface Props {
     id: string
   } & any)[]
   handle?: string
+  group?: string
 }
 
 interface Emits {

@@ -63,7 +63,7 @@ export const useCreateCourseStore = defineStore(
           { showLoader: true }
         )
 
-        if (!response.data) {
+        if (!response?.data) {
           uiService.openErrorModal('Курс не найден')
           return
         }
@@ -229,8 +229,10 @@ export const useCreateCourseStore = defineStore(
           return
         }
 
-        if (!chapter.materials?.length) {
-          uiService.openWarningModal('Глава должна иметь хотя бы один материал')
+        if (!chapter.materials?.length && !chapter.chapters?.length) {
+          uiService.openWarningModal(
+            'Глава должна иметь хотя бы один материал или подглаву'
+          )
           return
         }
 
@@ -247,15 +249,7 @@ export const useCreateCourseStore = defineStore(
         }
       }
 
-      course.value.chapters?.forEach((chapter, index) => {
-        if (chapter.materials) {
-          chapter.order = index
-          chapter.materials = chapter.materials?.map((material, i) => ({
-            ...material,
-            order: i
-          }))
-        }
-      })
+      course.value.chapters = orderItems(course.value.chapters!)
 
       if (!_route.params.courseSlug) {
         try {
@@ -300,6 +294,26 @@ export const useCreateCourseStore = defineStore(
           )
         }
       }
+    }
+
+    /**
+     * Recursively assign order to chapters and materials
+     */
+    function orderItems(chapters: Chapter[]) {
+      chapters.forEach((chapter, index) => {
+        chapter.id = undefined!
+        chapter.order = index + 1
+        chapter.materials?.forEach((material, index) => {
+          material.id = undefined!
+          material.order = index + 1
+        })
+
+        if (chapter.chapters) {
+          chapter.chapters = orderItems(chapter.chapters)
+        }
+      })
+
+      return chapters
     }
 
     /**
