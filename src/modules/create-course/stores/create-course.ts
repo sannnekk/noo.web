@@ -301,10 +301,8 @@ export const useCreateCourseStore = defineStore(
      */
     function orderItems(chapters: Chapter[]) {
       chapters.forEach((chapter, index) => {
-        chapter.id = undefined!
         chapter.order = index + 1
         chapter.materials?.forEach((material, index) => {
-          material.id = undefined!
           material.order = index + 1
         })
 

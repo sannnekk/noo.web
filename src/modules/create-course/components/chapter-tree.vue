@@ -3,7 +3,6 @@
     v-model="chaptersModel"
     item-key="name"
     :handle="`.handle-chapters`"
-    group="chapters"
   >
     <template v-slot="chapter">
       <div class="chapter-tree__item">
@@ -69,7 +68,6 @@
             v-model="chapter.item.materials"
             item-key="name"
             :handle="`.handle-materials`"
-            group="materials"
           >
             <template v-slot="{ item }">
               <li class="chapter-tree__item__materials__item">
