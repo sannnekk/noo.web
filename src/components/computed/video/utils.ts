@@ -20,7 +20,7 @@ export function videoVisibilityText(video: Video) {
         case 'admin':
           return 'Доступно администраторам'
         case 'teacher':
-          return 'Доступно модераторам'
+          return 'Доступно преподавателям'
         case 'mentor':
           return 'Доступно кураторам'
         case 'assistant':
@@ -30,8 +30,8 @@ export function videoVisibilityText(video: Video) {
       }
       break
     case 'mentorId':
-      return 'Для укников куратора'
+      return 'Для учеников куратора'
     case 'courseId':
-      return 'Для укников курса'
+      return 'Для учеников курса'
   }
 }

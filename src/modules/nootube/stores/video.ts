@@ -82,7 +82,7 @@ export const useVideoStore = defineStore('nootube-module:video', () => {
         reaction
       )
       video.value.myReaction = reaction
-      video.value.reactions = response!.data!
+      video.value.reactionCounts = response!.data!
     } catch (error: any) {
       uiService.openErrorModal(
         'Не удалось отреагировать на видео',
