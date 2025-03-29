@@ -168,6 +168,10 @@ watch(
       display: flex
       justify-content: space-between
 
+      @media only screen and (max-width: 1000px)
+        flex-direction: column
+        gap: 1em
+
   &__other-videos
     margin-top: 1em
     grid-area: other-videos
