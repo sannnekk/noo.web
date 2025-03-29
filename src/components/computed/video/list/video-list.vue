@@ -19,6 +19,7 @@
         <video-card
           :video="video"
           @delete-video="$emit('delete-video', $event)"
+          @updated="$emit('updated')"
         />
       </div>
     </div>
@@ -42,6 +43,7 @@ interface Props {
 
 interface Emits {
   (event: 'delete-video', videoId: string): void
+  (event: 'updated'): void
 }
 
 defineProps<Props>()
@@ -64,8 +66,9 @@ defineEmits<Emits>()
 			font-size: 1.15em
 
 	&__list
-		&__item
-			padding: 1em 0
+		display: grid
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
+		gap: 1em
 
 	&__loading
 		display: flex

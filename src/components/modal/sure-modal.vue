@@ -32,7 +32,7 @@
               @click="onConfirm"
               design="primary"
               class="sure-modal__buttons__confirm"
-              :disabled="actionsDisabled"
+              :disabled="actionsDisabled || confirmDisabled"
             >
               Подтвердить
             </common-button>
@@ -47,6 +47,7 @@
 interface Props {
   visible?: boolean
   actionsDisabled?: boolean
+  confirmDisabled?: boolean
   stayOpen?: boolean
 }
 

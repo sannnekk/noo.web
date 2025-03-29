@@ -3,6 +3,7 @@ import { Core } from '@/core/Core'
 import type { Pagination } from '@/core/data/Pagination'
 import type { Video } from '@/core/data/entities/Video'
 import type { VideoComment } from '@/core/data/entities/VideoComment'
+import type { VideoAccessInfo } from '@/core/services/api/VideoService'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -11,6 +12,7 @@ export const useVideoStore = defineStore('nootube-module:video', () => {
   const videoService = Core.Services.Video
 
   const video = ref<Video | null>(null)
+  const accessInfo = ref<VideoAccessInfo | null>(null)
   const comments = useSearch(fetchVideoComments, { immediate: false })
   const similarVideos = useSearch(fetchVideos)
 
@@ -21,6 +23,7 @@ export const useVideoStore = defineStore('nootube-module:video', () => {
       })
 
       video.value = response.data
+      await fetchAccessInfo()
     } catch (error: any) {
       uiService.openErrorModal('Ошибка при загрузке видео', error?.message)
     }
@@ -64,11 +67,58 @@ export const useVideoStore = defineStore('nootube-module:video', () => {
     }
   }
 
+  const reactionsLoading = ref(false)
+
+  async function react(reaction: string) {
+    if (!video.value) {
+      return
+    }
+
+    reactionsLoading.value = true
+
+    try {
+      const response = await videoService.toggleReaction(
+        video.value.id,
+        reaction
+      )
+      video.value.myReaction = reaction
+      video.value.reactions = response!.data!
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Не удалось отреагировать на видео',
+        error.message
+      )
+    } finally {
+      reactionsLoading.value = false
+    }
+  }
+
+  async function fetchAccessInfo() {
+    if (!video.value) {
+      return
+    }
+
+    try {
+      const response = await videoService.getAccessInfo(video.value.id, {
+        showLoader: true
+      })
+      accessInfo.value = response.data
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Ошибка при загрузке информации о доступе',
+        error?.message
+      )
+    }
+  }
+
   return {
     video,
+    accessInfo,
     comments,
     similarVideos,
     fetchVideo,
-    deleteComment
+    deleteComment,
+    react,
+    reactionsLoading
   }
 })

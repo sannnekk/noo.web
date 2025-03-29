@@ -68,6 +68,7 @@
             v-model="chapter.item.materials"
             item-key="name"
             :handle="`.handle-materials`"
+            group="materials"
           >
             <template v-slot="{ item }">
               <li class="chapter-tree__item__materials__item">

@@ -22,4 +22,6 @@ export interface Video extends Entity {
   publishedAt: Date
   accessType: 'everyone' | 'courseId' | 'mentorId' | 'role'
   accessValue: string | null
+  reactionCounts?: Record<string, number>
+  myReaction?: string | null
 }

@@ -59,7 +59,7 @@ onUnmounted(() => {
     flex-direction: column
 
   &__sidebar
-    width: 300px
+    width: 350px
     height: fit-content
     padding: 1rem
     margin: 1rem

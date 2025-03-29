@@ -30,6 +30,8 @@ export const useCreateCourseStore = defineStore(
         description: '',
         chapters: [],
         images: [],
+        authors: [],
+        editors: [],
         subject: null
       } as unknown as Course)
 
@@ -249,7 +251,7 @@ export const useCreateCourseStore = defineStore(
         }
       }
 
-      course.value.chapters = orderItems(course.value.chapters!)
+      orderItems(course.value.chapters!)
 
       if (!_route.params.courseSlug) {
         try {

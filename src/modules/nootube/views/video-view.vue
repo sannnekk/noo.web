@@ -33,6 +33,25 @@
       <div class="video-view__info__author">
         <inline-user-card :user="videoStore.video.uploadedBy" />
       </div>
+      <div class="video-view__info__main">
+        Опубликовано
+        {{
+          useDate(videoStore.video.publishedAt, {
+            precision: 'day'
+          }).toBeautiful()
+        }}
+        •
+        {{ videoStore.accessInfo?.text }}
+      </div>
+      <div class="video-view__info__actions">
+        <add-video-to-saved-button :video-id="videoStore.video.id" />
+        <user-reactions
+          :reactions="videoStore.video.reactionCounts as any"
+          :my-reaction="videoStore.video.myReaction as any"
+          :loading="videoStore.reactionsLoading"
+          @react="videoStore.react($event)"
+        />
+      </div>
       <div
         class="video-view__info__link"
         v-if="Core.Context.roleIs(['admin', 'teacher'])"
@@ -44,6 +63,12 @@
           readonly
           copy-button
         />
+        <info-block class="video-view__info__link__hint">
+          Видео рекомендуется вставлять не ссылкой, а с помощью функции вставки
+          видео. Если нужна просто ссылка, а не плеер, рекомендуется просто
+          использовать ссылку на эту страницу (содержимое адресной строки
+          браузера)
+        </info-block>
       </div>
       <div class="video-view__info__description">
         <rich-text-container
@@ -52,12 +77,6 @@
         />
       </div>
     </div>
-    <!--
-    <div class="video-view__other-videos">
-      <h2 class="video-view__other-videos__title">Другие видео</h2>
-      <video-list :videos="videoStore.similarVideos.results" />
-    </div>
-    -->
   </div>
   <div
     class="video-view__not-found"
@@ -74,6 +93,7 @@ import { setPageTitle } from '@/core/utils/setPageTitle'
 import { watch } from 'vue'
 import { useVideoStore } from '../stores/video'
 import { useRoute } from 'vue-router'
+import { useDate } from '@/composables/useDate'
 
 const route = useRoute()
 const videoStore = useVideoStore()
@@ -82,8 +102,8 @@ watch(
   () => route.params.id,
   async () => {
     await videoStore.fetchVideo(route.params.id as string)
-    await videoStore.comments.trigger()
-    setPageTitle(videoStore.video?.title || 'Видео')
+    videoStore.comments.trigger()
+    setPageTitle(`НОО.Tube - ${videoStore.video?.title}`)
   },
   { immediate: true }
 )
@@ -91,55 +111,68 @@ watch(
 
 <style scoped lang="sass">
 .video-view
-	padding: 1em
-	display: grid
-	grid-template-columns: 1fr 300px
-	grid-template-areas: "player comments" "info comments" "other-videos other-videos"
-	gap: 1em
+  padding: 1em
+  display: grid
+  grid-template-columns: 1fr 400px
+  grid-template-areas: "player comments" "info comments" "other-videos other-videos"
+  gap: 1em
 
-	@media (max-width: 1200px)
-		grid-template-columns: 1fr
-		grid-template-areas: "player" "info" "comments" "other-videos"
+  @media (max-width: 1200px)
+    grid-template-columns: 1fr
+    grid-template-areas: "player" "info" "comments" "other-videos"
 
-	&__not-found
-		height: 500px
-		display: flex
-		justify-content: center
-		align-items: center
+  &__not-found
+    height: 500px
+    display: flex
+    justify-content: center
+    align-items: center
 
-	&__player
-		grid-area: player
-		min-height: 350px
+  &__player
+    grid-area: player
+    aspect-ratio: 16 / 9
 
-	&__comments
-		grid-area: comments
-		display: flex
-		flex-direction: column
-		padding: 1em
-		border-radius: var(--border-radius)
-		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
+  &__comments
+    grid-area: comments
+    display: flex
+    flex-direction: column
+    padding: 1em
+    border-radius: var(--border-radius)
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
 
-		&__list
-			flex: 1
-			overflow-y: auto
-			max-height: 80vh
+    &__list
+      flex: 1
+      overflow-y: auto
+      max-height: 80vh
 
-	&__info
-		grid-area: info
+  &__info
+    grid-area: info
 
-		&__title
-			margin-top: 0
-			margin-bottom: 0.5em
-			font-size: 1.3em
+    &__title
+      margin-top: 0
+      margin-bottom: 0.5em
+      font-size: 1.3em
 
-		&__link
-			margin: 0.4em 0 1em 0
+    &__link
+      margin: 0.4em 0 1em 0
 
-	&__other-videos
-		margin-top: 1em
-		grid-area: other-videos
+      &__hint
+        margin-top: 0.5em
+        font-size: 0.8em
 
-		&__title
-			margin-bottom: 0.5em
-			font-size: 1em
+    &__main
+      font-size: 0.9em
+      color: var(--text-light)
+
+    &__actions
+      margin: 1em 0
+      display: flex
+      justify-content: space-between
+
+  &__other-videos
+    margin-top: 1em
+    grid-area: other-videos
+
+    &__title
+      margin-bottom: 0.5em
+      font-size: 1em
 </style>

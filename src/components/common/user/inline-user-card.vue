@@ -11,6 +11,7 @@
         :username="user.username"
         :name="user.name"
       />
+      <slot name="under-name" />
     </div>
   </div>
 </template>

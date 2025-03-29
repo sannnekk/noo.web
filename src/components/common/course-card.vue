@@ -105,7 +105,7 @@ const router = useRouter()
 const link = computed(() => `/courses/${props.course.slug}`)
 
 const courseImage = computed(() => {
-  return props.course.images?.at(0)?.src || undefined
+  return props.course.images[0]?.src || undefined
 })
 
 function copyCourseLink(thisRef: any) {
@@ -151,7 +151,7 @@ async function unarchiveCourse() {
 
   &__img
     width: 100%
-    height: 200px
+    aspect-ratio: 1.5848
     overflow: hidden
     border-radius: var(--border-radius)
     margin-bottom: 1rem

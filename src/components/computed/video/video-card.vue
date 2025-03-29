@@ -14,17 +14,31 @@
         {{ duration }}
       </div>
     </router-link>
+    <div
+      class="video-card__preview__actions"
+      v-if="Core.Context.roleIs(['teacher', 'admin', 'mentor'])"
+    >
+      <more-widget :items="actions" />
+    </div>
     <div class="video-card__info">
       <div class="video-card__info__header">
         <h3 class="video-card__info__title">
           <router-link :to="link">{{ video.title }}</router-link>
         </h3>
-        <div class="video-card__info__actions">
-          <more-widget :items="actions" />
-        </div>
       </div>
       <div class="video-card__info__author">
-        <inline-user-card :user="video.uploadedBy" />
+        <inline-user-card :user="video.uploadedBy">
+          <template #under-name>
+            <span class="video-card__info__author__info">
+              Опубликовано
+              {{
+                useDate(video.publishedAt, { precision: 'day' }).toBeautiful()
+              }}
+              •
+              {{ videoVisibilityText(video) }}
+            </span>
+          </template>
+        </inline-user-card>
       </div>
     </div>
   </div>
@@ -37,14 +51,20 @@
       Вы уверены, что хотите удалить видео "{{ video.title }}"?
     </template>
   </sure-delete-modal>
+  <edit-video-modal
+    v-model:visible="editVideoModalVisible"
+    :video="video"
+    @edited="onVideoEdit()"
+  />
 </template>
 
 <script setup lang="ts">
 import type { Video } from '@/core/data/entities/Video'
 import { computed, reactive, ref } from 'vue'
-import { stringifyDuration } from './utils'
+import { stringifyDuration, videoVisibilityText } from './utils'
 import type { MenuItem } from '../../widgets/more-widget.vue'
 import { Core } from '@/core/Core'
+import { useDate } from '@/composables/useDate'
 
 interface Props {
   video: Video
@@ -52,125 +72,135 @@ interface Props {
 
 interface Emits {
   (event: 'delete-video', videoId: Video['id']): void
+  (event: 'updated'): void
 }
 
 const props = defineProps<Props>()
-defineEmits<Emits>()
+const emits = defineEmits<Emits>()
 
 const link = computed(() => `/nootube/video/${props.video.id}`)
 const duration = computed(() => stringifyDuration(props.video.duration))
+const editVideoModalVisible = ref(false)
 const deleteVideoModalVisible = ref(false)
 
 const actions = reactive<MenuItem[]>([
   {
-    title: 'В избранное (coming soon)',
-    icon: 'heart',
-    action: () => {}
+    title: 'Изменить',
+    icon: 'edit',
+    if:
+      Core.Context.roleIs(['teacher', 'admin']) ||
+      Core.Context.User!.id === props.video.uploadedBy?.id,
+    action: () => {
+      editVideoModalVisible.value = true
+    }
   },
   {
     title: 'Удалить',
     icon: 'delete',
     if:
       Core.Context.roleIs(['teacher', 'admin']) ||
-      Core.Context.User?.id === props.video.uploadedBy?.id,
+      Core.Context.User!.id === props.video.uploadedBy?.id,
     action: () => {
       deleteVideoModalVisible.value = true
     }
   }
 ])
+
+function onVideoEdit() {
+  emits('updated')
+}
 </script>
 
 <style scoped lang="sass">
 .video-card
-	display: flex
-	gap: 1em
+  display: flex
+  flex-direction: column
+  position: relative
 
-	@media (max-width: 700px)
-		flex-direction: column
+  &__preview
+    position: relative
+    cursor: pointer
+    display: block
+    text-decoration: none
+    color: inherit
+    border-radius: var(--border-radius)
+    overflow: hidden
+    width: 100%
+    aspect-ratio: 1.5848
 
-	&__preview
-		position: relative
-		cursor: pointer
-		display: block
-		text-decoration: none
-		color: inherit
-		width: min(100%, 300px)
+    &:hover
+      .video-card__preview__view-button
+        transform: translate(-50%, -50%) scale(1.2)
+        opacity: 1
 
-		@media (max-width: 700px)
-			width: 100%
+    &__image
+      width: 100%
+      height: 100%
+      overflow: hidden
+      border-radius: var(--border-radius)
 
-		&:hover
-			.video-card__preview__view-button
-				transform: translate(-50%, -50%) scale(1.2)
-				opacity: 1
+      img
+        width: 100%
+        height: 100%
+        object-fit: cover
 
-		&__image
-			width: 100%
-			height: 100%
-			overflow: hidden
-			border-radius: var(--border-radius)
+    &__duration
+      position: absolute
+      bottom: 5px
+      right: 5px
+      background: rgba(0, 0, 0, 0.5)
+      color: white
+      padding: 0em 0.5em
+      border-radius: var(--border-radius)
+      font-size: 0.9em
 
-			img
-				width: 100%
-				height: 100%
-				object-fit: cover
+    &__actions
+      position: absolute
+      top: 5px
+      right: 5px
+      z-index: 1
+      border-radius: 50px
 
-		&__duration
-			position: absolute
-			bottom: 5px
-			right: 5px
-			background: rgba(0, 0, 0, 0.5)
-			color: white
-			padding: 0em 0.5em
-			border-radius: var(--border-radius)
+    &__view-button
+      position: absolute
+      top: 50%
+      left: 50%
+      transform: translate(-50%, -50%) scale(0.5)
+      font-size: 4em
+      color: white
+      cursor: pointer
+      transition: 0.2s ease all
+      opacity: 0
 
-		&__view-button
-			position: absolute
-			top: 50%
-			left: 50%
-			transform: translate(-50%, -50%) scale(0.5)
-			font-size: 4em
-			color: white
-			cursor: pointer
-			transition: 0.2s ease all
-			opacity: 0
+      &:hover
+        transform: translate(-50%, -50%) scale(1.3) !important
 
-			&:hover
-				transform: translate(-50%, -50%) scale(1.3) !important
+  &__info
+    flex: 1
+    display: flex
+    flex-direction: column
+    justify-content: center
 
-	&__info
-		flex: 1
-		padding: 1em
-		display: flex
-		flex-direction: column
-		justify-content: center
+    &__header
+      padding-top: 1em
 
-		&__header
-			display: flex
-			justify-content: space-between
-			align-items: center
+    &__title
+      font-size: 1.2em
+      margin: 0
 
-		&__title
-			flex: 1
-			font-size: 1.5em
-			margin: 0
+      a
+        color: inherit
+        text-decoration: none
 
-			a
-				color: inherit
-				text-decoration: none
+        &:hover
+          color: var(--lila)
 
-				&:hover
-					color: var(--lila)
+    &__author
+      margin-top: 0em
 
-		&__author
-			margin-top: 0em
-
-		&__description
-			margin-top: 0.3em
-			font-size: 0.9em
-			color: #666
-
-			:deep()
-				.quill-editor__content
-					padding: 0
+      &__info
+        line-height: 1em
+        display: block
+        font-size: 0.9em
+        color: var(--border-color)
 </style>

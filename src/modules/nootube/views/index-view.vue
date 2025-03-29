@@ -4,7 +4,8 @@
       <nootube-image />
     </div>
     <tabs-view
-      :titles="['Видео', 'Стримы (coming soon)', 'Избранное (coming soon)']"
+      :titles="['Видео', 'Избранное', 'Стримы (coming soon)']"
+      v-model:tab-index="nootubeStore.activeTabIndex"
     >
       <template #tab-0>
         <div class="index-view__greeting">
@@ -27,10 +28,14 @@
         </div>
       </template>
       <template #tab-1>
-        <stream-list-view />
+        <div class="index-view__saved-videos">
+          <saved-video-list-view />
+        </div>
       </template>
       <template #tab-2>
-        <favourites-list-view />
+        <div class="index-view__streams">
+          <feature-block version="3.6.0" />
+        </div>
       </template>
     </tabs-view>
   </div>
@@ -39,6 +44,10 @@
 <script setup lang="ts">
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import videoListView from '../components/video-list-view.vue'
+import savedVideoListView from '../components/saved-video-list-view.vue'
+import { useNooTubeStore } from '../stores/nootube'
+
+const nootubeStore = useNooTubeStore()
 
 setPageTitle('НОО.Tube')
 </script>
@@ -47,14 +56,8 @@ setPageTitle('НОО.Tube')
 .index-view
 	&__greeting
 		padding: 1em
-		//padding-bottom: 4em
 
 		&__text-block
-			//display: none
-			//position: absolute
-			//right: 2em
-			//bottom: 1em
-			//width: 70%
 			padding: 1em
 			padding-bottom: 0.3em
 			background-color: var(--form-background)
@@ -76,4 +79,12 @@ setPageTitle('НОО.Tube')
 	&__videos
 		padding: 1em
 		padding-top: 0
+
+	&__saved-videos
+		padding: 1em
+		padding-top: 0
+
+	&__streams
+		padding: 1em
+		padding-top: 1em
 </style>

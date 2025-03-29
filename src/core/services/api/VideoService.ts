@@ -6,6 +6,16 @@ import {
 } from '../ApiService'
 import type { Pagination } from '@/core/data/Pagination'
 import type { VideoComment } from '@/core/data/entities/VideoComment'
+import type { User } from '@/core/data/entities/User'
+import type { Course } from '@/core/data/entities/Course'
+
+export interface VideoAccessInfo {
+  type: Video['accessType']
+  text: string
+  link?: string
+  user?: User
+  course?: Course
+}
 
 export class VideoService extends ApiService {
   private _route = '/video' as const
@@ -91,6 +101,94 @@ export class VideoService extends ApiService {
     return this.httpPatch<void>(
       `${this._route}/${id}`,
       data,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Add video to saved videos
+   */
+  public async addToSavedVideos(
+    videoId: Video['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    return this.httpPatch<void>(
+      `${this._route}/${videoId}/add-to-saved`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Remove video from saved videos
+   */
+  public async removeFromSavedVideos(
+    videoId: Video['id'],
+    options: ServiceOptions = {}
+  ): Promise<void> {
+    return this.httpPatch<void>(
+      `${this._route}/${videoId}/remove-from-saved`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Check if video is saved
+   */
+  public async isSaved(
+    videoId: Video['id'],
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<boolean | null>> {
+    return this.httpGet<boolean>(
+      `${this._route}/${videoId}/is-saved`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Get saved videos
+   */
+  public async getSavedVideos(
+    pagination?: Pagination,
+    options: ServiceOptions = {}
+  ): Promise<ApiResponse<Video[]>> {
+    return this.httpGet<Video[]>(
+      `${this._route}/saved`,
+      pagination,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * Toggle video reaction
+   */
+  public async toggleReaction(
+    videoId: Video['id'],
+    reaction: string,
+    options: ServiceOptions = {}
+  ) {
+    return this.httpPost<Video['reactions']>(
+      `${this._route}/${videoId}/reaction`,
+      { reaction },
+      undefined,
+      options
+    )
+  }
+
+  public async getAccessInfo(
+    videoId: Video['id'],
+    options: ServiceOptions = {}
+  ) {
+    return this.httpGet<VideoAccessInfo>(
+      `${this._route}/${videoId}/access-info`,
+      undefined,
       undefined,
       options
     )

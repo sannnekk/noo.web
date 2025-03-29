@@ -43,6 +43,14 @@
             v-model="videoModel.accessType"
             :options="videoAccessTypes"
           />
+          <warning-block
+            small
+            class="everyone-access-type-warning"
+            v-if="videoModel.accessType === 'everyone'"
+          >
+            Доступно всем пользователям, включая всех, кто перешел по ссылке или
+            зарегестрировался на платформе без приобретения курса.
+          </warning-block>
         </div>
         <div
           class="col-md-4"
@@ -68,13 +76,6 @@
       >
         Следующий шаг
       </common-button>
-    </div>
-    <div class="form-group">
-      <info-block>
-        Изменение видео пока не поддерживается. Если вы загрузили видео с
-        ошибкой, удалите его и загрузите заново. Так же не поддерживается
-        кадрирование, изменение размера и другие операции с видео.
-      </info-block>
     </div>
   </div>
 </template>
@@ -180,3 +181,8 @@ function validateVideoData() {
   return true
 }
 </script>
+
+<style lang="sass">
+.everyone-access-type-warning
+	margin-top: 0.5em
+</style>

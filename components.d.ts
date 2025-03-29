@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AccordionList: typeof import('./src/components/structures/accordion-list.vue')['default']
     AddIcon: typeof import('./src/components/decorations/icons/add-icon.vue')['default']
+    AddVideoToSavedButton: typeof import('./src/components/computed/video/add-video-to-saved-button.vue')['default']
     AlignCenterIcon: typeof import('./src/components/decorations/icons/text-format-icons/align-center-icon.vue')['default']
     AlignJustifyIcon: typeof import('./src/components/decorations/icons/text-format-icons/align-justify-icon.vue')['default']
     AlignLeftIcon: typeof import('./src/components/decorations/icons/text-format-icons/align-left-icon.vue')['default']
@@ -49,6 +50,7 @@ declare module 'vue' {
     DoughnutChart: typeof import('./src/components/charts/doughnut-chart.vue')['default']
     DraggableList: typeof import('./src/components/structures/draggable-list.vue')['default']
     EditIcon: typeof import('./src/components/decorations/icons/edit-icon.vue')['default']
+    EditVideoModal: typeof import('./src/components/computed/video/edit-video-modal.vue')['default']
     EntitySelectInput: typeof import('./src/components/form/entity-select-input.vue')['default']
     EntityTable: typeof import('./src/components/structures/entity-table/entity-table.vue')['default']
     EntityTableAvatarCell: typeof import('./src/components/structures/entity-table/entity-table-avatar-cell.vue')['default']
@@ -243,6 +245,7 @@ declare module 'vue' {
     VideoIcon: typeof import('./src/components/decorations/icons/text-format-icons/video-icon.vue')['default']
     VideoList: typeof import('./src/components/computed/video/list/video-list.vue')['default']
     VideoPlayer: typeof import('./src/components/computed/video/video-player.vue')['default']
+    VideoUpdateForm: typeof import('./src/components/computed/video/creation/video-update-form.vue')['default']
     WarningBlock: typeof import('./src/components/common/warning-block.vue')['default']
     WelcomeIcon: typeof import('./src/components/decorations/icons/welcome-icon.vue')['default']
     WordCounter: typeof import('./src/components/entities/utils/word-counter.vue')['default']
