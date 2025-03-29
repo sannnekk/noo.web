@@ -4,6 +4,7 @@
       <calender-datepicker
         v-model="currentDate"
         :day-function="dayFunction"
+        @changed-month="onMonthChange($event)"
       />
     </div>
     <div
@@ -126,6 +127,10 @@ async function onEventSubmit() {
   } catch (error: any) {
     uiService.openErrorModal('Ошибка при создании события', error.message)
   }
+}
+
+function onMonthChange(date: Date) {
+  currentDate.value = date
 }
 
 function emptyEvent() {

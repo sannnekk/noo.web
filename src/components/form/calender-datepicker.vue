@@ -44,9 +44,20 @@ function getCellContent({
   date: number
   timestamp: number
 }) {
+  const dateObj = new Date(timestamp)
+
+  // check if it is today
+  if (
+    dateObj.getDate() === new Date().getDate() &&
+    dateObj.getMonth() === new Date().getMonth() &&
+    dateObj.getFullYear() === new Date().getFullYear()
+  ) {
+    date = `<b>${date}</b>` as any
+  }
+
   if (!props.dayFunction) return `<span class="date">${date}</span>`
 
-  const colors = props.dayFunction(new Date(timestamp))
+  const colors = props.dayFunction(dateObj)
 
   return (
     `<span class="date">${date}</span><span class='tags'>` +
