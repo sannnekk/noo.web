@@ -1,10 +1,20 @@
 <template>
-  <div class="video-card">
+  <div
+    class="video-card"
+    :class="{
+      'video-card--small': small,
+      'video-card--selected': selectable && isSelected
+    }"
+  >
     <router-link
       class="video-card__preview"
-      :to="link"
+      :to="selectable ? '' : link"
+      @click.prevent="selectable && $emit('select')"
     >
-      <div class="video-card__preview__view-button">
+      <div
+        class="video-card__preview__view-button"
+        v-if="!small"
+      >
         <inline-icon name="play" />
       </div>
       <div class="video-card__preview__image">
@@ -16,18 +26,26 @@
     </router-link>
     <div
       class="video-card__preview__actions"
-      v-if="Core.Context.roleIs(['teacher', 'admin', 'mentor'])"
+      v-if="Core.Context.roleIs(['teacher', 'admin', 'mentor']) && showActions"
     >
       <more-widget :items="actions" />
     </div>
     <div class="video-card__info">
       <div class="video-card__info__header">
         <h3 class="video-card__info__title">
-          <router-link :to="link">{{ video.title }}</router-link>
+          <router-link
+            :to="selectable ? '' : link"
+            @click.prevent="selectable && $emit('select')"
+          >
+            {{ video.title }}
+          </router-link>
         </h3>
       </div>
       <div class="video-card__info__author">
-        <inline-user-card :user="video.uploadedBy">
+        <inline-user-card
+          :user="video.uploadedBy"
+          v-if="video.uploadedBy"
+        >
           <template #under-name>
             <span class="video-card__info__author__info">
               Опубликовано
@@ -68,11 +86,16 @@ import { useDate } from '@/composables/useDate'
 
 interface Props {
   video: Video
+  small?: boolean
+  showActions?: boolean
+  selectable?: boolean
+  isSelected?: boolean
 }
 
 interface Emits {
   (event: 'delete-video', videoId: Video['id']): void
   (event: 'updated'): void
+  (event: 'select'): void
 }
 
 const props = defineProps<Props>()
@@ -116,6 +139,44 @@ function onVideoEdit() {
   display: flex
   flex-direction: column
   position: relative
+
+  &--selected
+    border: 1px solid var(--lila) !important
+    border-radius: var(--border-radius) !important
+
+  &--small
+    padding: 1em 0.5em 0.3em 0.5em
+    flex-direction: row
+    align-items: center
+    border-bottom: 1px solid var(--border-color)
+
+    .video-card
+      &__preview
+        height: 3em
+        width: unset
+        aspect-ratio: 1.5848
+        margin-bottom: 1em
+
+        &__duration
+          display: none
+
+      &__info
+        flex: 1
+        padding-left: 1em
+
+        &__header
+          padding-top: 0em
+
+        &__title
+          font-size: 1.2em
+
+        &__author
+          margin-top: 0em
+
+          &__info
+            line-height: 1em
+            display: block
+            font-size: 0.8em
 
   &__preview
     position: relative
@@ -197,6 +258,7 @@ function onVideoEdit() {
 
     &__author
       margin-top: 0em
+      min-height: 1em
 
       &__info
         line-height: 1em

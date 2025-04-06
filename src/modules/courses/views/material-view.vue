@@ -85,13 +85,9 @@
       class="material-view__video"
       v-if="courseStore.material.videos?.length"
     >
-      <h3>НОО.Tube <new-tag /></h3>
-      <div
-        class="material-view__video__item"
-        v-for="video in courseStore.material.videos"
-        :key="video.id"
-      >
-        <video-player :video="video" />
+      <h3>К этому материалу прикреплены видео на НОО.Tube <new-tag /></h3>
+      <div class="material-view__videos">
+        <video-list :videos="courseStore.material.videos" />
       </div>
     </div>
     <div

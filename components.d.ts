@@ -136,6 +136,7 @@ declare module 'vue' {
     NooTableCellWork: typeof import('./src/components/structures/noo-table/cell-type/noo-table-cell-work.vue')['default']
     NootubeIcon: typeof import('./src/components/decorations/icons/nootube-icon.vue')['default']
     NootubeImage: typeof import('./src/components/decorations/nootube-image.vue')['default']
+    NootubeSelectInput: typeof import('./src/components/form/entity-select/nootube-select-input.vue')['default']
     NothingFoundImage: typeof import('./src/components/decorations/nothing-found-image.vue')['default']
     NotificationsIcon: typeof import('./src/components/decorations/icons/notifications-icon.vue')['default']
     NotificationsWidget: typeof import('./src/components/widgets/notifications-widget.vue')['default']

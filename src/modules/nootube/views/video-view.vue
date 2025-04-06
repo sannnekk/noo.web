@@ -58,17 +58,11 @@
       >
         <form-input
           label="Ссылка на видео для вставки"
-          :model-value="videoStore.video.url!"
+          :model-value="currentVideoLink"
           type="text"
           readonly
           copy-button
         />
-        <info-block class="video-view__info__link__hint">
-          Видео рекомендуется вставлять не ссылкой, а с помощью функции вставки
-          видео. Если нужна просто ссылка, а не плеер, рекомендуется просто
-          использовать ссылку на эту страницу (содержимое адресной строки
-          браузера)
-        </info-block>
       </div>
       <div class="video-view__info__description">
         <rich-text-container
@@ -90,7 +84,7 @@
 <script setup lang="ts">
 import { Core } from '@/core/Core'
 import { setPageTitle } from '@/core/utils/setPageTitle'
-import { watch } from 'vue'
+import { watch, computed } from 'vue'
 import { useVideoStore } from '../stores/video'
 import { useRoute } from 'vue-router'
 import { useDate } from '@/composables/useDate'
@@ -107,6 +101,10 @@ watch(
   },
   { immediate: true }
 )
+
+const currentVideoLink = computed(() => {
+  return Core.Constants.APP_URL + `/nootube/video/${videoStore.video?.id}`
+})
 </script>
 
 <style scoped lang="sass">

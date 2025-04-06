@@ -15,6 +15,7 @@
           :is-loading="nootubeStore.savedVideoSearch.isListLoading"
           @delete-video="nootubeStore.deleteVideo($event)"
           @updated="nootubeStore.savedVideoSearch.trigger()"
+          show-actions
         />
       </div>
     </div>

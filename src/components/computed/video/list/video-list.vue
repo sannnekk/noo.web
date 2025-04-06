@@ -20,6 +20,11 @@
           :video="video"
           @delete-video="$emit('delete-video', $event)"
           @updated="$emit('updated')"
+          :small="small"
+          :show-actions="showActions"
+          :selectable="selectable"
+          :is-selected="isSelected ? isSelected(video) : false"
+          @select="$emit('select', video)"
         />
       </div>
     </div>
@@ -39,11 +44,16 @@ import type { Video } from '@/core/data/entities/Video'
 interface Props {
   videos?: Video[]
   isLoading?: boolean
+  small?: boolean
+  showActions?: boolean
+  selectable?: boolean
+  isSelected?: (video: Video) => boolean
 }
 
 interface Emits {
   (event: 'delete-video', videoId: string): void
   (event: 'updated'): void
+  (event: 'select', video: Video): void
 }
 
 defineProps<Props>()

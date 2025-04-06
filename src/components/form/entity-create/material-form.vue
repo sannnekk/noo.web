@@ -126,6 +126,13 @@
         Для прикрепления работы выберите предмет курса
       </warning-block>
     </div>
+    <div class="form-group">
+      <h3>Прикрепить видео из НОО.Tube</h3>
+      <nootube-select-input
+        :max-count="3"
+        v-model="model.videos"
+      />
+    </div>
   </div>
 </template>
 
