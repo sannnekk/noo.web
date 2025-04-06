@@ -128,6 +128,12 @@
     </div>
     <div class="form-group">
       <h3>Прикрепить видео из НОО.Tube</h3>
+      <info-block>
+        Рекомендуется использовать только для тестирования, так как этот
+        функционал дает доступ ученикам к переходу на видео в НОО.Tube, который
+        пока находится в режиме <beta-tag />.
+      </info-block>
+      <br />
       <nootube-select-input
         :max-count="3"
         v-model="model.videos"
