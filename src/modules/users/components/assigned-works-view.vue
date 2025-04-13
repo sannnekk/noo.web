@@ -115,7 +115,7 @@
 import type { SearchFilter } from '@/components/search/filters/SearchFilter'
 import ChangeMentorModal from './change-mentor-modal.vue'
 import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
-import type { MenuItem } from '@/components/widgets/more-widget.vue'
+import type { MenuItem } from '@/components/widgets/noo-more-widget.vue'
 import { useSearch } from '@/composables/useSearch'
 import { Core } from '@/core/Core'
 import type { Pagination } from '@/core/data/Pagination'

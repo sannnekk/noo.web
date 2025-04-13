@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
-import type { MenuItem } from '@/components/widgets/more-widget.vue'
+import type { MenuItem } from '@/components/widgets/noo-more-widget.vue'
 import type { Work } from '@/core/data/entities/Work'
 import { useRouter } from 'vue-router'
 

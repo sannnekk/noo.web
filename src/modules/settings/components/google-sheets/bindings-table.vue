@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import LastBindingErrorModal from './last-binding-error-modal.vue'
 import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
-import type { MenuItem } from '@/components/widgets/more-widget.vue'
+import type { MenuItem } from '@/components/widgets/noo-more-widget.vue'
 import type { GoogleSheetsBinding } from '@/core/data/entities/GoogleSheetsBinding'
 import type { SupportedEntity } from '../../google-docs-bindings/types/SupportedEntity'
 import { reactive } from 'vue'

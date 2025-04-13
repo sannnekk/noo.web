@@ -43,7 +43,7 @@ import type { User } from '@/core/data/entities/User'
 import { useUsersStore } from '../stores/users'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
-import type { MenuItem } from '@/components/widgets/more-widget.vue'
+import type { MenuItem } from '@/components/widgets/noo-more-widget.vue'
 import { useRouter } from 'vue-router'
 import type { SearchFilter } from '@/components/search/filters/SearchFilter'
 

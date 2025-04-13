@@ -42,7 +42,7 @@
 import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 import { usePollsStore } from '../stores/polls'
 import type { Poll } from '@/core/data/entities/Poll'
-import type { MenuItem } from '@/components/widgets/more-widget.vue'
+import type { MenuItem } from '@/components/widgets/noo-more-widget.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 

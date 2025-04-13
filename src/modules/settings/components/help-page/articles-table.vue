@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import type { ColType } from '@/components/structures/entity-table/entity-table.vue'
 import type { FAQArticle } from '@/core/data/entities/FAQArticle'
-import type { MenuItem } from '@/components/widgets/more-widget.vue'
+import type { MenuItem } from '@/components/widgets/noo-more-widget.vue'
 import { reactive } from 'vue'
 
 interface Props {

@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import type { TreeColType } from '@/components/structures/entity-table/types'
 import EditCategoryModal from './edit-category-modal.vue'
-import type { MenuItem } from '@/components/widgets/more-widget.vue'
+import type { MenuItem } from '@/components/widgets/noo-more-widget.vue'
 import type { FAQCategory } from '@/core/data/entities/FAQCategory'
 import { reactive } from 'vue'
 
