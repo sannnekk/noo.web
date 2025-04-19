@@ -214,7 +214,7 @@
 import { Core } from '@/core/Core'
 import { useCoursesStore } from '../stores/courses'
 import type { SearchFilter } from '@/components/search/filters/SearchFilter'
-import { subjectFilter } from '@/core/filters/subject-filter'
+import { subjectFilter } from '@/components/search/filters/filter-types/subject-filter'
 
 const coursesStore = useCoursesStore()
 

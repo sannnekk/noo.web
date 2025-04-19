@@ -172,7 +172,7 @@ import actionsWithSelected from '../components/actions-with-selected.vue'
 import actionsWithArchivedSelected from '../components/actions-with-archived-selected.vue'
 import favouriteTaskView from '../components/favourite-task/favourite-task-view.vue'
 import type { SearchFilter } from '@/components/search/filters/SearchFilter'
-import { subjectFilter } from '@/core/filters/subject-filter'
+import { subjectFilter } from '@/components/search/filters/filter-types/subject-filter'
 
 const assignedWorksStore = useAssignedWorksStore()
 

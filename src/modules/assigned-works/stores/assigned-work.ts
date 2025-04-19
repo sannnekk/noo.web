@@ -18,7 +18,7 @@ import {
   getTaskScoreStatus,
   isCheckedAutomatically
 } from '../utils/task'
-import type { DeltaContentType } from '@/types/composed/DeltaContentType'
+import type { DeltaContentType } from '@/types/richtext/DeltaContentType'
 import type { Comment } from '@/core/data/entities/Comment'
 import type { Answer } from '@/core/data/entities/Answer'
 import { deepCopy } from '@/core/utils/object'

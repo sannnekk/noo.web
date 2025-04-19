@@ -13,7 +13,7 @@ import { Core } from '@/core/Core'
 import type { Answer } from '@/core/data/entities/Answer'
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { Media } from '@/core/data/entities/Media'
-import type { DeltaContentType } from '@/types/composed/DeltaContentType'
+import type { DeltaContentType } from '@/types/richtext/DeltaContentType'
 
 interface Props {
   answers: (Answer | undefined | null)[]

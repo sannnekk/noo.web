@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import { emptyDelta, isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
-import type { DeltaContentType } from '@/types/composed/DeltaContentType'
+import type { DeltaContentType } from '@/types/richtext/DeltaContentType'
 import { computed } from 'vue'
 
 interface Props {

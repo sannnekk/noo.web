@@ -123,10 +123,10 @@ import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { User } from '@/core/data/entities/User'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { subjectFilter } from '@/core/filters/subject-filter'
-import { solveStatusFilter } from '@/core/filters/solve-status-filter'
-import { checkStatusFilter } from '@/core/filters/check-status-filter'
-import { workTypeFilter } from '@/core/filters/work-type-filter'
+import { subjectFilter } from '@/components/search/filters/filter-types/subject-filter'
+import { solveStatusFilter } from '@/components/search/filters/filter-types/solve-status-filter'
+import { checkStatusFilter } from '@/components/search/filters/filter-types/check-status-filter'
+import { workTypeFilter } from '@/components/search/filters/filter-types/work-type-filter'
 
 interface Props {
   user: User

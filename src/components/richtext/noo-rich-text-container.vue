@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import type { DeltaContentType } from '@/types/composed/DeltaContentType'
+import type { DeltaContentType } from '@/types/richtext/DeltaContentType'
 import { Core } from '@/core/Core'
 import type { UserSettings } from '@/core/data/entities/UserSettings'
 

@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import type { DeltaContentType } from '@/types/composed/DeltaContentType'
+import type { DeltaContentType } from '@/types/richtext/DeltaContentType'
 import { computed } from 'vue'
 import { Core } from '@/core/Core'
 

@@ -30,7 +30,7 @@ import type { Task } from '@/core/data/entities/Task'
 import type { Answer } from '@/core/data/entities/Answer'
 import { entityFactory } from '@/core/utils/entityFactory'
 import { ref, watch } from 'vue'
-import type { DeltaContentType } from '@/types/composed/DeltaContentType'
+import type { DeltaContentType } from '@/types/richtext/DeltaContentType'
 import { emptyDelta } from '@/core/utils/deltaHelpers'
 
 interface Props {

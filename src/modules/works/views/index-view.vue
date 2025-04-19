@@ -72,9 +72,9 @@ import { useWorksStore } from '../stores/works'
 import worksTable from '../components/works-table.vue'
 import { reactive, ref } from 'vue'
 import type { SearchFilter } from '@/components/search/filters/SearchFilter'
-import { subjectFilter } from '@/core/filters/subject-filter'
+import { subjectFilter } from '@/components/search/filters/filter-types/subject-filter'
 import type { Work } from '@/core/data/entities/Work'
-import { workTypeFilter } from '@/core/filters/work-type-filter'
+import { workTypeFilter } from '@/components/search/filters/filter-types/work-type-filter'
 
 setPageTitle('Работы')
 
