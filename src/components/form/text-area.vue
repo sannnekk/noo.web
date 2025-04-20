@@ -14,6 +14,8 @@
       :placeholder="placeholder"
       v-model="model"
       :readonly="readonly"
+      @focusin="() => (errors.length = 0)"
+      @focusout="() => (errors.length = 0)"
     />
     <span
       class="text-area__error"
@@ -25,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 type InputValidator = (value: string | number | Date) => true | string
 
@@ -50,6 +52,19 @@ const model = computed({
 })
 
 const errors = ref<string[]>([])
+
+watch(model, () => {
+  errors.value = []
+
+  if (props.validators) {
+    for (const validator of props.validators) {
+      const result = validator(model.value)
+      if (result !== true) {
+        errors.value.push(result as string)
+      }
+    }
+  }
+})
 </script>
 
 <style scoped lang="sass">
@@ -76,9 +91,16 @@ const errors = ref<string[]>([])
       color: var(--text-light)
 
     &--error
-      border-color: var(--danger)
+      border-color: var(--danger) !important
 
     &:focus
       outline: none
       border-color: var(--primary)
+
+  &__error
+    font-size: 0.8rem
+    color: var(--danger)
+    margin-top: 0.2em
+    line-height: 0.95em
+    display: block
 </style>

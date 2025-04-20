@@ -19,11 +19,6 @@
           </div>
         </div>
         <div class="index-view__videos">
-          <warning-block>
-            НОО.Tube пока доступен только для преподавателей в режиме
-            <beta-tag />
-          </warning-block>
-          <br />
           <video-list-view />
         </div>
       </template>

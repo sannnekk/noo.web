@@ -56,9 +56,10 @@
           class="col-md-4"
           v-if="Core.Context.roleIs(['admin', 'teacher'])"
         >
-          <course-select
+          <courses-select
             v-if="videoModel.accessType === 'courseId'"
             label="Курс"
+            :max-count="10"
             v-model="accessValueModel as any"
           />
           <user-role-select
@@ -113,12 +114,14 @@ watch(thumbnailModel, (value) => {
   videoModel.value.thumbnail = value[0] || null
 })
 
-const accessValueModel = ref<Course | { value: User['role'] } | null>(null)
+const accessValueModel = ref<Course[] | { value: User['role'] } | null>(null)
 
 watch(accessValueModel, (value) => {
   switch (videoModel.value.accessType) {
     case 'courseId':
-      videoModel.value.accessValue = (value as Course | null)?.id || null
+      videoModel.value.accessValue = (value as Course[])
+        .map((course) => course.id)
+        .join(',')
       break
     case 'role':
       videoModel.value.accessValue =

@@ -42,6 +42,7 @@ declare module 'vue' {
     CopyIcon: typeof import('./src/components/decorations/icons/copy-icon.vue')['default']
     CourseCard: typeof import('./src/components/common/course-card.vue')['default']
     CourseSelect: typeof import('./src/components/form/entity-select/course-select.vue')['default']
+    CoursesSelect: typeof import('./src/components/form/entity-select/courses-select.vue')['default']
     CropModal: typeof import('./src/components/files/crop-modal.vue')['default']
     CrossRedIcon: typeof import('./src/components/decorations/icons/cross-red-icon.vue')['default']
     DangerBlock: typeof import('./src/components/common/danger-block.vue')['default']

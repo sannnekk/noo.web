@@ -5,8 +5,8 @@
         label="Оставить комментарий"
         v-model="content"
         :validators="[
-					(value: any) => !value || 'Комментарий не может быть пустым',
-					(value: any) => value.length <= maxLength || 'Комментарий слишком длинный'
+					(value: any) => value.length > 0 || 'Комментарий не может быть пустым',
+					(value: any) => value.length <= 250 || 'Комментарий слишком длинный'
 				]"
         :readonly="isLoading"
       />
