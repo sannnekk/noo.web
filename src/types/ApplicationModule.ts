@@ -2,6 +2,6 @@ import type { RouteRecordRaw } from 'vue-router'
 
 export interface ApplicationModule {
   name: string
-  router?: RouteRecordRaw
-  diRegistrator?: (container: any) => void
+  diDefinitions: Record<string, any>
+  routes?: RouteRecordRaw[]
 }

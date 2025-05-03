@@ -1,14 +1,19 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createWebHistory, type RouterOptions } from 'vue-router'
 
-const router = createRouter({
+const routerOptions: RouterOptions = {
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       name: 'root',
       path: '/',
-      redirect: '/courses'
+      redirect: { name: 'courses' },
+      meta: {
+        noAuth: true,
+        pageTitle: 'Главная',
+        tabTitle: 'НОО.Платформа'
+      }
     }
   ]
-})
+}
 
-export default router
+export { routerOptions }

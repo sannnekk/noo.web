@@ -1,83 +1,28 @@
 import Cookie from 'js-cookie'
 
-/**
- * Cookie storage wrapper
- */
-class CookieStorage {
-  /**
-   * Aliases of storage
-   */
-  private static _aliases = {
-    user: 'noo.context.user',
-    apiToken: 'noo.context.apiToken',
-    theme: 'noo.context.theme'
-  }
+const StorageAliases = {
+  user: 'noo.userInfo',
+  apiToken: 'noo.apiToken',
+  theme: 'noo.theme'
+} as const
 
-  /**
-   * Sets storage key
-   */
-  private static set(key: string, value: any) {
-    Cookie.set(key, JSON.stringify(value), { expires: 365 })
-  }
+function set<T>(key: string, value: T): void {
+  Cookie.set(key, JSON.stringify(value), { expires: 365 })
+}
 
-  /**
-   * Gets storage value
-   */
-  private static get(key: string) {
-    const value = Cookie.get(key)
-    return value !== undefined ? JSON.parse(value) : null
-  }
+function get<T>(key: string): T | undefined {
+  const value = Cookie.get(key)
+  return value !== undefined ? JSON.parse(value) : undefined
+}
 
-  /**
-   * Gets user from storage
-   */
-  public static get User() {
-    return this.get(this._aliases.user)
-  }
+function isSet(key: string): boolean {
+  return Cookie.get(key) !== undefined
+}
 
-  /**
-   * Sets user to storage
-   */
-  public static set User(value: any) {
-    this.set(this._aliases.user, value)
-  }
-
-  /**
-   * Gets api token from storage
-   */
-  public static get ApiToken() {
-    return this.get(this._aliases.apiToken)
-  }
-
-  /**
-   * Sets api token to storage
-   */
-  public static set ApiToken(value: any) {
-    this.set(this._aliases.apiToken, value)
-  }
-
-  /**
-   * Gets theme from storage
-   */
-  public static get Theme() {
-    return this.get(this._aliases.theme) as 'light' | 'dark'
-  }
-
-  /**
-   * Sets theme to storage
-   */
-  public static set Theme(value: 'light' | 'dark') {
-    this.set(this._aliases.theme, value)
-  }
-
-  /**
-   * Clears the storage (only known keys)
-   */
-  public static clear() {
-    for (const key in this._aliases) {
-      Cookie.remove(this._aliases[key as keyof typeof this._aliases])
-    }
+function clear() {
+  for (const key in StorageAliases) {
+    Cookie.remove(StorageAliases[key as keyof typeof StorageAliases])
   }
 }
 
-export { CookieStorage }
+export const CookieStorage = { get, set, isSet, clear, StorageAliases }
