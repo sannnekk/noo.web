@@ -59,7 +59,7 @@
         label="Файлы, прикрепленные к материалу"
         :max-count="20"
         :allowed-mime-types="['application/pdf', 'image/jpeg', 'image/png']"
-        :max-file-size="100 * 1024 * 1024"
+        :max-file-size="150 * 1024 * 1024"
         v-model="model.files"
       />
     </div>
@@ -127,12 +127,7 @@
       </warning-block>
     </div>
     <div class="form-group">
-      <h3>Прикрепить видео из НОО.Tube</h3>
-      <info-block>
-        Рекомендуется использовать только для тестирования, так как этот
-        функционал дает доступ ученикам к переходу на видео в НОО.Tube, который
-        пока находится в режиме <beta-tag />.
-      </info-block>
+      <h3>Прикрепить видео из НОО.Tube <beta-tag /></h3>
       <br />
       <nootube-select-input
         :max-count="3"
