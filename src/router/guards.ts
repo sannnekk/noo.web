@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/core/stores/auth.store'
+import { useGlobalUIStore } from '@/core/stores/global-ui.store'
 import type { NavigationGuardReturn, RouteLocationNormalized } from 'vue-router'
 
 function isAuthenticatedGuard(
@@ -20,4 +21,23 @@ function isAuthenticatedGuard(
   return true
 }
 
-export { isAuthenticatedGuard }
+function canRoleAccessGuard(
+  to: RouteLocationNormalized
+): NavigationGuardReturn {
+  const authStore = useAuthStore()
+  const globalUiStore = useGlobalUIStore()
+
+  if (!to.meta.roles) {
+    return true
+  }
+
+  if (!authStore.roleIsOneOf(to.meta.roles)) {
+    globalUiStore.createApiErrorToast
+
+    return false
+  }
+
+  return true
+}
+
+export { isAuthenticatedGuard, canRoleAccessGuard }

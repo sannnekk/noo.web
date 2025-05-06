@@ -16,12 +16,9 @@ interface AuthService {
 }
 
 async function login(
-  usernameOrEmail: LoginPayload
+  payload: LoginPayload
 ): Promise<ApiResponse<LoginResponse>> {
-  return await Api.post<LoginPayload, LoginResponse>(
-    '/auth/login',
-    usernameOrEmail
-  )
+  return await Api.post<LoginPayload, LoginResponse>('/auth/login', payload)
 }
 
 async function forgotPassword(email: string): Promise<ApiResponse> {

@@ -1,7 +1,7 @@
 import type { ApplicationModule } from '@/types/ApplicationModule'
 import { routerOptions } from './router'
 import { createRouter, type RouteRecordRaw } from 'vue-router'
-import { isAuthenticatedGuard } from './router/guards'
+import { canRoleAccessGuard, isAuthenticatedGuard } from './router/guards'
 import {
   setPageTitleMiddleware,
   setTabTitleMiddleware
@@ -15,10 +15,10 @@ function registerModules(modules: ApplicationModule[]): {
   const diContainer: Record<string, any> = {}
 
   for (const module of modules) {
-    const { name, diDefinitions, router } = module
+    const { name, diDefinitions, routes } = module
 
-    if (router) {
-      ;(options.routes as RouteRecordRaw[]).push(router)
+    if (routes) {
+      ;(options.routes as RouteRecordRaw[]).push(...routes)
     }
 
     if (diDefinitions) {
@@ -31,6 +31,7 @@ function registerModules(modules: ApplicationModule[]): {
   const router = createRouter(options)
 
   router.beforeEach(isAuthenticatedGuard)
+  router.beforeEach(canRoleAccessGuard)
   router.afterEach(setTabTitleMiddleware)
   router.afterEach(setPageTitleMiddleware)
 

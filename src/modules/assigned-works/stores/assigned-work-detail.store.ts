@@ -12,7 +12,7 @@ import type {
   AssignedWorkEntity
 } from '../api/assigned-work.types'
 import { AssignedWorkService } from '../api/assigned-work.service'
-import { useGlobalUIStore } from '@/core/stores/global-ui'
+import { useGlobalUIStore } from '@/core/stores/global-ui.store'
 import { useSaveStatus } from '@/core/composables/useSaveStatus'
 import type { PossiblyUnsavedAnswer, TaskGrid } from '../types'
 import {

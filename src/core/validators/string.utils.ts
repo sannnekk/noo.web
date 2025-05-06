@@ -1,23 +1,33 @@
-import { ZodSchema, z } from 'zod'
+import { z } from 'zod'
+import { parse, type ValidationError } from './validation-helpers.utils'
 
-export type ValidationError = {
-  kind: 'warning' | 'error'
-  message: string
+function isStringOfLength(
+  value: unknown,
+  min: number,
+  max: number
+): true | ValidationError[] {
+  const stringSchema = z
+    .string()
+    .min(min, { message: `Длина должна быть не менее ${min} символов` })
+    .max(max, { message: `Длина не может превышать ${max} символов` })
+
+  return parse(stringSchema, value)
 }
 
-function isValidUsername(value: string): true | ValidationError[] {
+function isValidUsername(value: unknown): true | ValidationError[] {
   const usernameSchema = z
     .string()
     .min(3, { message: 'Никнейм не может быть короче 3 символов' })
     .max(20, { message: 'Никнейм не может быть длиннее 20 символов' })
     .regex(/^[a-zA-Z0-9_-]+$/, {
-      message: 'Никнейм может содержать только буквы, цифры и символы _ и -'
+      message:
+        'Никнейм может содержать только латинские буквы, цифры и символы _ и -'
     })
 
   return parse(usernameSchema, value)
 }
 
-function isValidEmail(value: string): true | ValidationError[] {
+function isValidEmail(value: unknown): true | ValidationError[] {
   const emailSchema = z
     .string()
     .email({ message: 'Некорректный адрес электронной почты' })
@@ -25,7 +35,7 @@ function isValidEmail(value: string): true | ValidationError[] {
   return parse(emailSchema, value)
 }
 
-function isValidPassword(value: string): true | ValidationError[] {
+function isValidPassword(value: unknown): true | ValidationError[] {
   const passwordSchema = z
     .string()
     .min(8, { message: 'Пароль должен содержать не менее 8 символов' })
@@ -44,17 +54,4 @@ function isValidPassword(value: string): true | ValidationError[] {
   return parse(passwordSchema, value)
 }
 
-function parse(schema: ZodSchema, value: unknown): true | ValidationError[] {
-  const result = schema.safeParse(value)
-
-  if (result.success) {
-    return true
-  } else {
-    return result.error.errors.map((error) => ({
-      kind: 'error',
-      message: error.message
-    }))
-  }
-}
-
-export { isValidUsername, isValidEmail, isValidPassword }
+export { isStringOfLength, isValidUsername, isValidEmail, isValidPassword }

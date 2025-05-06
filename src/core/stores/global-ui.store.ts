@@ -22,7 +22,9 @@ interface GlobalUIStore {
     loadingText?: string
   ) => void
   toasts: ShallowRef<Toast[]>
+  createErrorToast: (title: string, text?: string) => void
   createApiErrorToast: (title: string, error?: ApiError) => void
+  createWarningToast: (title: string, text?: string) => void
   createSuccessToast: (title: string, text?: string) => void
   removeToast: (id: string) => void
 }
@@ -45,6 +47,28 @@ const useGlobalUIStore = defineStore('global:ui', (): GlobalUIStore => {
   }
 
   const toasts = shallowRef<Toast[]>([])
+
+  function createErrorToast(title: string, text?: string) {
+    const id = uid()
+    toasts.value.push({
+      id,
+      title,
+      type: 'error',
+      text
+    })
+
+    setTimeout(() => removeToast(id), 5000)
+  }
+
+  function createWarningToast(title: string, text?: string) {
+    const id = uid()
+    toasts.value.push({
+      id,
+      title,
+      type: 'warning',
+      text
+    })
+  }
 
   function createApiErrorToast(title: string, error?: ApiError) {
     const id = uid()
@@ -83,6 +107,8 @@ const useGlobalUIStore = defineStore('global:ui', (): GlobalUIStore => {
     setLoading,
     toasts,
     createApiErrorToast,
+    createErrorToast,
+    createWarningToast,
     createSuccessToast,
     removeToast
   }

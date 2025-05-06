@@ -1,4 +1,4 @@
-import { useGlobalUIStore } from '@/core/stores/global-ui'
+import { useGlobalUIStore } from '@/core/stores/global-ui.store'
 import type { RouteLocationNormalized } from 'vue-router'
 
 function setPageTitleMiddleware(to: RouteLocationNormalized) {
