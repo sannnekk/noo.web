@@ -8,7 +8,7 @@
         'Проверенные',
         'Архивированные',
         // TODO: refactor
-        '[new]Карточки заданий'
+        Core.Context.roleIs(['student']) ? '[new]Карточки заданий' : ''
       ]"
       v-model:tab-index="assignedWorksStore.currentTabIndex"
     >
@@ -165,6 +165,7 @@
 </template>
 
 <script setup lang="ts">
+import { Core } from '@/core/Core'
 import { setPageTitle } from '@/core/utils/setPageTitle'
 import { useAssignedWorksStore } from '../stores/assigned-works'
 import worksTable from '../components/works-table.vue'

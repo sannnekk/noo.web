@@ -89,7 +89,10 @@ export const useCreateWorkStore = defineStore(
      * Add new task to the work
      */
     function addTask() {
-      work.value.tasks.push(entityFactory<Task>('task'))
+      work.value.tasks.push({
+        ...entityFactory<Task>('task'),
+        order: work.value.tasks.length + 1
+      })
     }
 
     /**

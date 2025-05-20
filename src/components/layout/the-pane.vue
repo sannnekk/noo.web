@@ -42,7 +42,7 @@
         <p>
           Есть проблема? Напишите нам в
           <a
-            href="https://t.me/noo_support_chat"
+            href="https://t.me/+oACQzPflwZQ1ODRi"
             target="_blank"
           >
             @noo_support_chat

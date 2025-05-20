@@ -7,6 +7,7 @@ export interface Chapter extends Entity {
   slug: string
   courseId: string
   course?: Course
+  parentChapter?: Chapter
   chapters?: Chapter[]
   materials?: Material[]
   order: number

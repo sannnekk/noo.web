@@ -3,17 +3,36 @@
     class="task-list"
     v-auto-animate
   >
-    <div class="task-list__items">
+    <draggable-list
+      v-model="model"
+      item-key="slug"
+      class="task-list__items"
+    >
+      <template v-slot="{ item }">
+        <div
+          class="task-list__item"
+          :class="{ 'task-list__item--new': item.id === undefined }"
+        >
+          <router-link
+            :to="`/create-work${$route.params.workSlug}/${item.slug}`"
+          >
+            {{ item.order }}
+          </router-link>
+        </div>
+      </template>
+    </draggable-list>
+    <!--<div class="task-list__items">
       <div
         class="task-list__item"
         v-for="(item, index) in model"
         :key="item.id"
+        :class="{ 'task-list__item--new': item.id === undefined }"
       >
         <router-link :to="`/create-work${$route.params.workSlug}/${item.slug}`">
           {{ index + 1 }}
         </router-link>
       </div>
-    </div>
+    </div>-->
     <div
       class="task-list__add"
       v-if="currentTaskId !== 'new'"
@@ -47,7 +66,15 @@ const emits = defineEmits<Emits>()
 
 const model = computed({
   get: () => props.modelValue,
-  set: (value) => emits('update:modelValue', value)
+  set: (value) => {
+    emits(
+      'update:modelValue',
+      value.map((item, index) => {
+        item.order = index + 1
+        return item
+      })
+    )
+  }
 })
 </script>
 
@@ -56,6 +83,7 @@ const model = computed({
   padding: 0
   margin: 0
   max-height: 305px
+  padding: 0.5em 0
   overflow-y: auto
 
   &__add
@@ -68,6 +96,22 @@ const model = computed({
     gap: 0.2em
 
   &__item
+    position: relative
+
+    &--new
+      &::after
+        content: 'new'
+        position: absolute
+        top: -2px
+        right: -3px
+        padding: 1px 2px
+        background-color: var(--danger)
+        color: #000
+        border-radius: var(--border-radius)
+        font-size: 8px
+        line-height: 10px
+        font-weight: bold
+
     a
       font-weight: 500
       display: grid

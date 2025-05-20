@@ -61,7 +61,10 @@ const cols: ColType[] = [
   {
     title: 'Курс',
     type: 'text',
-    value: (material: Material) => material.chapter?.course?.name
+    value: (material: Material) =>
+      material.chapter?.course?.name ??
+      material.chapter?.parentChapter?.course?.name ??
+      'Неизвестный курс'
   },
   {
     title: 'Материал',
