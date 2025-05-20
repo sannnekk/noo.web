@@ -19,6 +19,7 @@
       <video-creation-upload-form
         :upload-url="video.uploadUrl"
         :service-type="video.serviceType"
+        :video-link="videoLink"
         @before-upload="registerVideo($event)"
         @finish-upload="finishUpload()"
         @publish="publishVideo()"
@@ -37,7 +38,7 @@
       </p>
       <div class="video-creation-form__success-step__actions">
         <common-button
-          :to="videoLink"
+          :to="videoLink!"
           design="primary"
           alignment="center"
         >
@@ -72,7 +73,9 @@ const videoService = Core.Services.Video
 const uiService = Core.Services.UI
 
 const video = ref<UnsavedVideo>(emptyVideo())
-const videoLink = computed(() => `/nootube/video/${video.value.id}`)
+const videoLink = computed(() =>
+  video.value.id ? `/nootube/video/${video.value.id}` : null
+)
 
 const step = ref<'info' | 'upload' | 'success'>('info')
 
