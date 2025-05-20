@@ -147,6 +147,7 @@ declare module 'vue' {
     PasswordCriteria: typeof import('./src/components/computed/password-criteria.vue')['default']
     PdfFileIcon: typeof import('./src/components/decorations/icons/pdf-file-icon.vue')['default']
     PdfPreview: typeof import('./src/components/files/pdf-preview.vue')['default']
+    PinIcon: typeof import('./src/components/decorations/icons/pin-icon.vue')['default']
     PlayIcon: typeof import('./src/components/decorations/icons/play-icon.vue')['default']
     PngFileIcon: typeof import('./src/components/decorations/icons/png-file-icon.vue')['default']
     PollIcon: typeof import('./src/components/decorations/icons/poll-icon.vue')['default']

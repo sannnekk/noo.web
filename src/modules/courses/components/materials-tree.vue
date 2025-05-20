@@ -27,7 +27,13 @@
           name="uni-cap"
           v-if="item.workId"
         />
-        {{ item.name }}
+        <span
+          :style="{
+            color: item.titleColor ?? 'var(--form-text-color)'
+          }"
+        >
+          {{ item.name }}
+        </span>
         <inline-emoji
           class="materials-tree__item__name__reaction"
           v-if="item.myReaction && Core.Context.roleIs(['student'])"
@@ -51,7 +57,7 @@ import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 interface Props {
-  data: (Pick<Material, 'id' | 'name' | 'slug' | 'isActive'> & {
+  data: (Pick<Material, 'id' | 'name' | 'titleColor' | 'slug' | 'isActive'> & {
     children?: Pick<Material, 'id' | 'name' | 'slug' | 'isActive'>[]
     workId?: string
     myReaction?: string
@@ -131,10 +137,12 @@ function chapterIsOpened(chapter: any) {
       line-height: 1.1
 
       &.router-link-active
-        color: var(--lila)
+        font-weight: bold !important
+        color: var(--secondary)
+        text-decoration: none
 
       &:not(&.router-link-active):hover
-        color: var(--secondary)
+        text-decoration: underline
 
       &__icon
         font-size: 1.5em

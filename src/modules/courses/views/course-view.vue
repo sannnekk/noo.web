@@ -65,6 +65,7 @@
               <template #empty>Авторы не указаны</template>
             </inline-user-card-list>
           </div>
+          <pinned-materials-list :chapters="courseStore.course.chapters" />
           <materials-tree :data="courseStore.materialsTree" />
           <div
             class="index-materials-view__tree__course-id"
@@ -95,6 +96,7 @@
 </template>
 
 <script lang="ts" setup>
+import PinnedMaterialsList from '../components/pinned-materials-list.vue'
 import sendNotificationModal from '../components/send-notification-modal.vue'
 import MaterialsTree from '../components/materials-tree.vue'
 import { useCourseStore } from '../stores/course'

@@ -19,6 +19,8 @@ export interface Material extends Entity {
   activateAt: Date | null
   work?: Work
   isWorkAvailable: boolean
+  isPinned: boolean
+  titleColor: string
   files: Media[]
   createdAt: Date
   updatedAt: Date

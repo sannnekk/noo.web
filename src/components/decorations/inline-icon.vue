@@ -59,6 +59,7 @@ export type IconName =
   | 'play'
   | 'statistics'
   | 'table'
+  | 'pin'
 
 interface Props {
   name: IconName

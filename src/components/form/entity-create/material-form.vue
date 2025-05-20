@@ -1,7 +1,13 @@
 <template>
   <div class="material-form">
     <div class="material-form__title">
-      <h3>{{ model.name }}</h3>
+      <h3
+        :style="{
+          color: model.titleColor ?? 'var(--form-text-color)'
+        }"
+      >
+        {{ model.name }}
+      </h3>
     </div>
     <div class="form-group">
       <form-input
@@ -9,6 +15,32 @@
         v-model="model.name"
         label="Название материала"
       />
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <select-input
+            type="color"
+            v-model="model.titleColor"
+            label="Цвет заголовка"
+            :options="[
+              { label: 'Без цвета', value: null as any },
+              { label: 'Основной зеленый', value: 'var(--primary)' },
+              { label: 'Основной фиолетовый', value: 'var(--lila)' },
+              { label: 'Красный', value: 'var(--danger)' },
+              { label: 'Желтый', value: 'var(--warning)' }
+            ]"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group dimmed-checkbox checkbox-centered">
+          <form-checkbox
+            v-model="model.isPinned"
+            label="Закрепить материал"
+          />
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <text-area
@@ -48,9 +80,6 @@
             label="Дата публикации (МСК)"
             v-model="model.activateAt"
           />
-          <warning-block class="test-functionality">
-            Функционал находится в режиме тестирования разработчиками
-          </warning-block>
         </div>
       </div>
     </div>
@@ -175,7 +204,7 @@ const isSchedulingEnabled = computed({
 const areDeadlinesSet = ref(false)
 watch(areDeadlinesSet, setDeadlines)
 
-if (model.value.workCheckDeadline || model.value.workCheckDeadline) {
+if (model.value.workCheckDeadline || model.value.workSolveDeadline) {
   areDeadlinesSet.value = true
 }
 
@@ -183,7 +212,7 @@ function setDeadlines(value: boolean) {
   if (!value) {
     model.value.workSolveDeadline = null
     model.value.workCheckDeadline = null
-  } else if (!model.value.workCheckDeadline && !model.value.workCheckDeadline) {
+  } else if (!model.value.workCheckDeadline && !model.value.workSolveDeadline) {
     model.value.workSolveDeadline = Date.inDays(3)
     model.value.workCheckDeadline = Date.inDays(7)
   }
@@ -201,6 +230,15 @@ function setDeadlines(value: boolean) {
 
 			> *
 				font-size: 0.9em
+
+	&.checkbox-centered
+		padding: 2em 0.5em 0.5em 0.5em
+
+		@media screen and (max-width: 996px)
+			padding: 1em 0.5em 0.5em 0.5em
+
+		@media screen and (max-width: 500px)
+			padding: 0
 
 .test-functionality
 	margin-top: 0.5em
