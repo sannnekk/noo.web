@@ -134,6 +134,8 @@ export const useCreateCourseStore = defineStore(
     ): Omit<Material, 'id' | 'chapterId' | 'createdAt' | 'updatedAt'> {
       return {
         name: name || 'Новый материал',
+        isPinned: false,
+        titleColor: undefined!,
         slug: uuid(),
         description: '',
         files: [],

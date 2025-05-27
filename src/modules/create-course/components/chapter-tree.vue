@@ -1,8 +1,9 @@
 <template>
   <draggable-list
     v-model="chaptersModel"
-    item-key="name"
+    item-key="slug"
     :handle="`.handle-chapters`"
+    group="chapters"
   >
     <template v-slot="chapter">
       <div class="chapter-tree__item">
@@ -58,7 +59,7 @@
         >
           <chapter-tree
             :all-chapters="props.allChapters"
-            :chapters="chapter.item.chapters"
+            v-model:chapters="chapter.item.chapters"
             :course-slug="courseSlug"
             :nesting-level="(props.nestingLevel || 0) + 1"
           />
@@ -66,7 +67,7 @@
         <ul class="chapter-tree__item__materials">
           <draggable-list
             v-model="chapter.item.materials"
-            item-key="name"
+            item-key="slug"
             :handle="`.handle-materials`"
             group="materials"
           >
