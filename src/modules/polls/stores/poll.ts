@@ -87,7 +87,11 @@ export const usePollStore = defineStore('polls-module:poll', () => {
     }
 
     try {
-      validateAnswers(poll.value.questions, answers.value)
+      const errors = validateAnswers(poll.value.questions, answers.value)
+
+      if (errors.length > 0) {
+        throw new Error(errors.join(', \n'))
+      }
 
       const payload = answers.value.map((answer) => ({
         ...answer,
@@ -100,31 +104,22 @@ export const usePollStore = defineStore('polls-module:poll', () => {
 
       uiService.openSuccessModal(
         'Спасибо за участие в опросе!',
-        'Ваши ответы успешно сохранены',
-        [
-          {
-            label: 'Назад к блогу/новостям',
-            design: 'primary',
-            handler: () => window.location.replace('/blog')
-          }
-        ]
+        'Ваши ответы успешно сохранены'
       )
     } catch (error: any) {
       uiService.openErrorModal(
         'Произошла ошибка при сохранении ответов',
-        error.message,
-        [
-          {
-            label: 'Назад к блогу/новостям',
-            design: 'primary',
-            handler: () => window.location.replace('/blog')
-          }
-        ]
+        error.message
       )
     }
   }
 
-  function validateAnswers(questions: PollQuestion[], answers: PollAnswer[]) {
+  function validateAnswers(
+    questions: PollQuestion[],
+    answers: PollAnswer[]
+  ): string[] {
+    const errors: string[] = []
+
     for (const question of questions) {
       const answer = answers.find((a) => a.questionId === question.id)
 
@@ -132,13 +127,20 @@ export const usePollStore = defineStore('polls-module:poll', () => {
         throw new Error(`Ответ на вопрос "${question.text}" обязателен`)
       }
 
-      if (!isAnswerValid(question, answer!)) {
-        throw new Error(`Ответ на вопрос "${question.text}" обязателен`)
+      const error = isAnswerValid(question, answer!)
+
+      if (error !== true) {
+        errors.push(`Вопрос "${question.text}": ${error}`)
       }
     }
+
+    return errors
   }
 
-  function isAnswerValid(question: PollQuestion, answer: PollAnswer) {
+  function isAnswerValid(
+    question: PollQuestion,
+    answer: PollAnswer
+  ): string | true {
     switch (question.type) {
       case 'text':
         return checkTextQuestionType(question, answer.text)
@@ -153,24 +155,24 @@ export const usePollStore = defineStore('polls-module:poll', () => {
       case 'file':
         return checkFileQuestionType(question, answer.files)
       default:
-        return false
+        return true
     }
   }
 
   function checkTextQuestionType(
     question: PollQuestion,
     answer: string | undefined
-  ) {
+  ): string | true {
     if (!question.required && !answer?.length) {
       return true
     }
 
     if (question.maxLength && question.maxLength < answer!.length) {
-      return false
+      return 'Ответ слишком длинный, максимальная длина: ' + question.maxLength
     }
 
     if (question.minLength && question.minLength > answer!.length) {
-      return false
+      return 'Ответ слишком короткий, минимальная длина: ' + question.minLength
     }
 
     return true
@@ -179,25 +181,29 @@ export const usePollStore = defineStore('polls-module:poll', () => {
   function checkNumberQuestionType(
     question: PollQuestion,
     answer: number | undefined
-  ) {
+  ): string | true {
     if (!question.required && answer === undefined) {
       return true
     }
 
     if (answer === undefined) {
-      return false
+      return 'Ответ обязателен'
     }
 
     if (question.maxValue && question.maxValue < answer) {
-      return false
+      return (
+        'Ответ слишком большой, максимальное значение: ' + question.maxValue
+      )
     }
 
     if (question.minValue && question.minValue > answer) {
-      return false
+      return (
+        'Ответ слишком маленький, минимальное значение: ' + question.minValue
+      )
     }
 
     if (question.onlyIntegerValue && !Number.isInteger(answer)) {
-      return false
+      return 'Ответ должен быть целым числом'
     }
 
     return true
@@ -206,21 +212,21 @@ export const usePollStore = defineStore('polls-module:poll', () => {
   function checkChoiceQuestionType(
     question: PollQuestion,
     answer: string[] | undefined
-  ) {
+  ): string | true {
     if (!question.required && !answer?.length) {
       return true
     }
 
     if (answer === undefined) {
-      return false
+      return 'Ответ обязателен'
     }
 
     if (question.minChoices && question.minChoices > answer.length) {
-      return false
+      return 'Выберите как минимум ' + question.minChoices + ' вариантов ответа'
     }
 
     if (question.maxChoices && question.maxChoices < answer.length) {
-      return false
+      return 'Выберите не более ' + question.maxChoices + ' вариантов ответа'
     }
 
     return true
@@ -229,25 +235,29 @@ export const usePollStore = defineStore('polls-module:poll', () => {
   function checkRatingQuestionType(
     question: PollQuestion,
     answer: number | undefined
-  ) {
+  ): string | true {
     if (!question.required && answer === undefined) {
       return true
     }
 
     if (answer === undefined) {
-      return false
+      return 'Ответ обязателен'
     }
 
     if (question.maxRating && question.maxRating < answer) {
-      return false
+      return (
+        'Ответ слишком большой, максимальный рейтинг: ' + question.maxRating
+      )
     }
 
     if (question.minRating && question.minRating > answer) {
-      return false
+      return (
+        'Ответ слишком маленький, минимальный рейтинг: ' + question.minRating
+      )
     }
 
     if (question.onlyIntegerRating && !Number.isInteger(answer)) {
-      return false
+      return 'Рейтинг должен быть целым числом'
     }
 
     return true
@@ -256,21 +266,21 @@ export const usePollStore = defineStore('polls-module:poll', () => {
   function checkDateQuestionType(
     question: PollQuestion,
     answer: Date | undefined
-  ) {
+  ): string | true {
     if (!question.required && !answer) {
       return true
     }
 
     if (!answer) {
-      return false
+      return 'Ответ обязателен'
     }
 
     if (question.onlyFutureDate && answer < new Date()) {
-      return false
+      return 'Дата должна быть в будущем'
     }
 
     if (question.onlyPastDate && answer > new Date()) {
-      return false
+      return 'Дата должна быть в прошлом'
     }
 
     return true
@@ -279,19 +289,19 @@ export const usePollStore = defineStore('polls-module:poll', () => {
   function checkFileQuestionType(
     question: PollQuestion,
     answer: Media[] | undefined
-  ) {
+  ): string | true {
     if (!question.required && !answer?.length) {
       return true
     }
 
     if (!answer?.length) {
-      return false
+      return 'Ответ обязателен'
     }
 
     // file size is checked on the server
 
     if (question.maxFileCount && question.maxFileCount < answer.length) {
-      return false
+      return 'Вы можете загрузить не более ' + question.maxFileCount + ' файлов'
     }
 
     for (const file of answer) {
@@ -299,7 +309,11 @@ export const usePollStore = defineStore('polls-module:poll', () => {
         question.allowedFileTypes &&
         !question.allowedFileTypes.includes(file.mimeType)
       ) {
-        return false
+        return `Файл "${
+          file.name
+        }" имеет недопустимый тип. Допустимые типы: ${question.allowedFileTypes.join(
+          ', '
+        )}`
       }
     }
 
