@@ -79,7 +79,9 @@
           <right-answer-container
             v-if="
               (isWorkChecked(assignedWorkStore.assignedWork) ||
-                Core.Context.roleIs(['mentor'])) &&
+                Core.Context.roleIs(['mentor']) ||
+                (assignedWorkStore.mode === 'solve' &&
+                  assignedWorkStore.taskIsSubmitted())) &&
               assignedWorkStore.task?.type === 'word' &&
               assignedWorkStore.task?.rightAnswer
             "
@@ -88,7 +90,10 @@
         </div>
         <div class="col-md-6">
           <score-container
-            v-if="assignedWorkStore.mode !== 'solve'"
+            v-if="
+              assignedWorkStore.mode !== 'solve' ||
+              assignedWorkStore.taskIsSubmitted()
+            "
             v-model="assignedWorkStore.assignedWork"
             :task="assignedWorkStore.task"
             :readonly="assignedWorkStore.mode === 'read'"
@@ -126,7 +131,7 @@
     <div class="task-view__action-buttons">
       <common-button
         alignment="left"
-        design="warning"
+        design="inline"
         v-if="
           assignedWorkStore.task.isAnswerVisibleBeforeCheck &&
           assignedWorkStore.task.type === 'word' &&
@@ -138,7 +143,7 @@
       </common-button>
       <common-button
         alignment="left"
-        design="secondary"
+        design="inline"
         v-if="assignedWorkStore.previousTaskLink"
         :to="assignedWorkStore.previousTaskLink"
       >
@@ -150,6 +155,21 @@
         :to="assignedWorkStore.nextTaskLink"
       >
         Следующий вопрос
+      </common-button>
+      <common-button
+        alignment="right"
+        design="inline"
+        v-if="
+          assignedWorkStore.task.isCheckOneByOneEnabled &&
+          assignedWorkStore.mode === 'solve'
+        "
+        @click="assignedWorkStore.submitTask()"
+      >
+        {{
+          assignedWorkStore.taskIsSubmitted()
+            ? 'Перерешать'
+            : 'Проверить задание'
+        }}
       </common-button>
     </div>
   </div>
@@ -245,6 +265,12 @@ function openAnswerModal() {
     justify-content: space-between
     font-size: 0.9em
 
-    @media (max-width: 768px)
+    > *
+      display: inline-block
+      width: auto
+
+    @media (max-width: 992px)
       font-size: 0.8em
+      flex-wrap: wrap
+      gap: 1em
 </style>

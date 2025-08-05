@@ -93,7 +93,8 @@ export function getChangedAnswer(
         return (
           !saved ||
           !deltasAreEqual(saved.content, answer.content) ||
-          saved.word !== answer.word
+          saved.word !== answer.word ||
+          saved.isSubmitted !== answer.isSubmitted
         )
       }) || null
   )

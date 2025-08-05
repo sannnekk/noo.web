@@ -6,6 +6,7 @@ export interface Answer extends Entity {
   slug: string
   content: DeltaContentType | null
   word: string | null
+  isSubmitted?: boolean | null
   task?: Task
   taskId: Task['id']
   createdAt: Date

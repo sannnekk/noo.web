@@ -22,6 +22,8 @@ import type { DeltaContentType } from '@/types/composed/DeltaContentType'
 import type { Comment } from '@/core/data/entities/Comment'
 import type { Answer } from '@/core/data/entities/Answer'
 import { deepCopy } from '@/core/utils/object'
+import { entityFactory } from '@/core/utils/entityFactory'
+import { automatedCheck } from '../utils/automated-checks'
 
 export const useAssignedWorkStore = defineStore(
   'assigned-works-module:assigned-work',
@@ -273,6 +275,17 @@ export const useAssignedWorkStore = defineStore(
     }
 
     /**
+     * Check if task is submitted
+     */
+    function taskIsSubmitted(): boolean {
+      const answer = assignedWork.value?.answers.find(
+        (answer) => answer.taskId === task.value?.id
+      )
+
+      return answer?.isSubmitted === true
+    }
+
+    /**
      * Get score badge for the task
      */
     function taskScoreStatus(
@@ -283,6 +296,73 @@ export const useAssignedWorkStore = defineStore(
       }
 
       return getTaskScoreStatus(task, assignedWork.value!, mode.value)
+    }
+
+    /**
+     * Submit task
+     */
+    function submitTask(): void {
+      if (!assignedWork.value || !task.value || mode.value !== 'solve') return
+
+      const answer = assignedWork.value.answers.find(
+        (answer) => answer.taskId === task.value!.id
+      )
+
+      if (!answer) {
+        uiService.openErrorModal(
+          'Ошибка',
+          'Ответ на вопрос не может быть пустым'
+        )
+        return
+      }
+
+      if (task.value.type === 'word' && !answer.word?.trim()) {
+        uiService.openErrorModal(
+          'Ошибка',
+          'Ответ на вопрос не может быть пустым'
+        )
+        return
+      }
+
+      if (
+        task.value.type === 'text' &&
+        isDeltaEmptyOrWhitespace(answer.content)
+      ) {
+        uiService.openErrorModal(
+          'Ошибка',
+          'Ответ на вопрос не может быть пустым'
+        )
+        return
+      }
+
+      answer.isSubmitted = !answer.isSubmitted
+
+      if (!answer.isSubmitted) {
+        assignedWork.value.comments = assignedWork.value.comments.filter(
+          (comment) => comment.taskId !== task.value!.id
+        )
+        return
+      }
+
+      let existingComment = assignedWork.value.comments.find(
+        (comment) => comment.taskId === task.value!.id
+      )
+
+      if (!existingComment) {
+        existingComment = {
+          ...entityFactory<Comment>('comment'),
+          taskId: task.value!.id
+        }
+      }
+
+      existingComment.score = automatedCheck(task.value, answer.word || '')
+
+      assignedWork.value.comments = [
+        ...assignedWork.value.comments.filter(
+          (comment) => comment.taskId !== task.value!.id
+        ),
+        existingComment
+      ]
     }
 
     /**
@@ -668,6 +748,8 @@ export const useAssignedWorkStore = defineStore(
       getTask,
       taskHasAnswer,
       taskScoreStatus,
+      taskIsSubmitted,
+      submitTask,
       submitWork,
       mode,
       baseUrl,

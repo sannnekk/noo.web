@@ -5,7 +5,7 @@ export function automatedCheck(task: Task, answer: string): number {
     case 'word':
       return checkWord(
         answer,
-        task.rightAnswer,
+        task.rightAnswer ?? undefined,
         task.highestScore,
         task.checkingStrategy
       )
