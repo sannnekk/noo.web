@@ -33,7 +33,10 @@
         v-else-if="assignedWorkStore.task.type === 'word'"
         v-model="assignedWorkStore.assignedWork"
         :task-id="assignedWorkStore.task.id"
-        :readonly="assignedWorkStore.mode !== 'solve'"
+        :readonly="
+          assignedWorkStore.mode !== 'solve' ||
+          assignedWorkStore.taskIsSubmitted()
+        "
       />
       <answer-essay-container
         v-else-if="assignedWorkStore.task.type === 'essay'"
@@ -96,7 +99,10 @@
             "
             v-model="assignedWorkStore.assignedWork"
             :task="assignedWorkStore.task"
-            :readonly="assignedWorkStore.mode === 'read'"
+            :readonly="
+              assignedWorkStore.mode === 'read' ||
+              assignedWorkStore.mode === 'solve'
+            "
           />
         </div>
       </div>

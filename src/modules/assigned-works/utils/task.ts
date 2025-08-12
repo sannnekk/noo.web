@@ -26,13 +26,19 @@ export function getTaskScoreStatus(
   assignedWork: AssignedWork,
   mode: AssignedWorkViewMode
 ): 'warning' | 'success' | 'error' | null {
-  if (
-    mode === 'solve' ||
-    !isWorkMade(assignedWork) ||
-    (Core.Context.roleIs(['admin', 'teacher', 'student', 'assistant']) &&
-      !isWorkChecked(assignedWork))
-  ) {
-    return null
+  const answer = assignedWork.answers.find(
+    (answer) => answer.taskId === task.id
+  )
+
+  if (!task.isCheckOneByOneEnabled || !answer?.isSubmitted) {
+    if (
+      mode === 'solve' ||
+      !isWorkMade(assignedWork) ||
+      (Core.Context.roleIs(['admin', 'teacher', 'student', 'assistant']) &&
+        !isWorkChecked(assignedWork))
+    ) {
+      return null
+    }
   }
 
   const comment = assignedWork.comments.find(
@@ -48,6 +54,7 @@ export function getTaskScoreStatus(
   }
 
   if (
+    !task.isCheckOneByOneEnabled &&
     !isWorkChecked(assignedWork) &&
     Core.Context.roleIs(['admin', 'teacher', 'student', 'assistant'])
   ) {

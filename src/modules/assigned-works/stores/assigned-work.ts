@@ -304,35 +304,13 @@ export const useAssignedWorkStore = defineStore(
     function submitTask(): void {
       if (!assignedWork.value || !task.value || mode.value !== 'solve') return
 
-      const answer = assignedWork.value.answers.find(
+      let answer = assignedWork.value.answers.find(
         (answer) => answer.taskId === task.value!.id
       )
 
       if (!answer) {
-        uiService.openErrorModal(
-          'Ошибка',
-          'Ответ на вопрос не может быть пустым'
-        )
-        return
-      }
-
-      if (task.value.type === 'word' && !answer.word?.trim()) {
-        uiService.openErrorModal(
-          'Ошибка',
-          'Ответ на вопрос не может быть пустым'
-        )
-        return
-      }
-
-      if (
-        task.value.type === 'text' &&
-        isDeltaEmptyOrWhitespace(answer.content)
-      ) {
-        uiService.openErrorModal(
-          'Ошибка',
-          'Ответ на вопрос не может быть пустым'
-        )
-        return
+        answer = entityFactory<Answer>('answer')
+        answer.taskId = task.value!.id
       }
 
       answer.isSubmitted = !answer.isSubmitted
