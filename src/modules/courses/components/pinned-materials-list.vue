@@ -36,10 +36,21 @@
       </router-link>
     </div>
   </div>
+  <div
+    class="pinned-chapters-list"
+    v-if="preparedPinnedChapters.length"
+  >
+    <materials-tree
+      :data="preparedPinnedChapters"
+      is-pinned
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
+import materialsTree from './materials-tree.vue'
 import { Core } from '@/core/Core'
+import type { Chapter } from '@/core/data/entities/Chapter'
 import { computed } from 'vue'
 
 interface Props {
@@ -75,13 +86,51 @@ const pinnedMaterials = computed(() => {
 
   return pinnedMaterials
 })
+
+const preparedPinnedChapters = computed(() => {
+  const pinnedChapters = []
+
+  for (const chapter of props.chapters) {
+    if (chapter.isPinned) {
+      pinnedChapters.push(chapter)
+    }
+
+    if (chapter.chapters?.length) {
+      for (const subChapter of chapter.chapters) {
+        if (subChapter.isPinned) {
+          pinnedChapters.push(subChapter)
+        }
+      }
+    }
+  }
+
+  return pinnedChapters.map((chapter) => {
+    return {
+      ...chapter,
+      materials: undefined,
+      children: [
+        ...((chapter.chapters?.map((subChapter) => {
+          return {
+            ...subChapter,
+            materials: undefined,
+            children: subChapter.materials || []
+          }
+        }) as any[]) ?? []),
+        ...(chapter.materials || [])
+      ]
+    }
+  })
+})
 </script>
 
 <style scoped lang="sass">
+.pinned-chapters-list
+	border-bottom: 1px dashed var(--border-color)
+	margin-bottom: 0.5em
+
 .pinned-materials-list
 	padding: 0.5em 0
 	border-bottom: 1px dashed var(--border-color)
-	margin-bottom: 0.5em
 
 	&__item
 		display: flex

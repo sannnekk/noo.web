@@ -6,7 +6,7 @@
         v-model="content"
         :validators="[
 					(value: any) => value.length > 0 || 'Комментарий не может быть пустым',
-					(value: any) => value.length <= 250 || 'Комментарий слишком длинный'
+					(value: any) => value.length <= maxLength || 'Комментарий слишком длинный'
 				]"
         :readonly="isLoading"
       />
@@ -42,7 +42,7 @@ const emits = defineEmits<Emits>()
 const videoService = Core.Services.Video
 const uiService = Core.Services.UI
 
-const maxLength = 250
+const maxLength = 512
 const content = ref('')
 const trimmed = computed(() => content.value.trim())
 const isLoading = ref(false)

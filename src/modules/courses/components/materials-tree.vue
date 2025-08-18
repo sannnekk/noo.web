@@ -11,6 +11,11 @@
       :key="item.id"
       v-auto-animate
     >
+      <inline-icon
+        v-if="item.isPinned && isPinned"
+        class="materials-tree__item__name__pin"
+        name="pin"
+      />
       <list-opener-arrow
         v-if="item.children && !!item.children.length"
         :opened="item.opened"
@@ -57,12 +62,16 @@ import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 interface Props {
-  data: (Pick<Material, 'id' | 'name' | 'titleColor' | 'slug' | 'isActive'> & {
+  data: (Pick<
+    Material,
+    'id' | 'name' | 'titleColor' | 'isPinned' | 'slug' | 'isActive'
+  > & {
     children?: Pick<Material, 'id' | 'name' | 'slug' | 'isActive'>[]
     workId?: string
     myReaction?: string
   })[]
   nestingLevel?: number
+  isPinned?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -143,6 +152,12 @@ function chapterIsOpened(chapter: any) {
 
       &:not(&.router-link-active):hover
         text-decoration: underline
+
+      &__pin
+        position: relative
+        font-size: 1em
+        top: 2px
+        margin-right: 4px
 
       &__icon
         font-size: 1.5em

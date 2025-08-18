@@ -12,7 +12,15 @@
             <span class="chapter-tree__item__title__dragger handle-chapters">
               ::
             </span>
-            {{ chapter.item.name }}
+            &nbsp;
+            <b :style="{ color: chapter.item.titleColor }">
+              <inline-icon
+                v-if="chapter.item.isPinned"
+                class="chapter-tree__item__title__pin"
+                name="pin"
+              />
+              {{ chapter.item.name }}
+            </b>
           </span>
           <div class="chapter-tree__item__title__actions">
             <div
@@ -145,13 +153,32 @@
   >
     <template #title>{{ sureModalData.title }}</template>
     <template #text>
-      <p>{{ sureModalData.text }}</p>
-      <form-input
-        v-if="sureModalData.inputLabel"
-        v-model="sureModalData.input"
-        type="text"
-        :label="sureModalData.inputLabel"
-      />
+      <div class="sure-modal-container">
+        <p>{{ sureModalData.text }}</p>
+        <form-input
+          v-if="sureModalData.inputLabel"
+          v-model="sureModalData.input"
+          type="text"
+          :label="sureModalData.inputLabel"
+        />
+        <select-input
+          v-if="sureModalData.colorInput"
+          type="color"
+          v-model="sureModalData.color!"
+          label="Цвет заголовка"
+          :options="[
+          { label: 'Без цвета', value: null as any },
+          { label: 'Основной зеленый', value: 'var(--primary)' },
+          { label: 'Основной фиолетовый', value: 'var(--lila)' },
+          { label: 'Красный', value: 'var(--danger)' },
+          { label: 'Желтый', value: 'var(--warning)' }
+        ]"
+        />
+        <form-checkbox
+          v-model="sureModalData.isPinned"
+          label="Закрепить главу"
+        />
+      </div>
     </template>
   </sure-modal>
 </template>
@@ -187,21 +214,36 @@ const sureModalData = reactive({
   title: '',
   text: '',
   input: '',
+  colorInput: false,
+  color: null as null | string,
+  pinnedInput: false,
+  isPinned: false,
   inputLabel: '',
   action: () => {}
 })
 
 // handlers
 function onChapterNameChange(chapterSlug: string, currentName: string) {
+  const chapter = findChapter(props.chapters, chapterSlug)
+
   sureModalData.title = 'Изменение названия главы'
   sureModalData.text = ''
   sureModalData.inputLabel = 'Введите новое название главы'
   sureModalData.input = currentName
+  sureModalData.colorInput = true
+  sureModalData.color = chapter?.titleColor ?? null
+  sureModalData.pinnedInput = true
+  sureModalData.isPinned = chapter?.isPinned ?? false
   sureModalData.visible = true
   sureModalData.action = () => {
     if (!sureModalData.input) return
 
-    changeChapterName(chapterSlug, sureModalData.input)
+    changeChapter(
+      chapterSlug,
+      sureModalData.input,
+      sureModalData.color,
+      sureModalData.isPinned
+    )
   }
 }
 
@@ -210,6 +252,8 @@ function onChapterRemove(chapterSlug: string) {
   sureModalData.text = 'Вы уверены, что хотите удалить главу?'
   sureModalData.visible = true
   sureModalData.inputLabel = ''
+  sureModalData.colorInput = false
+  sureModalData.pinnedInput = false
   sureModalData.action = () => {
     removeChapter(chapterSlug)
   }
@@ -220,6 +264,8 @@ function onMaterialRemove(chapterSlug: string, materialSlug: string) {
   sureModalData.text = 'Вы уверены, что хотите удалить материал?'
   sureModalData.visible = true
   sureModalData.inputLabel = ''
+  sureModalData.colorInput = false
+  sureModalData.pinnedInput = false
   sureModalData.action = () => {
     removeMaterial(chapterSlug, materialSlug)
   }
@@ -276,11 +322,18 @@ function removeChapter(chapterSlug: string) {
   }
 }
 
-function changeChapterName(chapterSlug: string, newName: string) {
+function changeChapter(
+  chapterSlug: string,
+  newName: string,
+  newColor: string | null,
+  isPinned: boolean
+) {
   const chapter = findChapter(props.chapters, chapterSlug)
 
   if (chapter) {
     chapter.name = newName
+    chapter.titleColor = newColor
+    chapter.isPinned = isPinned
   }
 }
 
@@ -322,6 +375,11 @@ function addChapter(parentSlug?: string) {
 </script>
 
 <style lang="sass" scoped>
+.sure-modal-container
+  display: flex
+  flex-direction: column
+  gap: 0.7em
+
 .chapter-tree
   padding: 0
   list-style: none
@@ -342,6 +400,10 @@ function addChapter(parentSlug?: string) {
       font-size: 1em
       font-weight: bold
       gap: 0.5em
+
+      &__pin
+        position: relative
+        top: 2px
 
       &__actions
         display: flex

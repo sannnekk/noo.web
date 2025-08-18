@@ -126,7 +126,8 @@
         v-if="
           assignedWorkStore.settings.showCheckHints &&
           assignedWorkStore.task.checkHint &&
-          ['check', 'read'].includes(assignedWorkStore.mode) &&
+          (['check', 'read'].includes(assignedWorkStore.mode) ||
+            assignedWorkStore.taskIsSubmitted()) &&
           !isDeltaEmptyOrWhitespace(assignedWorkStore.task.checkHint)
         "
       >

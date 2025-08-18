@@ -1,6 +1,26 @@
 import type { Task } from '@/core/data/entities/Task'
 
 export function automatedCheck(task: Task, answer: string): number {
+  if (task.rightAnswer?.includes('|')) {
+    const rightAnswers = task.rightAnswer.split('|')
+
+    const scores = rightAnswers.map((rightAnswer) => {
+      switch (task.type) {
+        case 'word':
+          return checkWord(
+            answer,
+            rightAnswer,
+            task.highestScore,
+            task.checkingStrategy
+          )
+        default:
+          return 0
+      }
+    })
+
+    return Math.max(...scores)
+  }
+
   switch (task.type) {
     case 'word':
       return checkWord(

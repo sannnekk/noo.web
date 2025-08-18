@@ -22,6 +22,7 @@
               v-model="createWorkStore.work.tasks"
               :current-task-id="taskId"
               @create-task="createWorkStore.addTask()"
+              @create-from-template="createWorkStore.createFromTemplate($event)"
             />
           </div>
           <div

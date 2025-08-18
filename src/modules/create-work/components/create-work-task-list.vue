@@ -21,18 +21,6 @@
         </div>
       </template>
     </draggable-list>
-    <!--<div class="task-list__items">
-      <div
-        class="task-list__item"
-        v-for="(item, index) in model"
-        :key="item.id"
-        :class="{ 'task-list__item--new': item.id === undefined }"
-      >
-        <router-link :to="`/create-work${$route.params.workSlug}/${item.slug}`">
-          {{ index + 1 }}
-        </router-link>
-      </div>
-    </div>-->
     <div
       class="task-list__add"
       v-if="currentTaskId !== 'new'"
@@ -42,6 +30,29 @@
         @click="$emit('create-task')"
       >
         Добавить вопрос
+      </inline-button>
+    </div>
+    <div
+      class="task-list__add"
+      v-if="model.length === 0"
+    >
+      <inline-button
+        icon="add"
+        @click="$emit('create-from-template', 'trial-work')"
+      >
+        Создать пробник
+      </inline-button>
+      <inline-button
+        icon="add"
+        @click="$emit('create-from-template', 'test-50')"
+      >
+        Создать тест (50)
+      </inline-button>
+      <inline-button
+        icon="add"
+        @click="$emit('create-from-template', 'test-100')"
+      >
+        Создать тест (100)
       </inline-button>
     </div>
   </div>
@@ -59,6 +70,10 @@ interface Props {
 interface Emits {
   (event: 'update:modelValue', value: Task[]): void
   (event: 'create-task'): void
+  (
+    event: 'create-from-template',
+    template: 'trial-work' | 'test-50' | 'test-100'
+  ): void
 }
 
 const props = defineProps<Props>()
@@ -80,7 +95,6 @@ const model = computed({
 
 <style scoped lang="sass">
 .task-list
-  padding: 0
   margin: 0
   max-height: 305px
   padding: 0.5em 0
@@ -103,7 +117,7 @@ const model = computed({
         content: 'new'
         position: absolute
         top: -2px
-        right: -3px
+        right: 0px
         padding: 1px 2px
         background-color: var(--danger)
         color: #000

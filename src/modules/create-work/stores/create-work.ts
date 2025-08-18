@@ -96,6 +96,50 @@ export const useCreateWorkStore = defineStore(
     }
 
     /**
+     * Add multiple tasks to the work
+     */
+    function addTasks(
+      type: Task['type'],
+      count: number,
+      checkingStrategy: Task['checkingStrategy'] = 'type1'
+    ) {
+      const toAdd = Array.from({ length: count }, (_, i) => ({
+        ...entityFactory<Task>('task'),
+        type,
+        checkingStrategy,
+        order: work.value.tasks.length + i + 1
+      }))
+
+      work.value.tasks = [...work.value.tasks, ...toAdd]
+    }
+
+    /**
+     * Create a new work from a template
+     */
+    function createFromTemplate(
+      template: 'trial-work' | 'test-50' | 'test-100'
+    ) {
+      switch (template) {
+        case 'trial-work':
+          work.value.type = 'trial-work'
+          work.value.name = 'Пробник'
+          addTasks('word', 21)
+          addTasks('text', 7)
+          break
+        case 'test-50':
+          work.value.name = 'Тест (50)'
+          work.value.type = 'test'
+          addTasks('word', 50)
+          break
+        case 'test-100':
+          work.value.name = 'Тест (100)'
+          work.value.type = 'test'
+          addTasks('word', 100)
+          break
+      }
+    }
+
+    /**
      * Remove task from the work
      */
     function removeTask(taskSlug: Task['slug']) {
@@ -116,7 +160,7 @@ export const useCreateWorkStore = defineStore(
       const currentTaskIndex = work.value.tasks.findIndex(
         (task) => task.slug === currentTaskSlug
       )
-      const nextTaskSlug = work.value.tasks.at(currentTaskIndex + 1)?.slug
+      const nextTaskSlug = work.value.tasks[currentTaskIndex + 1]?.slug
 
       if (!nextTaskSlug) {
         return
@@ -139,7 +183,7 @@ export const useCreateWorkStore = defineStore(
       const currentTaskIndex = work.value.tasks.findIndex(
         (task) => task.slug === currentTaskSlug
       )
-      const prevTaskSlug = work.value.tasks.at(currentTaskIndex - 1)?.slug
+      const prevTaskSlug = work.value.tasks[currentTaskIndex - 1]?.slug
 
       if (!prevTaskSlug) {
         return
@@ -242,6 +286,7 @@ export const useCreateWorkStore = defineStore(
     return {
       work,
       addTask,
+      createFromTemplate,
       removeTask,
       getTask,
       submitWork,

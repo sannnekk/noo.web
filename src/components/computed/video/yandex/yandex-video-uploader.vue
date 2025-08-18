@@ -5,8 +5,14 @@
   >
     <label
       class="yandex-video-uploader__drop-region"
+      :class="{ 'yandex-video-uploader__drop-region--drag': isDragActive }"
       v-if="!fileRef"
       :for="componentId"
+      @dragenter.prevent="onDragEnter()"
+      @dragleave.prevent="onDragLeave()"
+      @dragover.prevent
+      @mouseleave="onDragLeave()"
+      @drop.prevent="onFilesDropped($event)"
     >
       <h3 class="yandex-video-uploader__drop-region__label">
         Кликните или перетащите файл сюда
@@ -114,6 +120,30 @@ const progress = ref(0)
 const isPaused = ref(false)
 const error = ref<any | null>(null)
 
+let dragTimeoutId = 0
+const isDragActive = ref(false)
+
+function onDragEnter() {
+  isDragActive.value = true
+  clearTimeout(dragTimeoutId)
+}
+
+function onDragLeave() {
+  dragTimeoutId = setTimeout(() => {
+    isDragActive.value = false
+  }, 50) as any
+}
+
+function onFilesDropped(event: DragEvent) {
+  const files = Array.from(event.dataTransfer?.files || [])
+
+  if (files && files[0] && fileFormatIsValid(files[0])) {
+    fileRef.value = files[0]
+
+    emits('before-upload', fileRef.value)
+  }
+}
+
 function onFileSelected(event: Event): void {
   const target = event.target as HTMLInputElement
   const files = target.files
@@ -216,6 +246,12 @@ function fileFormatIsValid(file: File): boolean {
 
 		&:hover
 			border: 1px solid var(--primary)
+
+		&--drag
+			border: 1px solid var(--primary)
+
+		*
+			pointer-events: none
 
 		&__label
 			font-size: 1.5rem

@@ -4,6 +4,7 @@ import type { Entity } from '../Entity'
 
 export interface Chapter extends Entity {
   name: string
+  titleColor: string | null
   slug: string
   courseId: string
   course?: Course
@@ -12,6 +13,7 @@ export interface Chapter extends Entity {
   materials?: Material[]
   order: number
   isActive: boolean
+  isPinned: boolean
   createdAt: Date
   updatedAt: Date
 }
