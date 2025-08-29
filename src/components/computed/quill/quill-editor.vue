@@ -85,10 +85,12 @@ interface Props {
   commentTypes?: string[]
   allowImageRotation?: boolean
   fontSize?: UserSettings['fontSize']
+  cursorPosition?: number
 }
 
 interface Emits {
   (e: 'update:modelValue', value: DeltaContentType): void
+  (e: 'update:cursorPosition', value?: number): void
   (e: 'commented', value: DeltaContentType): void
 }
 
@@ -622,6 +624,10 @@ async function initQuill() {
 
     quill.on('text-change', () => {
       emits('update:modelValue', quill!.getContents())
+    })
+
+    quill.on('selection-change', (range) => {
+      emits('update:cursorPosition', range?.index ?? 0)
     })
 
     if (mode === 'commentable') {

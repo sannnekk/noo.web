@@ -4,6 +4,7 @@
     <div class="rich-text-area__inner">
       <quill-editor
         v-model="model"
+        v-model:cursor-position="cursorPosition"
         :font-size="userSettingsStore.fontSize"
       />
     </div>
@@ -17,11 +18,13 @@ import { Core } from '@/core/Core'
 
 interface Props {
   modelValue: DeltaContentType
+  cursorPosition?: number
   label?: string
 }
 
 interface Emits {
   (e: 'update:modelValue', value: DeltaContentType): void
+  (e: 'update:cursorPosition', value?: number): void
 }
 
 const props = defineProps<Props>()
@@ -36,6 +39,15 @@ const model = computed({
   },
   set(value) {
     emit('update:modelValue', value)
+  }
+})
+
+const cursorPosition = computed({
+  get() {
+    return props.cursorPosition
+  },
+  set(value) {
+    emit('update:cursorPosition', value)
   }
 })
 </script>

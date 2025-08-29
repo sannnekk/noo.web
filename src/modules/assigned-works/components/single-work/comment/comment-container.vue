@@ -11,6 +11,7 @@
     <rich-text-area
       v-else
       v-model="model"
+      v-model:cursor-position="cursorPosition"
       :key="reloadTrigger"
     />
     <div
@@ -34,6 +35,16 @@
           </span>
         </div>
       </div>
+      <pre>
+				{{
+          {
+            cursorPosition: cursorPosition,
+            content: model,
+            snippets: snippets.map((s) => s.content)
+          }
+        }}
+			</pre
+      >
     </div>
   </div>
 </template>
@@ -43,8 +54,11 @@ import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { Task } from '@/core/data/entities/Task'
 import type { Comment } from '@/core/data/entities/Comment'
 import { entityFactory } from '@/core/utils/entityFactory'
-import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
-import { computed, ref } from 'vue'
+import {
+  isDeltaEmptyOrWhitespace,
+  insertInDelta
+} from '@/core/utils/deltaHelpers'
+import { computed, ref, shallowRef, watch } from 'vue'
 import type { Snippet } from '@/core/data/entities/Snippet'
 
 interface Props {
@@ -61,6 +75,15 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
+
+const cursorPosition = shallowRef(0)
+const actualCursorPosition = shallowRef(0)
+
+watch(cursorPosition, () =>
+  cursorPosition.value !== 0
+    ? (actualCursorPosition.value = cursorPosition.value)
+    : 0
+)
 
 const model = computed<Comment['content']>({
   get() {
@@ -93,13 +116,11 @@ const model = computed<Comment['content']>({
 const reloadTrigger = ref(0)
 
 function applySnippet(snippet: Snippet) {
-  if (isDeltaEmptyOrWhitespace(model.value)) {
-    model.value = snippet.content
-  } else {
-    model.value = {
-      ops: model.value.ops.concat(snippet.content.ops)
-    }
-  }
+  model.value = insertInDelta(
+    model.value,
+    snippet.content,
+    actualCursorPosition.value
+  )
 
   reloadTrigger.value++
 }
