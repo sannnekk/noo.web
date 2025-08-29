@@ -58,7 +58,6 @@ export function insertInDelta(
   toInsert: DeltaContentType,
   position: number
 ): DeltaContentType {
-  alert('Position: ' + position)
   let index = 0
   const before: any[] = []
   const after: any[] = []

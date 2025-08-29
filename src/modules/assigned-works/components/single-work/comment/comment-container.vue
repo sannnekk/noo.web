@@ -35,16 +35,6 @@
           </span>
         </div>
       </div>
-      <pre>
-				{{
-          {
-            cursorPosition: cursorPosition,
-            content: model,
-            snippets: snippets.map((s) => s.content)
-          }
-        }}
-			</pre
-      >
     </div>
   </div>
 </template>
