@@ -25,7 +25,7 @@
         />
         <span
           class="quill-toolbar__button__color-dot"
-          :style="{ 'background-color': item.value }"
+          :style="{ 'background-color': String(item.value) }"
           v-else
         >
         </span>
@@ -85,6 +85,7 @@ defineEmits<Emits>()
     font-size: 0.7em
     width: 1.8rem
     height: 2rem
+    overflow: hidden
 
     &--active
       background-color: var(--border-color)

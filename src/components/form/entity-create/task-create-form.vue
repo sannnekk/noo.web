@@ -148,6 +148,8 @@ function predefinedMaxScore(type: Task['type']): number | null {
       return 22
     case 'final-essay':
       return 5
+    case 'dictation':
+      return 50
   }
 }
 </script>

@@ -18,14 +18,17 @@
     >
       <div
         class="col-md-6 col-lg-4"
-        v-for="assignment in assignmentSearch.results.value"
+        v-for="assignment in assignments"
         :key="assignment.id"
       >
         <course-card
           :course="assignment.course!"
           :assignment="assignment"
+          :is-pinned="assignment.isPinned"
           @archive="onAssignmentArchive($event)"
           @unarchive="onAssignmentUnarchive($event)"
+          @pin="onAssignmentPin($event)"
+          @unpin="onAssignmentUnpin($event)"
         />
       </div>
     </div>
@@ -62,6 +65,7 @@
 import { useSearch } from '@/composables/useSearch'
 import { useCoursesStore } from '../stores/courses'
 import type { CourseAssignment } from '@/core/data/entities/CourseAssignment'
+import { computed } from 'vue'
 
 interface Props {
   archived?: boolean
@@ -87,6 +91,12 @@ const assignmentSearch = useSearch(coursesStore.fetchAssignments, {
   immediate: true
 })
 
+const assignments = computed(() =>
+  [...assignmentSearch.results.value].sort(
+    (a, b) => Number(b.isPinned) - Number(a.isPinned)
+  )
+)
+
 async function onAssignmentArchive(assignment: CourseAssignment) {
   await coursesStore.archiveAssignment(assignment)
   emits('trigger-search')
@@ -94,6 +104,16 @@ async function onAssignmentArchive(assignment: CourseAssignment) {
 
 async function onAssignmentUnarchive(assignment: CourseAssignment) {
   await coursesStore.unarchiveAssignment(assignment)
+  emits('trigger-search')
+}
+
+async function onAssignmentPin(assignment: CourseAssignment) {
+  await coursesStore.pinAssignment(assignment)
+  emits('trigger-search')
+}
+
+async function onAssignmentUnpin(assignment: CourseAssignment) {
+  await coursesStore.unpinAssignment(assignment)
   emits('trigger-search')
 }
 </script>

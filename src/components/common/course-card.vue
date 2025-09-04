@@ -5,6 +5,11 @@
         class="router-link"
         :to="link"
       >
+        <inline-icon
+          name="pin"
+          v-if="isPinned"
+          class="course-card__img__pinned-icon"
+        />
         <uploaded-image
           :src="courseImage"
           alt="Card title"
@@ -40,18 +45,37 @@ import type { CourseAssignment } from '@/core/data/entities/CourseAssignment'
 
 interface Props {
   course: Course
+  isPinned?: boolean
   assignment?: CourseAssignment
 }
 
 interface Emits {
   (event: 'archive', assignment: CourseAssignment): void
   (event: 'unarchive', assignment: CourseAssignment): void
+  (event: 'pin', assignment: CourseAssignment): void
+  (event: 'unpin', assignment: CourseAssignment): void
 }
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 const actions = reactive<MenuItem[]>([
+  {
+    title: 'Закрепить',
+    icon: 'pin',
+    if: Core.Context.roleIs(['student']) && !props.isPinned,
+    action: () => {
+      props.assignment && emits('pin', props.assignment!)
+    }
+  },
+  {
+    title: 'Открепить',
+    icon: 'pin',
+    if: Core.Context.roleIs(['student']) && props.isPinned,
+    action: () => {
+      props.assignment && emits('unpin', props.assignment!)
+    }
+  },
   {
     title: 'Редактировать',
     icon: 'edit',
@@ -169,6 +193,11 @@ async function unarchiveCourse() {
         height: 100%
         object-fit: cover
         object-position: center
+
+    &__pinned-icon
+      position: absolute
+      top: 10px
+      left: 10px
 
     &__more-widget
       position: absolute

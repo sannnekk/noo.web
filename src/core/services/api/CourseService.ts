@@ -156,6 +156,36 @@ export class CourseService extends ApiService {
   }
 
   /**
+   * pin course assignment
+   */
+  public async pinAssignment(
+    assignmentId: string,
+    options: ServiceOptions = {}
+  ) {
+    return this.httpPatch(
+      `${this._route}/${assignmentId}/pin`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
+   * unpin course assignment
+   */
+  public async unpinAssignment(
+    assignmentId: string,
+    options: ServiceOptions = {}
+  ) {
+    return this.httpPatch(
+      `${this._route}/${assignmentId}/unpin`,
+      undefined,
+      undefined,
+      options
+    )
+  }
+
+  /**
    * Create course
    */
   public async createCourse(course: Course, options: ServiceOptions = {}) {

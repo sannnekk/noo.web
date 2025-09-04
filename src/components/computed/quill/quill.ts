@@ -6,6 +6,8 @@ import { type Ref } from 'vue'
 import { Range } from 'quill/core/selection'
 import { ImageCommentBlot, type ImageComment } from './ImageCommentBlot'
 import { ImageOverrideBlot } from './ImageOverrideBlot'
+//// @ts-expect-error there are no types for the table module
+//import QuillBetterTable from 'quill-better-table'
 
 export type FormatType =
   | 'bold'
@@ -20,6 +22,10 @@ export type FormatType =
   | 'header'
   | 'list'
   | 'table'
+  | 'table-insert-column'
+  | 'table-delete-column'
+  | 'table-insert-row'
+  | 'table-delete-row'
   | 'color'
 
 export type Toolbar = {
@@ -50,7 +56,32 @@ export class CustomQuill extends Quill {
   ) {
     super(selector.value, {
       readOnly: mode === 'readonly',
-      debug: false
+      debug: false,
+      modules: {
+        table: true
+        /* 'better-table': {
+          operationMenu: {
+            items: {
+              unmergeCells: {
+                text: 'Another unmerge cells name'
+              }
+            },
+
+            color: {
+              colors: [
+                'red',
+                'green',
+                'yellow',
+                'white',
+                'red',
+                'green',
+                'yellow',
+                'white'
+              ]
+            }
+          }
+        } */
+      }
     })
 
     this.registerBlots()
@@ -79,6 +110,8 @@ export class CustomQuill extends Quill {
     if (!Quill.imports['formats/image-comment']) {
       Quill.register(ImageCommentBlot)
     }
+
+    //Quill.register({ 'modules/better-table': QuillBetterTable }, true)
   }
 
   private initHandlers() {
@@ -136,7 +169,22 @@ export class CustomQuill extends Quill {
         this.format('header', value)
         break
       case 'table':
-        // TODO: table
+        ;(this.getModule('table') as any).insertTable(3, 3)
+        //await (this.getModule('better-table') as any).insertTable(3, 3)
+        break
+      case 'table-insert-column':
+        ;(this.getModule('table') as any).insertColumnRight()
+        //this.format('insertColumnRight', undefined)
+        break
+      case 'table-delete-column':
+        ;(this.getModule('table') as any).deleteColumn()
+        break
+      case 'table-insert-row':
+        ;(this.getModule('table') as any).insertRowBelow()
+        //this.format('insertRowDown', undefined)
+        break
+      case 'table-delete-row':
+        ;(this.getModule('table') as any).deleteRow()
         break
       case 'link':
       case 'video':

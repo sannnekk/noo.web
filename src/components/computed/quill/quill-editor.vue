@@ -496,6 +496,41 @@ const toolbar = reactive<Toolbar>([
       title: 'Нумерованный список',
       icon: 'list-ordered',
       active: false
+    },
+    {
+      type: 'table',
+      value: 'NEVER',
+      title: 'Таблица',
+      icon: 'table',
+      active: false
+    },
+    {
+      type: 'table-insert-column',
+      value: 'NEVER',
+      title: 'Добавить ряд',
+      icon: 'table-insert-columns',
+      active: false
+    },
+    {
+      type: 'table-delete-column',
+      value: 'NEVER',
+      title: 'Удалить столбец',
+      icon: 'table-delete-columns',
+      active: false
+    },
+    {
+      type: 'table-insert-row',
+      value: 'NEVER',
+      title: 'Добавить столбец',
+      icon: 'table-insert-rows',
+      active: false
+    },
+    {
+      type: 'table-delete-row',
+      value: 'NEVER',
+      title: 'Удалить строку',
+      icon: 'table-delete-rows',
+      active: false
     }
   ],
   [
@@ -800,6 +835,32 @@ function syncImageSelections() {
 
       .ql-align-justify
         text-align: justify
+
+      table
+        border-collapse: separate
+        border-spacing: 0
+        width: auto
+        max-width: 100%
+
+        td
+          border: 1px solid var(--form-text-color)
+          min-width: 3em
+          padding: 0.5em 1em
+
+        tr:first-child td:first-child
+          border-top-left-radius: var(--border-radius)
+
+        tr:first-child td:last-child
+          border-top-right-radius: var(--border-radius)
+
+        tr:last-child td:first-child
+          border-bottom-left-radius: var(--border-radius)
+
+        tr:last-child td:last-child
+          border-bottom-right-radius: var(--border-radius)
+
+      .qlbt-selection-line
+        display: none
 
       .ql-comment
         border-radius: var(--border-radius)

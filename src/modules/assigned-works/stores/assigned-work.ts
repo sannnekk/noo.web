@@ -270,6 +270,7 @@ export const useAssignedWorkStore = defineStore(
         case 'text':
         case 'essay':
         case 'final-essay':
+        case 'dictation':
           return !!(answer.content && !isDeltaEmptyOrWhitespace(answer.content))
       }
     }
@@ -519,7 +520,7 @@ export const useAssignedWorkStore = defineStore(
           }
         }
 
-        if (changedComment && Core.Context.roleIs(['mentor'])) {
+        if (changedComment /* && Core.Context.roleIs(['mentor']) */) {
           const response = await assignedWorkService.upsertComment(
             assignedWork.value.id,
             changedComment,

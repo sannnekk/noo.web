@@ -10,5 +10,6 @@ export interface CourseAssignment extends Entity {
   assigner?: User
   assignerId: User['id']
   isArchived: boolean
+	isPinned: boolean
   createdAt: Date
 }

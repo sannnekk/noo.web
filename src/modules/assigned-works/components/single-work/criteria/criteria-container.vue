@@ -54,6 +54,12 @@ const opened = ref(props.mode !== 'solve')
 const criteria = ref<CriteriaItem[]>([])
 setCriteria(props.task.type)
 
+const model = ref<DetailedScore>(getDetailedSCore())
+watch(model, setDetailedScore, {
+  deep: true,
+  immediate: true
+})
+
 const commentCounts = ref<Record<string, number> | undefined>(
   getCommentCounts()
 )
@@ -66,12 +72,6 @@ watch(
     deep: true
   }
 )
-
-const model = ref<DetailedScore>(getDetailedSCore())
-watch(model, setDetailedScore, {
-  deep: true,
-  immediate: true
-})
 
 function getDetailedSCore() {
   const comment = props.modelValue.comments.find(
@@ -144,8 +144,9 @@ function getCommentCounts() {
   // apply this to detailed score
   for (const [key, value] of Object.entries(counts)) {
     if (model.value[key] !== undefined) {
-      const newScore = model.value[key] - value
-      model.value[key] = newScore < 0 ? 0 : newScore
+      const maxScore =
+        criteria.value.find((item) => item.code === key)?.maxScore ?? 0
+      model.value[key] = maxScore - value < 0 ? 0 : maxScore - value
     }
   }
 

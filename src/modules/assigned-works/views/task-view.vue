@@ -52,6 +52,13 @@
         :readonly="assignedWorkStore.mode !== 'solve'"
         :commentable="assignedWorkStore.mode === 'check'"
       />
+      <answer-dictation-container
+        v-else-if="assignedWorkStore.task.type === 'dictation'"
+        v-model="assignedWorkStore.assignedWork"
+        :task-id="assignedWorkStore.task.id"
+        :readonly="assignedWorkStore.mode !== 'solve'"
+        :commentable="assignedWorkStore.mode === 'check'"
+      />
     </div>
     <br />
     <div
@@ -195,6 +202,7 @@ import AnswerTextContainer from '../components/single-work/answer/answer-text-co
 import AnswerWordContainer from '../components/single-work/answer/answer-word-container.vue'
 import AnswerEssayContainer from '../components/single-work/answer/answer-essay-container.vue'
 import AnswerFinalEssayContainer from '../components/single-work/answer/answer-final-essay-container.vue'
+import AnswerDictationContainer from '../components/single-work/answer/answer-dictation-container.vue'
 import CommentContainer from '../components/single-work/comment/comment-container.vue'
 import ScoreContainer from '../components/single-work/comment/score-container.vue'
 import RightAnswerModal from '../components/single-work/answer/right-answer-modal.vue'

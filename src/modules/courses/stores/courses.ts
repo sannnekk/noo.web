@@ -129,6 +129,34 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
     }
   }
 
+  /**
+   * Pin course assignment
+   */
+  async function pinAssignment(assignment: CourseAssignment) {
+    try {
+      await courseService.pinAssignment(assignment.id, { showLoader: true })
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при закреплении курса',
+        error.message
+      )
+    }
+  }
+
+  /**
+   * Unpin course assignment
+   */
+  async function unpinAssignment(assignment: CourseAssignment) {
+    try {
+      await courseService.unpinAssignment(assignment.id, { showLoader: true })
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при откреплении курса',
+        error.message
+      )
+    }
+  }
+
   return {
     allSearch,
     ownSearch,
@@ -136,6 +164,8 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
     teacherTabIndex,
     fetchAssignments,
     archiveAssignment,
-    unarchiveAssignment
+    unarchiveAssignment,
+    pinAssignment,
+    unpinAssignment
   }
 })

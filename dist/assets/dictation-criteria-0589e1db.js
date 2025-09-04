@@ -1,0 +1,1 @@
+const e=[{code:"K1",title:"<b>K1:</b> Аккуратность изложения",description:"-",maxScore:10,showInComment:!0},{code:"K2",title:"<b>K2:</b> Пунктуация",description:"-",maxScore:20,showInComment:!0},{code:"K3",title:"<b>K3:</b> Орфография",description:"-",maxScore:20,showInComment:!0}];export{e as default};

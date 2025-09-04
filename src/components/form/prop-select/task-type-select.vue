@@ -43,6 +43,10 @@ const taskTypeOptions = [
   {
     label: 'Итоговое сочинение',
     value: 'final-essay'
+  },
+  {
+    label: 'Диктант',
+    value: 'dictation'
   }
 ]
 </script>

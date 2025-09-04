@@ -10,7 +10,11 @@ import {
 } from '@/core/utils/deltaHelpers'
 
 export function hasCriteria(taskType: Task['type']): boolean {
-  return taskType === 'essay' || taskType === 'final-essay'
+  return (
+    taskType === 'essay' ||
+    taskType === 'final-essay' ||
+    taskType === 'dictation'
+  )
 }
 
 export function scoreFromDetailedScore(detailedScore: Record<string, number>) {
