@@ -6,6 +6,7 @@
         v-model="model"
         v-model:cursor-position="cursorPosition"
         :font-size="userSettingsStore.fontSize"
+        :snippets="snippets"
       />
     </div>
   </div>
@@ -15,11 +16,13 @@
 import type { DeltaContentType } from '@/types/composed/DeltaContentType'
 import { computed } from 'vue'
 import { Core } from '@/core/Core'
+import type { Snippet } from '@/core/data/entities/Snippet'
 
 interface Props {
   modelValue: DeltaContentType
   cursorPosition?: number
   label?: string
+  snippets?: Snippet[]
 }
 
 interface Emits {

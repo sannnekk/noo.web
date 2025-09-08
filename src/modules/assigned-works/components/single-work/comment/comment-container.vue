@@ -12,30 +12,8 @@
       v-else
       v-model="model"
       v-model:cursor-position="cursorPosition"
-      :key="reloadTrigger"
+      :snippets="snippets"
     />
-    <div
-      class="task-comment-container__snippets"
-      v-if="!readonly && snippets.length"
-    >
-      <div class="task-comment-container__snippets__title">
-        <h4>Сниппеты:</h4>
-      </div>
-      <div class="task-comment-container__snippets__list">
-        <div
-          class="task-comment-container__snippets__list__item"
-          v-for="snippet in snippets"
-          :key="snippet.id"
-        >
-          <span
-            class="task-comment-container__snippets__list__item__snippet"
-            @click="applySnippet(snippet)"
-          >
-            {{ snippet.name }}
-          </span>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -44,11 +22,8 @@ import type { AssignedWork } from '@/core/data/entities/AssignedWork'
 import type { Task } from '@/core/data/entities/Task'
 import type { Comment } from '@/core/data/entities/Comment'
 import { entityFactory } from '@/core/utils/entityFactory'
-import {
-  isDeltaEmptyOrWhitespace,
-  insertInDelta
-} from '@/core/utils/deltaHelpers'
-import { computed, ref, shallowRef, watch } from 'vue'
+import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
+import { computed, shallowRef, watch } from 'vue'
 import type { Snippet } from '@/core/data/entities/Snippet'
 
 interface Props {
@@ -102,18 +77,6 @@ const model = computed<Comment['content']>({
     emits('update:modelValue', work)
   }
 })
-
-const reloadTrigger = ref(0)
-
-function applySnippet(snippet: Snippet) {
-  model.value = insertInDelta(
-    model.value,
-    snippet.content,
-    actualCursorPosition.value
-  )
-
-  reloadTrigger.value++
-}
 </script>
 
 <style scoped lang="sass">

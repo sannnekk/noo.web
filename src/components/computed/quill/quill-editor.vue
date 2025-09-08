@@ -58,6 +58,22 @@
       @delete="onImageCommentRemove()"
     />
   </div>
+  <div
+    class="quill-snippets"
+    v-if="props.snippets?.length && !props.readonly"
+  >
+    <template
+      v-for="snippet in props.snippets"
+      :key="snippet.id"
+    >
+      <div
+        class="quill-snippets__snippet"
+        @click="insertSnippet(snippet.content)"
+      >
+        {{ snippet.name }}
+      </div>
+    </template>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -77,6 +93,8 @@ import { CommentBlot, type Comment } from './CommentBlot'
 import { ImageCommentBlot, type ImageComment } from './ImageCommentBlot'
 import * as ImageSelection from './ImageSelection'
 import type { UserSettings } from '@/core/data/entities/UserSettings'
+import type { Snippet } from '@/core/data/entities/Snippet'
+import { Delta } from 'quill/core'
 
 interface Props {
   modelValue: DeltaContentType
@@ -86,6 +104,7 @@ interface Props {
   allowImageRotation?: boolean
   fontSize?: UserSettings['fontSize']
   cursorPosition?: number
+  snippets?: Snippet[]
 }
 
 interface Emits {
@@ -701,6 +720,52 @@ function syncImageSelections() {
   ImageSelection.removeAllSelections(quill!)
   ImageSelection.drawAllSelections(quill!)
 }
+
+function insertSnippet(content: DeltaContentType) {
+  if (!quill) {
+    return
+  }
+
+  const range = quill.getSelection(true)
+  const delta = new Delta(content.ops)
+
+  // Clone the delta to avoid mutating the original
+  let cleanedDelta = new Delta(delta)
+
+  // Remove trailing newline if it exists in the delta
+  const ops = cleanedDelta.ops || []
+  if (ops.length > 0) {
+    const lastOp = ops[ops.length - 1]
+    if (typeof lastOp.insert === 'string' && lastOp.insert.endsWith('\n')) {
+      lastOp.insert = lastOp.insert.replace(/\n$/, '')
+      // Remove op if it becomes empty
+      if (lastOp.insert === '') {
+        ops.pop()
+      }
+      cleanedDelta = new Delta(ops)
+    }
+  }
+
+  if (!range) {
+    // No selection/cursor – append at the end
+    const length = quill.getLength()
+    quill.updateContents(
+      // @ts-ignore
+      new Delta().retain(length).concat(cleanedDelta)
+    )
+    quill.setSelection(length + cleanedDelta.length(), 0)
+    return
+  }
+
+  // Insert at cursor position
+  quill.updateContents(
+    // @ts-ignore
+    new Delta().retain(range.index).concat(delta)
+  )
+
+  // Move cursor to after inserted content
+  quill.setSelection(range.index + delta.length(), 0)
+}
 </script>
 
 <style lang="sass" scoped>
@@ -925,6 +990,23 @@ function syncImageSelections() {
           border-radius: 50%
           background-color: var(--lila)
 
+.quill-snippets
+  border-top: 1px solid var(--border-color)
+  padding: 0.5em
+  display: flex
+  flex-wrap: wrap
+  gap: 0.5em
+
+  &__snippet
+    font-size: 12px
+    color: var(--form-text-color)
+    cursor: pointer
+    border: 1px dashed var(--border-color)
+    padding: 0.5em 1em
+    border-radius: var(--border-radius)
+
+    &:hover
+      background-color: var(--border-color)
 
 @keyframes spin
   from
