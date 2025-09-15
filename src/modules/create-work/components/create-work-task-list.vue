@@ -7,6 +7,7 @@
       v-model="model"
       item-key="slug"
       class="task-list__items"
+      :prompt-before-drag="true"
     >
       <template v-slot="{ item }">
         <div
@@ -94,11 +95,9 @@ const model = computed({
 </script>
 
 <style scoped lang="sass">
-.task-list
+:deep() .task-list
   margin: 0
-  max-height: 305px
   padding: 0.5em 0
-  overflow-y: auto
 
   &__add
     margin-top: 1em
@@ -108,6 +107,8 @@ const model = computed({
     flex-direction: row
     flex-wrap: wrap
     gap: 0.2em
+    max-height: 305px
+    overflow-y: auto
 
   &__item
     position: relative
