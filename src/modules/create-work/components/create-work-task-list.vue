@@ -45,6 +45,12 @@
       </inline-button>
       <inline-button
         icon="add"
+        @click="$emit('create-from-template', 'dictation')"
+      >
+        Создать диктант
+      </inline-button>
+      <inline-button
+        icon="add"
         @click="$emit('create-from-template', 'test-50')"
       >
         Создать тест (50)
@@ -73,7 +79,7 @@ interface Emits {
   (event: 'create-task'): void
   (
     event: 'create-from-template',
-    template: 'trial-work' | 'test-50' | 'test-100'
+    template: 'trial-work' | 'test-50' | 'test-100' | 'dictation'
   ): void
 }
 

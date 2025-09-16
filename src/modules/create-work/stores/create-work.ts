@@ -101,12 +101,14 @@ export const useCreateWorkStore = defineStore(
     function addTasks(
       type: Task['type'],
       count: number,
-      checkingStrategy: Task['checkingStrategy'] = 'type1'
+      checkingStrategy: Task['checkingStrategy'] = 'type1',
+      highestScore: number = 1
     ) {
       const toAdd = Array.from({ length: count }, (_, i) => ({
         ...entityFactory<Task>('task'),
         type,
         checkingStrategy,
+        highestScore: highestScore ?? undefined,
         order: work.value.tasks.length + i + 1
       }))
 
@@ -117,7 +119,7 @@ export const useCreateWorkStore = defineStore(
      * Create a new work from a template
      */
     function createFromTemplate(
-      template: 'trial-work' | 'test-50' | 'test-100'
+      template: 'trial-work' | 'test-50' | 'test-100' | 'dictation'
     ) {
       switch (template) {
         case 'trial-work':
@@ -125,6 +127,12 @@ export const useCreateWorkStore = defineStore(
           work.value.name = 'Пробник'
           addTasks('word', 21)
           addTasks('text', 7)
+          break
+        case 'dictation':
+          work.value.name = 'Диктант'
+          work.value.type = 'second-part'
+          addTasks('dictation', 1, undefined, 50)
+          addTasks('text', 10, undefined, 5)
           break
         case 'test-50':
           work.value.name = 'Тест (50)'
