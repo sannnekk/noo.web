@@ -10,6 +10,24 @@
       </h4>
     </div>
     <div
+      class="criteria-container__options"
+      v-if="mode === 'check'"
+    >
+      <form-toggle
+        v-model="isAutoScoreEnabled"
+        :values="[
+          {
+            value: false,
+            label: 'Автоматические баллы по комментариям в ответе'
+          },
+          {
+            value: true,
+            label: 'Автоматические баллы по комментариям в ответе'
+          }
+        ]"
+      />
+    </div>
+    <div
       class="criteria-container__body"
       v-if="opened && criteria.length"
     >
@@ -51,6 +69,8 @@ const emits = defineEmits<Emits>()
 
 const opened = ref(props.mode !== 'solve')
 
+const isAutoScoreEnabled = ref(false)
+
 const criteria = ref<CriteriaItem[]>([])
 setCriteria(props.task.type)
 
@@ -64,7 +84,7 @@ const commentCounts = ref<Record<string, number> | undefined>(
   getCommentCounts()
 )
 watch(
-  [() => props.modelValue.answers, criteria],
+  [() => props.modelValue.answers, criteria, isAutoScoreEnabled],
   () => {
     commentCounts.value = getCommentCounts()
   },
@@ -137,7 +157,11 @@ function getCommentCounts() {
     return acc
   }, {} as Record<string, number>)
 
-  if (props.task.type === 'final-essay' || props.mode === 'read') {
+  if (
+    props.task.type === 'final-essay' ||
+    props.mode === 'read' ||
+    !isAutoScoreEnabled.value
+  ) {
     return counts
   }
 
@@ -146,6 +170,7 @@ function getCommentCounts() {
     if (model.value[key] !== undefined) {
       const maxScore =
         criteria.value.find((item) => item.code === key)?.maxScore ?? 0
+
       model.value[key] = maxScore - value < 0 ? 0 : maxScore - value
     }
   }
@@ -170,6 +195,12 @@ async function setCriteria(type: Task['type']) {
 
 		&:hover
 			color: var(--secondary)
+
+	&__options
+		padding-bottom: 1em
+		font-size: 0.8em
+		display: flex
+		justify-content: flex-end
 
 	&__body
 		margin-bottom: 1em
