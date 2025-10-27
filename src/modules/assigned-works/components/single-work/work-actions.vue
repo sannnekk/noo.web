@@ -153,7 +153,13 @@
     v-model:visible="assignedWorkStore.shiftDeadlineModalVisible"
     @confirm="assignedWorkStore.shiftDeadline()"
   >
-    <template #title> Сдвинуть дедлайн на 5 дней </template>
+    <template #title>
+      {{
+        assignedWorkStore.mode === 'check'
+          ? 'Сдвинуть дедлайн проверки на 5 дней'
+          : 'Сдвинуть дедлайн на 3 дня'
+      }}
+    </template>
     <template #text>
       Вы уверены, что хотите сдвинуть дедлайн?
       <br />
