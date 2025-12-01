@@ -164,7 +164,9 @@
       Вы уверены, что хотите сдвинуть дедлайн?
       <br />
       <br />
-      <warning-block> Сдвинуть дедлайн можно только один раз </warning-block>
+      <warning-block>
+        Сдвинуть дедлайн одной работы можно только один раз
+      </warning-block>
     </template>
   </sure-modal>
   <sure-modal

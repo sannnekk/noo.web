@@ -46,8 +46,8 @@
       <div class="video-view__info__actions">
         <add-video-to-saved-button :video-id="videoStore.video.id" />
         <user-reactions
-          :reactions="videoStore.video.reactionCounts as any"
-          :my-reaction="videoStore.video.myReaction as any"
+          :reactions="videoStore.video.reactionCounts!"
+          :my-reaction="videoStore.video.myReaction!"
           :loading="videoStore.reactionsLoading"
           @react="videoStore.react($event)"
         />
@@ -57,8 +57,15 @@
         v-if="Core.Context.roleIs(['admin', 'teacher'])"
       >
         <form-input
-          label="Ссылка на видео для вставки"
+          label="Ссылка на видео"
           :model-value="currentVideoLink"
+          type="text"
+          readonly
+          copy-button
+        />
+        <form-input
+          label="Ссылка на видео для вставки в виде плеера"
+          :model-value="currentVideoPlayerLink"
           type="text"
           readonly
           copy-button
@@ -104,6 +111,10 @@ watch(
 
 const currentVideoLink = computed(() => {
   return Core.Constants.APP_URL + `/nootube/video/${videoStore.video?.id}`
+})
+
+const currentVideoPlayerLink = computed(() => {
+  return `https://runtime.video.cloud.yandex.net/player/video/${videoStore.video?.uniqueIdentifier}`
 })
 </script>
 

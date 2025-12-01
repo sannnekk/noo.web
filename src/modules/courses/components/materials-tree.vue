@@ -5,9 +5,11 @@
   >
     <li
       class="materials-tree__item"
-      :class="{ 'materials-tree__item--opened': item.opened }"
-      v-for="item in dataModel"
-      v-show="item.isActive || Core.Context.roleIs(['teacher'])"
+      :class="{
+        'materials-tree__item--opened': item.opened,
+        'materials-tree__item--is-unactive': !item.isActive
+      }"
+      v-for="item in dataModel.filter(isVisible)"
       :key="item.id"
       v-auto-animate
     >
@@ -49,6 +51,7 @@
         v-if="item.children && item.children.length && item.opened"
         :data="item.children"
         :nesting-level="nestingLevel + 1"
+        :show-hidden="showHidden"
       />
     </li>
   </ul>
@@ -72,6 +75,7 @@ interface Props {
   })[]
   nestingLevel?: number
   isPinned?: boolean
+  showHidden?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -106,6 +110,24 @@ function chapterIsOpened(chapter: any) {
 
   return opened === undefined ? false : opened
 }
+
+function isVisible(item: Material): boolean {
+  if (
+    Core.Context.roleIs(['teacher', 'admin']) &&
+    (item.isActive || props.showHidden)
+  ) {
+    return props.isPinned ? item.isPinned : !item.isPinned
+  }
+
+  if (
+    Core.Context.roleIs(['student', 'mentor', 'assistant']) &&
+    item.isActive
+  ) {
+    return props.isPinned ? item.isPinned : !item.isPinned
+  }
+
+  return false
+}
 </script>
 
 <style scoped lang="sass">
@@ -139,6 +161,18 @@ function chapterIsOpened(chapter: any) {
     transition: all 0.2s ease-in-out
     overflow: hidden
     padding-bottom: 0.2em
+
+    &--is-unactive
+      opacity: 0.7
+
+      &::before
+        content: ''
+        background-color: var(--danger)
+        border-radius: 50%
+        width: 0.5em
+        height: 0.5em
+        display: inline-block
+        margin-right: 0.5em
 
     &__name
       text-decoration: none

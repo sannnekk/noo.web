@@ -5,7 +5,9 @@
   >
     <div
       class="pinned-materials-list__item"
-      v-for="material in pinnedMaterials"
+      v-for="material in pinnedMaterials.filter(
+        (m) => props.showHidden || m.isActive
+      )"
       :key="material.id"
     >
       <router-link
@@ -43,6 +45,7 @@
     <materials-tree
       :data="preparedPinnedChapters"
       is-pinned
+      :show-hidden="showHidden"
     />
   </div>
 </template>
@@ -55,10 +58,12 @@ import { computed } from 'vue'
 
 interface Props {
   chapters: Chapter[]
+  showHidden?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  chapters: () => []
+  chapters: () => [],
+  showHidden: false
 })
 
 const pinnedMaterials = computed(() => {

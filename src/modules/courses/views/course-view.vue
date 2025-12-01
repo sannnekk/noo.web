@@ -65,8 +65,26 @@
               <template #empty>Авторы не указаны</template>
             </inline-user-card-list>
           </div>
-          <pinned-materials-list :chapters="courseStore.course.chapters" />
-          <materials-tree :data="courseStore.materialsTree" />
+          <div
+            class="index-materials-view__tree__toggle-hidden"
+            v-if="Core.Context.roleIs(['admin', 'teacher'])"
+          >
+            <form-toggle
+              v-model="showHiddenItems"
+              :values="[
+                { value: true, label: 'Показывать неопубликованные' },
+                { value: false, label: 'Скрыть неопубликованные' }
+              ]"
+            />
+          </div>
+          <pinned-materials-list
+            :chapters="courseStore.course.chapters"
+            :show-hidden="showHiddenItems"
+          />
+          <materials-tree
+            :data="courseStore.materialsTree"
+            :show-hidden="showHiddenItems"
+          />
           <div
             class="index-materials-view__tree__course-id"
             v-if="Core.Context.roleIs(['admin', 'teacher', 'assistant'])"
@@ -123,6 +141,8 @@ watch(
 )
 
 const sendNotificationModalOpened = ref(false)
+
+const showHiddenItems = ref(false)
 </script>
 
 <style lang="sass" scoped>
@@ -192,6 +212,11 @@ const sendNotificationModalOpened = ref(false)
 
     &__course-id
       margin-top: 1em
+
+    &__toggle-hidden
+      margin-bottom: 0.5em
+      margin-top: 0.5em
+      font-size: 0.8em
 
 .students-modal
   &__search
