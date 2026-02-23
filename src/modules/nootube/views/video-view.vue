@@ -27,6 +27,9 @@
       <div class="video-view__info__back-button">
         <back-button to="/nootube"> Назад к списку видео </back-button>
       </div>
+      <div class="video-view__info__edit-button" v-if="Core.Context.roleIs(['teacher','admin'])">
+        <span class="video-view__info__edit-button" @click="openEditVideoModal()">Редактировать видео</span>
+      </div>
       <h1 class="video-view__info__title">
         {{ videoStore.video.title }}
       </h1>
@@ -78,6 +81,7 @@
         />
       </div>
     </div>
+    <edit-video-modal v-model:visible="editVideoModalOpened" :video="videoStore.video" @edited="onVideoEdit()" />
   </div>
   <div
     class="video-view__not-found"
@@ -91,7 +95,7 @@
 <script setup lang="ts">
 import { Core } from '@/core/Core'
 import { setPageTitle } from '@/core/utils/setPageTitle'
-import { watch, computed } from 'vue'
+import { watch, computed, ref } from 'vue'
 import { useVideoStore } from '../stores/video'
 import { useRoute } from 'vue-router'
 import { useDate } from '@/composables/useDate'
@@ -116,6 +120,17 @@ const currentVideoLink = computed(() => {
 const currentVideoPlayerLink = computed(() => {
   return `https://runtime.video.cloud.yandex.net/player/video/${videoStore.video?.uniqueIdentifier}`
 })
+
+const editVideoModalOpened = ref(false)
+
+function openEditVideoModal() {
+editVideoModalOpened.value = true
+}
+
+async function onVideoEdit() {
+         await videoStore.fetchVideo(route.params.id as string)
+    setPageTitle(`НОО.Tube - ${videoStore.video?.title}`)
+}
 </script>
 
 <style scoped lang="sass">
@@ -155,6 +170,14 @@ const currentVideoPlayerLink = computed(() => {
 
   &__info
     grid-area: info
+
+    &__edit-button
+      font-size: 0.9rem
+      color: var(--text-light)
+      cursor: pointer
+
+      &:hover
+        color: var(--text-form-color)
 
     &__title
       margin-top: 0
