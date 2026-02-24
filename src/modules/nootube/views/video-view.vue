@@ -24,11 +24,14 @@
       </div>
     </div>
     <div class="video-view__info">
+      <div class="video-view__info__head">
       <div class="video-view__info__back-button">
         <back-button to="/nootube"> Назад к списку видео </back-button>
       </div>
+      <span class="video-view__info__head-separator">•</span>
       <div class="video-view__info__edit-button" v-if="Core.Context.roleIs(['teacher','admin'])">
         <span class="video-view__info__edit-button" @click="openEditVideoModal()">Редактировать видео</span>
+      </div>
       </div>
       <h1 class="video-view__info__title">
         {{ videoStore.video.title }}
@@ -171,13 +174,24 @@ async function onVideoEdit() {
   &__info
     grid-area: info
 
+    &__head
+      display: flex
+      align-items: center
+      gap: 0.5em
+
+    &__head-separator
+      display: block
+      margin-bottom: 1rem
+      color: var(--text-light)
+
     &__edit-button
-      font-size: 0.9rem
+      font-size: 0.9em
       color: var(--text-light)
       cursor: pointer
+      margin-bottom: 1rem
 
       &:hover
-        color: var(--text-form-color)
+        color: var(--secondary)
 
     &__title
       margin-top: 0

@@ -217,6 +217,7 @@ label
   background-color: var(--form-background)
   padding: 0.4em
   font-size: 0.9em
+  overflow-x: auto
 
   &--focus
     border-color: var(--primary)
