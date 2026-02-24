@@ -217,7 +217,7 @@ label
   background-color: var(--form-background)
   padding: 0.4em
   font-size: 0.9em
-  overflow-x: auto
+  box-sizing: border-box
 
   &--focus
     border-color: var(--primary)
@@ -226,6 +226,7 @@ label
     display: flex
     flex-wrap: wrap
     gap: 0.5rem
+    max-width: 100%
 
     &--empty
       display: none
@@ -241,7 +242,8 @@ label
       white-space: nowrap
       font-weight: 500
       display: block
-      text-overflow: ellipsis
+      white-space: wrap
+      box-sizing: border-box
       overflow: hidden
 
       &__remove

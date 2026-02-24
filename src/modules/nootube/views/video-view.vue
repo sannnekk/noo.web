@@ -25,13 +25,20 @@
     </div>
     <div class="video-view__info">
       <div class="video-view__info__head">
-      <div class="video-view__info__back-button">
-        <back-button to="/nootube"> Назад к списку видео </back-button>
-      </div>
-      <span class="video-view__info__head-separator">•</span>
-      <div class="video-view__info__edit-button" v-if="Core.Context.roleIs(['teacher','admin'])">
-        <span class="video-view__info__edit-button" @click="openEditVideoModal()">Редактировать видео</span>
-      </div>
+        <div class="video-view__info__back-button">
+          <back-button to="/nootube"> Назад к списку видео </back-button>
+        </div>
+        <span class="video-view__info__head-separator">•</span>
+        <div
+          class="video-view__info__edit-button"
+          v-if="Core.Context.roleIs(['teacher', 'admin'])"
+        >
+          <span
+            class="video-view__info__edit-button"
+            @click="openEditVideoModal()"
+            >Редактировать видео</span
+          >
+        </div>
       </div>
       <h1 class="video-view__info__title">
         {{ videoStore.video.title }}
@@ -84,7 +91,11 @@
         />
       </div>
     </div>
-    <edit-video-modal v-model:visible="editVideoModalOpened" :video="videoStore.video" @edited="onVideoEdit()" />
+    <edit-video-modal
+      v-model:visible="editVideoModalOpened"
+      :video="videoStore.video"
+      @edited="onVideoEdit()"
+    />
   </div>
   <div
     class="video-view__not-found"
@@ -127,12 +138,12 @@ const currentVideoPlayerLink = computed(() => {
 const editVideoModalOpened = ref(false)
 
 function openEditVideoModal() {
-editVideoModalOpened.value = true
+  editVideoModalOpened.value = true
 }
 
 async function onVideoEdit() {
-         await videoStore.fetchVideo(route.params.id as string)
-    setPageTitle(`НОО.Tube - ${videoStore.video?.title}`)
+  await videoStore.fetchVideo(route.params.id as string)
+  setPageTitle(`НОО.Tube - ${videoStore.video?.title}`)
 }
 </script>
 
