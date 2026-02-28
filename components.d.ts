@@ -74,6 +74,7 @@ declare module 'vue' {
     FormColorSelect: typeof import('./src/components/form/form-color-select.vue')['default']
     FormInput: typeof import('./src/components/form/form-input.vue')['default']
     FormToggle: typeof import('./src/components/form/form-toggle.vue')['default']
+    FormulaIcon: typeof import('./src/components/decorations/icons/text-format-icons/formula-icon.vue')['default']
     GoogleAuthButton: typeof import('./src/components/actions/google-auth-button.vue')['default']
     GoogleSheetsIcon: typeof import('./src/components/decorations/icons/google-sheets-icon.vue')['default']
     GoogleTranslateWarner: typeof import('./src/components/virtual/google-translate-warner.vue')['default']

@@ -27,6 +27,7 @@ export type FormatType =
   | 'table-insert-row'
   | 'table-delete-row'
   | 'color'
+  | 'formula'
 
 export type Toolbar = {
   type: FormatType
@@ -195,6 +196,9 @@ export class CustomQuill extends Quill {
         break
       case 'color':
         this.format('color', currentFormat[type] === value ? false : value)
+        break
+      case 'formula':
+        await action?.call(this, index)
         break
     }
 

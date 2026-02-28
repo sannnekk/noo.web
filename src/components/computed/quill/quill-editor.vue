@@ -453,6 +453,25 @@ const toolbar = reactive<Toolbar>([
           return Promise.resolve()
         }
       }
+    },
+    {
+      type: 'formula',
+      value: 'NEVER',
+      title: 'Формула',
+      icon: 'formula',
+      active: false,
+      action: (index) => {
+        prompt.value.label = 'Введите формулу в формате LaTeX'
+        prompt.value.visible = true
+        prompt.value.action = (value: string) => {
+          if (!value?.length) {
+            return Promise.resolve()
+          }
+
+          quill?.insertEmbed(index, 'formula', value)
+          return Promise.resolve()
+        }
+      }
     }
   ],
   [
