@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import type { Course } from '@/core/data/entities/Course'
 import type { User } from '@/core/data/entities/User'
 import type { Video } from '@/core/data/entities/Video'
@@ -109,6 +109,28 @@ watch(thumbnailModel, (value) => {
 })
 
 const accessValueModel = ref<Course[] | { value: User['role'] } | null>(null)
+
+onMounted(async () => {
+  if (props.video.accessType === 'courseId' && props.video.accessValue) {
+    const ids = props.video.accessValue.split(',').filter(Boolean)
+
+    if (ids.length > 0) {
+      try {
+        const response = await Core.Services.Course.getCourses({
+          'filter[id]': { type: 'arr', value: ids }
+        })
+
+        if (response?.data) {
+          accessValueModel.value = response.data
+        }
+      } catch {
+        // silently fail, user can re-select courses
+      }
+    }
+  } else if (props.video.accessType === 'role' && props.video.accessValue) {
+    accessValueModel.value = { value: props.video.accessValue as User['role'] }
+  }
+})
 
 watch(accessValueModel, (value) => {
   switch (videoModel.value.accessType) {
