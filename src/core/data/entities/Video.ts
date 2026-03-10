@@ -20,7 +20,7 @@ export interface Video extends Entity {
   uploadedBy: User
   uploadUrl: string | null
   publishedAt: Date
-  accessType: 'everyone' | 'courseId' | 'mentorId' | 'role'
+  accessType: 'everyone' | 'courseId' | 'mentorId' | 'role' | 'link'
   accessValue: string | null
   reactionCounts?: Record<string, number>
   myReaction?: string | null

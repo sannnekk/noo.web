@@ -128,6 +128,7 @@ watch(accessValueModel, (value) => {
         (value as { value: User['role'] })?.value || 'student'
       break
     case 'everyone':
+    case 'link':
     default:
       videoModel.value.accessValue = null
       break
@@ -143,6 +144,7 @@ watch(
         break
       case 'courseId':
       case 'everyone':
+      case 'link':
       default:
         videoModel.value.accessValue = null
         break
@@ -153,7 +155,8 @@ watch(
 const videoAccessTypes: { value: string; label: string }[] = [
   { value: 'everyone', label: 'Всем' },
   { value: 'courseId', label: 'Участникам курса' },
-  { value: 'role', label: 'По роли' }
+  { value: 'role', label: 'По роли' },
+  { value: 'link', label: 'По ссылке' }
 ]
 
 function onSubmit() {
@@ -179,6 +182,26 @@ function validateVideoData() {
       'Выберите сервис для загрузки видео'
     )
     return false
+  }
+
+  if (videoModel.value.accessType === 'courseId') {
+    if (!videoModel.value.accessValue) {
+      uiService.openErrorModal(
+        'Не удалось создать видео',
+        'Выберите хотя бы один курс для доступа к видео'
+      )
+      return false
+    }
+  }
+
+  if (videoModel.value.accessType === 'role') {
+    if (!videoModel.value.accessValue) {
+      uiService.openErrorModal(
+        'Не удалось создать видео',
+        'Выберите роль для доступа к видео'
+      )
+      return false
+    }
   }
 
   return true

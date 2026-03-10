@@ -144,6 +144,7 @@ watch(accessValueModel, (value) => {
         (value as { value: User['role'] })?.value || 'student'
       break
     case 'everyone':
+    case 'link':
     default:
       videoModel.value.accessValue = null
       break
@@ -159,6 +160,7 @@ watch(
         break
       case 'courseId':
       case 'everyone':
+      case 'link':
       default:
         videoModel.value.accessValue = null
         break
@@ -169,7 +171,8 @@ watch(
 const videoAccessTypes: { value: string; label: string }[] = [
   { value: 'everyone', label: 'Всем' },
   { value: 'courseId', label: 'Участникам курса' },
-  { value: 'role', label: 'По роли' }
+  { value: 'role', label: 'По роли' },
+  { value: 'link', label: 'По ссылке' }
 ]
 
 const error = ref<string | null>(null)
@@ -183,6 +186,20 @@ function validateVideoData() {
   if (!videoModel.value.serviceType) {
     error.value = 'Выберите сервис для загрузки видео'
     return false
+  }
+
+  if (videoModel.value.accessType === 'courseId') {
+    if (!videoModel.value.accessValue) {
+      error.value = 'Выберите хотя бы один курс для доступа к видео'
+      return false
+    }
+  }
+
+  if (videoModel.value.accessType === 'role') {
+    if (!videoModel.value.accessValue) {
+      error.value = 'Выберите роль для доступа к видео'
+      return false
+    }
   }
 
   error.value = null

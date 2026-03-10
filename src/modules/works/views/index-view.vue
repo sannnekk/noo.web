@@ -22,6 +22,7 @@
         :works="worksStore.results"
         :loading="worksStore.isListLoading"
         @copy-work="worksStore.copyWork($event)"
+        @merge-work="onMergeWork($event)"
         @delete-work="onWorkDelete($event)"
         @show-related-materials="onShowRelatedMaterials($event)"
         @show-work-statistics="onShowWorkStatistics($event)"
@@ -62,9 +63,20 @@
     v-model:visible="workStatisticsModalData.visible"
     :work="workStatisticsModalData.work"
   />
+  <work-merge-modal
+    v-model:visible="mergeWorkModalData.visible"
+    v-model="mergeWorkModalData.workId2"
+    @merge="
+      worksStore.mergeWorks(
+        mergeWorkModalData.workId1!,
+        mergeWorkModalData.workId2!
+      )
+    "
+  />
 </template>
 
 <script setup lang="ts">
+import WorkMergeModal from '../components/work-merge-modal.vue'
 import workStatisticsModal from '../components/work-statistics-modal.vue'
 import relatedMaterialsModal from '../components/related-materials-modal.vue'
 import { setPageTitle } from '@/core/utils/setPageTitle'
@@ -90,6 +102,12 @@ const relatedMaterialsModalData = reactive({
   work: null as Work | null
 })
 
+const mergeWorkModalData = reactive({
+  visible: false,
+  workId1: null as Work['id'] | null,
+  workId2: null as Work['id'] | null
+})
+
 const workStatisticsModalData = reactive({
   visible: false,
   work: null as Work | null
@@ -108,6 +126,11 @@ function onShowRelatedMaterials(work: Work) {
 function onShowWorkStatistics(work: Work) {
   workStatisticsModalData.work = work
   workStatisticsModalData.visible = true
+}
+
+function onMergeWork(workId: Work['id']) {
+  mergeWorkModalData.workId1 = workId
+  mergeWorkModalData.visible = true
 }
 
 const filters = ref<SearchFilter[]>([

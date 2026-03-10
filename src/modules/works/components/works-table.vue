@@ -22,6 +22,7 @@ interface Props {
 
 interface Emits {
   (e: 'copy-work', workSlug: Work['slug']): void
+  (e: 'merge-work', workId: Work['id']): void
   (e: 'delete-work', work: Work): void
   (e: 'show-related-materials', work: Work): void
   (e: 'show-work-statistics', work: Work): void
@@ -86,6 +87,13 @@ function actions(row: Work): MenuItem[] {
       icon: 'edit',
       action: () => {
         router.push(`/create-work${row.slug}`)
+      }
+    },
+    {
+      title: 'Соединить с другой работой',
+      icon: 'list',
+      action: () => {
+        emits('merge-work', row.id)
       }
     },
     {

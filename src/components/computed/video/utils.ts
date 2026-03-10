@@ -33,5 +33,7 @@ export function videoVisibilityText(video: Video) {
       return 'Для учеников куратора'
     case 'courseId':
       return 'Для учеников курса'
+    case 'link':
+      return 'Доступно по ссылке'
   }
 }

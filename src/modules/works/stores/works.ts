@@ -48,6 +48,25 @@ export const useWorksStore = defineStore('works-module', () => {
   }
 
   /**
+   * Merge 2 works
+   */
+  async function mergeWorks(workSlug1: Work['id'], workSlug2: Work['id']) {
+    try {
+      await workService.mergeWorks(workSlug1, workSlug2, { showLoader: true })
+
+      pagination.value.page = 1
+
+      // trigger reload
+      trigger()
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при объединении работ',
+        error.message
+      )
+    }
+  }
+
+  /**
    * Delete work
    */
   async function deleteWork(work: Work | null) {
@@ -76,6 +95,7 @@ export const useWorksStore = defineStore('works-module', () => {
     isListLoading,
     fetchWorks,
     copyWork,
+    mergeWorks,
     deleteWork
   }
 })
