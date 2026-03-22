@@ -105,7 +105,7 @@ const config = {
   /**
    * Video formats that are allowed (mp4, avi, mkv, flv and mov)
    */
-  allowedFormats: ['video/mp4', 'video/avi', 'video/mov']
+  allowedFormats: ['video/mp4', 'video/avi', 'video/quicktime']
 } as const
 
 const allowedMimeTypesString = config.allowedFormats
