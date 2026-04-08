@@ -65,11 +65,11 @@
   />
   <work-merge-modal
     v-model:visible="mergeWorkModalData.visible"
-    v-model="mergeWorkModalData.workId2"
+    v-model="mergeWorkModalData.workIds"
     @merge="
       worksStore.mergeWorks(
         mergeWorkModalData.workId1!,
-        mergeWorkModalData.workId2!
+        mergeWorkModalData.workIds
       )
     "
   />
@@ -105,7 +105,7 @@ const relatedMaterialsModalData = reactive({
 const mergeWorkModalData = reactive({
   visible: false,
   workId1: null as Work['id'] | null,
-  workId2: null as Work['id'] | null
+  workIds: [] as Work['id'][]
 })
 
 const workStatisticsModalData = reactive({

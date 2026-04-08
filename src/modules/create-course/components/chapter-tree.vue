@@ -299,6 +299,18 @@ function onChapterCopy(chapter: Chapter) {
     const newChapter = entityFactory<Chapter>('chapter')
     newChapter.name = `${c.name} (копия)`
     newChapter.isActive = c.isActive
+    
+    // Copy materials from the original sub-chapter with new slugs
+    newChapter.materials = c.materials?.map((material) => {
+      const newMaterial = entityFactory<Material>('material')
+      newMaterial.name = `${material.name} (копия)`
+      newMaterial.isActive = material.isActive
+      newMaterial.order = material.order
+      newMaterial.content = material.content
+      newMaterial.description = material.description
+      return newMaterial
+    })
+    
     return newChapter
   })
 

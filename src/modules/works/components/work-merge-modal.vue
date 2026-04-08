@@ -12,9 +12,9 @@
     ]"
   >
     <div class="work-merge-modal__content">
-      <work-select
-        label="Выберите работу для слияния"
-        v-model="secondWork"
+      <works-select
+        label="Выберите работы для слияния"
+        v-model="otherWorks"
       />
       <br />
       <info-block
@@ -27,6 +27,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { Work } from '@/core/data/entities/Work'
 import { watch, ref } from 'vue'
 
 interface Emits {
@@ -35,8 +36,8 @@ interface Emits {
 
 const emits = defineEmits<Emits>()
 
-const workId2Model = defineModel<string | null>({
-  default: null,
+const workIdsModel = defineModel<string[]>({
+  default: [],
   required: true
 })
 
@@ -45,14 +46,14 @@ const visibilityModel = defineModel('visible', {
   required: true
 })
 
-const secondWork = ref<Work | null>(null)
+const otherWorks = ref<Work[]>([])
 
-watch(secondWork, () => {
-  workId2Model.value = secondWork.value?.id ?? null
+watch(otherWorks, () => {
+  workIdsModel.value = otherWorks.value.map((work) => work.id)
 })
 
 function onConfirm() {
-  if (!workId2Model.value) {
+  if (!workIdsModel.value.length) {
     return
   }
 

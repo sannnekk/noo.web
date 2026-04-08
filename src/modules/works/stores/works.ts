@@ -50,9 +50,9 @@ export const useWorksStore = defineStore('works-module', () => {
   /**
    * Merge 2 works
    */
-  async function mergeWorks(workSlug1: Work['id'], workSlug2: Work['id']) {
+  async function mergeWorks(workId1: Work['id'], workIds: Work['id'][]) {
     try {
-      await workService.mergeWorks(workSlug1, workSlug2, { showLoader: true })
+      await workService.mergeWorks(workId1, workIds, { showLoader: true })
 
       pagination.value.page = 1
 

@@ -97,12 +97,12 @@ export class WorkService extends ApiService {
    */
   public async mergeWorks(
     workId1: Work['id'],
-    workId2: Work['id'],
+    workIds: Work['id'][],
     options: ServiceOptions = {}
   ): Promise<void> {
     await this.httpPatch(
-      `${this._route}/${workId1}/${workId2}/merge`,
-      undefined,
+      `${this._route}/${workId1}/merge`,
+      { ids: workIds },
       undefined,
       options
     )

@@ -258,6 +258,7 @@ declare module 'vue' {
     WelcomeIcon: typeof import('./src/components/decorations/icons/welcome-icon.vue')['default']
     WordCounter: typeof import('./src/components/entities/utils/word-counter.vue')['default']
     WorkSelect: typeof import('./src/components/form/entity-select/work-select.vue')['default']
+    WorksSelect: typeof import('./src/components/form/entity-select/works-select.vue')['default']
     WorkTypeSelect: typeof import('./src/components/form/prop-select/work-type-select.vue')['default']
     YandexVideoPlayer: typeof import('./src/components/computed/video/yandex/yandex-video-player.vue')['default']
     YandexVideoUploader: typeof import('./src/components/computed/video/yandex/yandex-video-uploader.vue')['default']
