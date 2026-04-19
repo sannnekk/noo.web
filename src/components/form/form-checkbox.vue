@@ -34,7 +34,7 @@
         </div>
       </div>
       <span class="form-checkbox__text">
-        <template v-if="$slots.default()">
+        <template v-if="$slots.default">
           <slot />
         </template>
         <span v-else>
