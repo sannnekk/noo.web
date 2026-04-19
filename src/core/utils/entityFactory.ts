@@ -126,6 +126,7 @@ function courseConstructor(): Omit<Course, 'id'> {
   return {
     slug: uuid(),
     name: '',
+    isPublic: false,
     description: '',
     images: [],
     subject: null as unknown as Subject,

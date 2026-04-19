@@ -40,6 +40,14 @@
                   readonly
                 />
               </div>
+              <div class="edit-user-view__credentials__email">
+                <form-input
+                  v-model="userStore.user.phone"
+                  type="phone"
+                  label="Номер телефона"
+                  readonly
+                />
+              </div>
               <div class="edit-user-view__credentials__role">
                 <role-tag :role="userStore.user.role" />
               </div>

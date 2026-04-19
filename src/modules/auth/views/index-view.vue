@@ -66,14 +66,14 @@ authStore.verifyEmailChange()
       margin-bottom: 3em
 
   &__auth-rights
-    position: absolute
+    //position: absolute
     bottom: 1em
     width: 100%
     left: 50%
-    transform: translateX(-50%)
+    //transform: translateX(-50%)
 
   aside
-    overflow-y: hidden
+    overflow-y: auto
     position: relative
     padding-top: 30px
     background-color: var(--primary)

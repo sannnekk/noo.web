@@ -37,6 +37,16 @@
           />
         </div>
       </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          <br />
+          <form-checkbox
+            label="Сделать курс доступным для всех"
+            v-model="createCourseStore.course.isPublic"
+          />
+          <br />
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <file-input

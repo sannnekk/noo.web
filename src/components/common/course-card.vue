@@ -5,6 +5,12 @@
         class="router-link"
         :to="link"
       >
+        <div
+          class="course-card__public-badge"
+          v-if="course.isPublic && Core.Context.roleIs(['teacher', 'admin'])"
+        >
+          Доступен всем
+        </div>
         <inline-icon
           name="pin"
           v-if="isPinned"
@@ -87,7 +93,7 @@ const actions = reactive<MenuItem[]>([
   {
     title: 'Добавить/Убрать учеников',
     icon: 'user',
-    if: Core.Context.roleIs(['teacher', 'admin']),
+    if: Core.Context.roleIs(['teacher', 'admin']) && !props.course.isPublic,
     action: () => {
       router.push(`/course-students/${props.course.slug}`)
     }
@@ -172,6 +178,18 @@ async function unarchiveCourse() {
 
   &:hover
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1)
+
+  &__public-badge
+    position: absolute
+    top: 5px
+    left: 5px
+    background-color: var(--primary)
+    color: black
+    font-weight: bold
+    padding: 0.2em 0.5em
+    font-size: 0.8em
+    border-radius: 4px
+    z-index: 1
 
   &__img
     width: 100%

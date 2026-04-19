@@ -11,7 +11,10 @@
           </div>
           <div class="index-materials-view__tree__students">
             <router-link
-              v-if="Core.Context.roleIs(['teacher', 'admin'])"
+              v-if="
+                Core.Context.roleIs(['teacher', 'admin']) &&
+                !courseStore.course.isPublic
+              "
               :to="`/course-students/${courseStore.course.slug}`"
             >
               <inline-icon
@@ -35,7 +38,10 @@
           </div>
           <div class="index-materials-view__tree__send-notification">
             <span
-              v-if="Core.Context.roleIs(['teacher', 'admin'])"
+              v-if="
+                Core.Context.roleIs(['teacher', 'admin']) &&
+                !courseStore.course.isPublic
+              "
               @click="sendNotificationModalOpened = true"
             >
               <inline-icon

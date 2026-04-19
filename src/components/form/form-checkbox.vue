@@ -34,7 +34,12 @@
         </div>
       </div>
       <span class="form-checkbox__text">
-        {{ label }}
+        <template v-if="$slots.default()">
+          <slot />
+        </template>
+        <span v-else>
+          {{ label }}
+        </span>
         <beta-tag
           class="form-checkbox__text__beta"
           v-if="beta"
@@ -81,6 +86,7 @@ const model = computed({
   &__box
     width: 20px
     height: 20px
+    aspect-ratio: 1
     border: 1px solid var(--text-light)
     border-radius: 4px
     margin-right: 10px

@@ -10,6 +10,7 @@ export interface User extends Entity {
   name: string
   username: string
   email: string
+  phone: string
   newEmail?: string
   avatar?: UserAvatar
   courses?: Course[]

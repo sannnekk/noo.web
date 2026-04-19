@@ -76,6 +76,20 @@
       </div>
       <div class="auth-form__group">
         <text-input
+          v-model.trim="registerModel.phone"
+          placeholder="Номер телефона"
+          @enter-press="onRegister()"
+        />
+      </div>
+      <div class="auth-form__group">
+        <text-input
+          v-model.trim="registerModel.telegram"
+          placeholder="Телеграм"
+          @enter-press="onRegister()"
+        />
+      </div>
+      <div class="auth-form__group">
+        <text-input
           v-model="registerModel.password"
           placeholder="Пароль"
           @enter-press="onRegister()"
@@ -95,6 +109,19 @@
         />
       </div>
       <div class="auth-form__group">
+        <form-checkbox v-model="isRightsAccepted">
+          Я даю Согласие на обработку моих персональных данных в порядке и на
+          условиях, указанных в
+          <a
+            href="https://www.no-os.ru/agreement"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Политике обработки персональных данных и Публичной оферте</a
+          >
+        </form-checkbox>
+      </div>
+      <div class="auth-form__group">
         <error-block v-if="error">{{ error }}</error-block>
       </div>
       <div class="auth-form__group">
@@ -102,6 +129,7 @@
           <common-button
             contrast
             alignment="center"
+            :disabled="!isRightsAccepted"
             :loading="isLoading"
             @click="onRegister()"
           >
@@ -188,7 +216,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 interface Props {
   authCredentials: {
@@ -200,6 +228,8 @@ interface Props {
     username: string
     email: string
     password: string
+    phone: string
+    telegram: string
     repeatPassword: string
     passwordIsCorrect: boolean
     usernameIsValid: boolean
@@ -235,6 +265,8 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
+
+const isRightsAccepted = ref(false)
 
 const modeModel = computed({
   get: () => props.mode,

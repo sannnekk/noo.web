@@ -35,6 +35,8 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     password: '',
     repeatPassword: '',
     email: '',
+    phone: '',
+    telegram: '',
     name: '',
     passwordIsCorrect: false,
     usernameIsValid: false
@@ -132,6 +134,19 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
 
     if (!validateName(registerCredentials.name)) {
       error.value = 'Имя не может быть пустым и содержать цифры/спецсимволы'
+      isLoading.value = false
+      return
+    }
+
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/
+    if (!phoneRegex.test(registerCredentials.phone)) {
+      error.value = 'Некорректный номер телефона'
+      isLoading.value = false
+      return
+    }
+
+    if (!registerCredentials.telegram) {
+      error.value = 'Telegram не может быть пустым'
       isLoading.value = false
       return
     }

@@ -4,7 +4,7 @@
     v-auto-animate
   >
     <div
-      class="auth-titles__image"
+      class="auth-titles__logo"
       :class="
         mode === 'register'
           ? 'auth-titles__image--register'
@@ -16,6 +16,18 @@
     <h1 class="auth-titles__title">
       {{ title }}
     </h1>
+    <img
+      class="auth-titles__image"
+      src="/login-heads-4.png"
+      v-if="mode === 'register'"
+    />
+    <p
+      class="auth-titles__hint"
+      v-if="false"
+    >
+      <b>Зарегистрируйся</b> и получи курс по заданиям №1 и №22 ЕГЭ по биологии
+      – прибавь <b>~10 баллов</b> к результату!
+    </p>
   </div>
 </template>
 
@@ -43,12 +55,12 @@ const title = computed(() => {
 
 <style lang="sass" scoped>
 .auth-titles
-  &__image
-    margin-bottom: 2.5em
+  &__logo
+    margin-bottom: 0.5em
     text-align: center
-    margin-top: 3em
-    width: 45%
-    margin: 17% auto
+    margin-top: 0em
+    width: 30%
+    margin: 17% auto 0.5em auto
     transition: all 0.3s ease-in-out
 
     @media screen and (max-width: 768px)
@@ -62,4 +74,16 @@ const title = computed(() => {
   &__title
     margin-bottom: 1em
     text-align: center
+
+  &__image
+    width: 100%
+    margin-left: 0
+    margin-top: 0
+    margin-bottom: 2em
+
+  &__hint
+    text-align: center
+    font-size: 0.9em
+    color: #333
+    margin-bottom: 2em
 </style>
