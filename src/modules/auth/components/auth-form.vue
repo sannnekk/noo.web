@@ -36,8 +36,19 @@
             Войти
           </common-button>
         </div>
+
+        <div class="auth-form__group__or">или</div>
+        <div class="auth-form__group__register-button">
+          <common-button
+            contrast
+            alignment="center"
+            :disabled="isLoading"
+            @click="modeModel = 'register'"
+          >
+            Зарегистрироваться
+          </common-button>
+        </div>
         <div class="auth-form__group__register">
-          <span @click="modeModel = 'register'"> Зарегистрироваться </span>
           <span @click="modeModel = 'forgot-password'"> Забыли пароль? </span>
         </div>
       </div>
@@ -327,6 +338,11 @@ function onResendVerification() {
 
   &__group
     margin-bottom: 1em
+
+    &__or
+      text-align: center
+      margin-top: 0.4em
+      margin-bottom: 0.4em
 
     &__register
       display: flex
