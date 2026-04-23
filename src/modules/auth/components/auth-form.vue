@@ -344,6 +344,9 @@ function onResendVerification() {
       margin-top: 0.4em
       margin-bottom: 0.4em
 
+    &__register-button
+      font-size: 1.1em
+
     &__register
       display: flex
       flex-wrap: wrap
