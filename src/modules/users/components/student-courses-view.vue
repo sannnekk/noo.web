@@ -90,12 +90,12 @@ const cols: ColType[] = [
   {
     title: 'Название курса',
     type: 'text',
-    value: (assignment: CourseAssignment) => assignment.course!.name
+    value: (assignment: CourseAssignment) => assignment.course?.name ?? '-'
   },
   {
     title: 'Добавил(а)',
     type: 'text',
-    value: (assignment: CourseAssignment) => assignment.assigner!.name
+    value: (assignment: CourseAssignment) => assignment.assigner?.name ?? '-'
   },
   {
     title: 'Дата добавления',
