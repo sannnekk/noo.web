@@ -6,10 +6,11 @@ import {
 } from '@/core/validators/string'
 import { defineStore } from 'pinia'
 import { reactive, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 export const useAuthStore = defineStore('auth-module:auth', () => {
   const route = useRoute()
+  const router = useRouter()
 
   /*
    * current mode (login, register, forgot-password)
@@ -157,7 +158,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
         'Регистрация прошла успешно',
         'Чтобы продолжить, подтвердите свой имейл. Письмо с инструкциями отправлено на вашу почту'
       )
-      mode.value = 'login'
+      router.push('/auth')
     } catch (e: any) {
       error.value = e.message
     } finally {
@@ -167,7 +168,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     }
 
     if (!error.value) {
-      mode.value = 'login'
+      router.push('/auth')
     }
   }
 
@@ -187,7 +188,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
       Core.Services.UI.openSuccessModal(
         'Письмо с инструкциями отправлено на вашу почту'
       )
-      mode.value = 'login'
+      router.push('/auth')
     } catch (error: any) {
       Core.Services.UI.openErrorModal(error.message || 'Что-то пошло не так')
     }
@@ -276,7 +277,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
       Core.Services.UI.openSuccessModal(
         'Письмо с инструкциями повторно отправлено на вашу почту'
       )
-      mode.value = 'login'
+      router.push('/auth')
     } catch (error: any) {
       Core.Services.UI.openErrorModal(error.message || 'Что-то пошло не так')
     }

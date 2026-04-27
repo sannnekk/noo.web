@@ -10,10 +10,7 @@
     </div>
     <div
       class="row"
-      v-if="
-        assignmentSearch.resultsMeta.value.total > 0 &&
-        !assignmentSearch.isListLoading.value
-      "
+      v-if="assignments.length > 0 && !assignmentSearch.isListLoading.value"
       v-auto-animate
     >
       <div
