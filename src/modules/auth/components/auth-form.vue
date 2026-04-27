@@ -5,7 +5,7 @@
   >
     <div
       class="auth-form__inner"
-      v-if="modeModel === 'login'"
+      v-if="mode === 'login'"
     >
       <div class="auth-form__group">
         <text-input
@@ -43,19 +43,19 @@
             contrast
             alignment="center"
             :disabled="isLoading"
-            @click="modeModel = 'register'"
+            to="/auth/register"
           >
             Зарегистрироваться
           </common-button>
         </div>
         <div class="auth-form__group__register">
-          <span @click="modeModel = 'forgot-password'"> Забыли пароль? </span>
+          <router-link to="/auth/forgot-password"> Забыли пароль? </router-link>
         </div>
       </div>
     </div>
     <div
       class="auth-form__inner"
-      v-else-if="modeModel === 'register'"
+      v-else-if="mode === 'register'"
     >
       <div class="auth-form__group">
         <text-input
@@ -148,17 +148,17 @@
           </common-button>
         </div>
         <div class="auth-form__group__register">
-          <span @click="modeModel = 'login'"> Войти </span>
+          <router-link to="/auth"> Войти </router-link>
           <br />
-          <span @click="modeModel = 'resend-verification'">
+          <router-link to="/auth/resend-verification">
             Отправить подтверждение заново
-          </span>
+          </router-link>
         </div>
       </div>
     </div>
     <div
       class="auth-form__inner"
-      v-else-if="modeModel === 'forgot-password'"
+      v-else-if="mode === 'forgot-password'"
     >
       <div class="auth-form__group">
         <text-input
@@ -182,12 +182,12 @@
           </common-button>
         </div>
         <div class="auth-form__group__register">
-          <span @click="modeModel = 'login'"> Войти </span>
-          <span @click="modeModel = 'register'"> Зарегистрироваться </span>
+          <router-link to="/auth"> Войти </router-link>
+          <router-link to="/auth/register"> Зарегистрироваться </router-link>
           <br />
-          <span @click="modeModel = 'resend-verification'">
+          <router-link to="/auth/resend-verification">
             Отправить подтверждение заново
-          </span>
+          </router-link>
         </div>
       </div>
     </div>
@@ -217,9 +217,9 @@
           </common-button>
         </div>
         <div class="auth-form__group__register">
-          <span @click="modeModel = 'login'"> Войти </span>
-          <span @click="modeModel = 'register'"> Зарегистрироваться </span>
-          <span @click="modeModel = 'forgot-password'"> Забыли пароль? </span>
+          <router-link to="/auth"> Войти </router-link>
+          <router-link to="/auth/register"> Зарегистрироваться </router-link>
+          <router-link to="/auth/forgot-password"> Забыли пароль? </router-link>
         </div>
       </div>
     </div>
@@ -267,7 +267,6 @@ interface Emits {
     e: 'update:resendVerificationCredentials',
     value: Props['resendVerificationCredentials']
   ): void
-  (e: 'update:mode', value: Props['mode']): void
   (e: 'login'): void
   (e: 'register'): void
   (e: 'forgot-password'): void
@@ -278,11 +277,6 @@ const props = defineProps<Props>()
 const emits = defineEmits<Emits>()
 
 const isRightsAccepted = ref(false)
-
-const modeModel = computed({
-  get: () => props.mode,
-  set: (val) => emits('update:mode', val)
-})
 
 const loginModel = computed({
   get: () => props.authCredentials,

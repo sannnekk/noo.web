@@ -9,29 +9,7 @@
         </div>
         <div class="col-md-4 col-12">
           <aside>
-            <div class="index-auth-view__auth-titles">
-              <auth-titles :mode="authStore.mode" />
-            </div>
-            <div class="index-auth-view__auth-form">
-              <auth-form
-                v-model:auth-credentials="authStore.loginCredentials"
-                v-model:register-credentials="authStore.registerCredentials"
-                v-model:forgot-password-credentials="
-                  authStore.forgotPasswordCredentials
-                "
-                v-model:resend-verification-credentials="
-                  authStore.resendVerificationCredentials
-                "
-                v-model:mode="authStore.mode"
-                :error="authStore.error"
-                :is-loading="authStore.isLoading"
-                :username-exists="authStore.usernameExists"
-                @login="authStore.login()"
-                @register="authStore.register()"
-                @forgot-password="authStore.forgotPassword()"
-                @resend-verification="authStore.resendVerification()"
-              />
-            </div>
+            <router-view />
             <div class="index-auth-view__auth-rights">
               <auth-rights />
             </div>
@@ -44,8 +22,6 @@
 
 <script lang="ts" setup>
 import authIconSpace from '../components/auth-icon-space.vue'
-import authTitles from '../components/auth-titles.vue'
-import authForm from '../components/auth-form.vue'
 import authRights from '../components/auth-rights.vue'
 import { useAuthStore } from '../stores/auth'
 

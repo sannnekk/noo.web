@@ -6,7 +6,7 @@ export const logoutTrigger: EventFunc = (context: Context) => {
 
   context.clear()
 
-  if (window.location.pathname !== '/auth') {
+  if (!window.location.pathname.startsWith('/auth')) {
     window.location.replace('/auth')
   }
 }
