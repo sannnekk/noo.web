@@ -11,7 +11,7 @@ export interface Video extends Entity {
   thumbnail: Media
   url: string | null
   sizeInBytes: number
-  serviceType: 'yandex'
+  serviceType: 'yandex' | 'kinescope'
   state: 'not-uploaded' | 'uploaded' | 'uploading' | 'failed'
   uniqueIdentifier: string
   duration: number

@@ -132,6 +132,9 @@ const currentVideoLink = computed(() => {
 })
 
 const currentVideoPlayerLink = computed(() => {
+  if (videoStore.video?.serviceType === 'kinescope') {
+    return `https://kinescope.io/${videoStore.video?.uniqueIdentifier}`
+  }
   return `https://runtime.video.cloud.yandex.net/player/video/${videoStore.video?.uniqueIdentifier}`
 })
 

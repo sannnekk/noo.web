@@ -102,6 +102,8 @@ declare module 'vue' {
     ItalicIcon: typeof import('./src/components/decorations/icons/text-format-icons/italic-icon.vue')['default']
     JpgFileIcon: typeof import('./src/components/decorations/icons/jpg-file-icon.vue')['default']
     KeyboardIcon: typeof import('./src/components/decorations/icons/keyboard-icon.vue')['default']
+    KinescopeVideoPlayer: typeof import('./src/components/computed/video/kinescope/kinescope-video-player.vue')['default']
+    KinescopeVideoUploader: typeof import('./src/components/computed/video/kinescope/kinescope-video-uploader.vue')['default']
     LineChart: typeof import('./src/components/charts/line-chart.vue')['default']
     LinkIcon: typeof import('./src/components/decorations/icons/text-format-icons/link-icon.vue')['default']
     ListBulletIcon: typeof import('./src/components/decorations/icons/text-format-icons/list-bullet-icon.vue')['default']

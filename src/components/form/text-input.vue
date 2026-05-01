@@ -1,6 +1,6 @@
 <template>
   <div class="text-input">
-    <label :for="`input-${String($.uid)}`"></label>
+    <label :for="`input-${String($.uid)}`">{{ label }}</label>
     <input
       :id="`input-${String($.uid)}`"
       :type="password ? 'password' : 'text'"
@@ -22,6 +22,7 @@ interface Props {
   placeholder: string
   modelValue: string
   autocomplete?: boolean
+  label?: string
 }
 
 interface Emits {
@@ -41,9 +42,11 @@ const model = computed({
 <style scoped lang="sass">
 .text-input
   label
-    font-size: 1.3em
-    font-weight: 500
-    margin-bottom: 0.4em
+    font-size: 0.9em
+    font-weight: 400
+    margin-bottom: 0.1em
+    display: block
+    margin-left: 1.2em
 
   input
     background: var(--lightest)

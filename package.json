@@ -18,6 +18,7 @@
 		"@duskmoon/vue3-typed-js": "^0.0.4",
 		"@formkit/auto-animate": "1.0.0-beta.6",
 		"@j-t-mcc/vue3-chartjs": "^1.3.0",
+		"@kinescope/vue-kinescope-player": "^2.1.0",
 		"@numairawan/video-duration": "^1.0.0",
 		"chart.js": "^4.4.0",
 		"generate-json-patch": "^1.2.4",

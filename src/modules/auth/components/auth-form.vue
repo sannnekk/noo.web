@@ -60,14 +60,16 @@
       <div class="auth-form__group">
         <text-input
           v-model.trim="registerModel.name"
-          placeholder="Имя и фамилия"
+          label="Имя и фамилия"
+          placeholder="Иван Иванов..."
           @enter-press="onRegister()"
         />
       </div>
       <div class="auth-form__group">
         <text-input
+          label="Email"
           v-model.trim="registerModel.email"
-          placeholder="Email"
+          placeholder="user@example.com..."
           @enter-press="onRegister()"
         />
       </div>
@@ -76,8 +78,9 @@
         v-auto-animate
       >
         <text-input
+          label="Никнейм"
           v-model.trim="registerModel.username"
-          placeholder="Никнейм"
+          placeholder="ivanivanov123..."
           @enter-press="onRegister()"
         />
         <username-validation
@@ -87,20 +90,23 @@
       </div>
       <div class="auth-form__group">
         <text-input
+          label="Номер телефона"
           v-model.trim="registerModel.phone"
-          placeholder="Номер телефона"
+          placeholder="+7 (999) 999-99-99"
           @enter-press="onRegister()"
         />
       </div>
       <div class="auth-form__group">
         <text-input
+          label="Телеграм"
           v-model.trim="registerModel.telegram"
-          placeholder="Телеграм"
+          placeholder="ivan_ivanov"
           @enter-press="onRegister()"
         />
       </div>
       <div class="auth-form__group">
         <text-input
+          label="Пароль"
           v-model="registerModel.password"
           placeholder="Пароль"
           @enter-press="onRegister()"
@@ -113,6 +119,7 @@
       </div>
       <div class="auth-form__group">
         <text-input
+          label="Повторите пароль"
           v-model="registerModel.repeatPassword"
           placeholder="Повторите пароль"
           @enter-press="onRegister()"

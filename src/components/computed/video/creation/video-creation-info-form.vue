@@ -39,6 +39,16 @@
           v-if="Core.Context.roleIs(['admin', 'teacher'])"
         >
           <select-input
+            label="Сервис загрузки"
+            v-model="videoModel.serviceType"
+            :options="videoServiceTypes"
+          />
+        </div>
+        <div
+          class="col-md-4"
+          v-if="Core.Context.roleIs(['admin', 'teacher'])"
+        >
+          <select-input
             label="Видео доступно"
             v-model="videoModel.accessType"
             :options="videoAccessTypes"
@@ -157,6 +167,11 @@ const videoAccessTypes: { value: string; label: string }[] = [
   { value: 'courseId', label: 'Участникам курса' },
   { value: 'role', label: 'По роли' },
   { value: 'link', label: 'По ссылке' }
+]
+
+const videoServiceTypes: { value: string; label: string }[] = [
+  { value: 'yandex', label: 'Yandex Cloud' },
+  { value: 'kinescope', label: 'Kinescope' }
 ]
 
 function onSubmit() {

@@ -6,6 +6,12 @@
       @before-upload="$emit('before-upload', $event)"
       @upload-finished="onUploadFinish()"
     />
+    <kinescope-video-uploader
+      v-else-if="serviceType === 'kinescope'"
+      :upload-url="uploadUrl"
+      @before-upload="$emit('before-upload', $event)"
+      @upload-finished="onUploadFinish()"
+    />
     <div
       class="video-creation-upload-form__link"
       v-if="videoLink"

@@ -5,11 +5,7 @@
   >
     <div
       class="auth-titles__logo"
-      :class="
-        mode === 'register'
-          ? 'auth-titles__image--register'
-          : 'auth-titles__image--login'
-      "
+      v-if="mode !== 'register'"
     >
       <round-logo />
     </div>
