@@ -61,7 +61,7 @@
         <text-input
           v-model.trim="registerModel.name"
           label="Имя и фамилия"
-          placeholder="Иван Иванов..."
+          placeholder="Иван Иванов"
           @enter-press="onRegister()"
         />
       </div>
@@ -69,7 +69,7 @@
         <text-input
           label="Email"
           v-model.trim="registerModel.email"
-          placeholder="user@example.com..."
+          placeholder="user@gmail.com"
           @enter-press="onRegister()"
         />
       </div>
@@ -80,7 +80,7 @@
         <text-input
           label="Никнейм"
           v-model.trim="registerModel.username"
-          placeholder="ivanivanov123..."
+          placeholder="ivanivanov123"
           @enter-press="onRegister()"
         />
         <username-validation
@@ -324,10 +324,10 @@ function onResendVerification() {
 
 <style lang="sass" scoped>
 .auth-form
-  max-height: 65vh
-  overflow-y: auto
 
   &__inner
+    padding-bottom: 2em
+
     @media screen and (max-width: 768px)
       height: unset
       max-height: unset

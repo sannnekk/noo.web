@@ -12,18 +12,6 @@
     <h1 class="auth-titles__title">
       {{ title }}
     </h1>
-    <img
-      class="auth-titles__image"
-      src="/login-heads-4.png"
-      v-if="mode === 'register'"
-    />
-    <p
-      class="auth-titles__hint"
-      v-if="false"
-    >
-      <b>Зарегистрируйся</b> и получи курс по заданиям №1 и №22 ЕГЭ по биологии
-      – прибавь <b>~10 баллов</b> к результату!
-    </p>
   </div>
 </template>
 

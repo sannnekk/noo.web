@@ -37,7 +37,7 @@ authStore.verifyEmailChange()
     height: 100vh
 
     @media screen and (max-width: 768px)
-      height: 50vh
+      height: 65vh
       overflow: hidden
       margin-bottom: 3em
 
