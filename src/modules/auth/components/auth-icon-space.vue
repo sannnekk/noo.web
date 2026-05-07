@@ -37,7 +37,7 @@
         <a
           target="blank"
           rel="noopener noreferrer"
-          href="https://m.vk.com/mail?community=181180014"
+          href="https://vk.me/noobiology"
         >
           VK
         </a>
