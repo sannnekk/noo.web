@@ -111,6 +111,9 @@
     margin-bottom: 5em
     text-align: right
 
+    @media screen and (max-width: 768px)
+      margin-bottom: 2em
+
     img
       margin-bottom: -3em
       display: inline-block
