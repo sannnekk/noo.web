@@ -60,7 +60,8 @@
   display: flex
   flex-direction: column
   align-items: center
-  justify-content: center
+  justify-content: space-around
+  padding: 80px 0 0 0
   width: 100%
   height: 100%
 
@@ -78,22 +79,29 @@
     width: 100%
     font-size: 40px
     height: 3em
+    margin-bottom: 1em
 
     @media screen and (max-width: 768px)
       font-size: 20px
+      height: 5em
+      margin-bottom: 0em
+      margin-top: 2em
 
   &__text-image
     width: 100%
-    height: auto
+    height: 70vh
+    display: grid
+    place-items: center
     margin-bottom: 4em
     padding: 0 2rem
 
 
     @media screen and (max-width: 768px)
       margin-bottom: 1em
+      height: auto
 
     img
-      width: 80%
+      width: 90%
       height: auto
 
       @media screen and (max-width: 768px)
@@ -104,12 +112,14 @@
     text-align: right
 
     img
+      margin-bottom: -3em
       display: inline-block
       width: 95%
       margin-right: -2rem
 
   &__help
-    margin-top: 3em
+    margin-top: 4em
+    margin-bottom: 1em
     text-align: left
     width: 100%
     padding: 0 2rem
