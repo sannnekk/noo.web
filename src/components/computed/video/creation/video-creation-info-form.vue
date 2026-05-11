@@ -170,7 +170,7 @@ const videoAccessTypes: { value: string; label: string }[] = [
 ]
 
 const videoServiceTypes: { value: string; label: string }[] = [
-  { value: 'yandex', label: 'Yandex Cloud' },
+  /* { value: 'yandex', label: 'Yandex Cloud' }, */
   { value: 'kinescope', label: 'Kinescope' }
 ]
 
