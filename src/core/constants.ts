@@ -16,5 +16,5 @@ export const Constants = {
       ? 'https://poll.noo-school.ru'
       : 'http://localhost:3001',
   GOOGLE_CLIENT_ID:
-    '643513066461-h6vrkoirgj91vr2isaqsm7hrv6tbkml8.apps.googleusercontent.com'
+    '660547827117-avn3p3cdabvlvvj26n47476k2qmv7ed0.apps.googleusercontent.com'
 } as const
