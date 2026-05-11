@@ -34,7 +34,7 @@ const props = defineProps<Props>()
     width: 100%
     height: 100%
 
-    :deep()
-      .kinescope-video-player__player > div
-        height: 100%
+:deep()
+  .kinescope-video-player__player > div
+    height: 100%
 </style>
