@@ -25,12 +25,16 @@ const props = defineProps<Props>()
 
 <style scoped lang="sass">
 .kinescope-video-player
-	width: 100%
-	height: 100%
-	border-radius: var(--border-radius)
-	overflow: hidden
+  width: 100%
+  height: 100%
+  border-radius: var(--border-radius)
+  overflow: hidden
 
-	&__player
-		width: 100%
-		height: 100%
+  &__player
+    width: 100%
+    height: 100%
+
+    :deep()
+      .kinescope-video-player__player > div
+        height: 100%
 </style>
