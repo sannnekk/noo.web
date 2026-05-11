@@ -3,7 +3,13 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-8 col-12">
-          <div class="index-auth-view__auth-icon-space">
+          <div
+            class="index-auth-view__auth-icon-space"
+            :class="{
+              'index-auth-view__auth-icon-space--register':
+                $route.name === 'auth.register'
+            }"
+          >
             <auth-icon-space />
           </div>
         </div>
@@ -37,9 +43,13 @@ authStore.verifyEmailChange()
     height: 100vh
 
     @media screen and (max-width: 768px)
-      height: 65vh
+      height: 50vh
       overflow: hidden
-      margin-bottom: 3em
+      margin-bottom: 0em
+
+    &--register
+      @media screen and (max-width: 768px)
+        height: 40vh
 
   &__auth-rights
     //position: absolute

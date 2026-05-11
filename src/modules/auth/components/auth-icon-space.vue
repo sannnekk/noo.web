@@ -61,18 +61,26 @@
   flex-direction: column
   align-items: center
   justify-content: space-around
-  padding: 80px 0 0 0
+  padding: 80px 0 120px 0
   width: 100%
   height: 100%
 
   @media screen and (max-width: 768px)
-    justify-content: flex-end
-    gap: 2em
+    gap: 20px
+    padding-top: 20px
 
   &__logo
     position: absolute
     top: 2rem
     left: 2rem
+
+    @media screen and (max-width: 768px)
+      position: static
+
+    :deep() h1
+      @media screen and (max-width: 768px)
+        margin: 0
+        padding-top: 0.5em
 
   &__text
     padding: 0 2rem
@@ -83,9 +91,9 @@
 
     @media screen and (max-width: 768px)
       font-size: 20px
-      height: 5em
+      min-height: 70px
       margin-bottom: 0em
-      margin-top: 2em
+      margin-top: 1em
 
   &__text-image
     width: 100%
@@ -97,7 +105,7 @@
 
 
     @media screen and (max-width: 768px)
-      margin-bottom: 1em
+      margin-bottom: 0em
       height: auto
 
     img
@@ -112,7 +120,7 @@
     text-align: right
 
     @media screen and (max-width: 768px)
-      margin-bottom: 2em
+      margin-bottom: 0em
 
     img
       margin-bottom: -3em
@@ -121,11 +129,15 @@
       margin-right: -2rem
 
   &__help
-    margin-top: 4em
-    margin-bottom: 1em
+    margin-top: 0em
+    margin-bottom: 3em
     text-align: left
     width: 100%
     padding: 0 2rem
+
+    @media screen and (max-width: 768px)
+      margin-top: 1em
+      margin-bottom: 1em
 
     a
       font-weight: 600
