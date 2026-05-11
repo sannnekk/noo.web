@@ -68,6 +68,7 @@
   @media screen and (max-width: 768px)
     gap: 20px
     padding-top: 20px
+    padding-bottom: 20px
 
   &__logo
     position: absolute
@@ -92,7 +93,7 @@
     @media screen and (max-width: 768px)
       font-size: 20px
       min-height: 70px
-      margin-bottom: 0em
+      margin-bottom: 1em
       margin-top: 1em
 
   &__text-image
@@ -123,7 +124,7 @@
       margin-bottom: 0em
 
     img
-      margin-bottom: -3em
+      //margin-bottom: -3em
       display: inline-block
       width: 95%
       margin-right: -2rem
