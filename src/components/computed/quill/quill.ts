@@ -344,11 +344,50 @@ export class CustomQuill extends Quill {
       // to resolve a bug on iOS
       input.value = ''
 
-      input.onchange = () => {
-        const file = input.files?.[0] || null
+      // iOS/macOS Safari can drop the `change` event when the input is
+      // detached from the DOM. Mount it off-screen so the event fires reliably.
+      input.style.position = 'fixed'
+      input.style.top = '-1000px'
+      input.style.left = '-1000px'
+      input.style.opacity = '0'
+      input.style.pointerEvents = 'none'
+      input.tabIndex = -1
+      input.setAttribute('aria-hidden', 'true')
+
+      let settled = false
+
+      const cleanup = () => {
+        if (input.parentNode) {
+          input.parentNode.removeChild(input)
+        }
+      }
+
+      const settle = (file: File | null) => {
+        if (settled) return
+        settled = true
+        cleanup()
         resolve(file)
       }
 
+      input.addEventListener('change', () => {
+        settle(input.files?.[0] || null)
+      })
+
+      // Some browsers (notably iOS Safari) don't fire `change` when the file
+      // dialog is cancelled. Use a one-shot focus listener as a fallback so
+      // the promise still resolves and the element is removed from the DOM.
+      // Delay the check to give `change` a chance to fire first.
+      const onFocus = () => {
+        setTimeout(() => {
+          if (settled) return
+          if (!input.files || input.files.length === 0) {
+            settle(null)
+          }
+        }, 1000)
+      }
+      window.addEventListener('focus', onFocus, { once: true })
+
+      document.body.appendChild(input)
       input.click()
     })
   }
