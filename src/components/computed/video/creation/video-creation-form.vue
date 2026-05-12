@@ -148,7 +148,7 @@ function emptyVideo(): UnsavedVideo {
     title: '',
     description: emptyDelta(),
     publishedAt: new Date(),
-    serviceType: 'yandex',
+    serviceType: 'kinescope',
     uniqueIdentifier: '',
     state: 'not-uploaded',
     accessType: 'everyone',
