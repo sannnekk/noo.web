@@ -42,10 +42,10 @@
         <p>
           Есть проблема? Напишите нам в
           <a
-            href="https://t.me/+oACQzPflwZQ1ODRi"
+            href="https://t.me/noozabota"
             target="_blank"
           >
-            @noo_support_chat
+            @noozabota
           </a>
         </p>
       </div>

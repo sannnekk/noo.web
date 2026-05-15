@@ -90,22 +90,6 @@
       </div>
       <div class="auth-form__group">
         <text-input
-          label="Номер телефона"
-          v-model.trim="registerModel.phone"
-          placeholder="+7 (999) 999-99-99"
-          @enter-press="onRegister()"
-        />
-      </div>
-      <div class="auth-form__group">
-        <text-input
-          label="Телеграм"
-          v-model.trim="registerModel.telegram"
-          placeholder="ivan_ivanov"
-          @enter-press="onRegister()"
-        />
-      </div>
-      <div class="auth-form__group">
-        <text-input
           label="Пароль"
           v-model="registerModel.password"
           placeholder="Пароль"
@@ -246,8 +230,6 @@ interface Props {
     username: string
     email: string
     password: string
-    phone: string
-    telegram: string
     repeatPassword: string
     passwordIsCorrect: boolean
     usernameIsValid: boolean
