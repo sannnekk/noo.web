@@ -49,7 +49,7 @@ authStore.verifyEmailChange()
 
     &--register
       @media screen and (max-width: 768px)
-        height: 40vh
+        height: 50vh
 
   &__auth-rights
     //position: absolute
