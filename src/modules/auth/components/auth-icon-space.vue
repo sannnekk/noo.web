@@ -33,7 +33,7 @@
     </div>
     <div class="auth-icon-space__help">
       <p>
-        Возникли вопросы? Обратись к нам в
+        Остались вопросы или не смог зарегистрироваться? Пиши нам в
         <a
           target="blank"
           rel="noopener noreferrer"
@@ -45,7 +45,7 @@
         <a
           target="blank"
           rel="noopener noreferrer"
-          href="https://t.me/noohelp_bot"
+          href="https://t.me/noo_biobot?start=act_plat"
         >
           Telegram
         </a>

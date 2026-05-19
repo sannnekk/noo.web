@@ -36,6 +36,7 @@ export const useAuthStore = defineStore('auth-module:auth', () => {
     password: '',
     repeatPassword: '',
     email: '',
+    telegramUsername: '',
     name: '',
     passwordIsCorrect: false,
     usernameIsValid: false

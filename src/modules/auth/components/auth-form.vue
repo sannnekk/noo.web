@@ -90,6 +90,14 @@
       </div>
       <div class="auth-form__group">
         <text-input
+          label="Telegram (без @)"
+          placeholder="ivan_ivanov"
+          v-model.trim="registerModel.telegramUsername"
+          @enter-press="onRegister()"
+        />
+      </div>
+      <div class="auth-form__group">
+        <text-input
           label="Пароль"
           v-model="registerModel.password"
           placeholder="Пароль"
@@ -229,6 +237,7 @@ interface Props {
     name: string
     username: string
     email: string
+    telegramUsername: string
     password: string
     repeatPassword: string
     passwordIsCorrect: boolean
