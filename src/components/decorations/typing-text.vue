@@ -15,6 +15,7 @@ import { computed, nextTick, type ComputedRef, ref, watch } from 'vue'
 interface Props {
   words: string[]
   speed: number
+  backDelay?: number
 }
 
 const props = defineProps<Props>()
@@ -29,8 +30,10 @@ const options: ComputedRef<TypedOptions> = computed(() => {
   return {
     strings: props.words,
     typeSpeed: props.speed,
+    contentType: 'html',
     loop: true,
-    smartBackspace: true
+    smartBackspace: true,
+    backDelay: props.backDelay
   }
 })
 

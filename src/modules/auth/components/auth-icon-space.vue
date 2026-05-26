@@ -20,7 +20,19 @@
       class="auth-icon-space__text-image"
       v-else
     >
-      <img src="/login-heads-4.png" />
+      <div class="auth-icon-space__text-image__inner">
+        <typing-text
+          :words="[
+            'Зарегистрируйся и получи курс по заданиям №1 и №22 ЕГЭ по биологии <b>- прибавь ~10 баллов к результату!</b>'
+          ]"
+          :speed="10"
+          :back-delay="12000"
+        />
+        <img
+          src="/register_animation.svg"
+          alt="Register Animation"
+        />
+      </div>
     </div>
     <div
       class="auth-icon-space__image"
@@ -96,25 +108,54 @@
       margin-bottom: 1em
       margin-top: 1em
 
+    @media screen and (max-width: 500px)
+      font-size: 17px
+      padding-left: 0
+      padding-right: 0
+
+
   &__text-image
     width: 100%
-    height: 70vh
-    display: grid
-    place-items: center
-    margin-bottom: 4em
-    padding: 0 2rem
 
-
-    @media screen and (max-width: 768px)
-      margin-bottom: 0em
-      height: auto
-
-    img
-      width: 90%
-      height: auto
+    &__inner
+      width: 100%
+      display: flex
+      flex-direction: row
+      justify-content: space-around
+      align-items: flex-start
+      padding: 0 2rem
+      margin-top: 2em
+      height: 300px
 
       @media screen and (max-width: 768px)
-        width: 100%
+        flex-direction: column
+        align-items: center
+        height: auto
+        margin-top: 1em
+
+      & > div
+        width: 70%
+        font-size: 35px
+        padding-top: 20px
+
+        @media screen and (max-width: 1000px)
+          font-size: 20px
+          padding-top: 10px
+
+        @media screen and (max-width: 500px)
+          font-size: 17px
+          width: 100%
+          height: 170px
+
+      &:deep() b
+        background-color: var(--secondary)
+        font-weight: normal
+
+      img
+        width: 30%
+
+        @media screen and (max-width: 500px)
+          width: 70%
 
   &__image
     margin-bottom: 5em
