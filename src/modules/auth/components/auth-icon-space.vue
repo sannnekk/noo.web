@@ -73,7 +73,7 @@
   flex-direction: column
   align-items: center
   justify-content: space-around
-  padding: 80px 0 120px 0
+  padding: 120px 0 120px 0
   width: 100%
   height: 100%
 
@@ -110,8 +110,9 @@
 
     @media screen and (max-width: 500px)
       font-size: 17px
-      padding-left: 0
-      padding-right: 0
+      padding-left: 15px
+      padding-right: 15px
+      text-align: center
 
 
   &__text-image
@@ -165,10 +166,14 @@
       margin-bottom: 0em
 
     img
-      //margin-bottom: -3em
       display: inline-block
       width: 95%
       margin-right: -2rem
+
+
+      @media screen and (max-width: 768px)
+        width: 100%
+        margin-right: 0
 
   &__help
     margin-top: 0em
