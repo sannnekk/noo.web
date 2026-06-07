@@ -115,7 +115,7 @@ defineEmits<Emits>()
       color: var(--dark)
 
       &.contrast
-        background-color: var(--dark)
+        background-color: #202020
         color: var(--lightest)
 
         &:not(.loading):hover

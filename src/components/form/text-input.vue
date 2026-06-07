@@ -46,7 +46,6 @@ const model = computed({
     font-weight: 400
     margin-bottom: 0.1em
     display: block
-    margin-left: 1.2em
 
   input
     background: var(--lightest)

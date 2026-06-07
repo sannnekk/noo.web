@@ -9,7 +9,9 @@
         :name="criterium.isValid(password) ? 'check-green' : 'cross-red'"
         :key="criterium.isValid(password) ? 'check-green' : 'cross-red'"
       />
-      {{ criterium.label }}
+      <b>
+        {{ criterium.label }}
+      </b>
     </span>
   </div>
 </template>
@@ -45,12 +47,19 @@ watch(
 <style scoped lang="sass">
 .password-criteria
   margin-top: 0.5em
-  font-size: 12px
+  font-size: 15px
   background-color: var(--lightest)
-  border-radius: var(--border-radius)
+  border-radius: 1.7em
   padding: 1em
   text-align: left
 
   &__item
     display: block
+
+    b
+      display: inline-block
+      font-weight: normal
+      margin-left: 0.5em
+      position: relative
+      top: -2px
 </style>

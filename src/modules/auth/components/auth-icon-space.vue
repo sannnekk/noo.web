@@ -1,12 +1,12 @@
 <template>
-  <div class="auth-icon-space">
+  <div
+    class="auth-icon-space"
+    v-if="$route.name !== 'auth.register'"
+  >
     <div class="auth-icon-space__logo">
       <main-logo />
     </div>
-    <div
-      v-if="$route.name !== 'auth.register'"
-      class="auth-icon-space__text"
-    >
+    <div class="auth-icon-space__text">
       <typing-text
         :words="[
           'Ты можешь поступить на бюджет туда, куда хочешь!',
@@ -16,28 +16,8 @@
         :speed="50"
       />
     </div>
-    <div
-      class="auth-icon-space__text-image"
-      v-else
-    >
-      <div class="auth-icon-space__text-image__inner">
-        <typing-text
-          :words="[
-            'Зарегистрируйся и получи курс по заданиям №1 и №22 ЕГЭ по биологии <b>- прибавь ~10 баллов к результату!</b>'
-          ]"
-          :speed="10"
-          :back-delay="12000"
-        />
-        <img
-          src="/register_animation.svg"
-          alt="Register Animation"
-        />
-      </div>
-    </div>
-    <div
-      class="auth-icon-space__image"
-      v-if="$route.name !== 'auth.register'"
-    >
+
+    <div class="auth-icon-space__image">
       <img
         src="/img/auth-icon-space.svg"
         alt="Auth Icon Space"
@@ -64,7 +44,12 @@
       </p>
     </div>
   </div>
+  <register-icon-space v-else />
 </template>
+
+<script setup lang="ts">
+import RegisterIconSpace from '@/modules/auth/components/register-icon-space.vue'
+</script>
 
 <style lang="sass" scoped>
 .auth-icon-space

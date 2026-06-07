@@ -4,7 +4,7 @@
     v-auto-animate
   >
     <div
-      class="auth-form__inner"
+      class="auth-form__inner auth-form__inner--login"
       v-if="mode === 'login'"
     >
       <div class="auth-form__group">
@@ -36,20 +36,34 @@
             Войти
           </common-button>
         </div>
-
-        <div class="auth-form__group__or">или</div>
-        <div class="auth-form__group__register-button">
+        <div class="auth-form__group__forgot-password">
+          <router-link to="/auth/forgot-password"> Забыли пароль? </router-link>
+        </div>
+        <div class="auth-form__group__login-register">
+          <div class="auth-form__group__login-register__row">
+            <div class="auth-form__group__login-register__left">
+              <p>
+                Нажми «зарегистрироваться» и получи курсы подготовки к ЕГЭ и ОГЭ
+                <b>бесплатно</b>
+              </p>
+              <div class="auth-form__group__login-register__hint">
+                Прибавь от 20 баллов и выше
+              </div>
+            </div>
+            <div class="auth-form__group__login-register__right">
+              <img
+                src="/vlada_asif.png"
+                alt="Register faces"
+              />
+            </div>
+          </div>
           <common-button
+            :to="'/auth/register'"
+            alignment="stretch"
             contrast
-            alignment="center"
-            :disabled="isLoading"
-            to="/auth/register"
           >
             Зарегистрироваться
           </common-button>
-        </div>
-        <div class="auth-form__group__register">
-          <router-link to="/auth/forgot-password"> Забыли пароль? </router-link>
         </div>
       </div>
     </div>
@@ -127,8 +141,8 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            Политике обработки персональных данных и Публичной оферте</a
-          >
+            Политике обработки персональных данных
+          </a>
         </form-checkbox>
       </div>
       <div class="auth-form__group">
@@ -323,6 +337,85 @@ function onResendVerification() {
       height: unset
       max-height: unset
 
+    &--login
+      :deep()
+        input
+          font-size: 1.1em
+          padding: 1.1em 1em
+
+    .auth-form__group__login
+      display: flex
+      justify-content: stretch
+
+      &:deep() button
+        width: 100%
+        font-weight: 500
+        padding: 1.1em 1em
+        font-size: 1.1em
+        text-align: center
+        display: block
+
+    .auth-form__group__forgot-password
+      font-size: 1.1em
+      text-align: center
+      padding: 0.7em 0 1.8em 0
+
+    .auth-form__group__login-register
+      display: flex
+      flex-direction: column
+      align-items: center
+      gap: 1em
+      padding: 1em
+      background: var(--lightest)
+      border-radius: 1em
+
+      @media screen and (max-width: 1400px)
+        font-size: 0.75em
+
+      &__row
+        display: flex
+        flex-direction: row
+        align-items: center
+        gap: 0em
+        align-items: flex-start
+
+        @media screen and (max-width: 1200px)
+          flex-direction: column
+          gap: 1em
+
+        @media screen and (max-width: 1200px)
+          flex-direction: row
+          gap: 0em
+
+      &__left
+        p
+          font-size: 1.3em
+          margin: 0
+
+          @media screen and (max-width: 1200px)
+            font-size: 1em
+
+      &__right
+        img
+          @media screen and (max-width: 1200px)
+            max-width: 80px
+
+      &__hint
+        margin-top: 1.1em
+        background: var(--secondary)
+        font-weight: 600
+        border-radius: 200px
+        padding: 0.3em 1em
+        width: fit-content
+
+      &:deep() .v-button
+        margin-top: 0.2em
+        font-size: 1.2em
+
+        a
+          padding: 0.9em 1em
+          font-weight: 500
+
   @media screen and (max-width: 768px)
     height: unset
     max-height: unset
@@ -346,7 +439,6 @@ function onResendVerification() {
       align-items: center
       gap: 1em
       margin-top: 1em
-      font-size: 12px
       color: var(--dark)
       text-decoration: none
       cursor: pointer

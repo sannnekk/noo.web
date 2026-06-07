@@ -6,7 +6,6 @@
     >
       Политика конфиденциальности
     </a>
-    &bullet;
     <a
       href="https://no-os.ru/oferta"
       target="_blank"
@@ -20,13 +19,15 @@
 .auth-rights
   text-align: center
   color: var(--dark-text-color)
-  font-size: 10px
+  font-size: 0.9em
   font-weight: 500
 
   a
+    display: block
     color: inherit
     text-decoration: none
     padding: 0 0.5em
+    color: var(--text-light)
 
     &:hover
       text-decoration: underline
