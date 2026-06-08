@@ -369,8 +369,17 @@ function onResendVerification() {
       background: var(--lightest)
       border-radius: 1em
 
-      @media screen and (max-width: 1400px)
+      @media screen and (max-width: 1520px)
         font-size: 0.75em
+
+      @media screen and (max-width: 1520px)
+        font-size: 0.7em
+
+      @media screen and (max-width: 1240px)
+        font-size: 0.65em
+
+      @media screen and (max-width: 1240px)
+        font-size: 0.60em
 
       &__row
         display: flex
@@ -399,6 +408,9 @@ function onResendVerification() {
         img
           @media screen and (max-width: 1200px)
             max-width: 80px
+
+          @media screen and (max-width: 1200px)
+            max-width: 60px
 
       &__hint
         margin-top: 1.1em

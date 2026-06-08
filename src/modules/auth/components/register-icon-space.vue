@@ -66,7 +66,9 @@
 
     <div class="register-icon-space__help">
       <p>
-        Возникли вопросы? Обратись к нам в
+        Возникли вопросы?
+        <br class="register-icon-space__help__break" />
+        Обратись к нам в
         <a
           target="blank"
           rel="noopener noreferrer"
@@ -78,7 +80,7 @@
         <a
           target="blank"
           rel="noopener noreferrer"
-          href="https://t.me/noo_biobot?start=act_plat"
+          href="https://t.me/noohelp_bot?start=platform"
         >
           Telegram
         </a>
@@ -98,6 +100,10 @@ const { isMobile } = useDevice()
   padding: 2em
   max-height: 100vh
   overflow-y: auto
+
+  &__logo
+    @media screen and (max-width: 768px)
+      text-align: center
 
   &__animation
     margin-top: 3em
@@ -139,7 +145,7 @@ const { isMobile } = useDevice()
         height: 100px
 
       @media screen and (max-width: 500px)
-        height: 140px
+        height: 90px
         font-size: 1.5em
 
     .hint
@@ -206,4 +212,10 @@ const { isMobile } = useDevice()
     @media screen and (max-width: 500px)
       font-size: 0.8em
       text-align: center
+
+    &__break
+      display: none
+
+      @media screen and (max-width: 500px)
+        display: inline
 </style>

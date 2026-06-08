@@ -25,7 +25,8 @@
     </div>
     <div class="auth-icon-space__help">
       <p>
-        Остались вопросы или не смог зарегистрироваться? Пиши нам в
+        Возникли вопросы? <br class="auth-icon-space__help__break" />
+        Обратись нам в
         <a
           target="blank"
           rel="noopener noreferrer"
@@ -37,7 +38,7 @@
         <a
           target="blank"
           rel="noopener noreferrer"
-          href="https://t.me/noo_biobot?start=act_plat"
+          href="https://t.me/noohelp_bot?start=platform"
         >
           Telegram
         </a>
@@ -170,6 +171,13 @@ import RegisterIconSpace from '@/modules/auth/components/register-icon-space.vue
     @media screen and (max-width: 768px)
       margin-top: 1em
       margin-bottom: 1em
+      text-align: center
+
+    &__break
+      display: none
+
+      @media screen and (max-width: 500px)
+        display: inline
 
     a
       font-weight: 600
