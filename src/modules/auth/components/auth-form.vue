@@ -379,22 +379,27 @@ function onResendVerification() {
         font-size: 0.65em
 
       @media screen and (max-width: 1240px)
+        font-size: 0.70em
+
+      @media screen and (min-width: 768px) and (max-width: 970px)
         font-size: 0.60em
 
       &__row
         display: flex
         flex-direction: row
         align-items: center
-        gap: 0em
+        gap: 0.1em
         align-items: flex-start
 
-        @media screen and (max-width: 1200px)
-          flex-direction: column
-          gap: 1em
+        @media screen and (max-width: 768px)
+          gap: 0.3em
 
-        @media screen and (max-width: 1200px)
-          flex-direction: row
-          gap: 0em
+        @media screen and (min-width: 768px) and (max-width: 1150px)
+          flex-direction: column
+          text-align: center
+          justify-content: center
+          align-items: center
+          gap: 1em
 
       &__left
         p
@@ -402,15 +407,12 @@ function onResendVerification() {
           margin: 0
 
           @media screen and (max-width: 1200px)
-            font-size: 1em
+            font-size: 1.6em
 
       &__right
         img
           @media screen and (max-width: 1200px)
             max-width: 80px
-
-          @media screen and (max-width: 1200px)
-            max-width: 60px
 
       &__hint
         margin-top: 1.1em
@@ -420,9 +422,18 @@ function onResendVerification() {
         padding: 0.3em 1em
         width: fit-content
 
+        @media screen and (max-width: 1200px)
+          font-size: 1.15em
+
+        @media screen and (min-width: 768px) and (max-width: 1150px)
+          margin: 1.1em auto 0 auto
+
       &:deep() .v-button
         margin-top: 0.2em
         font-size: 1.2em
+
+        @media screen and (max-width: 1200px)
+          font-size: 1.5em
 
         a
           padding: 0.9em 1em
