@@ -7,7 +7,7 @@
       Политика конфиденциальности
     </a>
     <a
-      href="https://no-os.ru/oferta"
+      href="https://drive.google.com/file/d/1L1iOZgPN1LPgdjPiD_EE3VFJ2_BRsgYq/view?usp=sharing"
       target="_blank"
     >
       Договор публичной оферты
