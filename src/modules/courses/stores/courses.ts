@@ -98,6 +98,23 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
   }
 
   /**
+   * Remove ALL students from a course
+   */
+  async function removeAllStudentsFromCourse(courseId: Course['id']) {
+    try {
+      await courseService.removeAllStudentsFromCourse(courseId, {
+        showLoader: true
+      })
+      uiService.openSuccessModal('Все студенты успешно удалены из курса')
+    } catch (error: any) {
+      uiService.openErrorModal(
+        'Произошла ошибка при удалении студентов из курса',
+        error.message
+      )
+    }
+  }
+
+  /**
    * Archive course assignment
    */
   async function archiveAssignment(assignment: CourseAssignment) {
@@ -163,6 +180,7 @@ export const useCoursesStore = defineStore('courses-module:courses', () => {
     currentTabIndex,
     teacherTabIndex,
     fetchAssignments,
+    removeAllStudentsFromCourse,
     archiveAssignment,
     unarchiveAssignment,
     pinAssignment,

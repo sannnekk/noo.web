@@ -92,6 +92,20 @@ export class CourseService extends ApiService {
   }
 
   /**
+   * Remove all students from a course
+   */
+  public async removeAllStudentsFromCourse(
+    courseId: Course['id'],
+    options: ServiceOptions = {}
+  ) {
+    await this.httpDelete(
+      `${this._route}/${courseId}/remove-all-students/confirmed`,
+      undefined,
+      options
+    )
+  }
+
+  /**
    * Get course materials
    */
   public async toggleReaction(

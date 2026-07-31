@@ -60,6 +60,7 @@ interface Emits {
   (event: 'unarchive', assignment: CourseAssignment): void
   (event: 'pin', assignment: CourseAssignment): void
   (event: 'unpin', assignment: CourseAssignment): void
+  (event: 'remove-all-students'): void
 }
 
 const props = defineProps<Props>()
@@ -102,6 +103,14 @@ const actions = reactive<MenuItem[]>([
     if: Core.Context.roleIs(['teacher', 'admin']) && !props.course.isPublic,
     action: () => {
       router.push(`/course-students/${props.course.slug}`)
+    }
+  },
+  {
+    title: 'Убрать ВСЕХ учеников',
+    icon: 'danger',
+    if: Core.Context.roleIs(['admin']) && !props.course.isPublic,
+    action: () => {
+      emits('remove-all-students')
     }
   },
   {

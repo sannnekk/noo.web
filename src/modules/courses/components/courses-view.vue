@@ -103,7 +103,16 @@
             v-for="course in coursesStore.allSearch.results"
             :key="course.id"
           >
-            <course-card :course="course" />
+            <course-card
+              :course="course"
+              @remove-all-students="
+                onRemoveAllStudents(
+                  course.id,
+                  course.name,
+                  course.subject?.name || 'Неизвестный предмет'
+                )
+              "
+            />
           </div>
         </div>
         <div
@@ -172,7 +181,16 @@
           v-for="course in coursesStore.allSearch.results"
           :key="course.id"
         >
-          <course-card :course="course" />
+          <course-card
+            :course="course"
+            @remove-all-students="
+              onRemoveAllStudents(
+                course.id,
+                course.name,
+                course.subject?.name || '-'
+              )
+            "
+          />
         </div>
       </div>
       <div
@@ -208,6 +226,20 @@
       </div>
     </div>
   </div>
+  <sure-modal
+    v-model:visible="removeAllStudentModal.isOpened"
+    @confirm="onConfirmRemoveAllStudents"
+  >
+    <template #title>Удалить всех учеников с курса?</template>
+    <template #text
+      ><p>
+        Вы уверены, что хотите удалить всех учеников с курса
+        <b>{{ removeAllStudentModal.courseName }}</b> по предмету
+        {{ removeAllStudentModal.subjectName }}?
+      </p>
+      <danger-block>Это действие нельзя отменить</danger-block></template
+    >
+  </sure-modal>
 </template>
 
 <script lang="ts" setup>
@@ -215,10 +247,40 @@ import { Core } from '@/core/Core'
 import { useCoursesStore } from '../stores/courses'
 import type { SearchFilter } from '@/components/search/filters/SearchFilter'
 import { subjectFilter } from '@/core/filters/subject-filter'
+import { reactive } from 'vue'
 
 const coursesStore = useCoursesStore()
 
 const filters: SearchFilter[] = [subjectFilter()]
+
+const removeAllStudentModal = reactive({
+  isOpened: false,
+  courseId: null as string | null,
+  courseName: null as string | null,
+  subjectName: null as string | null
+})
+
+function onRemoveAllStudents(
+  courseId: string,
+  courseName: string,
+  subjectName: string
+) {
+  removeAllStudentModal.courseId = courseId
+  removeAllStudentModal.courseName = courseName
+  removeAllStudentModal.subjectName = subjectName
+  removeAllStudentModal.isOpened = true
+}
+
+function onConfirmRemoveAllStudents() {
+  if (removeAllStudentModal.courseId) {
+    coursesStore.removeAllStudentsFromCourse(removeAllStudentModal.courseId)
+  }
+
+  removeAllStudentModal.isOpened = false
+  removeAllStudentModal.courseId = null
+  removeAllStudentModal.courseName = null
+  removeAllStudentModal.subjectName = null
+}
 </script>
 
 <style scoped lang="sass">
