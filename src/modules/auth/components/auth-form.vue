@@ -71,6 +71,14 @@
       class="auth-form__inner"
       v-else-if="mode === 'register'"
     >
+      <common-button
+        design="secondary"
+        alignment="center"
+        to="https://no-os.ru/god"
+      >
+        Купить наши курсы можно здесь
+      </common-button>
+      <br />
       <div class="auth-form__group">
         <text-input
           v-model.trim="registerModel.name"

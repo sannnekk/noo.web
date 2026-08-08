@@ -24,6 +24,9 @@
       />
     </div>
     <div class="auth-icon-space__help">
+      <common-button to="https://no-os.ru/god">
+        Купить наши курсы можно здесь
+      </common-button>
       <p>
         Возникли вопросы? <br class="auth-icon-space__help__break" />
         Обратись нам в
