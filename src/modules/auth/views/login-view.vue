@@ -1,31 +1,20 @@
 <template>
-  <div class="index-auth-view__auth-titles">
-    <auth-titles mode="login" />
-  </div>
-  <div class="index-auth-view__auth-form">
-    <auth-form
-      v-model:auth-credentials="authStore.loginCredentials"
-      v-model:register-credentials="authStore.registerCredentials"
-      v-model:forgot-password-credentials="authStore.forgotPasswordCredentials"
-      v-model:resend-verification-credentials="
-        authStore.resendVerificationCredentials
-      "
-      mode="login"
-      :error="authStore.error"
-      :is-loading="authStore.isLoading"
-      :username-exists="authStore.usernameExists"
-      @login="authStore.login()"
-      @register="authStore.register()"
-      @forgot-password="authStore.forgotPassword()"
-      @resend-verification="authStore.resendVerification()"
-    />
-  </div>
+  <auth-panel
+    title="Вход в систему"
+    logo
+  >
+    <login-form />
+    <register-promo-card class="login-view__promo-card" />
+  </auth-panel>
 </template>
 
 <script lang="ts" setup>
-import AuthTitles from '../components/auth-titles.vue'
-import AuthForm from '../components/auth-form.vue'
-import { useAuthStore } from '../stores/auth'
-
-const authStore = useAuthStore()
+import AuthPanel from '../components/auth-panel.vue'
+import LoginForm from '../components/forms/login-form.vue'
+import RegisterPromoCard from '../components/register-promo-card.vue'
 </script>
+
+<style lang="sass" scoped>
+.login-view__promo-card
+  margin-top: 1.5rem
+</style>

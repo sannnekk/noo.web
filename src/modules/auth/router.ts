@@ -22,7 +22,11 @@ export default {
         {
           path: 'register',
           name: 'auth.register',
-          component: () => import('./views/register-view.vue')
+          component: () => import('./views/register-view.vue'),
+          // picks which promo pane the index view shows next to the form
+          meta: {
+            promo: 'register'
+          }
         },
         {
           path: 'forgot-password',
