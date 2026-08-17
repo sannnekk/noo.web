@@ -1,7 +1,7 @@
 <template>
   <a
     class="promo-shop-link"
-    href="https://no-os.ru/god"
+    href="https://no-os.ru/?utm_source=platforma&utm_medium=before&utm_campaign=all"
     target="_blank"
     rel="noopener noreferrer"
   >

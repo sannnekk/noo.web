@@ -20,7 +20,7 @@
             v-model="detailedScoreModel[item.code]"
           />
           <span class="criteria__head__comment-count">
-            {{ commentCounts![item.code] }} комментариев
+            {{ commentCounts?.[item.code] ?? 0 }} комментариев
           </span>
         </div>
         <div
@@ -29,7 +29,7 @@
         >
           <span> {{ detailedScore[item.code] || 0 }}/{{ item.maxScore }} </span>
           <span class="criteria__head__comment-count">
-            {{ commentCounts![item.code] }} комментариев
+            {{ commentCounts?.[item.code] ?? 0 }} комментариев
           </span>
         </div>
         <div

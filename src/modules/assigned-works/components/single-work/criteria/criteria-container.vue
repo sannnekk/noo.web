@@ -53,6 +53,7 @@ import type { CriteriaItem } from '../../../types/CriteriaItem'
 import { ref, watch } from 'vue'
 import { entityFactory } from '@/core/utils/entityFactory'
 import { scoreFromDetailedScore } from '../../../utils/task'
+import { isDeltaEmptyOrWhitespace } from '@/core/utils/deltaHelpers'
 
 interface Props {
   modelValue: AssignedWork
@@ -129,10 +130,21 @@ function setDetailedScore(detailedScore: DetailedScore) {
 }
 
 function emptyDetailedScore(criteria: CriteriaItem[]) {
+  // if there is no answer at all, the default score is 0, not the max score
+  const defaultScore = answerIsEmpty()
+
   return criteria.reduce((acc, item) => {
-    acc[item.code] = item.maxScore
+    acc[item.code] = defaultScore ? 0 : item.maxScore
     return acc
   }, {} as Record<string, number>)
+}
+
+function answerIsEmpty() {
+  const answer = props.modelValue.answers.find(
+    (answer) => answer.taskId === props.task.id
+  )
+
+  return !answer || isDeltaEmptyOrWhitespace(answer.content)
 }
 
 function getCommentCounts() {
@@ -140,13 +152,12 @@ function getCommentCounts() {
     return undefined
   }
 
+  // the answer may not exist at all if the student never opened the task
   const answer = props.modelValue.answers.find(
-    (comment) => comment.taskId === props.task.id
-  )!
+    (answer) => answer.taskId === props.task.id
+  )
 
-  const content = answer.content!
-
-  const comments = content.ops
+  const comments = (answer?.content?.ops || [])
     .map((op) => op?.attributes?.comment)
     .filter(Boolean)
 
@@ -160,7 +171,8 @@ function getCommentCounts() {
   if (
     props.task.type === 'final-essay' ||
     props.mode === 'read' ||
-    !isAutoScoreEnabled.value
+    !isAutoScoreEnabled.value ||
+    answerIsEmpty()
   ) {
     return counts
   }
