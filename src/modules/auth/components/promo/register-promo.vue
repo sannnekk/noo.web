@@ -12,7 +12,7 @@
               'Зарегистрируйся и получи банк заданий ЕГЭ <b>бесплатно</b>'
             ]"
             :speed="10"
-            :back-delay="9337"
+            :back-delay="15000"
           />
         </h2>
         <p class="register-promo__hint">Отработай нужные темы на практике</p>
@@ -29,7 +29,7 @@
 
       <div class="register-promo__faces">
         <img
-          :src="facesImage"
+          src="/register-faces.png"
           alt=""
         />
       </div>
@@ -43,18 +43,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useDevice } from '@/composables/useDevice'
 import PromoShopLink from './promo-shop-link.vue'
 import PromoSupportLink from './promo-support-link.vue'
-
-const { width } = useDevice()
-
-// Same 992px breakpoint the stylesheet below uses, so the artwork always
-// matches the layout it is rendered into
-const facesImage = computed(() =>
-  width.value < 992 ? '/faces_register_mobile.svg' : '/facess_register.svg'
-)
 
 const subjects = [
   'Русский язык',
@@ -67,6 +57,8 @@ const subjects = [
 
 <style lang="sass" scoped>
 $desktop: 992px
+// Widest the headline / hint / subject block is allowed to get on desktop
+$pitch-width: 32rem
 
 // Two spacing steps, and nothing else adds vertical space:
 //   --block-gap  between the blocks (logo, pitch, faces, shop, support) — comes
@@ -142,8 +134,6 @@ $desktop: 992px
     white-space: nowrap
 
   &__faces
-    // Needs a definite width of its own: the SVG carries no intrinsic size,
-    // so a shrink-to-fit box here would collapse it to nothing
     width: 100%
 
     img
@@ -173,7 +163,12 @@ $desktop: 992px
     // pitch's own gap does on mobile, so the rhythm is unchanged.
     &__intro
       display: grid
-      grid-template-columns: minmax(0, 1fr) clamp(12rem, 26%, 22rem)
+      // The text column stops at its own width instead of eating the slack, so
+      // the artwork centres in the space that is really left beside it. The
+      // artwork column's floor comes first though: the photo is sized from its
+      // height, so it needs ~1.21x that in width or it gets letterboxed and
+      // stops short of the subject pills.
+      grid-template-columns: minmax(0, $pitch-width) minmax(17rem, 1fr)
       column-gap: var(--block-gap)
       row-gap: var(--pitch-gap)
       align-items: start
@@ -198,27 +193,30 @@ $desktop: 992px
       grid-row: 3
       justify-content: flex-start
       gap: 0.9rem
-      max-width: 32rem
+      max-width: $pitch-width
 
     &__subject
       padding: 0.6rem 1.5rem
 
     &__faces
-      // Exactly as tall as the headline plus the hint below it — the subject
-      // pills on row 3 are deliberately left out of the span
       grid-column: 2
-      grid-row: 1 / span 2
+      // Rows 1-2 reach from the top of the headline's reserved box to the
+      // bottom of the hint; the negative margin carries the box across the
+      // row gap so it ends exactly where the subject pills begin
+      grid-row: 1 / 3
+      margin-bottom: calc(-1 * var(--pitch-gap))
       align-self: stretch
-      width: auto
+      display: flex
+      justify-content: center
+      min-width: 0
 
       img
-        width: 100%
+        // Height drives the size, so the photo spans the full range above;
+        // width follows from its own proportions and flex centres it
         height: 100%
-        max-width: none
-        // Keeps the artwork square inside that box and pinned to the right,
-        // as in the desktop frame
+        width: auto
+        max-width: 100%
         object-fit: contain
-        object-position: right center
         margin: 0
 
     &__footer
