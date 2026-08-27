@@ -25,12 +25,14 @@
             <a
               href="https://no-os.ru/confidentiality"
               target="_blank"
+              rel="noopener noreferrer"
             >
               Политика конфиденциальности
             </a>
             <span class="dot">&bullet;</span>
             <a
-              href="https://no-os.ru/oferta"
+              href="https://drive.google.com/file/d/12yR5mZqQIFgqfWnDEzn49V83xWVSIYJe/view?usp=drive_link"
+              rel="noopener noreferrer"
               target="_blank"
             >
               Договор публичной оферты
