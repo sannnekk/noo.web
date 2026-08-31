@@ -70,10 +70,7 @@ const actions = reactive<MenuItem[]>([
   {
     title: 'Закрепить',
     icon: 'pin',
-    if:
-      Core.Context.roleIs(['student']) &&
-      !props.isPinned &&
-      !props.course?.isPublic,
+    if: Core.Context.roleIs(['student']) && !props.isPinned,
     action: () => {
       props.assignment && emits('pin', props.assignment!)
     }
@@ -81,10 +78,7 @@ const actions = reactive<MenuItem[]>([
   {
     title: 'Открепить',
     icon: 'pin',
-    if:
-      Core.Context.roleIs(['student']) &&
-      props.isPinned &&
-      !props.course?.isPublic,
+    if: Core.Context.roleIs(['student']) && props.isPinned,
     action: () => {
       props.assignment && emits('unpin', props.assignment!)
     }
@@ -127,8 +121,7 @@ const actions = reactive<MenuItem[]>([
     if:
       Core.Context.roleIs(['student']) &&
       props.assignment &&
-      !props.assignment?.isArchived &&
-      !props.course?.isPublic,
+      !props.assignment?.isArchived,
     action: () => {
       archiveCourse()
     }
@@ -139,8 +132,7 @@ const actions = reactive<MenuItem[]>([
     if:
       Core.Context.roleIs(['student']) &&
       props.assignment &&
-      props.assignment?.isArchived &&
-      !props.course?.isPublic,
+      props.assignment?.isArchived,
     action: () => {
       unarchiveCourse()
     }
