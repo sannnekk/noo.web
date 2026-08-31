@@ -29,7 +29,7 @@
 
       <div class="register-promo__faces">
         <img
-          src="/register-faces.png"
+          src="/register-faces.webp"
           alt=""
         />
       </div>
