@@ -4,7 +4,10 @@
       class="task-form-view__form"
       v-if="task"
     >
-      <task-create-form v-model="task" />
+      <task-create-form
+        v-model="task"
+        :tag-suggestions="createWorkStore.taskTags"
+      />
     </div>
     <div
       class="task-form-view__actions"

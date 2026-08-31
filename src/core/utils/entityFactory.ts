@@ -165,6 +165,7 @@ function taskConstructor(): Omit<Task, 'id' | 'createdAt' | 'updatedAt'> {
     slug: uuid(),
     order: 0,
     rightAnswer: '',
+    tags: [],
     content: emptyDelta(),
     highestScore: 1,
     type: 'word',

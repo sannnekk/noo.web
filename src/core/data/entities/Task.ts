@@ -11,6 +11,7 @@ export interface Task extends Entity {
   workId?: Work['id']
   work?: Work
   rightAnswer: string | null
+  tags?: string[] | null
   solveHint?: DeltaContentType
   checkHint?: DeltaContentType
   checkingStrategy: 'type1' | 'type2' | 'type3' | 'type4' | null

@@ -6,6 +6,7 @@ import type { Work } from '@/core/data/entities/Work'
 import { Core } from '@/core/Core'
 import { useWorksStore } from '@/modules/works/stores/works'
 import { entityFactory } from '@/core/utils/entityFactory'
+import { collectTaskTags } from '@/core/utils/taskTags'
 
 export const useCreateWorkStore = defineStore(
   'create-work-module:create-work',
@@ -77,6 +78,11 @@ export const useCreateWorkStore = defineStore(
         uiService.openErrorModal('Произошла ошибка при загрузке работы')
       }
     }
+
+    /**
+     * All the tags already used in the work, used as autocomplete suggestions
+     */
+    const taskTags = computed(() => collectTaskTags(work.value.tasks))
 
     /**
      * Task as an object
@@ -293,6 +299,7 @@ export const useCreateWorkStore = defineStore(
 
     return {
       work,
+      taskTags,
       addTask,
       createFromTemplate,
       removeTask,

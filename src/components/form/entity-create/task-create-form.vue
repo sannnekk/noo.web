@@ -65,6 +65,13 @@
       </div>
     </div>
     <div class="form-group">
+      <tag-input
+        label="Теги (нажмите Enter для добавления). Нужны, чтобы ученик мог отфильтровать задания"
+        v-model="model.tags!"
+        :suggestions="tagSuggestions"
+      />
+    </div>
+    <div class="form-group">
       <rich-text-area
         v-model="model.content"
         label="Задание"
@@ -102,6 +109,7 @@ import { computed, watch } from 'vue'
 
 interface Props {
   modelValue: Task | null
+  tagSuggestions?: string[]
 }
 
 interface Emits {

@@ -19,19 +19,44 @@
     <input
       type="text"
       v-model="input"
-      @keydown.enter.prevent="addTag()"
+      @keydown.enter.prevent="confirmInput()"
       @keydown.backspace="removeLastTag()"
+      @keydown.down.prevent="moveHighlight(1)"
+      @keydown.up.prevent="moveHighlight(-1)"
+      @keydown.esc="closeSuggestions()"
+      @focus="suggestionsVisible = true"
+      @blur="closeSuggestions()"
     />
+    <ul
+      class="tag-input__suggestions"
+      v-if="suggestionsVisible && filteredSuggestions.length"
+    >
+      <li
+        class="tag-input__suggestion"
+        :class="{
+          'tag-input__suggestion--highlighted': index === highlightedIndex
+        }"
+        v-for="(suggestion, index) in filteredSuggestions"
+        :key="suggestion"
+        @mousedown.prevent="addTag(suggestion)"
+        @mouseenter="highlightedIndex = index"
+      >
+        {{ suggestion }}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+
+const MAX_VISIBLE_SUGGESTIONS = 8
 
 interface Props {
   label: string
   modelValue: string[] | string
   separator?: string | undefined
+  suggestions?: string[]
 }
 
 interface Emits {
@@ -51,7 +76,7 @@ const model = computed<string[]>({
       return (props.modelValue as string).split(props.separator)
     }
 
-    return props.modelValue as string[]
+    return (props.modelValue as string[]) || []
   },
   set: (value: string[]) => {
     if (props.separator) {
@@ -64,10 +89,39 @@ const model = computed<string[]>({
 
 const input = ref('')
 
-function addTag() {
-  if (input.value && input.value.trim()) {
-    model.value = [...model.value, input.value.trim()]
+const suggestionsVisible = ref(false)
+const highlightedIndex = ref(-1)
+
+/**
+ * Suggestions that are not added yet and match the current input
+ */
+const filteredSuggestions = computed<string[]>(() => {
+  const needle = input.value.trim().toLowerCase()
+  const added = model.value.map((tag) => tag.toLowerCase())
+
+  return (props.suggestions || [])
+    .filter(
+      (suggestion) =>
+        !added.includes(suggestion.toLowerCase()) &&
+        suggestion.toLowerCase().includes(needle)
+    )
+    .slice(0, MAX_VISIBLE_SUGGESTIONS)
+})
+
+watch(filteredSuggestions, () => (highlightedIndex.value = -1))
+
+/**
+ * Add the highlighted suggestion or, if there is none, the typed text
+ */
+function confirmInput() {
+  addTag(filteredSuggestions.value[highlightedIndex.value] ?? input.value)
+}
+
+function addTag(tag: string) {
+  if (tag && tag.trim()) {
+    model.value = [...model.value, tag.trim()]
     input.value = ''
+    highlightedIndex.value = -1
   }
 }
 
@@ -79,6 +133,27 @@ function removeLastTag() {
   if (input.value === '' && model.value.length > 0) {
     removeTag(model.value.length - 1)
   }
+}
+
+function moveHighlight(delta: number) {
+  const count = filteredSuggestions.value.length
+
+  if (!count) {
+    return
+  }
+
+  suggestionsVisible.value = true
+
+  // the position 0 means "nothing highlighted, use the typed text"
+  const position = highlightedIndex.value + 1
+  const nextPosition = (position + delta + count + 1) % (count + 1)
+
+  highlightedIndex.value = nextPosition - 1
+}
+
+function closeSuggestions() {
+  suggestionsVisible.value = false
+  highlightedIndex.value = -1
 }
 </script>
 
@@ -94,6 +169,33 @@ label
   border: 1px solid var(--border-color)
   border-radius: var(--border-radius)
   padding: 0.5rem 0.8rem
+  position: relative
+
+  &__suggestions
+    position: absolute
+    top: calc(100% + 0.2rem)
+    left: 0
+    right: 0
+    z-index: 10
+    margin: 0
+    padding: 0.2rem 0
+    list-style: none
+    max-height: 200px
+    overflow-y: auto
+    background: var(--form-background)
+    border: 1px solid var(--border-color)
+    border-radius: var(--border-radius)
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1)
+
+  &__suggestion
+    padding: 0.3em 0.8em
+    cursor: pointer
+    font-size: 0.9em
+    color: var(--form-text-color)
+
+    &--highlighted
+      background-color: var(--lila)
+      color: var(--lightest)
 
   &__tags
     display: flex
