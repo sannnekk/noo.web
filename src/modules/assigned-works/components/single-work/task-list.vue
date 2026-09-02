@@ -8,7 +8,7 @@
       v-if="tagOptions.length"
     >
       <select-input
-        label="Тег"
+        label="Отфильтровать задания"
         :options="tagOptions"
         v-model="selectedTag"
       />
@@ -55,9 +55,7 @@ const isSolvedFunction = assignedWorkStore.taskHasAnswer
 
 const selectedTag = ref<string>(ALL_TAGS)
 
-const tasks = computed(
-  () => assignedWorkStore.assignedWork?.work?.tasks || []
-)
+const tasks = computed(() => assignedWorkStore.assignedWork?.work?.tasks || [])
 
 /**
  * All the tags used in the work. If there are none, the filter is not shown
