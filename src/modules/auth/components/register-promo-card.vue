@@ -3,7 +3,7 @@
     <div class="register-promo-card__body">
       <div class="register-promo-card__text">
         <p class="register-promo-card__pitch">
-          Нажми «зарегистрироваться» и получи банк заданий ЕГЭ
+          Нажми «зарегистрироваться» и получи банк заданий ЕГЭ и ОГЭ
           <b>бесплатно</b>
         </p>
         <p class="register-promo-card__hint">
