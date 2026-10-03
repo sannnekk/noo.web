@@ -4,6 +4,11 @@ import type { Notification } from '@/core/data/entities/Notification'
 import { ApiService, type ServiceOptions } from '@/core/services/ApiService'
 import { installNotificationStore } from './NotificationStore'
 
+/**
+ * Max notifications shown in the pane per tab
+ */
+export const NOTIFICATION_PANE_LIMIT = 25
+
 export type NotificationSendOptions = {
   selector: 'role' | 'course' | 'all'
   value: null | string // role name or course id
@@ -96,7 +101,9 @@ export class NotificationService extends ApiService {
       await this.getUnreadCount()
       await this.getReadNotifications()
 
-      this._store.showOneByOne(newNotifications)
+      this._store.showOneByOne(
+        newNotifications.slice(0, NOTIFICATION_PANE_LIMIT)
+      )
     } catch (error) {
       console.log(error)
     }
@@ -156,10 +163,30 @@ export class NotificationService extends ApiService {
   }
 
   /**
+   * Get all notifications (read and unread), paginated
+   */
+  public async getAllNotifications(
+    pagination?: Pagination,
+    options: ServiceOptions = {}
+  ) {
+    return this.httpGet<Notification[]>(
+      `${this._route}/all`,
+      pagination,
+      undefined,
+      options
+    )
+  }
+
+  /**
    * Get notifications
    */
   private async getReadNotifications(
-    pagination?: Pagination,
+    pagination: Pagination = {
+      page: 1,
+      limit: NOTIFICATION_PANE_LIMIT,
+      sort: 'id',
+      order: 'DESC'
+    },
     options: ServiceOptions = {}
   ) {
     const response = await this.httpGet<Notification[]>(

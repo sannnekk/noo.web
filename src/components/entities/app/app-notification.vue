@@ -44,7 +44,12 @@ interface Props {
   preserveLineWraps?: boolean
 }
 
+interface Emits {
+  (e: 'deleted', id: Notification['id']): void
+}
+
 const props = defineProps<Props>()
+const emits = defineEmits<Emits>()
 
 const notificationService = Core.Services.Notification
 const uiService = Core.Services.UI
@@ -94,6 +99,7 @@ async function onNotificationDelete() {
 
   try {
     await notificationService.deleteNotification(props.notification.id)
+    emits('deleted', props.notification.id)
   } catch (error: any) {
     uiService.openErrorModal('Не удалось удалить уведомление', error.message)
   } finally {

@@ -14,6 +14,7 @@ declare module 'vue' {
     AlignJustifyIcon: typeof import('./src/components/decorations/icons/text-format-icons/align-justify-icon.vue')['default']
     AlignLeftIcon: typeof import('./src/components/decorations/icons/text-format-icons/align-left-icon.vue')['default']
     AlignRightIcon: typeof import('./src/components/decorations/icons/text-format-icons/align-right-icon.vue')['default']
+    AllNotificationsModal: typeof import('./src/components/modal/all-notifications-modal.vue')['default']
     AppNotification: typeof import('./src/components/entities/app/app-notification.vue')['default']
     AssignedWorkCheckStatus: typeof import('./src/components/computed/assigned-work/assigned-work-check-status.vue')['default']
     AssignedWorkProgress: typeof import('./src/components/computed/assigned-work/assigned-work-progress.vue')['default']

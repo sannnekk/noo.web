@@ -87,8 +87,18 @@
           </template>
         </tabs-view>
       </div>
+      <div class="notifications-pane__footer">
+        <common-button
+          alignment="stretch"
+          design="secondary"
+          @click="openAllNotifications()"
+        >
+          Показать все уведомления
+        </common-button>
+      </div>
     </div>
   </div>
+  <all-notifications-modal v-model:visible="isAllModalOpen" />
   <Teleport to="body">
     <div
       v-if="notificationStore.isPaneOpen"
@@ -109,6 +119,12 @@ const notificationService = Core.Services.Notification
 const notificationStore = notificationService.Store()
 
 const currentTab = ref(0)
+const isAllModalOpen = ref(false)
+
+function openAllNotifications() {
+  notificationService.setPaneOpen(false)
+  isAllModalOpen.value = true
+}
 
 const readNotificationsDatedList = useDatedList(
   () => notificationStore.notifications,
@@ -161,6 +177,9 @@ const unreadNotificationsDatedList = useDatedList(
 
   &__body
     flex: 1
+
+  &__footer
+    padding: 1em
 
     &:deep()
       .tabs-view__titles
