@@ -28,6 +28,19 @@
         />
       </template>
     </settings-section>
+    <settings-section>
+      <template #title> Push-уведомления в браузере </template>
+      <template #content>
+        <push-notifications-form
+          :supported="pushStore.isSupported"
+          :needs-install="pushStore.needsInstall"
+          :permission="pushStore.permission"
+          :enabled="pushStore.isEnabled"
+          :loading="pushStore.isLoading"
+          @toggled="pushStore.toggle()"
+        />
+      </template>
+    </settings-section>
   </div>
   <div
     class="telegram-view__loading"
@@ -40,12 +53,16 @@
 <script lang="ts" setup>
 import BindTelegramForm from '../components/telegram/bind-telegram-form.vue'
 import TelegramNotificationsForm from '../components/telegram/telegram-notifications-form.vue'
+import PushNotificationsForm from '../components/push/push-notifications-form.vue'
 import SettingsSection from '../components/settings-section.vue'
 import { useTelegramStore } from '../stores/telegram'
+import { usePushStore } from '../stores/push'
 
 const telegramStore = useTelegramStore()
+const pushStore = usePushStore()
 
 telegramStore.fetchUser()
+pushStore.fetchState()
 </script>
 
 <style lang="sass" scoped>

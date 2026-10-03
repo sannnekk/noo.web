@@ -47,6 +47,7 @@
       :position-y="comment.y"
       :comment="comment as unknown as Comment & ImageComment"
       :editable="mode === 'commentable'"
+      @edit="onCommentEdit()"
       @delete="onCommentRemove()"
     />
     <quill-comment-modal
@@ -55,6 +56,7 @@
       :position-y="imageComment.popupPosition.y"
       :comment="imageComment"
       :editable="mode === 'commentable'"
+      @edit="onImageCommentEdit()"
       @delete="onImageCommentRemove()"
     />
   </div>
@@ -134,6 +136,11 @@ interface PositionedImageComment extends ImageComment {
     modal?: boolean
     popup?: boolean
   }
+  /**
+   * Range of the existing comment marker in the document.
+   * `null` means the comment is being created
+   */
+  range: QuillRange | null
   popupPosition: {
     x: number
     y: number
@@ -192,6 +199,7 @@ const imageComment = ref<PositionedImageComment>({
     width: 0,
     height: 0
   },
+  range: null,
   popupPosition: {
     x: 0,
     y: 0
@@ -205,16 +213,22 @@ const prompt = ref<Prompt>({
 })
 
 /**
- * On comment creation
+ * On comment creation or edit. Formatting the exact range of an existing
+ * comment replaces its data, so both cases go through the same call
  */
 function onCommentSubmit() {
-  quill?.comment(comment.value.range!, {
+  if (!comment.value.range) {
+    return
+  }
+
+  quill?.comment(comment.value.range, {
     content: comment.value.content,
     type: comment.value.type
   })
 
   comment.value.visible.popup = false
   comment.value.content = ''
+  comment.value.range = null
 
   emits('commented', quill!.getContents())
 }
@@ -223,42 +237,45 @@ function onCommentSubmit() {
  * On comment remove
  */
 function onCommentRemove() {
-  quill?.removeComment(comment.value)
+  quill?.removeComment(comment.value.range)
   comment.value.visible.modal = false
+  comment.value.range = null
   emits('commented', quill!.getContents())
+}
+
+/**
+ * On comment edit: reopen the popup prefilled with the comment data
+ */
+function onCommentEdit() {
+  if (!comment.value.range) {
+    return
+  }
+
+  imageComment.value.visible = { modal: false, popup: false }
+  comment.value.visible = { modal: false, popup: true }
 }
 
 /**
  * On comment click (any mode!!!)
  */
-function onCommentClick(_comment: Comment) {
-  const clickedSelection = quill?.getSelection()
-
-  // change selection to cover the whole comment blot
-  const [currentElement] = quill?.getLeaf(clickedSelection?.index || 0) || []
-
-  if (!currentElement) {
+function onCommentClick(target: HTMLElement) {
+  if (!quill) {
     return
   }
 
-  const commentBlot = currentElement.parent
-  let parent = commentBlot.parent
-  let index = commentBlot.offset()
+  const range = quill.getCommentRange(target)
 
-  while (parent) {
-    index += parent.offset()
-    parent = parent.parent
+  if (!range) {
+    return
   }
 
-  const range = {
-    index,
-    length: commentBlot.length() || 0
-  }
+  const data = CommentBlot.value(target)
+  const position = quill.getBounds(range.index, range.length)
 
-  const position = quill?.getBounds(range.index, range.length)
-
+  imageComment.value.visible = { modal: false, popup: false }
   comment.value = {
-    ..._comment,
+    content: data.content,
+    type: data.type,
     visible: {
       modal: true,
       popup: false
@@ -297,37 +314,86 @@ function showCommentPopup(range: QuillRange) {
 }
 
 /**
- * On image comment creation
+ * On image comment creation or edit
  */
 function onImageCommentSubmit() {
-  quill?.commentImage(imageComment.value)
+  if (!quill) {
+    return
+  }
+
+  if (imageComment.value.range) {
+    quill.updateImageComment(imageComment.value.range, imageComment.value)
+  } else {
+    quill.commentImage(imageComment.value)
+  }
 
   imageComment.value.visible.popup = false
   imageComment.value.content = ''
+  imageComment.value.range = null
 
-  ImageSelection.removeAllSelections(quill!)
-  emits('commented', quill!.getContents())
+  syncImageSelections()
+  emits('commented', quill.getContents())
 }
 
 /**
  * On image comment remove
  */
 function onImageCommentRemove() {
-  quill?.removeImageComment(imageComment.value)
+  quill?.removeImageComment(imageComment.value.range)
   imageComment.value.visible.modal = false
+  imageComment.value.range = null
+
+  syncImageSelections()
   emits('commented', quill!.getContents())
 }
 
 /**
- * On image comment click (any mode!!!)
+ * On image comment edit: reopen the popup prefilled with the comment data
  */
-function onImageCommentClick(_comment: PositionedImageComment) {
+function onImageCommentEdit() {
+  if (!imageComment.value.range) {
+    return
+  }
+
+  comment.value.visible = { modal: false, popup: false }
+  imageComment.value.visible = { modal: false, popup: true }
+}
+
+/**
+ * On image comment click (any mode!!!)
+ * `commentNode` is the `.ql-image-comment` marker span
+ */
+function onImageCommentClick(commentNode: HTMLElement) {
+  if (!quill) {
+    return
+  }
+
+  const range = quill.getImageCommentRange(commentNode)
+  const imageContainer = ImageSelection.findImageContainer(commentNode)
+
+  if (!range || !imageContainer) {
+    return
+  }
+
+  const data = ImageCommentBlot.formats(commentNode)
+  const image = imageContainer.querySelector('img')
+
   comment.value.visible = { modal: false, popup: false }
   imageComment.value = {
-    ..._comment,
+    ...data,
     visible: {
       modal: true,
       popup: false
+    },
+    range,
+    popupPosition: {
+      x: imageContainer.offsetLeft + (image?.offsetLeft || 0) + data.x,
+      y:
+        imageContainer.offsetTop +
+        (image?.offsetTop || 0) +
+        data.y +
+        data.height -
+        10
     }
   }
 }
@@ -344,14 +410,16 @@ function showImageCommentPopup(comment: ImageComment | null) {
   const container = image?.closest('.ql-image') as HTMLElement | null
 
   if (!image || !container || !imageSrc) {
-    return 0
+    return
   }
+
   const offsetX = image.offsetLeft + container.offsetLeft
   const offsetY = image.offsetTop + container.offsetTop
 
   imageComment.value = {
     ...comment,
     visible: { modal: false, popup: true },
+    range: null,
     x,
     y,
     popupPosition: {
@@ -615,75 +683,50 @@ const toolbar = reactive<Toolbar>([
  */
 function handleEditorClick(event: MouseEvent) {
   const target = event.target as HTMLElement
-  const classNames = target.className
 
-  if (classNames.includes(CommentBlot.className)) {
-    const data = CommentBlot.value(target)
-    onCommentClick(data)
+  if (!quill || !(target instanceof Element)) {
     return
   }
 
-  if (classNames.includes('delete-button')) {
-    const src = target.parentNode?.parentNode?.querySelector('img')?.src
+  const commentNode = target.closest<HTMLElement>(`.${CommentBlot.className}`)
 
-    if (!src) {
-      return
-    }
-
-    quill?.deleteImage(src)
-
-    emits('update:modelValue', quill!.getContents())
+  if (commentNode) {
+    onCommentClick(commentNode)
     return
   }
 
-  if (classNames.includes('ql-image-comment-selection')) {
-    const height = target.dataset.height ? parseInt(target.dataset.height) : 0
-    const width = target.dataset.width ? parseInt(target.dataset.width) : 0
-    const content = target.dataset.comment
-    const type = target.dataset.type as Comment['type']
+  const imageCommentNode = target.closest<HTMLElement>(
+    `.${ImageCommentBlot.className}`
+  )
 
-    const imageComments = quill!.root.querySelectorAll(
-      '.ql-image-comment'
-    ) as NodeListOf<HTMLElement>
-    const commentNode = Array.from(imageComments).find(
-      (node) =>
-        parseInt(node.dataset.width!) === width &&
-        parseInt(node.dataset.height!) === height &&
-        node.dataset.comment === content &&
-        node.dataset.type === type
-    )
+  if (imageCommentNode) {
+    onImageCommentClick(imageCommentNode)
+    return
+  }
 
-    if (!commentNode) {
+  if (target.closest('.delete-button')) {
+    const imageContainer = target.closest<HTMLElement>('.ql-image')
+
+    if (!imageContainer) {
       return
     }
 
-    const data = ImageCommentBlot.formats(commentNode)
+    quill.deleteImage(imageContainer)
+    syncImageSelections()
 
-    let imageContainer = commentNode.nextElementSibling as HTMLImageElement
+    emits('update:modelValue', quill.getContents())
+    return
+  }
 
-    while (imageContainer && !imageContainer.classList.contains('ql-image')) {
-      imageContainer = imageContainer.nextElementSibling as HTMLImageElement
+  const overlay = target.closest<HTMLElement>('.ql-image-comment-selection')
+
+  if (overlay) {
+    const node = ImageSelection.getCommentNodeForOverlay(overlay)
+
+    if (node) {
+      onImageCommentClick(node)
     }
 
-    const image = imageContainer.querySelector('img') as HTMLImageElement | null
-
-    const positionedComment: PositionedImageComment = {
-      ...data,
-      visible: {
-        modal: false,
-        popup: false
-      },
-      popupPosition: {
-        x: imageContainer.offsetLeft + (image?.offsetLeft || 0) + data.x,
-        y:
-          imageContainer.offsetTop +
-          (image?.offsetTop || 0) +
-          data.y +
-          data.height -
-          10
-      }
-    }
-    onImageCommentClick(positionedComment)
     return
   }
 }
@@ -724,8 +767,8 @@ const abortController = new AbortController()
 if (props.commentable) {
   window.addEventListener(
     'mouseup',
-    (e) => {
-      showImageCommentPopup(ImageSelection.onMouseUp(e))
+    () => {
+      showImageCommentPopup(ImageSelection.onMouseUp())
     },
     { signal: abortController.signal }
   )
@@ -736,8 +779,12 @@ onBeforeUnmount(() => abortController.abort())
 onUpdated(() => syncImageSelections())
 
 function syncImageSelections() {
-  ImageSelection.removeAllSelections(quill!)
-  ImageSelection.drawAllSelections(quill!)
+  if (!quill) {
+    return
+  }
+
+  ImageSelection.removeAllSelections(quill)
+  ImageSelection.drawAllSelections(quill)
 }
 
 function insertSnippet(content: DeltaContentType) {

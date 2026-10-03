@@ -42,6 +42,14 @@
       >
         <common-button
           alignment="stretch"
+          @click="onEdit()"
+          design="secondary"
+          class="comment-modal__buttons__edit"
+        >
+          Изменить
+        </common-button>
+        <common-button
+          alignment="stretch"
           @click="onDelete()"
           design="danger"
           class="comment-modal__buttons__remove"
@@ -68,6 +76,7 @@ interface Props {
 
 interface Emits {
   (e: 'update:visible', value: boolean): void
+  (e: 'edit'): void
   (e: 'delete'): void
 }
 
@@ -83,6 +92,10 @@ const positionModel = computed(() => ({
   x: window.innerWidth > 400 ? props.positionX : 10,
   y: props.positionY + (props.comment.imageSrc ? 0 : 10)
 }))
+
+function onEdit() {
+  emits('edit')
+}
 
 function onDelete() {
   emits('delete')
@@ -126,8 +139,6 @@ function onDelete() {
     display: flex
     flex-direction: row
     justify-content: space-between
+    gap: 0.5em
     font-size: 0.8em
-
-    &__cancel
-      margin-right: 0.5em
 </style>

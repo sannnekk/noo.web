@@ -1,4 +1,4 @@
-import type { ImageComment } from './ImageCommentBlot'
+import { ImageCommentBlot, type ImageComment } from './ImageCommentBlot'
 import { CustomQuill } from './quill'
 
 const currentSelection = {
@@ -19,6 +19,14 @@ const currentSelection = {
 const selection = {
   element: null as HTMLElement | null
 }
+
+/**
+ * Maps every drawn selection overlay to the comment marker span
+ * (`.ql-image-comment`) it was drawn for. This lets a click on the
+ * overlay resolve the exact blot instead of searching for a comment
+ * with matching content/position (which breaks with duplicates).
+ */
+const overlayToCommentNode = new WeakMap<HTMLElement, HTMLElement>()
 
 export function onMouseDown(e: MouseEvent): void {
   const target = e.target as HTMLElement
@@ -69,8 +77,7 @@ export function onMouseMove(e: MouseEvent): void {
   updateSelection()
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function onMouseUp(e: MouseEvent): ImageComment | null {
+export function onMouseUp(): ImageComment | null {
   if (!currentSelection.started) {
     return null
   }
@@ -107,29 +114,53 @@ export function removeAllSelections(quill: CustomQuill): void {
   })
 }
 
+/**
+ * Finds the image container an image comment marker belongs to.
+ * The marker (`*` inside `.ql-image-comment`) is always inserted right
+ * before its image, so the image is the next `.ql-image` sibling.
+ */
+export function findImageContainer(
+  commentNode: HTMLElement
+): HTMLElement | null {
+  let sibling = commentNode.nextElementSibling as HTMLElement | null
+
+  while (sibling && !sibling.classList.contains('ql-image')) {
+    sibling = sibling.nextElementSibling as HTMLElement | null
+  }
+
+  return sibling
+}
+
+/**
+ * Returns the comment marker span a selection overlay was drawn for
+ */
+export function getCommentNodeForOverlay(
+  overlay: HTMLElement
+): HTMLElement | null {
+  return overlayToCommentNode.get(overlay) || null
+}
+
 export function drawAllSelections(quill: CustomQuill): void {
-  const selections = quill.root.querySelectorAll(
-    '.ql-image-comment'
+  const commentNodes = quill.root.querySelectorAll(
+    `.${ImageCommentBlot.className}`
   ) as NodeListOf<HTMLElement>
 
-  selections.forEach((selection) => {
-    let imageContainer = selection.nextElementSibling as HTMLElement
-    const imageComment = {
-      content: selection.dataset.comment!,
-      type: selection.dataset.type as ImageComment['type'],
-      x: parseFloat(selection.dataset.x!),
-      y: parseFloat(selection.dataset.y!),
-      width: parseFloat(selection.dataset.width!),
-      height: parseFloat(selection.dataset.height!),
-      imageSrc: selection.dataset.imageSrc || '',
-      imageSize: {
-        width: parseFloat(selection.dataset.imageWidth!),
-        height: parseFloat(selection.dataset.imageHeight!)
-      }
+  commentNodes.forEach((commentNode) => {
+    const imageContainer = findImageContainer(commentNode)
+
+    if (!imageContainer) {
+      return
     }
 
-    while (imageContainer && !imageContainer.classList.contains('ql-image')) {
-      imageContainer = imageContainer.nextElementSibling as HTMLElement
+    const imageComment = ImageCommentBlot.formats(commentNode)
+
+    if (
+      !Number.isFinite(imageComment.imageSize.width) ||
+      !Number.isFinite(imageComment.imageSize.height) ||
+      imageComment.imageSize.width <= 0 ||
+      imageComment.imageSize.height <= 0
+    ) {
+      return
     }
 
     const selectionElement = document.createElement('div')
@@ -144,14 +175,9 @@ export function drawAllSelections(quill: CustomQuill): void {
     selectionElement.style.top = top + '%'
     selectionElement.style.width = width + '%'
     selectionElement.style.height = height + '%'
-    selectionElement.dataset.comment = imageComment.content
     selectionElement.dataset.type = imageComment.type
-    selectionElement.dataset.width = imageComment.width.toString()
-    selectionElement.dataset.height = imageComment.height.toString()
 
-    if (!imageContainer) {
-      return
-    }
+    overlayToCommentNode.set(selectionElement, commentNode)
 
     imageContainer.appendChild(selectionElement)
   })

@@ -2,6 +2,7 @@ import type { Context } from '@/core/context/Context'
 import { ApiService, type ServiceOptions } from '@/core/services/ApiService'
 import type { User } from '@/core/data/entities/User'
 import { SessionService } from './SessionService'
+import { PushService } from './PushService'
 
 type LoginPayload = {
   usernameOrEmail: string
@@ -28,6 +29,8 @@ export class AuthService extends ApiService {
 
   private readonly sessionService: SessionService
 
+  private readonly pushService: PushService
+
   /**
    * constructor
    */
@@ -35,6 +38,7 @@ export class AuthService extends ApiService {
     super(context)
 
     this.sessionService = new SessionService(context)
+    this.pushService = new PushService(context)
   }
 
   /**
@@ -102,6 +106,13 @@ export class AuthService extends ApiService {
    * Logout
    */
   public async logout() {
+    // stop push notifications for the previous user on this browser
+    try {
+      await this.pushService.disable()
+    } catch (error) {
+      console.error('Error disabling push notifications', error)
+    }
+
     try {
       await this.sessionService.deleteCurrentSession({ showLoader: true })
     } catch (error) {

@@ -13,8 +13,8 @@ export const useSettingsStore = defineStore('settings-module:settings', () => {
       for: ['student', 'teacher', 'mentor', 'admin', 'assistant']
     },
     {
-      title: 'Telegram',
-      description: 'Привязка Telegram к профилю, уведомления',
+      title: 'Telegram и push',
+      description: 'Привязка Telegram, уведомления в Telegram и в браузере',
       icon: 'telegram-blue',
       route: '/settings/telegram',
       for: ['student', 'mentor', 'teacher', 'admin', 'assistant']

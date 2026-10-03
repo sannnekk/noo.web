@@ -4,6 +4,7 @@ import { CommentBlot, type Comment } from './CommentBlot'
 import { Delta } from 'quill/core'
 import { type Ref } from 'vue'
 import { Range } from 'quill/core/selection'
+import type { Parchment } from 'quill'
 import { ImageCommentBlot, type ImageComment } from './ImageCommentBlot'
 import { ImageOverrideBlot } from './ImageOverrideBlot'
 //// @ts-expect-error there are no types for the table module
@@ -212,125 +213,243 @@ export class CustomQuill extends Quill {
     return await this.uploadFile(file)
   }
 
+  /**
+   * Resolves the blot behind a DOM node of this editor (bubbling up to the
+   * closest blot if the node itself is not one).
+   */
+  public findBlot(node: Node | null): Parchment.Blot | null {
+    if (!node) return null
+
+    return this.scroll.find(node, true)
+  }
+
+  /**
+   * Returns the document range occupied by the blot behind a DOM node
+   */
+  public getBlotRange(node: Node | null): Range | null {
+    const blot = this.findBlot(node)
+
+    if (!blot || blot === this.scroll) return null
+
+    return new Range(this.getIndex(blot), blot.length())
+  }
+
+  /**
+   * Returns the full range of a text comment starting from one of its spans.
+   *
+   * One logical comment can be rendered as several adjacent `.ql-comment`
+   * spans (e.g. when it spans bold and regular text or several paragraphs),
+   * so the range of the clicked span is expanded over all neighbouring
+   * segments that carry the same comment.
+   */
+  public getCommentRange(node: HTMLElement): Range | null {
+    const blotRange = this.getBlotRange(node)
+
+    if (!blotRange) return null
+
+    const target = CommentBlot.formats(node)
+
+    return this.expandRange(blotRange, (attributes) =>
+      isSameComment(attributes?.comment as Comment | undefined, target)
+    )
+  }
+
+  /**
+   * Returns the range of the image comment marker (`*`) behind a DOM node
+   */
+  public getImageCommentRange(node: HTMLElement): Range | null {
+    return this.getBlotRange(node)
+  }
+
+  /**
+   * Creates a text comment on the range or, if the range already is a
+   * comment, replaces its content/type keeping the same range
+   */
   public comment(range: Range, comment: Comment) {
-    this.focus()
-    this.setSelection(range.index, range.length)
-    this.format('comment', comment)
-    this.setSelection(0, 0, 'silent')
+    if (!range?.length) return
+
+    this.formatText(range.index, range.length, 'comment', {
+      content: comment.content,
+      type: comment.type
+    })
   }
 
+  public removeComment(range: Range | null) {
+    if (!range?.length) return
+
+    this.formatText(range.index, range.length, 'comment', false)
+  }
+
+  /**
+   * Adds an image comment: inserts a `*` marker right before the image and
+   * formats it with the comment data
+   */
   public commentImage(comment: ImageComment) {
-    const contents = this.getContents()
+    const index = this.findImageIndex(comment)
 
-    // find the image index
-    const currentOpIndex = contents.ops.findIndex((op) => {
-      return (
+    if (index === null) return
+
+    this.insertText(
+      index,
+      '*',
+      'image-comment',
+      toImageCommentValue(comment),
+      'api'
+    )
+  }
+
+  /**
+   * Replaces content/type of an existing image comment keeping its
+   * marker and position on the image
+   */
+  public updateImageComment(range: Range | null, comment: ImageComment) {
+    if (!range?.length) return
+
+    this.formatText(
+      range.index,
+      range.length,
+      'image-comment',
+      toImageCommentValue(comment)
+    )
+  }
+
+  public removeImageComment(range: Range | null) {
+    if (!range?.length) return
+
+    this.deleteText(range.index, range.length)
+  }
+
+  /**
+   * Deletes an image together with the image comment markers attached to it
+   */
+  public deleteImage(imageContainer: HTMLElement) {
+    const imageBlot = this.findBlot(imageContainer)
+
+    if (!imageBlot || imageBlot === this.scroll) return
+
+    let first: Parchment.Blot = imageBlot
+
+    while (first.prev instanceof ImageCommentBlot) {
+      first = first.prev
+    }
+
+    const index = this.getIndex(first)
+    const length = this.getIndex(imageBlot) + imageBlot.length() - index
+
+    this.deleteText(index, length)
+  }
+
+  /**
+   * Finds the document index of the image an image comment belongs to.
+   * Prefers the actual DOM element the selection was drawn on and falls
+   * back to searching by src
+   */
+  private findImageIndex(comment: ImageComment): number | null {
+    if (comment.image) {
+      const blot = this.findBlot(comment.image)
+
+      if (blot && blot instanceof ImageOverrideBlot) {
+        return this.getIndex(blot)
+      }
+    }
+
+    if (!comment.imageSrc) return null
+
+    let index = 0
+
+    for (const op of this.getContents().ops) {
+      if (
         op.insert &&
-        (op.insert as any).image &&
+        typeof op.insert === 'object' &&
         (op.insert as any).image === comment.imageSrc
-      )
-    })
+      ) {
+        return index
+      }
 
-    const index =
-      contents.ops.reduce((acc, op, i) => {
-        if (i > currentOpIndex) return acc
-        if (op.insert && typeof op.insert === 'string') {
-          return acc + op.insert.length
-        }
-        return acc + 1
-      }, 0) - 1
-
-    if ('originPosition' in comment) {
-      comment.x = (comment.originPosition as any).x
-      comment.y = (comment.originPosition as any).y
+      index += typeof op.insert === 'string' ? op.insert.length : 1
     }
 
-    // add the comment
-    if (index !== -1) {
-      this.focus()
-      this.setSelection(index, 0, 'silent')
-      this.insertText(index, '*', 'silent')
-      this.setSelection(index, 1, 'silent')
-      this.format('image-comment', comment, 'silent')
-      this.setSelection(0, 0, 'silent')
-    }
+    return null
   }
 
-  public removeComment(comment: Comment & { range: Range | null }) {
-    if (!comment.range) return
+  /**
+   * Expands a range over neighbouring delta segments matching the predicate.
+   * Newline-only segments are bridged when the segment after them matches,
+   * so comments spanning several paragraphs are treated as one
+   */
+  private expandRange(
+    range: Range,
+    matches: (attributes: Record<string, unknown> | undefined) => boolean
+  ): Range {
+    const segments: {
+      start: number
+      end: number
+      isNewline: boolean
+      attributes?: Record<string, unknown>
+    }[] = []
 
-    this.focus()
-    this.setSelection(comment.range.index, comment.range.length, 'silent')
-    this.format('comment', false, 'silent')
-    this.setSelection(0, 0, 'silent')
-  }
+    let position = 0
 
-  public removeImageComment(comment: ImageComment) {
-    const contents = this.getContents()
+    for (const op of this.getContents().ops) {
+      const length = typeof op.insert === 'string' ? op.insert.length : 1
 
-    // find the image index
-    const currentOpIndex = contents.ops.findIndex((op) => {
-      return (
-        typeof op.insert === 'string' &&
-        op.attributes &&
-        (op.attributes['image-comment'] as any)?.content === comment.content &&
-        (op.attributes['image-comment'] as any)?.type === comment.type &&
-        (op.attributes['image-comment'] as any)?.x === comment.x &&
-        (op.attributes['image-comment'] as any)?.y === comment.y
-      )
-    })
+      segments.push({
+        start: position,
+        end: position + length,
+        isNewline: typeof op.insert === 'string' && /^\n+$/.test(op.insert),
+        attributes: op.attributes as Record<string, unknown> | undefined
+      })
 
-    let index = contents.ops.reduce((acc, op, i) => {
-      if (i > currentOpIndex) return acc
-      if (op.insert && typeof op.insert === 'string') {
-        return acc + op.insert.length
-      }
-      return acc + 1
-    }, 0)
-
-    if (currentOpIndex !== -1) {
-      this.focus()
-
-      if (this.getContents(index, 1).ops[0].insert !== '*') {
-        index = index - 1
-      }
-
-      this.setSelection(index, 1, 'silent')
-      this.format('image-comment', false, 'silent')
-      this.deleteText(index, 1, 'silent')
-      this.setSelection(0, 0, 'silent')
+      position += length
     }
-  }
 
-  public deleteImage(src: string) {
-    const contents = this.getContents()
-    const currentOpIndex = contents.ops.findIndex((op) => {
-      return (
-        op.insert &&
-        (op.insert as any).image &&
-        (op.insert as any).image === src
-      )
-    })
+    const rangeEnd = range.index + range.length
 
-    let index = contents.ops.reduce((acc, op, i) => {
-      if (i > currentOpIndex) return acc
-      if (op.insert && typeof op.insert === 'string') {
-        return acc + op.insert.length
+    let startIdx = segments.findIndex(
+      (s) => s.start <= range.index && range.index < s.end
+    )
+    let endIdx = segments.findIndex(
+      (s) => s.start < rangeEnd && rangeEnd <= s.end
+    )
+
+    if (startIdx === -1 || endIdx === -1) return range
+
+    while (startIdx > 0) {
+      const prev = segments[startIdx - 1]
+
+      if (matches(prev.attributes)) {
+        startIdx--
+      } else if (
+        prev.isNewline &&
+        startIdx - 2 >= 0 &&
+        matches(segments[startIdx - 2].attributes)
+      ) {
+        startIdx -= 2
+      } else {
+        break
       }
-      return acc + 1
-    }, 0)
-
-    if (currentOpIndex !== -1) {
-      this.focus()
-
-      if (this.getContents(index, 1).ops[0].insert !== '*') {
-        index = index - 1
-      }
-
-      this.setSelection(index, 1, 'silent')
-      this.deleteText(index, 1, 'silent')
-      this.setSelection(0, 0, 'silent')
     }
+
+    while (endIdx < segments.length - 1) {
+      const next = segments[endIdx + 1]
+
+      if (matches(next.attributes)) {
+        endIdx++
+      } else if (
+        next.isNewline &&
+        endIdx + 2 <= segments.length - 1 &&
+        matches(segments[endIdx + 2].attributes)
+      ) {
+        endIdx += 2
+      } else {
+        break
+      }
+    }
+
+    return new Range(
+      segments[startIdx].start,
+      segments[endIdx].end - segments[startIdx].start
+    )
   }
 
   public async promptFile(): Promise<File | null> {
@@ -443,6 +562,30 @@ export class CustomQuill extends Quill {
         this.focus()
         this.insertEmbed(index, 'image', url, 'user')
       }, 0)
+    }
+  }
+}
+
+function isSameComment(a?: Comment, b?: Comment): boolean {
+  return !!a && !!b && a.content === b.content && a.type === b.type
+}
+
+/**
+ * Strips runtime-only fields (DOM element, popup state, ...) so that only
+ * the persisted image comment shape ends up in the delta
+ */
+function toImageCommentValue(comment: ImageComment): ImageComment {
+  return {
+    content: comment.content,
+    type: comment.type,
+    x: comment.x,
+    y: comment.y,
+    width: comment.width,
+    height: comment.height,
+    imageSrc: comment.imageSrc || '',
+    imageSize: {
+      width: comment.imageSize.width,
+      height: comment.imageSize.height
     }
   }
 }
