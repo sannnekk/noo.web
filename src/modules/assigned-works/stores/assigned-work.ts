@@ -166,7 +166,10 @@ export const useAssignedWorkStore = defineStore(
         }
       }
 
-      if (mode.value === 'check') {
+      if (
+        mode.value === 'check' ||
+        (mode.value === 'read' && Core.Context.roleIs(['teacher']))
+      ) {
         const value = assignedWork.value.comments.reduce((acc, comment) => {
           return acc + (comment.score || 0)
         }, 0)

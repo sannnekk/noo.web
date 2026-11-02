@@ -23,12 +23,19 @@
         name="telegram"
         class="v-button__button__icon"
       />
+      <inline-icon
+        v-else-if="icon"
+        :name="icon"
+        class="v-button__button__icon"
+      />
       <slot />
     </component>
   </div>
 </template>
 
 <script setup lang="ts">
+import { type IconName } from '@/components/decorations/inline-icon.vue'
+
 interface Props {
   alignment?: 'left' | 'center' | 'right' | 'stretch'
   type?: 'button' | 'submit' | 'reset'
@@ -45,6 +52,7 @@ interface Props {
   loading?: boolean
   to?: string
   color?: `#${string}`
+  icon?: IconName
 }
 
 interface Emits {
