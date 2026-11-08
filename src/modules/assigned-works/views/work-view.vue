@@ -6,6 +6,9 @@
           <div class="work-view__sidebar__info">
             <work-info />
           </div>
+          <div class="work-view__sidebar__chemistry-tables">
+            <chemistry-tables-button />
+          </div>
           <div class="work-view__sidebar__tasks">
             <task-list />
           </div>
@@ -50,6 +53,7 @@
 <script setup lang="ts">
 import workInfo from '../components/single-work/work-info.vue'
 import TaskList from '../components/single-work/task-list.vue'
+import ChemistryTablesButton from '../components/single-work/chemistry-tables-button.vue'
 import commentsLink from '../components/single-work/comments-link.vue'
 import AutosaveBlock from '../components/single-work/autosave-block.vue'
 import WorkScore from '../components/single-work/work-score.vue'
