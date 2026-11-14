@@ -56,6 +56,7 @@ import {
   isWorkChecked,
   isWorkMade
 } from '../../../utils/task'
+import { isShpuntikAllowedMentor } from '../../../utils/shpuntik'
 
 interface Props {
   modelValue: AssignedWork
@@ -76,7 +77,8 @@ const shpuntikStore = useShpuntikStore()
 
 const canUseShpuntik = computed(
   () =>
-    Core.Context.roleIs(['teacher']) &&
+    (Core.Context.roleIs(['teacher']) ||
+      (props.mode === 'check' && isShpuntikAllowedMentor())) &&
     isWorkMade(props.modelValue) &&
     !isWorkChecked(props.modelValue) &&
     !isCheckedAutomatically(props.task.type)
